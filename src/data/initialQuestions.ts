@@ -1,6 +1,7 @@
 import { Question } from "../types";
 import { PYQ_QUESTIONS } from "./pyqQuestionsData";
 import { EXTRA_QUESTIONS } from "./extraQuestionsData";
+import { TARGET_TRIUMPH_PHYSICS_QUESTIONS } from "./targetTriumphPhysicsData";
 
 const BASE_QUESTIONS: Question[] = [
   // ==========================================
@@ -1879,4 +1880,5 @@ export const INITIAL_QUESTIONS: Question[] = [
   ...BASE_QUESTIONS,
   ...PYQ_QUESTIONS,
   ...EXTRA_QUESTIONS,
+  ...TARGET_TRIUMPH_PHYSICS_QUESTIONS,
 ];

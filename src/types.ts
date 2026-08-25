@@ -178,15 +178,21 @@ export interface UserFeedbackReport {
   id: string;
   userName: string;
   userMobile: string;
+  studentName?: string;
+  studentMobile?: string;
   userRole?: string;
-  category: "question_error" | "mock_test_issue" | "app_suggestion" | "login_issue" | "other";
+  category?: "question_error" | "mock_test_issue" | "app_suggestion" | "login_issue" | "other" | string;
   categoryMr?: string;
-  subject?: SubjectType;
+  issueCategory?: string;
+  subject?: SubjectType | string;
   exam?: ExamType;
   questionNumberOrTopic?: string;
+  questionId?: string;
+  questionText?: string;
   description: string;
   status: "pending" | "resolved";
-  createdAt: number;
+  createdAt?: number;
+  timestamp?: number;
   adminReply?: string;
 }
 

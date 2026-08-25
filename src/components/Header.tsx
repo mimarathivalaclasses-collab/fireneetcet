@@ -37,6 +37,7 @@ import {
   InstituteProfile,
 } from "../types";
 import { formatTrialTime } from "../utils/deviceSecurity";
+import { PWAInstallPrompt } from "./PWAInstallPrompt";
 
 interface HeaderProps {
   currentExam: ExamType;
@@ -230,6 +231,9 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right Action & Control Buttons */}
         <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* PWA Install Quick Action */}
+          <PWAInstallPrompt mini />
+
           {/* Master Admin Panel */}
           {onOpenAdminDashboard && (
             <button

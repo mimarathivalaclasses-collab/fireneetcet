@@ -1,0 +1,59 @@
+{
+  "name": "MHT-CET · NEET · JEE MCQ Master",
+  "short_name": "MCQ Master",
+  "description": "Maharashtra MHT-CET (PCM/PCB), NEET & JEE Main 10,000+ Question Bank, Instant Solutions & Timed Mock Tests.",
+  "id": "com.abhyasmitra.mhtcetmcq",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "window-controls-overlay"],
+  "orientation": "portrait-primary",
+  "background_color": "#070714",
+  "theme_color": "#0d9488",
+  "categories": ["education", "books", "productivity"],
+  "lang": "mr",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "३ मोफत डेमो टेस्ट्स",
+      "short_name": "डेमो टेस्ट्स",
+      "description": "MHT-CET व NEET मोफत ३ डेमो मॉक टेस्ट्स",
+      "url": "/?mode=demo",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "MHT-CET Physics सराव",
+      "short_name": "Physics सराव",
+      "description": "Target Publication Physics MCQ प्रश्नसंच",
+      "url": "/?subject=Physics",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

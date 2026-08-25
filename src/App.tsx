@@ -556,6 +556,69 @@ export default function App() {
     }
   };
 
+  const handleStartDemoTest = (exam: ExamType, demoIndex: number = 1) => {
+    const demoStudent: StudentUser = {
+      id: `demo_user_${Date.now()}`,
+      name: `मोफत डेमो विद्यार्थी (${demoIndex === 1 ? "Physics-Chem" : demoIndex === 2 ? "Maths" : "Biology"})`,
+      mobile: "9999999999",
+      email: "demo@abhyasmitra.com",
+      role: "student",
+      examTarget: exam,
+      primaryDeviceId: currentDeviceId,
+      primaryDeviceName: getDeviceName(),
+      approvalStatus: "approved",
+      isApproved: true,
+      paymentStatus: "unpaid",
+      registeredAt: Date.now(),
+      lastLoginAt: Date.now(),
+    };
+
+    setCurrentUser(demoStudent);
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(demoStudent));
+
+    // Pick questions according to demoIndex
+    let filtered = questions.filter((q) => q.exam === exam);
+    if (filtered.length === 0) filtered = questions;
+
+    if (demoIndex === 1) {
+      const pAndC = filtered.filter((q) => q.subject === "Physics" || q.subject === "Chemistry");
+      const testQs = pAndC.length >= 25 ? pAndC.slice(0, 25) : filtered.slice(0, 25);
+      setActiveTestConfig({
+        title: "मोफत डेमो टेस्ट १: MHT-CET Physics & Chemistry",
+        exam: exam,
+        subject: "All",
+        chapterFilter: "All",
+        durationMinutes: 25,
+        questionCount: testQs.length,
+        selectedQuestions: testQs,
+      });
+    } else if (demoIndex === 2) {
+      const maths = filtered.filter((q) => q.subject === "Mathematics");
+      const testQs = maths.length >= 25 ? maths.slice(0, 25) : filtered.slice(0, 25);
+      setActiveTestConfig({
+        title: "मोफत डेमो टेस्ट २: MHT-CET Mathematics Sprint",
+        exam: exam,
+        subject: "Mathematics",
+        chapterFilter: "All",
+        durationMinutes: 25,
+        questionCount: testQs.length,
+        selectedQuestions: testQs,
+      });
+    } else {
+      const bio = filtered.filter((q) => q.subject === "Biology");
+      const testQs = bio.length >= 30 ? bio.slice(0, 30) : filtered.slice(0, 30);
+      setActiveTestConfig({
+        title: "मोफत डेमो टेस्ट ३: NEET / CET Biology & Science Master",
+        exam: exam,
+        subject: "Biology",
+        chapterFilter: "All",
+        durationMinutes: 30,
+        questionCount: testQs.length,
+        selectedQuestions: testQs,
+      });
+    }
+  };
+
   // STRICT AUTH GATEWAY: If no user is logged in, show dedicated Unified Auth View
   if (!currentUser) {
     return (
@@ -564,6 +627,7 @@ export default function App() {
           currentUser={currentUser}
           onLoginSuccess={handleLoginSuccess}
           onOpenAdmin={() => setIsAdminDashboardOpen(true)}
+          onStartDemoTest={handleStartDemoTest}
         />
         {isAdminDashboardOpen && (
           <AdminApprovalDashboard

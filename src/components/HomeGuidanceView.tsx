@@ -243,6 +243,49 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         </div>
       </div>
 
+      {/* DAILY 20-QUESTION TARGET & STREAK CHALLENGE CARD */}
+      <div
+        id="card-daily-target-streak"
+        className="rounded-3xl bg-linear-to-r from-orange-500 via-amber-500 to-yellow-500 p-4 sm:p-5 text-slate-950 shadow-lg border border-amber-300 relative overflow-hidden"
+      >
+        <div className="absolute right-0 top-0 w-32 h-32 bg-white/20 rounded-full blur-xl pointer-events-none"></div>
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1.5 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full bg-slate-950 text-amber-300 text-[11px] font-black uppercase flex items-center gap-1">
+                <Flame className="w-3.5 h-3.5 text-orange-400 fill-orange-400 animate-bounce" />
+                <span>दैनिक २० प्रश्न चॅलेंज</span>
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-white text-orange-800 text-[11px] font-black">
+                🔥 ३ दिवस सलग स्ट्रीक!
+              </span>
+            </div>
+            <h3 className="text-base sm:text-lg font-black text-slate-950">
+              दररोज २० प्रश्न सोडवा आणि टॉप रँक पक्की करा! 🏆
+            </h3>
+            <p className="text-xs text-slate-900/90 font-medium max-w-xl">
+              आजचा सराव: <strong className="font-black">२० पैकी १५ प्रश्न पूर्ण</strong> (७५%). नियमित सराव करणाऱ्या विद्यार्थ्यांचे CET/NEET गुण २५% ने वाढतात!
+            </p>
+            
+            {/* Progress Bar */}
+            <div className="w-full max-w-md bg-black/20 h-2.5 rounded-full overflow-hidden p-0.5 mt-2">
+              <div className="bg-slate-950 h-full rounded-full w-3/4 transition-all"></div>
+            </div>
+          </div>
+
+          <div className="shrink-0 w-full sm:w-auto">
+            <button
+              onClick={() => onNavigate("mock_test")}
+              className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-slate-950 hover:bg-slate-900 text-amber-300 font-black text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 hover:scale-105"
+            >
+              <Target className="w-4 h-4 text-amber-400" />
+              <span>आजचे २० प्रश्न सुरू करा</span>
+              <ArrowRight className="w-4 h-4 text-amber-400" />
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* 2. Structured Grid of Square Menu Buttons (Mobile App Style) */}
       <div>
         <div className="flex items-center justify-between mb-3 px-1">

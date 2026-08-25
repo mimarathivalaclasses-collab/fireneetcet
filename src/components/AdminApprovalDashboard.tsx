@@ -30,6 +30,8 @@ import {
   ChevronRight,
   Sparkles,
   Building2,
+  MessageCircle,
+  AlertCircle,
   Share2,
   Copy,
   Edit3,
@@ -49,6 +51,7 @@ import {
   InstituteProfile,
   AgentUser,
   AgentPayoutRequest,
+  UserFeedbackReport,
 } from "../types";
 import {
   getAllInstitutes,
@@ -60,6 +63,9 @@ import {
   fetchStudentsFromCloud,
   updateStudentApprovalInCloud,
   deleteStudentFromCloud,
+  fetchFeedbackReportsFromCloud,
+  updateFeedbackReportStatusInCloud,
+  deleteFeedbackReportFromCloud,
 } from "../services/firebase";
 
 interface AdminApprovalDashboardProps {
@@ -79,7 +85,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 }) => {
   // Navigation Tabs in Admin Console
   const [activeTab, setActiveTab] = useState<
-    "pending_approvals" | "all_students" | "classes" | "agents" | "payments" | "devices"
+    "pending_approvals" | "all_students" | "feedback_inbox" | "classes" | "agents" | "payments" | "devices"
   >("pending_approvals");
 
   // Admin Authentication State
@@ -92,6 +98,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 
   // Core Data Lists
   const [students, setStudents] = useState<StudentUser[]>([]);
+  const [feedbackReports, setFeedbackReports] = useState<UserFeedbackReport[]>([]);
   const [payments, setPayments] = useState<PaymentReceiptRecord[]>([]);
   const [deviceRequests, setDeviceRequests] = useState<DeviceApprovalRequest[]>([]);
   const [institutes, setInstitutes] = useState<InstituteProfile[]>([]);
@@ -102,6 +109,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [examFilter, setExamFilter] = useState<string>("ALL");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [feedbackFilter, setFeedbackFilter] = useState<"ALL" | "pending" | "resolved">("ALL");
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
 
   // Modals for Adding
@@ -154,6 +162,19 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
       }
       setStudents(localStudents);
 
+      // Load Feedback & Error Reports from local storage and cloud
+      const fbRaw = localStorage.getItem("mcq_app_user_feedbacks_v1");
+      let localFeedbacks: UserFeedbackReport[] = fbRaw ? JSON.parse(fbRaw) : [];
+      const cloudFeedbacks = await fetchFeedbackReportsFromCloud();
+      if (cloudFeedbacks && cloudFeedbacks.length > 0) {
+        const fbMap = new Map<string, UserFeedbackReport>();
+        localFeedbacks.forEach((f) => fbMap.set(f.id, f));
+        cloudFeedbacks.forEach((cf) => fbMap.set(cf.id, cf));
+        localFeedbacks = Array.from(fbMap.values());
+        localStorage.setItem("mcq_app_user_feedbacks_v1", JSON.stringify(localFeedbacks));
+      }
+      setFeedbackReports(localFeedbacks);
+
       const paymentsRaw = localStorage.getItem("mcq_app_payment_receipts_v1");
       setPayments(paymentsRaw ? JSON.parse(paymentsRaw) : []);
 
@@ -170,6 +191,65 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     } catch (e) {
       console.error("Error loading admin data", e);
     }
+  };
+
+  // 1-Click WhatsApp Approval Notification
+  const sendWhatsAppApprovalNotification = (student: StudentUser) => {
+    if (!student.mobile) {
+      showToast("विद्यार्थ्याचा मोबाईल नंबर उपलब्ध नाही.");
+      return;
+    }
+    const cleanNumber = student.mobile.replace(/\D/g, "");
+    const formattedNumber = cleanNumber.length === 10 ? `91${cleanNumber}` : cleanNumber;
+    const message = encodeURIComponent(
+      `🎓 *अभिनंदन ${student.name}!* \n\n` +
+      `आपले *MHT-CET / NEET / JEE MCQ Mock Test Master 2026* चे ॲप खाते यशस्वीरित्या *मंजूर (Approved)* करण्यात आले आहे! 🎉\n\n` +
+      `📱 *लॉगिन मोबाईल:* ${student.mobile}\n` +
+      `🎯 *टारगेट परीक्षा:* ${student.examTarget}\n` +
+      `⚡ *वैशिष्ट्ये:* १०,०००+ प्रश्न, Target Triumph Physics, ॲनालिटिक्स व पीडीएफ निकाल!\n\n` +
+      `आताच ॲप उघडा आणि दररोज २० प्रश्नांचा सराव सुरू करा!\n` +
+      `शुभेच्छा! 🏆`
+    );
+    window.open(`https://wa.me/${formattedNumber}?text=${message}`, "_blank");
+    showToast("WhatsApp मेसेज विंडो उघडली!");
+  };
+
+  // Feedback Resolution Actions
+  const handleToggleFeedbackStatus = async (report: UserFeedbackReport) => {
+    const newStatus: "pending" | "resolved" = report.status === "resolved" ? "pending" : "resolved";
+    const updated: UserFeedbackReport[] = feedbackReports.map((f) =>
+      f.id === report.id ? { ...f, status: newStatus } : f
+    );
+    setFeedbackReports(updated);
+    localStorage.setItem("mcq_app_user_feedbacks_v1", JSON.stringify(updated));
+    await updateFeedbackReportStatusInCloud(report.id, newStatus);
+    showToast(newStatus === "resolved" ? "✅ त्रुटी दुरुस्त म्हणून मार्क केली!" : "⏳ त्रुटी प्रलंबित म्हणून मार्क केली.");
+  };
+
+  const handleDeleteFeedback = async (reportId: string) => {
+    if (confirm("हा अभिप्राय / त्रुटी अहवाल नक्की हटवायचा आहे का?")) {
+      const updated = feedbackReports.filter((f) => f.id !== reportId);
+      setFeedbackReports(updated);
+      localStorage.setItem("mcq_app_user_feedbacks_v1", JSON.stringify(updated));
+      await deleteFeedbackReportFromCloud(reportId);
+      showToast("अहवाल हटवला गेला.");
+    }
+  };
+
+  const sendWhatsAppFeedbackReply = (report: UserFeedbackReport) => {
+    if (!report.studentMobile) {
+      showToast("विद्यार्थ्याचा संपर्क क्रमांक उपलब्ध नाही.");
+      return;
+    }
+    const cleanNumber = report.studentMobile.replace(/\D/g, "");
+    const formattedNumber = cleanNumber.length === 10 ? `91${cleanNumber}` : cleanNumber;
+    const message = encodeURIComponent(
+      `नमस्ते *${report.studentName || "विद्यार्थी मित्र"}*,\n\n` +
+      `तुम्ही ॲपमध्ये नोंदवलेल्या *"${report.subject} - ${report.issueCategory}"* संदर्भातील त्रुटीचे/अभिप्रायाचे आमच्या तज्ज्ञ शिक्षकांनी निवारण केले आहे. ✅\n\n` +
+      `📝 *तुमचा मुद्दा:* "${report.description}"\n\n` +
+      `🙏 अभिप्राय दिल्याबद्दल धन्यवाद! ॲप रिफ्रेश करून नवीन अपडेट तपासा.`
+    );
+    window.open(`https://wa.me/${formattedNumber}?text=${message}`, "_blank");
   };
 
   useEffect(() => {
@@ -629,6 +709,27 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               </button>
 
               <button
+                onClick={() => setActiveTab("feedback_inbox")}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === "feedback_inbox"
+                    ? "bg-rose-600 text-white font-black shadow-md"
+                    : "text-slate-300 hover:bg-slate-800"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4 text-rose-300" />
+                  <span>त्रुटी व तक्रार इनबॉक्स</span>
+                </div>
+                {feedbackReports.filter((f) => f.status === "pending").length > 0 ? (
+                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
+                    {feedbackReports.filter((f) => f.status === "pending").length}
+                  </span>
+                ) : (
+                  <span className="text-[11px] opacity-80 font-mono">{feedbackReports.length}</span>
+                )}
+              </button>
+
+              <button
                 onClick={() => setActiveTab("agents")}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "agents"
@@ -694,6 +795,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 <span className="text-sm font-black text-slate-900">
                   {activeTab === "pending_approvals" && "विद्यार्थी मंजुरी विनंत्या"}
                   {activeTab === "all_students" && "विद्यार्थी व्यवस्थापन (संपादन व हटवणे)"}
+                  {activeTab === "feedback_inbox" && "विद्यार्थी तक्रार व त्रुटी निवारण इनबॉक्स"}
                   {activeTab === "classes" && "कोचिंग क्लासेस (संपादन व हटवणे)"}
                   {activeTab === "agents" && "एजंट नेटवर्क व्यवस्थापन"}
                   {activeTab === "payments" && "पेमेंट पावत्या व रेकॉर्ड्स"}
@@ -741,6 +843,12 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 className={`px-3 py-1 rounded-lg shrink-0 ${activeTab === "all_students" ? "bg-indigo-600 text-white" : "text-slate-300"}`}
               >
                 विद्यार्थी ({students.length})
+              </button>
+              <button
+                onClick={() => setActiveTab("feedback_inbox")}
+                className={`px-3 py-1 rounded-lg shrink-0 ${activeTab === "feedback_inbox" ? "bg-rose-600 text-white" : "text-slate-300"}`}
+              >
+                तक्रारी ({feedbackReports.filter((f) => f.status === "pending").length})
               </button>
               <button
                 onClick={() => setActiveTab("classes")}
@@ -811,11 +919,21 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 
                           <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                             <button
-                              onClick={() => handleApprove(std.id)}
+                              onClick={() => {
+                                handleApprove(std.id);
+                                sendWhatsAppApprovalNotification(std);
+                              }}
                               className="flex-1 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>मंजूर करा (Approve)</span>
+                            </button>
+                            <button
+                              onClick={() => sendWhatsAppApprovalNotification(std)}
+                              className="p-2 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-800 cursor-pointer"
+                              title="WhatsApp वर मंजुरी मेसेज पाठवा"
+                            >
+                              <MessageCircle className="w-3.5 h-3.5" />
                             </button>
                             <button
                               onClick={() => setEditingStudent(std)}
@@ -933,10 +1051,19 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                             </button>
                           )}
 
+                          {/* WhatsApp NOTIFY BUTTON */}
+                          <button
+                            onClick={() => sendWhatsAppApprovalNotification(std)}
+                            className="p-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 cursor-pointer"
+                            title="WhatsApp वर मेसेज पाठवा"
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" />
+                          </button>
+
                           {/* EDIT BUTTON */}
                           <button
                             onClick={() => setEditingStudent(std)}
-                            className="py-1.5 px-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                            className="py-1.5 px-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center gap-1 cursor-pointer"
                             title="माहिती संपादित करा (Edit Student)"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -955,6 +1082,154 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* TAB: FEEDBACK & ERROR REPORTS INBOX (NEW FEATURE) */}
+              {activeTab === "feedback_inbox" && (
+                <div className="space-y-3">
+                  {/* Header & Filter */}
+                  <div className="bg-white p-3.5 rounded-2xl border border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                    <div>
+                      <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                        <MessageSquare className="w-4 h-4 text-rose-600" />
+                        <span>विद्यार्थी त्रुटी व अभिप्राय इनबॉक्स (Feedback Inbox)</span>
+                      </h3>
+                      <p className="text-xs text-slate-500">
+                        विद्यार्थ्यांनी मॉक टेस्ट किंवा प्रश्नांमध्ये नोंदवलेल्या सर्व शंका व त्रुटी येथे पहा आणि १-क्लिकमध्ये निवारण करा.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={feedbackFilter}
+                        onChange={(e) => setFeedbackFilter(e.target.value as any)}
+                        className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold bg-white text-slate-700 outline-none"
+                      >
+                        <option value="ALL">सर्व तक्रारी ({feedbackReports.length})</option>
+                        <option value="pending">प्रलंबित ({feedbackReports.filter((f) => f.status === "pending").length})</option>
+                        <option value="resolved">दुरुस्त झालेले ({feedbackReports.filter((f) => f.status === "resolved").length})</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Feedback Cards List */}
+                  {feedbackReports.filter((f) => feedbackFilter === "ALL" ? true : f.status === feedbackFilter).length === 0 ? (
+                    <div className="bg-white rounded-2xl p-10 text-center border border-slate-200 text-slate-500 text-xs space-y-2">
+                      <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
+                      <p className="font-bold text-slate-800 text-sm">सर्व तक्रारींचे निवारण झाले आहे!</p>
+                      <p className="text-slate-500">कोणतीही प्रलंबित त्रुटी शिल्लक नाही. विद्यार्थी सहजपणे अभ्यास करत आहेत.</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                      {feedbackReports
+                        .filter((f) => (feedbackFilter === "ALL" ? true : f.status === feedbackFilter))
+                        .map((report) => (
+                          <div
+                            key={report.id}
+                            className={`bg-white rounded-2xl p-4 border shadow-xs flex flex-col justify-between space-y-3 transition-all ${
+                              report.status === "resolved"
+                                ? "border-emerald-200 bg-emerald-50/20"
+                                : "border-rose-300 bg-rose-50/20"
+                            }`}
+                          >
+                            <div className="space-y-2.5">
+                              {/* Top Tag & Status */}
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="space-y-0.5">
+                                  <div className="flex items-center gap-1.5 flex-wrap">
+                                    <span className="px-2 py-0.5 rounded-md text-[10px] font-black bg-slate-900 text-white">
+                                      {report.subject}
+                                    </span>
+                                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-900">
+                                      {report.issueCategory}
+                                    </span>
+                                    <span className="text-[10px] text-slate-400 font-mono">
+                                      {new Date(report.timestamp).toLocaleDateString("mr-IN", {
+                                        day: "numeric",
+                                        month: "short",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })}
+                                    </span>
+                                  </div>
+                                  <h4 className="text-xs font-bold text-slate-800 pt-1">
+                                    विद्यार्थी: <span className="font-black text-slate-900">{report.studentName || "अनामिक विद्यार्थी"}</span>
+                                    {report.studentMobile && (
+                                      <span className="ml-1.5 text-indigo-600 font-mono">📱 {report.studentMobile}</span>
+                                    )}
+                                  </h4>
+                                </div>
+
+                                <span
+                                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                    report.status === "resolved"
+                                      ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                                      : "bg-rose-100 text-rose-800 border border-rose-300 animate-pulse"
+                                  }`}
+                                >
+                                  {report.status === "resolved" ? "✅ दुरुस्त" : "⏳ प्रलंबित"}
+                                </span>
+                              </div>
+
+                              {/* Question Preview if Available */}
+                              {report.questionText && (
+                                <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
+                                  <div className="font-bold text-slate-900 flex items-center gap-1 text-[11px]">
+                                    <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                                    <span>प्रश्न संदर्भ (Question ID: {report.questionId}):</span>
+                                  </div>
+                                  <p className="line-clamp-2 italic text-slate-600">"{report.questionText}"</p>
+                                </div>
+                              )}
+
+                              {/* Student's Feedback Message */}
+                              <div className="bg-white p-2.5 rounded-xl border border-slate-100 text-xs text-slate-800">
+                                <span className="font-bold text-slate-600 block text-[11px] mb-0.5">तक्रार / त्रुटी तपशील:</span>
+                                <p className="font-medium whitespace-pre-wrap">{report.description}</p>
+                              </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+                              {/* Toggle Resolved Button */}
+                              <button
+                                onClick={() => handleToggleFeedbackStatus(report)}
+                                className={`flex-1 py-1.5 px-3 rounded-xl font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-all ${
+                                  report.status === "resolved"
+                                    ? "bg-amber-100 hover:bg-amber-200 text-amber-900"
+                                    : "bg-emerald-600 hover:bg-emerald-700 text-white font-black"
+                                }`}
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>{report.status === "resolved" ? "प्रलंबित करा" : "✅ दुरुस्त झाले (Mark Resolved)"}</span>
+                              </button>
+
+                              {/* WhatsApp Direct Reply */}
+                              {report.studentMobile && (
+                                <button
+                                  onClick={() => sendWhatsAppFeedbackReply(report)}
+                                  className="py-1.5 px-3 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold flex items-center gap-1 cursor-pointer"
+                                  title="विद्यार्थ्याला थेट WhatsApp वर उत्तर द्या"
+                                >
+                                  <MessageCircle className="w-3.5 h-3.5" />
+                                  <span className="hidden sm:inline">WhatsApp उत्तर</span>
+                                </button>
+                              )}
+
+                              {/* Delete Report */}
+                              <button
+                                onClick={() => handleDeleteFeedback(report.id)}
+                                className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 cursor-pointer"
+                                title="अहवाल हटवा"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  )}
                 </div>
               )}
 
