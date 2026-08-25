@@ -55,6 +55,12 @@ import {
   saveAllInstitutes,
 } from "../data/coachingInstitutesData";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
+import {
+  saveStudentToCloud,
+  fetchStudentsFromCloud,
+  updateStudentApprovalInCloud,
+  deleteStudentFromCloud,
+} from "../services/firebase";
 
 interface AdminApprovalDashboardProps {
   isOpen: boolean;
@@ -128,11 +134,25 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     setTimeout(() => setToastMessage(""), 3000);
   };
 
-  // Refresh data from localStorage
-  const loadAllData = () => {
+  // Refresh data from localStorage & Firebase Cloud
+  const loadAllData = async () => {
     try {
       const studentsRaw = localStorage.getItem("mcq_app_all_students_v1");
-      setStudents(studentsRaw ? JSON.parse(studentsRaw) : []);
+      let localStudents: StudentUser[] = studentsRaw ? JSON.parse(studentsRaw) : [];
+
+      // Merge with Firebase Cloud Students
+      const cloudStudents = await fetchStudentsFromCloud();
+      if (cloudStudents && cloudStudents.length > 0) {
+        const map = new Map<string, StudentUser>();
+        localStudents.forEach((s) => map.set(s.mobile || s.id, s));
+        cloudStudents.forEach((cs) => {
+          const key = cs.mobile || cs.id;
+          map.set(key, { ...(map.get(key) || {}), ...cs });
+        });
+        localStudents = Array.from(map.values());
+        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(localStudents));
+      }
+      setStudents(localStudents);
 
       const paymentsRaw = localStorage.getItem("mcq_app_payment_receipts_v1");
       setPayments(paymentsRaw ? JSON.parse(paymentsRaw) : []);
@@ -199,6 +219,13 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     setStudents(updated);
     localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
 
+    // Update in Firebase Cloud
+    const targetStudent = updated.find((s) => s.id === studentId);
+    if (targetStudent) {
+      updateStudentApprovalInCloud(targetStudent.mobile || targetStudent.id, "approved", true);
+      saveStudentToCloud(targetStudent);
+    }
+
     // Also sync with current logged in user if match
     const currentRaw = localStorage.getItem("mcq_app_current_user_v1");
     if (currentRaw) {
@@ -229,6 +256,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     );
     setStudents(updated);
     localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
+
+    // Update in Firebase Cloud
+    const targetStudent = updated.find((s) => s.id === studentId);
+    if (targetStudent) {
+      updateStudentApprovalInCloud(targetStudent.mobile || targetStudent.id, "rejected", false);
+      saveStudentToCloud(targetStudent);
+    }
+
     if (onRejectStudent) onRejectStudent(studentId);
     showToast("विद्यार्थी ब्लॉक / रिजेक्ट करण्यात आला.");
   };
@@ -245,11 +280,22 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     );
     setStudents(updated);
     localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
+
+    const targetStudent = updated.find((s) => s.id === studentId);
+    if (targetStudent) {
+      saveStudentToCloud(targetStudent);
+    }
+
     showToast("विद्यार्थ्याचे डिव्हाइस बंधन (Device Binding) रिसेट केले गेले!");
   };
 
   const handleDeleteStudent = (studentId: string, name: string) => {
     if (window.confirm(`तुम्हाला खात्री आहे का की '${name}' या विद्यार्थ्याला पूर्णपणे हटवायचे आहे?`)) {
+      const targetStudent = students.find((s) => s.id === studentId);
+      if (targetStudent) {
+        deleteStudentFromCloud(targetStudent.mobile || targetStudent.id);
+      }
+
       const updated = students.filter((s) => s.id !== studentId);
       setStudents(updated);
       localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
@@ -264,6 +310,9 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     const updated = students.map((s) => (s.id === editingStudent.id ? editingStudent : s));
     setStudents(updated);
     localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
+
+    // Sync to Cloud
+    saveStudentToCloud(editingStudent);
 
     // Also update current user if matching
     const currentRaw = localStorage.getItem("mcq_app_current_user_v1");
@@ -306,6 +355,10 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     const updated = [newStudent, ...students];
     setStudents(updated);
     localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
+
+    // Save to Cloud
+    saveStudentToCloud(newStudent);
+
     setIsAddingStudent(false);
     setNewStudentName("");
     setNewStudentMobile("");

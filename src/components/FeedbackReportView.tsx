@@ -18,6 +18,10 @@ import {
   Trash2,
 } from "lucide-react";
 import { ExamType, SubjectType, UserFeedbackReport, StudentUser } from "../types";
+import {
+  saveFeedbackReportToCloud,
+  fetchFeedbackReportsFromCloud,
+} from "../services/firebase";
 
 interface FeedbackReportViewProps {
   currentUser?: StudentUser | null;
@@ -43,12 +47,20 @@ export const FeedbackReportView: React.FC<FeedbackReportViewProps> = ({
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Load existing reports
-  const loadReports = () => {
+  const loadReports = async () => {
     try {
       const raw = localStorage.getItem("mcq_app_user_feedback_reports_v1");
-      if (raw) {
-        setSubmittedReports(JSON.parse(raw));
+      let localList: UserFeedbackReport[] = raw ? JSON.parse(raw) : [];
+      
+      const cloudReports = await fetchFeedbackReportsFromCloud();
+      if (cloudReports && cloudReports.length > 0) {
+        const map = new Map<string, UserFeedbackReport>();
+        localList.forEach((r) => map.set(r.id, r));
+        cloudReports.forEach((cr) => map.set(cr.id, cr));
+        localList = Array.from(map.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        localStorage.setItem("mcq_app_user_feedback_reports_v1", JSON.stringify(localList));
       }
+      setSubmittedReports(localList);
     } catch (e) {
       console.error(e);
     }
@@ -58,7 +70,7 @@ export const FeedbackReportView: React.FC<FeedbackReportViewProps> = ({
     loadReports();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
     setIsSuccess(false);
@@ -105,6 +117,9 @@ export const FeedbackReportView: React.FC<FeedbackReportViewProps> = ({
       list.unshift(newReport);
       localStorage.setItem("mcq_app_user_feedback_reports_v1", JSON.stringify(list));
       setSubmittedReports(list);
+
+      // Save to Firestore Cloud
+      await saveFeedbackReportToCloud(newReport);
 
       setIsSuccess(true);
       setDescription("");

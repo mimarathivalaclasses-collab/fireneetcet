@@ -20,6 +20,7 @@ import {
   Cpu,
   ChevronRight,
   User,
+  AlertCircle,
 } from "lucide-react";
 import { NavigationTab, ExamType } from "../types";
 
@@ -190,6 +191,13 @@ const TAB_METADATA: Record<NavigationTab, TabMeta> = {
     icon: Building2,
     color: "from-purple-700 to-indigo-800",
     badge: "30 Min Free",
+  },
+  feedback: {
+    titleMr: "त्रुटी व चुका नोंदणी कक्ष (अभिप्राय)",
+    titleEn: "Report Issues & Feedback",
+    icon: AlertCircle,
+    color: "from-rose-600 to-orange-600",
+    badge: "Feedback",
   },
 };
 

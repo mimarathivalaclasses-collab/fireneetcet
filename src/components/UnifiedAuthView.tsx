@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ShieldCheck,
   Smartphone,
@@ -29,10 +29,12 @@ import {
   Clock,
   MessageSquare,
   Play,
+  Cloud,
 } from "lucide-react";
 import { ExamType, StudentUser, UserRole } from "../types";
 import { getAllInstitutes } from "../data/coachingInstitutesData";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
+import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
 
 interface UnifiedAuthViewProps {
   currentUser?: StudentUser | null;
@@ -75,8 +77,32 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
   // Pending Approval State for unapproved students
   const [pendingApprovalStudent, setPendingApprovalStudent] = useState<StudentUser | null>(null);
 
+  // Load and sync cloud students on mount
+  useEffect(() => {
+    fetchStudentsFromCloud().then((cloudStudents) => {
+      if (cloudStudents && cloudStudents.length > 0) {
+        try {
+          const raw = localStorage.getItem("mcq_app_all_students_v1");
+          const localList: StudentUser[] = raw ? JSON.parse(raw) : [];
+          const mergedMap = new Map<string, StudentUser>();
+          
+          localList.forEach((s) => mergedMap.set(s.mobile || s.id, s));
+          cloudStudents.forEach((cs) => {
+            const key = cs.mobile || cs.id;
+            mergedMap.set(key, { ...(mergedMap.get(key) || {}), ...cs });
+          });
+          
+          const mergedList = Array.from(mergedMap.values());
+          localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(mergedList));
+        } catch (e) {
+          console.error("Cloud merge error:", e);
+        }
+      }
+    });
+  }, []);
+
   // Handle Form Submit
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
@@ -265,6 +291,9 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       existingList.unshift(newStudent);
       localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(existingList));
 
+      // Save to Firebase Firestore Cloud
+      await saveStudentToCloud(newStudent);
+
       setIsLoading(false);
       setPendingApprovalStudent(newStudent);
       return;
@@ -282,6 +311,17 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           ) || null;
       } catch (e) {
         console.error(e);
+      }
+
+      // Check cloud Firestore in real-time if not found or to get updated approval status
+      const cloudStudents = await fetchStudentsFromCloud();
+      const cloudMatch = cloudStudents.find(
+        (cs) =>
+          cs.mobile === cleanIdentifier ||
+          (cs.email && cs.email.toLowerCase() === cleanIdentifier.toLowerCase())
+      );
+      if (cloudMatch) {
+        foundUser = { ...(foundUser || {}), ...cloudMatch } as StudentUser;
       }
 
       if (!foundUser) {
@@ -307,6 +347,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       // Successful Approved Login
       foundUser.lastLoginAt = Date.now();
       localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(foundUser));
+      saveStudentToCloud(foundUser); // update lastLoginAt to cloud
       setSuccessMessage(`स्वागत आहे, ${foundUser.name}! टेस्ट सिरीज उघडत आहे...`);
       setTimeout(() => {
         setIsLoading(false);
