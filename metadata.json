@@ -1,0 +1,6 @@
+{
+  "name": "NEET JEE MHT-CET MCQ Prep Master",
+  "description": "Comprehensive MCQ Practice & Mock Test Platform for NEET, JEE Main, and MHT-CET with bilingual Marathi & English questions, detailed step-by-step solutions, custom question creator, chapter-wise filters, and AI-powered practice generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
