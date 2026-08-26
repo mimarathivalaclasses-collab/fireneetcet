@@ -5,6 +5,7 @@ import {
   FileText,
   Building2,
   User,
+  Users,
   Trophy,
   History,
   Gift,
@@ -73,16 +74,32 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         <span className="absolute -top-1 right-1 w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
       </button>
 
+      {/* Refer & Earn (Free ₹29 / Commission) */}
+      <button
+        onClick={() => handleNav("refer_earn")}
+        className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all relative ${
+          activeTab === "refer_earn"
+            ? "text-emerald-600 dark:text-emerald-400 font-extrabold"
+            : "text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300"
+        }`}
+      >
+        <Gift className={`w-5 h-5 ${activeTab === "refer_earn" ? "stroke-[2.5] text-emerald-600" : "stroke-2 text-emerald-600"}`} />
+        <span className="text-[10px] mt-0.5 font-bold">रेफर & कमवा</span>
+        <span className="absolute -top-1 -right-0.5 px-1 py-0.2 rounded-full text-[8px] font-black bg-emerald-500 text-slate-950">
+          ₹२९
+        </span>
+      </button>
+
       {/* Agent Portal */}
       <button
         onClick={() => handleNav("agent_portal")}
-        className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${
+        className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all ${
           activeTab === "agent_portal"
             ? "text-indigo-600 dark:text-indigo-400 font-extrabold"
             : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
         }`}
       >
-        <Gift className={`w-5 h-5 ${activeTab === "agent_portal" ? "stroke-[2.5]" : "stroke-2"}`} />
+        <Users className={`w-5 h-5 ${activeTab === "agent_portal" ? "stroke-[2.5]" : "stroke-2"}`} />
         <span className="text-[10px] mt-0.5">एजंट</span>
       </button>
 

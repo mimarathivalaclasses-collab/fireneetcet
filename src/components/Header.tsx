@@ -234,12 +234,26 @@ export const Header: React.FC<HeaderProps> = ({
           {/* PWA Install Quick Action */}
           <PWAInstallPrompt mini />
 
+          {/* Refer & Earn (10 Referrals = 100% Refund / ₹5.80 each) Top Action Button */}
+          <button
+            id="btn-header-refer-earn"
+            onClick={() => handleNavClick("refer_earn")}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white text-xs font-black shadow-sm transition-all cursor-pointer ring-1 ring-emerald-400 hover:scale-102"
+            title="मित्रांना रेफर करा आणि १००% फी परत किंवा थेट कमिशन मिळवा"
+          >
+            <Gift className="w-4 h-4 text-amber-300 fill-amber-300 animate-bounce" />
+            <span className="font-extrabold">🎁 रेफर आणि कमवा</span>
+            <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 font-mono-numbers">
+              ₹५.८०/विद्यार्थी
+            </span>
+          </button>
+
           {/* Master Admin Panel */}
           {onOpenAdminDashboard && (
             <button
               onClick={onOpenAdminDashboard}
               className="relative flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-black shadow-xs transition-all cursor-pointer ring-1 ring-slate-700"
-              title="मास्टर ॲडमिन पॅनल - विद्यार्थी मंजुरी, क्लासेस व नियंत्रण"
+              title="मास्टर ॲडमिन पॅनल - विद्यार्थी मंजुरी व नियंत्रण"
             >
               <KeyRound className="w-3.5 h-3.5 text-amber-400" />
               <span className="hidden sm:inline">ॲडमिन</span>
@@ -390,6 +404,23 @@ export const Header: React.FC<HeaderProps> = ({
               <span>⚡ सराव (१२.५ लाख MCQs)</span>
             </button>
 
+            {/* Refer & Earn (10 Referrals = 100% Refund / ₹5.80 commission) */}
+            <button
+              id="nav-refer-earn"
+              onClick={() => handleNavClick("refer_earn")}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-black ${
+                activeNav === "refer_earn"
+                  ? "bg-emerald-700 text-white shadow-sm ring-1 ring-emerald-400"
+                  : "text-emerald-950 bg-emerald-100/90 border border-emerald-300 hover:bg-emerald-200"
+              }`}
+            >
+              <Gift className={`w-3.5 h-3.5 ${activeNav === "refer_earn" ? "text-amber-300" : "text-emerald-700"}`} />
+              <span>🎁 रेफर करा आणि कमवा (₹२९ परत)</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-emerald-600 text-white uppercase">
+                १० रेफर = १००% परत
+              </span>
+            </button>
+
             {/* Agent Commission Portal */}
             <button
               id="nav-agent-portal"
@@ -405,34 +436,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase">
                 ₹५.८०/विद्यार्थी
               </span>
-            </button>
-
-            {/* Refer & Earn (10 Referrals = 100% Refund) */}
-            <button
-              id="nav-refer-earn"
-              onClick={() => handleNavClick("refer_earn")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-black ${
-                activeNav === "refer_earn"
-                  ? "bg-emerald-700 text-white shadow-sm ring-1 ring-emerald-400"
-                  : "text-emerald-950 bg-emerald-100/90 border border-emerald-300 hover:bg-emerald-200"
-              }`}
-            >
-              <Gift className={`w-3.5 h-3.5 ${activeNav === "refer_earn" ? "text-amber-300" : "text-emerald-700"}`} />
-              <span>🎁 विद्यार्थी रेफर (₹२९ परत)</span>
-            </button>
-
-            {/* Practice */}
-            <button
-              id="nav-practice"
-              onClick={() => handleNavClick("practice")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all ${
-                activeNav === "practice"
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "text-slate-700 bg-white border border-slate-200 hover:bg-slate-100"
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5 text-slate-700" />
-              <span>सराव (Practice)</span>
             </button>
 
             {/* Mock Test */}

@@ -213,6 +213,26 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           {/* Divider */}
           <div className="h-px bg-slate-200 dark:bg-slate-800 my-1.5" />
 
+          {/* Student Refer & Earn (Top Highlight) */}
+          <button
+            onClick={() => handleItemClick("refer_earn")}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors text-xs font-bold ${
+              activeTab === "refer_earn"
+                ? "bg-emerald-600 text-white shadow-md"
+                : isDarkMode
+                ? "text-emerald-300 bg-emerald-950/40 border border-emerald-500/30 hover:bg-emerald-900/50"
+                : "text-emerald-950 bg-emerald-50 border border-emerald-300 hover:bg-emerald-100"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Gift className="w-4 h-4 text-emerald-500 animate-pulse" />
+              <span>🎁 रेफर आणि कमवा (₹२९ परत / कमिशन)</span>
+            </div>
+            <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-emerald-500 text-slate-950">
+              १० रेफर = Free
+            </span>
+          </button>
+
           {/* Agent Portal */}
           <button
             onClick={() => handleItemClick("agent_portal")}
