@@ -31,6 +31,7 @@ import {
   submitPayoutRequest,
   getUserPayoutsHistory,
 } from "../utils/referralSystem";
+import { MyReferralsDashboard } from "./MyReferralsDashboard";
 
 interface StudentReferEarnViewProps {
   currentUser: StudentUser | null;
@@ -341,23 +342,23 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
       {/* 3. LIVE STATS DASHBOARD (Balance, Referred Count, Withdrawal Minimum) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Wallet Balance Card */}
-        <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-2">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               उपलब्ध कमाई (Wallet Balance)
             </span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-black">
               <Wallet className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-3xl font-black text-emerald-950 font-mono-numbers">
+          <div className="text-3xl font-black text-emerald-950 dark:text-emerald-400 font-mono-numbers">
             ₹{formatInr(availableEarnings)}
           </div>
-          <div className="flex items-center justify-between text-[11px] text-slate-600 pt-1 border-t border-slate-100 font-medium">
+          <div className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800 font-medium">
             <span>किमान विड्रॉल: <strong>₹{minWithdrawal}</strong></span>
             <span
               className={`font-black ${
-                canWithdraw ? "text-emerald-700" : "text-amber-700"
+                canWithdraw ? "text-emerald-700 dark:text-emerald-400" : "text-amber-700 dark:text-amber-400"
               }`}
             >
               {canWithdraw ? "✓ विड्रॉल पात्र" : `अजून ₹${formatInr(remainingForWithdraw)} हवे`}
@@ -366,47 +367,47 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
         </div>
 
         {/* Total Friends Referred */}
-        <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-2">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-slate-500 uppercase tracking-wider">
+            <span className="text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider">
               एकूण जोडलेले मित्र (Total Referrals)
             </span>
-            <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-black">
+            <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 flex items-center justify-center font-black">
               <Users className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-3xl font-black text-slate-900 font-mono-numbers">
-            {totalReferredCount} <span className="text-sm font-normal text-slate-500">विद्यार्थी</span>
+          <div className="text-3xl font-black text-slate-900 dark:text-white font-mono-numbers">
+            {totalReferredCount} <span className="text-sm font-normal text-slate-500 dark:text-slate-400">विद्यार्थी</span>
           </div>
-          <div className="text-[11px] text-slate-600 pt-1 border-t border-slate-100 font-medium">
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800 font-medium">
             प्रति मित्र <strong>₹५.८०</strong> थेट जमा झाले
           </div>
         </div>
 
         {/* 10 Referral 100% Fee Refund Milestone */}
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-5 border border-amber-200 shadow-xs space-y-2">
+        <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/40 rounded-3xl p-5 border border-amber-200 dark:border-amber-800/80 shadow-xs space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-amber-900 uppercase tracking-wider flex items-center gap-1">
-              <Trophy className="w-3.5 h-3.5 text-amber-600" />
+            <span className="text-xs font-black text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1">
+              <Trophy className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               <span>१० रेफरल्स १००% रिफंड</span>
             </span>
-            <span className="text-xs font-black text-amber-900 font-mono-numbers">
+            <span className="text-xs font-black text-amber-900 dark:text-amber-300 font-mono-numbers">
               {totalReferredCount}/{targetMilestone}
             </span>
           </div>
 
           {/* Progress bar */}
-          <div className="w-full h-3 rounded-full bg-amber-200/60 overflow-hidden">
+          <div className="w-full h-3 rounded-full bg-amber-200/60 dark:bg-amber-900/60 overflow-hidden">
             <div
               className="h-full rounded-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500"
               style={{ width: `${progressToMilestone}%` }}
             />
           </div>
 
-          <div className="text-[11px] text-amber-950 font-bold pt-1">
+          <div className="text-[11px] text-amber-950 dark:text-amber-200 font-bold pt-1">
             {totalReferredCount >= targetMilestone ? (
-              <span className="text-emerald-800 flex items-center gap-1 font-black">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="text-emerald-800 dark:text-emerald-400 flex items-center gap-1 font-black">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 अभिनंदन! १००% फी रिफंड लक्ष्य पूर्ण!
               </span>
             ) : (
@@ -417,17 +418,17 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
       </div>
 
       {/* 4. NAVIGATION SUB-TABS: OVERVIEW & RULES | MY REFERRED LIST | WITHDRAW FORM */}
-      <div className="flex p-1.5 rounded-2xl bg-slate-100 border border-slate-200 text-xs font-bold gap-1">
+      <div className="flex p-1.5 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold gap-1">
         <button
           type="button"
           onClick={() => setActiveSubTab("overview")}
           className={`flex-1 py-2.5 px-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
             activeSubTab === "overview"
-              ? "bg-white text-slate-950 font-black shadow-xs"
-              : "text-slate-600 hover:text-slate-900"
+              ? "bg-white dark:bg-slate-900 text-slate-950 dark:text-white font-black shadow-xs"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          <Sparkles className="w-4 h-4 text-emerald-600" />
+          <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
           <span>नियम व कमिशन चार्ट</span>
         </button>
 
@@ -436,12 +437,12 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
           onClick={() => setActiveSubTab("my_referrals")}
           className={`flex-1 py-2.5 px-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
             activeSubTab === "my_referrals"
-              ? "bg-white text-slate-950 font-black shadow-xs"
-              : "text-slate-600 hover:text-slate-900"
+              ? "bg-white dark:bg-slate-900 text-slate-950 dark:text-white font-black shadow-xs"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          <Users className="w-4 h-4 text-indigo-600" />
-          <span>रेफर केलेले विद्यार्थी ({totalReferredCount})</span>
+          <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <span>माझे रेफरल्स डॅशबोर्ड ({totalReferredCount})</span>
         </button>
 
         <button
@@ -449,11 +450,11 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
           onClick={() => setActiveSubTab("withdraw")}
           className={`flex-1 py-2.5 px-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
             activeSubTab === "withdraw"
-              ? "bg-white text-slate-950 font-black shadow-xs"
-              : "text-slate-600 hover:text-slate-900"
+              ? "bg-white dark:bg-slate-900 text-slate-950 dark:text-white font-black shadow-xs"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          <Wallet className="w-4 h-4 text-emerald-700" />
+          <Wallet className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
           <span>पैसे काढा (Withdraw UPI)</span>
         </button>
       </div>
@@ -462,39 +463,39 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
       {activeSubTab === "overview" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Rules & Transparency Card */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-600" />
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+            <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
               <span>रेफरल नियम आणि कमिशन पद्धत</span>
             </h3>
 
-            <div className="space-y-3 text-xs text-slate-700">
-              <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 space-y-1">
-                <div className="font-black text-emerald-950 flex items-center gap-1.5">
-                  <Zap className="w-4 h-4 text-emerald-600" />
+            <div className="space-y-3 text-xs text-slate-700 dark:text-slate-300">
+              <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl border border-emerald-200 dark:border-emerald-800/80 space-y-1">
+                <div className="font-black text-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
+                  <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>प्रति रेफर २०% थेट कमिशन (₹२९ चे २०% = ₹५.८०)</span>
                 </div>
-                <p className="text-emerald-900 leading-relaxed">
+                <p className="text-emerald-900 dark:text-emerald-200/90 leading-relaxed">
                   जेव्हा तुमच्या लिंकवरून किंवा रेफरल कोड टाकून कोणताही विद्यार्थी ₹२९ चा प्लॅन सुरू करतो, तेव्हा त्वरित ₹५.८० तुमच्या वॉलेटमध्ये जमा होतात.
                 </p>
               </div>
 
-              <div className="p-3 bg-indigo-50 rounded-2xl border border-indigo-200 space-y-1">
-                <div className="font-black text-indigo-950 flex items-center gap-1.5">
-                  <CreditCard className="w-4 h-4 text-indigo-600" />
+              <div className="p-3 bg-indigo-50 dark:bg-indigo-950/40 rounded-2xl border border-indigo-200 dark:border-indigo-800/80 space-y-1">
+                <div className="font-black text-indigo-950 dark:text-indigo-300 flex items-center gap-1.5">
+                  <CreditCard className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   <span>किमान विड्रॉल मर्यादा: ₹१०० (Minimum ₹100 Payout)</span>
                 </div>
-                <p className="text-indigo-900 leading-relaxed">
+                <p className="text-indigo-900 dark:text-indigo-200/90 leading-relaxed">
                   वॉलेटमध्ये किमान ₹१०० किंवा जास्त रक्कम झाल्यावर तुम्ही तुमच्या PhonePe, Google Pay, Paytm UPI ID वर किंवा बँक खात्यात थेट विड्रॉल विनंती पाठवू शकता.
                 </p>
               </div>
 
-              <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 space-y-1">
-                <div className="font-black text-amber-950 flex items-center gap-1.5">
-                  <Trophy className="w-4 h-4 text-amber-600" />
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-2xl border border-amber-200 dark:border-amber-800/80 space-y-1">
+                <div className="font-black text-amber-950 dark:text-amber-300 flex items-center gap-1.5">
+                  <Trophy className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                   <span>१० रेफरल्स = १००% फी रिफंड किंवा अतिरिक्त नफा!</span>
                 </div>
-                <p className="text-amber-900 leading-relaxed">
+                <p className="text-amber-900 dark:text-amber-200/90 leading-relaxed">
                   १० मित्र जोडल्यावर तुम्ही तुमची संपूर्ण भरलेली ₹२९ फी परत घेऊ शकता किंवा ₹५८ थेट खात्यावर ट्रान्सफर करू शकता.
                 </p>
               </div>
@@ -502,13 +503,13 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
           </div>
 
           {/* Transparent Earning Calculator Table */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-indigo-600" />
+              <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 <span>कमिशन कमाई तक्ता (Earnings Chart)</span>
               </h3>
-              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                 २०% प्रति रेफर
               </span>
             </div>
@@ -516,55 +517,55 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
             <div className="overflow-x-auto">
               <table className="w-full text-xs text-left">
                 <thead>
-                  <tr className="border-b border-slate-200 text-slate-500 font-bold">
+                  <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold">
                     <th className="py-2">विद्यार्थी संख्या</th>
                     <th className="py-2">दर</th>
                     <th className="py-2 text-right">एकूण कमाई</th>
                     <th className="py-2 text-right">विड्रॉल स्थिती</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-semibold text-slate-700 font-mono-numbers">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-semibold text-slate-700 dark:text-slate-300 font-mono-numbers">
                   <tr>
                     <td className="py-2.5">५ विद्यार्थी</td>
                     <td className="py-2.5">२०% (₹५.८०)</td>
-                    <td className="py-2.5 text-right font-black text-slate-900">₹२९.००</td>
+                    <td className="py-2.5 text-right font-black text-slate-900 dark:text-white">₹२९.००</td>
                     <td className="py-2.5 text-right text-slate-400">अजून ५ हवे</td>
                   </tr>
-                  <tr className="bg-emerald-50/50">
+                  <tr className="bg-emerald-50/50 dark:bg-emerald-950/30">
                     <td className="py-2.5 font-bold">१० विद्यार्थी (रिफंड)</td>
                     <td className="py-2.5">२०% (₹५.८०)</td>
-                    <td className="py-2.5 text-right font-black text-emerald-700">₹५८.००</td>
-                    <td className="py-2.5 text-right text-emerald-700 font-bold">१००% फी रिफंड</td>
+                    <td className="py-2.5 text-right font-black text-emerald-700 dark:text-emerald-400">₹५८.००</td>
+                    <td className="py-2.5 text-right text-emerald-700 dark:text-emerald-400 font-bold">१००% फी रिफंड</td>
                   </tr>
-                  <tr className="bg-emerald-100/40">
+                  <tr className="bg-emerald-100/40 dark:bg-emerald-950/50">
                     <td className="py-2.5 font-bold">१८ विद्यार्थी (Min Payout)</td>
                     <td className="py-2.5">२०% (₹५.८०)</td>
-                    <td className="py-2.5 text-right font-black text-emerald-800">₹१०४.४०</td>
-                    <td className="py-2.5 text-right text-emerald-700 font-bold">✓ थेट UPI विड्रॉल</td>
+                    <td className="py-2.5 text-right font-black text-emerald-800 dark:text-emerald-300">₹१०४.४०</td>
+                    <td className="py-2.5 text-right text-emerald-700 dark:text-emerald-400 font-bold">✓ थेट UPI विड्रॉल</td>
                   </tr>
                   <tr>
                     <td className="py-2.5">५० विद्यार्थी</td>
                     <td className="py-2.5">२०% (₹५.८०)</td>
-                    <td className="py-2.5 text-right font-black text-slate-900">₹२९०.००</td>
-                    <td className="py-2.5 text-right text-emerald-700 font-bold">✓ थेट खात्यात</td>
+                    <td className="py-2.5 text-right font-black text-slate-900 dark:text-white">₹२९०.००</td>
+                    <td className="py-2.5 text-right text-emerald-700 dark:text-emerald-400 font-bold">✓ थेट खात्यात</td>
                   </tr>
                   <tr>
                     <td className="py-2.5">१०० विद्यार्थी</td>
                     <td className="py-2.5">२०% (₹५.८०)</td>
-                    <td className="py-2.5 text-right font-black text-slate-900">₹५८०.००</td>
-                    <td className="py-2.5 text-right text-emerald-700 font-bold">✓ थेट खात्यात</td>
+                    <td className="py-2.5 text-right font-black text-slate-900 dark:text-white">₹५८०.००</td>
+                    <td className="py-2.5 text-right text-emerald-700 dark:text-emerald-400 font-bold">✓ थेट खात्यात</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-[11px] text-slate-600 flex items-center justify-between">
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-400 flex items-center justify-between">
               <span>अडचण आल्यास संपर्क:</span>
               <a
                 href={`https://wa.me/91${REFERRAL_CONFIG.ADMIN_CONTACT_PHONE}?text=Namaskar%20Admin,%20Referral%20babat%20sahayya%20have%20aahe.`}
                 target="_blank"
                 rel="noreferrer"
-                className="font-bold text-emerald-700 hover:underline flex items-center gap-1"
+                className="font-bold text-emerald-700 dark:text-emerald-400 hover:underline flex items-center gap-1"
               >
                 <Phone className="w-3 h-3" />
                 <span>{REFERRAL_CONFIG.ADMIN_CONTACT_PHONE} (WhatsApp)</span>
@@ -574,121 +575,47 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
         </div>
       )}
 
-      {/* TAB CONTENT 2: MY REFERRED STUDENTS LIST ("त्यांनी किती refer केले हे दिसेल") */}
+      {/* TAB CONTENT 2: MY REFERRALS DASHBOARD WITH 100% REFUND TRACKER */}
       {activeSubTab === "my_referrals" && (
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
-            <div>
-              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                <Users className="w-5 h-5 text-indigo-600" />
-                <span>माझ्या रेफरलने सामील झालेले विद्यार्थी</span>
-              </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
-                खालील विद्यार्थ्यांनी तुमच्या कोडने नोंदणी केली आहे व प्रति विद्यार्थी ₹५.८० जमा झाले आहेत.
-              </p>
-            </div>
-
-            <div className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-900 font-black text-xs font-mono-numbers">
-              एकूण: {referredList.length} विद्यार्थी
-            </div>
-          </div>
-
-          {referredList.length === 0 ? (
-            <div className="p-8 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center mx-auto">
-                <Users className="w-6 h-6" />
-              </div>
-              <h4 className="font-bold text-slate-800 text-sm">
-                अजून कोणीही विद्यार्थी जोडलेला नाही.
-              </h4>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                तुमचा रेफरल कोड किंवा लिंक मित्रांसोबत WhatsApp वर शेअर करा आणि प्रति विद्यार्थी ₹५.८० कमवा!
-              </p>
-              <button
-                type="button"
-                onClick={handleCopyLink}
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs inline-flex items-center gap-2 cursor-pointer shadow-sm"
-              >
-                <Copy className="w-4 h-4" />
-                <span>लिंक कॉपी करून शेअर करा</span>
-              </button>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left">
-                <thead>
-                  <tr className="border-b border-slate-200 text-slate-500 font-bold bg-slate-50/70">
-                    <th className="py-2.5 px-3 rounded-l-xl">विद्यार्थ्याचे नाव</th>
-                    <th className="py-2.5 px-3">मोबाईल</th>
-                    <th className="py-2.5 px-3">लक्ष्य परीक्षा</th>
-                    <th className="py-2.5 px-3">नोंदणी तारीख</th>
-                    <th className="py-2.5 px-3">स्थिती</th>
-                    <th className="py-2.5 px-3 text-right rounded-r-xl">कमिशन जमा</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
-                  {referredList.map((rec, idx) => (
-                    <tr key={rec.id || idx} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="py-3 px-3 font-bold text-slate-900">
-                        {rec.referredStudentName || "विद्यार्थी"}
-                      </td>
-                      <td className="py-3 px-3 font-mono text-slate-500">
-                        {maskPhoneNumber(rec.referredStudentMobile)}
-                      </td>
-                      <td className="py-3 px-3">
-                        <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-800 font-bold text-[10px]">
-                          {rec.referredStudentExam || "MHT_CET"}
-                        </span>
-                      </td>
-                      <td className="py-3 px-3 text-slate-500 font-mono-numbers">
-                        {new Date(rec.timestamp).toLocaleDateString("mr-IN", {
-                          day: "numeric",
-                          month: "short",
-                        })}
-                      </td>
-                      <td className="py-3 px-3">
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px] flex items-center gap-1 w-fit">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                          सक्रिय
-                        </span>
-                      </td>
-                      <td className="py-3 px-3 text-right font-black text-emerald-700 font-mono-numbers">
-                        +₹{formatInr(rec.commissionEarned || 5.8)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+        <MyReferralsDashboard
+          currentUser={currentUser}
+          studentRefCode={studentRefCode}
+          studentRefUrl={studentRefUrl}
+          referredList={referredList}
+          onCopyCode={handleCopyCode}
+          onCopyLink={handleCopyLink}
+          copiedCode={copiedCode}
+          copiedLink={copiedLink}
+          onOpenQr={() => setShowQrModal(true)}
+          onNavigateToWithdraw={() => setActiveSubTab("withdraw")}
+        />
       )}
 
       {/* TAB CONTENT 3: WITHDRAW FORM (MINIMUM ₹100) */}
       {activeSubTab === "withdraw" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Withdrawal Form */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                <Wallet className="w-5 h-5 text-emerald-600" />
+              <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+                <Wallet className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 <span>UPI विड्रॉल विनंती (Withdrawal)</span>
               </h3>
-              <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+              <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
                 किमान मर्यादा: ₹{minWithdrawal}
               </span>
             </div>
 
             {/* If balance is less than ₹100, show guidance card */}
             {!canWithdraw ? (
-              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-3">
-                <div className="flex items-start gap-2.5 text-amber-950 text-xs">
-                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 space-y-3">
+                <div className="flex items-start gap-2.5 text-amber-950 dark:text-amber-200 text-xs">
+                  <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                   <div className="space-y-1">
                     <p className="font-bold">
                       सध्या तुमचे वॉलेट बॅलन्स ₹{formatInr(availableEarnings)} आहे.
                     </p>
-                    <p className="text-amber-800 leading-relaxed">
+                    <p className="text-amber-800 dark:text-amber-300/90 leading-relaxed">
                       पैसे थेट खात्यावर काढण्यासाठी <strong>किमान ₹{minWithdrawal}</strong> शिल्लक असणे आवश्यक आहे. (अजून <strong>₹{formatInr(remainingForWithdraw)}</strong> किंवा <strong>{referralsNeededForMin}</strong> मित्रांना जोडा).
                     </p>
                   </div>
@@ -696,11 +623,11 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
 
                 {/* Progress bar towards ₹100 */}
                 <div className="space-y-1">
-                  <div className="flex justify-between text-[11px] font-bold text-amber-900 font-mono-numbers">
+                  <div className="flex justify-between text-[11px] font-bold text-amber-900 dark:text-amber-300 font-mono-numbers">
                     <span>सध्या: ₹{formatInr(availableEarnings)}</span>
                     <span>लक्ष्य: ₹{minWithdrawal}</span>
                   </div>
-                  <div className="w-full h-2.5 rounded-full bg-amber-200 overflow-hidden">
+                  <div className="w-full h-2.5 rounded-full bg-amber-200 dark:bg-amber-900/60 overflow-hidden">
                     <div
                       className="h-full rounded-full bg-amber-500"
                       style={{
@@ -713,22 +640,22 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
             ) : null}
 
             {payoutSuccessMessage && (
-              <div className="p-4 rounded-2xl bg-emerald-100 border border-emerald-300 text-xs text-emerald-950 font-bold flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0" />
+              <div className="p-4 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 text-xs text-emerald-950 dark:text-emerald-200 font-bold flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-emerald-700 dark:text-emerald-400 shrink-0" />
                 <span>{payoutSuccessMessage}</span>
               </div>
             )}
 
             {payoutErrorMessage && (
-              <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 font-bold flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+              <div className="p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-xs text-rose-800 dark:text-rose-200 font-bold flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
                 <span>{payoutErrorMessage}</span>
               </div>
             )}
 
             <form onSubmit={handleWithdrawalSubmit} className="space-y-3.5">
               <div>
-                <label className="text-xs font-black text-slate-700 block mb-1">
+                <label className="text-xs font-black text-slate-700 dark:text-slate-300 block mb-1">
                   काढायची रक्कम (रुपये):
                 </label>
                 <div className="relative">
@@ -743,16 +670,16 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
                     placeholder={`किमान ${minWithdrawal}`}
                     value={withdrawAmount}
                     onChange={(e) => setWithdrawAmount(e.target.value)}
-                    className="w-full pl-8 pr-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-emerald-600 font-mono font-bold text-xs outline-none"
+                    className="w-full pl-8 pr-3.5 py-2.5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-emerald-600 font-mono font-bold text-xs outline-none"
                   />
                 </div>
-                <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+                <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 mt-1">
                   <span>उपलब्ध: ₹{formatInr(availableEarnings)}</span>
                   {availableEarnings >= minWithdrawal && (
                     <button
                       type="button"
                       onClick={() => setWithdrawAmount(String(Math.floor(availableEarnings)))}
-                      className="text-emerald-700 font-bold hover:underline cursor-pointer"
+                      className="text-emerald-700 dark:text-emerald-400 font-bold hover:underline cursor-pointer"
                     >
                       सर्व रक्कम (₹{Math.floor(availableEarnings)}) टाका
                     </button>
@@ -761,7 +688,7 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
               </div>
 
               <div>
-                <label className="text-xs font-black text-slate-700 block mb-1">
+                <label className="text-xs font-black text-slate-700 dark:text-slate-300 block mb-1">
                   तुमचा UPI ID (PhonePe / GPay / Paytm / BHIM):
                 </label>
                 <input
@@ -770,7 +697,7 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
                   placeholder="उदा. 9307220454@yz किंवा name@okaxis"
                   value={upiPayoutInput}
                   onChange={(e) => setUpiPayoutInput(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-emerald-600 font-mono font-bold text-xs outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-emerald-600 font-mono font-bold text-xs outline-none"
                 />
               </div>
 
@@ -779,8 +706,8 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
                 disabled={!canWithdraw || isSubmittingWithdraw}
                 className={`w-full py-3 rounded-2xl text-xs font-black uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   canWithdraw
-                    ? "bg-slate-900 hover:bg-slate-800 text-white"
-                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                    ? "bg-slate-900 hover:bg-slate-800 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500"
+                    : "bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed"
                 }`}
               >
                 <Send className="w-4 h-4" />
@@ -792,8 +719,8 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
               </button>
             </form>
 
-            <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-[11px] text-slate-500 flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
               <span>
                 विड्रॉल विनंती पाठवल्यानंतर २४ तासांत रक्कम थेट तुमच्या बँक/UPI खात्यावर जमा केली जाते.
               </span>
@@ -801,14 +728,14 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
           </div>
 
           {/* Payout Requests History */}
-          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
-            <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-indigo-600" />
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+            <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               <span>विड्रॉल इतिहास (Payout History)</span>
             </h3>
 
             {payoutHistory.length === 0 ? (
-              <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
+              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400">
                 कोणतीही विड्रॉल विनंती केलेली नाही.
               </div>
             ) : (
@@ -816,16 +743,16 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
                 {payoutHistory.map((p) => (
                   <div
                     key={p.id}
-                    className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs"
+                    className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs"
                   >
                     <div>
-                      <div className="font-black text-slate-900 font-mono-numbers">
+                      <div className="font-black text-slate-900 dark:text-white font-mono-numbers">
                         ₹{formatInr(p.amount)}
                       </div>
-                      <div className="text-[10px] text-slate-500 font-mono mt-0.5">
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">
                         UPI: {p.upiId}
                       </div>
-                      <div className="text-[10px] text-slate-400 mt-0.5">
+                      <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
                         {new Date(p.requestedAt).toLocaleString("mr-IN", {
                           day: "numeric",
                           month: "short",
@@ -839,10 +766,10 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
                       <span
                         className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
                           p.status === "approved" || p.status === "transferred"
-                            ? "bg-emerald-100 text-emerald-800"
+                            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800"
                             : p.status === "pending"
-                            ? "bg-amber-100 text-amber-800"
-                            : "bg-rose-100 text-rose-800"
+                            ? "bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800"
+                            : "bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-800"
                         }`}
                       >
                         {p.status === "approved" || p.status === "transferred"
@@ -852,7 +779,7 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
                           : "नाकारले (Rejected)"}
                       </span>
                       {p.adminUtr && (
-                        <div className="text-[10px] font-mono text-emerald-700 mt-1">
+                        <div className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 mt-1">
                           UTR: {p.adminUtr}
                         </div>
                       )}
