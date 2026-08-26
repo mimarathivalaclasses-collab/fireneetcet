@@ -21,6 +21,7 @@ import {
   Lightbulb,
   Clock,
   LogIn,
+  LogOut,
   Trophy,
   Building2,
   KeyRound,
@@ -34,6 +35,9 @@ import {
   FileSpreadsheet,
   Printer,
   ChevronRight,
+  UserCheck,
+  UserPlus,
+  RefreshCw,
 } from "lucide-react";
 import { ExamType, LanguageMode, NavigationTab, StudentUser } from "../types";
 import { formatTrialTime } from "../utils/deviceSecurity";
@@ -47,6 +51,8 @@ interface HomeGuidanceViewProps {
   onOpenAuthModal: () => void;
   onOpenPaymentModal?: () => void;
   onOpenAdminDashboard?: () => void;
+  onLogout?: () => void;
+  onStartDemoTest?: (exam: ExamType, demoIndex: number) => void;
 }
 
 export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
@@ -58,6 +64,8 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
   onOpenAuthModal,
   onOpenPaymentModal,
   onOpenAdminDashboard,
+  onLogout,
+  onStartDemoTest,
 }) => {
   const [activeBannerIndex, setActiveBannerIndex] = useState<number>(0);
 
@@ -94,27 +102,341 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
   const handleShareApp = () => {
     const shareText = `🎯 MHT-CET, NEET & JEE Main सराव ॲप! \n🔥 फक्त ₹२९ मध्ये (मूळ ₹२९९) २५,०००+ प्रश्न, १० Grand Tests, सराव व नोट्स!\n🎁 १० मित्रांना रेफर करा आणि १००% फी रिफंड मिळवा!\n👉 आत्ताच सुरू करा: ${window.location.origin}`;
     if (navigator.share) {
-      navigator.share({
-        title: "MHT-CET • NEET • JEE सराव ॲप",
-        text: shareText,
-        url: window.location.origin,
-      }).catch(() => {});
+      navigator
+        .share({
+          title: "MHT-CET • NEET • JEE सराव ॲप",
+          text: shareText,
+          url: window.location.origin,
+        })
+        .catch(() => {});
     } else {
       navigator.clipboard.writeText(shareText);
       alert("ॲप शेअर लिंक कॉपी झाली आहे! आपण WhatsApp वर पाठवू शकता.");
     }
   };
 
-  const handleRateUs = () => {
-    alert("⭐⭐⭐⭐⭐ \n\nधन्यवाद! आपले ५-स्टार रेटिंग आमच्यासाठी खूप मोलाचे आहे. आपले मत 9307220454 वर WhatsApp द्वारे नक्की कळवा.");
-  };
+  // Check if current user is a demo user
+  const isDemoUser = currentUser?.id?.startsWith("demo_user_");
+
+  // Options list configured for Vertical Strip (उभी पट्टी) Layout
+  const verticalOptions = [
+    {
+      id: "option-pyq",
+      icon: History,
+      iconBg: "bg-emerald-500 text-white shadow-emerald-500/30",
+      borderHover: "hover:border-emerald-400 hover:bg-emerald-50/40",
+      titleMr: "मागील वर्षांच्या प्रश्नपत्रिका (PYQ)",
+      titleEn: "Previous Year Question Papers",
+      badge: "2019 - 2025 • स्पष्टीकरणासह",
+      badgeColor: "bg-emerald-100 text-emerald-900",
+      desc: "MHT-CET, NEET व JEE च्या २०१९ ते २०२५ पर्यंतच्या सर्व अधिकृत प्रश्नपत्रिका सविस्तर उत्तरांसहित आणि स्टेप-बाय-स्टेप स्पष्टीकरणासह सोडवा.",
+      btnText: "प्रश्नपत्रिका सोडवा",
+      action: () => onNavigate("pyq"),
+    },
+    {
+      id: "option-mock-tests",
+      icon: Layers,
+      iconBg: "bg-blue-600 text-white shadow-blue-500/30",
+      borderHover: "hover:border-blue-400 hover:bg-blue-50/40",
+      titleMr: "घटकनिहाय सराव चाचण्या (Chapter Tests)",
+      titleEn: "Topic-wise & Chapter-wise Mock Tests",
+      badge: "सर्व विषय • १०-१०० Marks",
+      badgeColor: "bg-blue-100 text-blue-900",
+      desc: "Physics, Chemistry, Mathematics आणि Biology च्या प्रत्येक धड्याचे सविस्तर प्रश्नसंच आणि वेळेचे व्यवस्थापन शिकवणारे टेस्ट्स.",
+      btnText: "सराव चाचणी सुरू करा",
+      action: () => onNavigate("mock_test"),
+    },
+    {
+      id: "option-grand-tests",
+      icon: Trophy,
+      iconBg: "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-amber-500/30",
+      borderHover: "hover:border-amber-400 hover:bg-amber-50/40",
+      titleMr: "प्रीमियम ग्रँड टेस्ट्स (१० संपूर्ण संच)",
+      titleEn: "10 Full Syllabus Real Exam Simulators",
+      badge: "१० संपूर्ण संच • NTA पॅटर्न",
+      badgeColor: "bg-amber-100 text-amber-950 font-black",
+      desc: "प्रत्यक्ष मुख्य परीक्षेसारखा हुबेहूब अनुभव देणारे १० ग्रँड टेस्ट्स, निगेटिव्ह मार्किंग, परसेंटाईल कॅल्क्युलेटर व अचूक रँक अंदाज.",
+      btnText: "ग्रँड टेस्ट उघडा",
+      action: () => onNavigate("grand_tests"),
+      highlight: true,
+    },
+    {
+      id: "option-study-notes",
+      icon: BookOpen,
+      iconBg: "bg-indigo-600 text-white shadow-indigo-500/30",
+      borderHover: "hover:border-indigo-400 hover:bg-indigo-50/40",
+      titleMr: "अभ्यास साहित्य व फॉर्म्युला नोट्स",
+      titleEn: "Study Material, Formula Sheets & Short Notes",
+      badge: "PDF रेडी • शॉर्टकट ट्रिक्स",
+      badgeColor: "bg-indigo-100 text-indigo-900",
+      desc: "महत्त्वाचे फॉर्म्युले, शॉर्टकट ट्रिक्स, क्विक रिव्हिजन नोट्स आणि परीक्षेच्या शेवटच्या क्षणी रिव्हिजन करण्यासाठी हँडबुक्स.",
+      btnText: "नोट्स वाचा",
+      action: () => onNavigate("notes"),
+    },
+    {
+      id: "option-omr-tests",
+      icon: CircleDot,
+      iconBg: "bg-rose-600 text-white shadow-rose-500/30",
+      borderHover: "hover:border-rose-400 hover:bg-rose-50/40",
+      titleMr: "लाईव्ह टेस्ट व डिजिटल OMR शीट",
+      titleEn: "Live Speed Test & Digital OMR Practice",
+      badge: "OMR सराव • त्वरित निकाल",
+      badgeColor: "bg-rose-100 text-rose-900",
+      desc: "ऑफलाईन परीक्षेची तयारी करणाऱ्यांसाठी डिजिटल OMR बबलिंग सराव, वेळेचे टाइमर आणि टेस्ट सबमिट होताच इन्स्टंट स्कोअरकार्ड.",
+      btnText: "OMR टेस्ट सुरू करा",
+      action: () => onNavigate("omr"),
+    },
+    {
+      id: "option-coaching-portal",
+      icon: Building2,
+      iconBg: "bg-purple-600 text-white shadow-purple-500/30",
+      borderHover: "hover:border-purple-400 hover:bg-purple-50/40",
+      titleMr: "कोचिंग क्लासेस पोर्टल (२००० विद्यार्थी क्षमता)",
+      titleEn: "Coaching Institute Hub & Roster Management",
+      badge: "३० Min Free Trial • Excel अपलोड",
+      badgeColor: "bg-purple-100 text-purple-950 font-black",
+      desc: "क्लासच्या नावाने व लोगोसह साप्ताहिक परीक्षांचे आयोजन, विद्यार्थी व्यवस्थापन (Add Student), Excel फाईल अपलोड आणि अचूक रँकिंग.",
+      btnText: "क्लासेस पोर्टल उघडा",
+      action: () => onNavigate("classes_portal"),
+      highlightPurple: true,
+    },
+    {
+      id: "option-refer-earn",
+      icon: Gift,
+      iconBg: "bg-emerald-600 text-white shadow-emerald-500/30",
+      borderHover: "hover:border-emerald-400 hover:bg-emerald-50/40",
+      titleMr: "रेफर आणि कमवा (१००% फी रिफंड)",
+      titleEn: "Refer & Earn 100% Fee Refund",
+      badge: "१० रेफरल्स = १००% रिफंड",
+      badgeColor: "bg-emerald-100 text-emerald-950 font-black",
+      desc: "तुमच्या मित्रांना आणि क्लासमेट्सना ॲप शेअर करा. १० मित्रांनी नोंदणी करताच तुमची ₹२९ फी थेट बँक खात्यात १००% परत केली जाईल.",
+      btnText: "रेफरल लिंक मिळवा",
+      action: () => onNavigate("refer_earn"),
+    },
+    {
+      id: "option-question-bank",
+      icon: FileText,
+      iconBg: "bg-cyan-600 text-white shadow-cyan-500/30",
+      borderHover: "hover:border-cyan-400 hover:bg-cyan-50/40",
+      titleMr: "सर्व प्रश्नसंच बँक (Master Question Bank)",
+      titleEn: "25,000+ Question Repository & Filter",
+      badge: "२५,०००+ प्रश्न • चॅप्टर फिल्टर",
+      badgeColor: "bg-cyan-100 text-cyan-900",
+      desc: "कोणताही धडा किंवा अवघड टॉपिक निवडून त्यावरील सर्व प्रश्नांचा सराव करा, स्पष्टीकरण पाहा आणि स्वतःची तयारी सुधारा.",
+      btnText: "प्रश्न बँक उघडा",
+      action: () => onNavigate("all_questions"),
+    },
+    {
+      id: "option-mistakes-notebook",
+      icon: AlertTriangle,
+      iconBg: "bg-red-500 text-white shadow-red-500/30",
+      borderHover: "hover:border-red-400 hover:bg-red-50/40",
+      titleMr: "माझ्या चुकांची रिव्हिजन वही (Mistakes Notebook)",
+      titleEn: "Auto-Saved Incorrect Questions for Revision",
+      badge: "Smart Revision • ०% चुका",
+      badgeColor: "bg-red-100 text-red-900",
+      desc: "चाचण्या सोडवताना चुकलेले सर्व प्रश्न येथे स्वयंचलित सेव्ह होतात. परीक्षेपूर्वी या प्रश्नांचा सराव करून चुका टाळा.",
+      btnText: "चुका दुरुस्त करा",
+      action: () => onNavigate("mistakes"),
+    },
+    {
+      id: "option-flashcards",
+      icon: Sparkles,
+      iconBg: "bg-amber-500 text-slate-950 shadow-amber-500/30",
+      borderHover: "hover:border-amber-400 hover:bg-amber-50/40",
+      titleMr: "फ्लॅशकार्ड्स व महत्त्वाचे पॉइंट्स (Flashcards)",
+      titleEn: "High-Speed Memory & Formula Flashcards",
+      badge: "जलद उजळणी • Smart Cards",
+      badgeColor: "bg-amber-100 text-amber-900",
+      desc: "बसमध्ये, प्रवासात किंवा मोकळ्या वेळेत ५ मिनिटांत विज्ञानाचे नियम, फॉर्म्युले आणि रिएक्शन्स तोंडपाठ करण्यासाठी सर्वोत्तम टूल.",
+      btnText: "फ्लॅशकार्ड्स सुरू करा",
+      action: () => onNavigate("flashcards"),
+    },
+    {
+      id: "option-printable-pdf",
+      icon: Printer,
+      iconBg: "bg-teal-600 text-white shadow-teal-500/30",
+      borderHover: "hover:border-teal-400 hover:bg-teal-50/40",
+      titleMr: "PDF व प्रिंट जनरेटर (Printable Test Generator)",
+      titleEn: "Download Printable Test Papers with Answer Keys",
+      badge: "Offline सराव • OMR प्रिंट",
+      badgeColor: "bg-teal-100 text-teal-900",
+      desc: "घरी बसून किंवा वर्गात पेपर देण्यासाठी A4 साईझ टेस्ट पेपर, OMR शीट आणि उत्तरपत्रिका १-क्लिकमध्ये प्रिंट करा.",
+      btnText: "PDF प्रिंट करा",
+      action: () => onNavigate("pdf_bank"),
+    },
+  ];
 
   return (
-    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6 animate-in fade-in">
+    <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6 animate-in fade-in">
+      {/* ======================================================== */}
+      {/* 1. DEDICATED LOGIN & USER ACCOUNT SECTION (लॉगिन केंद्र) */}
+      {/* ======================================================== */}
+      <div
+        id="home-login-account-panel"
+        className="rounded-3xl bg-linear-to-r from-slate-950 via-indigo-950 to-slate-900 border-2 border-indigo-500/40 p-5 sm:p-6 text-white shadow-2xl relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-60 h-60 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+          {/* Left info: User profile or Sign-In Prompt */}
+          <div className="space-y-2 max-w-2xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-0.5 rounded-full bg-indigo-500/25 border border-indigo-400/40 text-indigo-300 text-[11px] font-black uppercase tracking-wider flex items-center gap-1.5 shadow-xs">
+                <LogIn className="w-3.5 h-3.5 text-amber-400" />
+                <span>लॉगिन आणि खाते केंद्र (Account Portal)</span>
+              </span>
+
+              {currentUser && !isDemoUser ? (
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-black flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>सक्रिय अधिकृत खाते (Logged In)</span>
+                </span>
+              ) : (
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[11px] font-black flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                  <span>मोफत डेमो: {formatTrialTime(trialSecondsRemaining)} शिल्लक</span>
+                </span>
+              )}
+            </div>
+
+            {currentUser && !isDemoUser ? (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+                  <span>स्वागत आहे, {currentUser.name}!</span>
+                  <span className="text-xs px-2.5 py-0.5 rounded-lg bg-amber-400 text-slate-950 font-black">
+                    {currentUser.examTarget || currentExam}
+                  </span>
+                </h3>
+                <p className="text-xs sm:text-sm text-indigo-200/90 mt-1 font-medium">
+                  मोबाईल: <strong className="font-mono text-white">{currentUser.mobile}</strong> • स्थिती:{" "}
+                  <span className="text-emerald-400 font-bold">
+                    {currentUser.isApproved ? "मंजूर (Full Access)" : "सक्रिय"}
+                  </span>
+                  {currentUser.instituteCode && (
+                    <span className="ml-2 px-2 py-0.5 rounded bg-white/10 text-amber-300 font-mono text-xs">
+                      क्लास कोड: {currentUser.instituteCode}
+                    </span>
+                  )}
+                </p>
+              </div>
+            ) : (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-black text-white">
+                  विद्यार्थी व शिक्षक लॉगिन (Login Portal)
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed font-medium">
+                  आपल्या खात्यामध्ये लॉगिन करा किंवा नवीन नोंदणी करून <strong>२५,०००+ प्रश्न, १० Grand Tests आणि क्लासेस सिस्टीम</strong> अनलॉक करा.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Right Buttons: Login, Switch Account, Logout */}
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0 w-full md:w-auto">
+            {currentUser && !isDemoUser ? (
+              <>
+                <button
+                  id="btn-home-switch-account"
+                  onClick={onOpenAuthModal}
+                  className="flex-1 md:flex-initial px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer border border-white/20"
+                  title="दुसऱ्या खात्यात लॉगिन करा"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
+                  <span>खाते बदला / लॉगिन</span>
+                </button>
+
+                {onOpenAdminDashboard && (
+                  <button
+                    onClick={onOpenAdminDashboard}
+                    className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md"
+                  >
+                    <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+                    <span>मास्टर Admin</span>
+                  </button>
+                )}
+
+                {onLogout && (
+                  <button
+                    id="btn-home-logout"
+                    onClick={onLogout}
+                    className="px-3.5 py-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                    title="लॉग आऊट करा"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>लॉग आऊट</span>
+                  </button>
+                )}
+              </>
+            ) : (
+              <>
+                <button
+                  id="btn-home-login-now"
+                  onClick={onOpenAuthModal}
+                  className="flex-1 md:flex-initial px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-xs sm:text-sm uppercase tracking-wider shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 hover:scale-105"
+                >
+                  <LogIn className="w-4 h-4 text-slate-950" />
+                  <span>आत्ताच लॉगिन करा</span>
+                </button>
+
+                <button
+                  onClick={onOpenAuthModal}
+                  className="px-4 py-3 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-black text-xs flex items-center justify-center gap-1.5 border border-white/20 transition-all cursor-pointer"
+                >
+                  <UserPlus className="w-4 h-4 text-emerald-400" />
+                  <span>नवीन नोंदणी</span>
+                </button>
+
+                <button
+                  onClick={() => onNavigate("classes_portal")}
+                  className="px-3.5 py-3 rounded-2xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-400/30 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <Building2 className="w-4 h-4 text-amber-400" />
+                  <span>क्लासेस लॉगिन</span>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Quick Demo Test Bar for unregistered/demo users */}
+        {(!currentUser || isDemoUser) && onStartDemoTest && (
+          <div className="mt-4 pt-3.5 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="text-xs text-amber-200 font-bold">
+                ⚡ विनानोंदणी थेट ३ मोफत डेमो चाचण्या सुरू करा:
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => onStartDemoTest("MHT_CET", 1)}
+                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold border border-white/20 transition-all cursor-pointer"
+              >
+                डेमो १: Physics & Chem
+              </button>
+              <button
+                onClick={() => onStartDemoTest("MHT_CET", 2)}
+                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold border border-white/20 transition-all cursor-pointer"
+              >
+                डेमो २: Maths Sprint
+              </button>
+              <button
+                onClick={() => onStartDemoTest("NEET", 3)}
+                className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold border border-white/20 transition-all cursor-pointer"
+              >
+                डेमो ३: Biology Master
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* PROMINENT 'REFER & EARN' 90% DISCOUNT PROMOTIONAL BANNER */}
       <div
         id="banner-refer-earn-promo"
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-600 p-5 sm:p-6 text-slate-950 shadow-xl border-2 border-amber-300"
+        className="relative overflow-hidden rounded-3xl bg-linear-to-r from-amber-500 via-orange-500 to-rose-600 p-5 sm:p-6 text-slate-950 shadow-xl border-2 border-amber-300"
       >
         <div className="absolute -right-8 -bottom-8 w-40 h-40 bg-white/20 rounded-full blur-2xl pointer-events-none"></div>
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -166,83 +488,6 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         </div>
       </div>
 
-      {/* 1. Top Carousel / Announcement Banner Section */}
-      <div
-        className={`rounded-3xl bg-linear-to-br ${banners[activeBannerIndex].bgGradient} text-white p-5 sm:p-8 shadow-xl border border-slate-800 relative overflow-hidden transition-all duration-300`}
-      >
-        <div className="absolute -top-10 -right-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div className="relative z-10 space-y-3">
-          {/* Top Status & Indicator Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-black uppercase tracking-wider flex items-center gap-1.5 border border-white/20">
-              <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-              {banners[activeBannerIndex].badge}
-            </span>
-
-            {/* Carousel Navigation Dots */}
-            <div className="flex items-center gap-1.5">
-              {banners.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveBannerIndex(i)}
-                  className={`h-2 rounded-full transition-all cursor-pointer ${
-                    activeBannerIndex === i ? "w-6 bg-amber-400" : "w-2 bg-white/30 hover:bg-white/50"
-                  }`}
-                  aria-label={`Slide ${i + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Banner Title & Description */}
-          <div>
-            <h2 className="text-xl sm:text-3xl font-black tracking-tight leading-snug">
-              {banners[activeBannerIndex].title}
-            </h2>
-            <p className="text-slate-300 text-xs sm:text-sm mt-1.5 leading-relaxed font-medium max-w-2xl">
-              {banners[activeBannerIndex].subtitle}
-            </p>
-          </div>
-
-          {/* Pricing Highlight Pill & CTA */}
-          <div className="pt-2 flex flex-wrap items-center gap-3">
-            <button
-              onClick={banners[activeBannerIndex].action}
-              className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all cursor-pointer hover:scale-102"
-            >
-              <span>{banners[activeBannerIndex].ctaText}</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-
-            {/* Special Price Tag */}
-            <div className="px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 flex items-center gap-2 text-xs font-bold">
-              <span className="line-through text-slate-400 text-xs">₹२९९</span>
-              <span className="text-amber-300 font-black text-sm">₹२९ फक्त</span>
-              <span className="px-1.5 py-0.2 rounded bg-rose-600 text-white text-[9px] font-black uppercase">
-                ९०% सूट
-              </span>
-            </div>
-
-            {/* User Account / Trial State Pill */}
-            {currentUser ? (
-              <div className="px-3 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>{currentUser.name} (प्रमाणित खाते)</span>
-              </div>
-            ) : (
-              <button
-                onClick={onOpenAuthModal}
-                className="px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
-              >
-                <Clock className="w-4 h-4 text-amber-400 animate-pulse" />
-                <span>मोफत चाचणी: {formatTrialTime(trialSecondsRemaining)} शिल्लक</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* DAILY 20-QUESTION TARGET & STREAK CHALLENGE CARD */}
       <div
         id="card-daily-target-streak"
@@ -257,20 +502,15 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
                 <span>दैनिक २० प्रश्न चॅलेंज</span>
               </span>
               <span className="px-2.5 py-0.5 rounded-full bg-white text-orange-800 text-[11px] font-black">
-                🔥 ३ दिवस सलग स्ट्रीक!
+                🔥 नियमित सराव स्ट्रीक!
               </span>
             </div>
             <h3 className="text-base sm:text-lg font-black text-slate-950">
-              दररोज २० प्रश्न सोडवा आणि टॉप रँक पक्की करा! 🏆
+              दररोज २० प्रश्न सोडवा आणि CET / NEET मध्ये टॉप रँक पक्की करा! 🏆
             </h3>
             <p className="text-xs text-slate-900/90 font-medium max-w-xl">
-              आजचा सराव: <strong className="font-black">२० पैकी १५ प्रश्न पूर्ण</strong> (७५%). नियमित सराव करणाऱ्या विद्यार्थ्यांचे CET/NEET गुण २५% ने वाढतात!
+              नियमित २० प्रश्न सोडवल्याने अचूकता (Accuracy) आणि वेग (Speed) वेगाने सुधारतो.
             </p>
-            
-            {/* Progress Bar */}
-            <div className="w-full max-w-md bg-black/20 h-2.5 rounded-full overflow-hidden p-0.5 mt-2">
-              <div className="bg-slate-950 h-full rounded-full w-3/4 transition-all"></div>
-            </div>
           </div>
 
           <div className="shrink-0 w-full sm:w-auto">
@@ -286,280 +526,111 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         </div>
       </div>
 
-      {/* 2. Structured Grid of Square Menu Buttons (Mobile App Style) */}
-      <div>
-        <div className="flex items-center justify-between mb-3 px-1">
+      {/* ======================================================== */}
+      {/* 2. ALL OPTIONS IN VERTICAL STRIPS (उभ्या पट्ट्यांची यादी) */}
+      {/* ======================================================== */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
-            <h3 className="text-base sm:text-lg font-black tracking-tight text-slate-900">
-              अभ्यास व सराव विभाग (Menu Hub)
+            <span className="w-3 h-3 rounded-full bg-indigo-600 animate-pulse"></span>
+            <h3 className="text-lg sm:text-xl font-black tracking-tight text-slate-900">
+              सर्व अभ्यास व सराव विभाग (Menu Hub)
             </h3>
           </div>
-          <span className="text-xs text-slate-500 font-bold">
-            टार्गेट: <span className="text-indigo-600 font-black">{currentExam}</span>
+          <span className="text-xs text-slate-600 font-bold">
+            लक्ष्य परीक्षा: <span className="text-indigo-600 font-black">{currentExam}</span>
           </span>
         </div>
 
-        {/* 4-column or 2-column square grid layout matching reference UI */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          {/* Button 1: Previous Year Papers (PYQ) */}
-          <div
-            id="home-btn-pyq"
-            onClick={() => onNavigate("pyq")}
-            className="group p-4 rounded-2xl bg-white hover:bg-emerald-50/50 border border-slate-200 hover:border-emerald-300 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <History className="w-6 h-6" />
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 font-black uppercase font-mono">
-                2019-2025
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-slate-900 group-hover:text-emerald-800 transition-colors leading-tight">
-                मागील वर्षांच्या प्रश्नपत्रिका
-              </h4>
-              <p className="text-[11px] text-slate-500 mt-0.5 font-medium">
-                Previous Year Papers
-              </p>
-            </div>
-          </div>
+        {/* Vertical List of Full-Width Card Strips (उभ्या पट्ट्या) */}
+        <div className="space-y-3">
+          {verticalOptions.map((opt) => {
+            const Icon = opt.icon;
+            return (
+              <div
+                key={opt.id}
+                id={opt.id}
+                onClick={opt.action}
+                className={`group p-4 sm:p-5 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+                  opt.borderHover
+                } ${
+                  opt.highlight
+                    ? "bg-gradient-to-r from-amber-50/70 via-orange-50/50 to-white border-amber-300"
+                    : opt.highlightPurple
+                    ? "bg-gradient-to-r from-purple-50/70 via-indigo-50/50 to-white border-purple-300"
+                    : ""
+                }`}
+              >
+                {/* Left Section: Large Icon + Titles + Description */}
+                <div className="flex items-start sm:items-center gap-4 flex-1">
+                  <div
+                    className={`w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-md group-hover:scale-105 transition-transform ${opt.iconBg}`}
+                  >
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7" />
+                  </div>
 
-          {/* Button 2: Topic-wise Mock Tests */}
-          <div
-            id="home-btn-mock-test"
-            onClick={() => onNavigate("mock_test")}
-            className="group p-4 rounded-2xl bg-white hover:bg-blue-50/50 border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Layers className="w-6 h-6" />
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 font-black uppercase">
-                १०-१०० Marks
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-slate-900 group-hover:text-blue-800 transition-colors leading-tight">
-                घटकनिहाय सराव चाचण्या
-              </h4>
-              <p className="text-[11px] text-slate-500 mt-0.5 font-medium">
-                Topic-wise Mock Tests
-              </p>
-            </div>
-          </div>
+                  <div className="space-y-1 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h4 className="text-base sm:text-lg font-black text-slate-900 group-hover:text-indigo-900 transition-colors">
+                        {opt.titleMr}
+                      </h4>
+                      <span
+                        className={`px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black uppercase ${opt.badgeColor}`}
+                      >
+                        {opt.badge}
+                      </span>
+                    </div>
 
-          {/* Button 3: Premium Mock Tests (10 Grand Mocks) */}
-          <div
-            id="home-btn-grand-tests"
-            onClick={() => onNavigate("grand_tests")}
-            className="group p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border border-amber-300 hover:border-amber-400 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-slate-950 flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs">
-                <Trophy className="w-6 h-6 text-slate-950" />
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-200 text-slate-950 font-black uppercase font-mono">
-                १० संच
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-slate-900 group-hover:text-amber-900 transition-colors leading-tight">
-                प्रीमियम ग्रँड टेस्ट्स
-              </h4>
-              <p className="text-[11px] text-amber-800 mt-0.5 font-medium">
-                10 Real Exam Simulators
-              </p>
-            </div>
-          </div>
+                    <p className="text-xs text-slate-500 font-semibold">{opt.titleEn}</p>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium line-clamp-2 sm:line-clamp-1">
+                      {opt.desc}
+                    </p>
+                  </div>
+                </div>
 
-          {/* Button 4: Study Material & Short Notes */}
-          <div
-            id="home-btn-notes"
-            onClick={() => onNavigate("notes")}
-            className="group p-4 rounded-2xl bg-white hover:bg-indigo-50/50 border border-slate-200 hover:border-indigo-300 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <BookOpen className="w-6 h-6" />
+                {/* Right Action Button */}
+                <div className="shrink-0 flex items-center justify-end sm:pl-4">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      opt.action();
+                    }}
+                    className={`w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer group-hover:scale-105 ${
+                      opt.highlight
+                        ? "bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-amber-400/30"
+                        : opt.highlightPurple
+                        ? "bg-purple-700 hover:bg-purple-800 text-white shadow-purple-600/30"
+                        : "bg-slate-900 hover:bg-indigo-600 text-white"
+                    }`}
+                  >
+                    <span>{opt.btnText}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+                </div>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-900 font-black uppercase">
-                PDF Ready
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-slate-900 group-hover:text-indigo-800 transition-colors leading-tight">
-                अभ्यास साहित्य व नोट्स
-              </h4>
-              <p className="text-[11px] text-slate-500 mt-0.5 font-medium">
-                Study Material & Formulas
-              </p>
-            </div>
-          </div>
-
-          {/* Button 5: Live Tests & Digital OMR Sheet */}
-          <div
-            id="home-btn-omr"
-            onClick={() => onNavigate("omr")}
-            className="group p-4 rounded-2xl bg-white hover:bg-rose-50/50 border border-slate-200 hover:border-rose-300 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <CircleDot className="w-6 h-6" />
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-rose-100 text-rose-900 font-black uppercase">
-                OMR सराव
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-slate-900 group-hover:text-rose-800 transition-colors leading-tight">
-                लाईव्ह टेस्ट व OMR शीट
-              </h4>
-              <p className="text-[11px] text-slate-500 mt-0.5 font-medium">
-                Live Tests & OMR Practice
-              </p>
-            </div>
-          </div>
-
-          {/* Button 6: Refer & Earn (10 Referrals = 100% Refund) */}
-          <div
-            id="home-btn-refer-earn"
-            onClick={() => onNavigate("refer_earn")}
-            className="group p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 border border-emerald-300 hover:border-emerald-400 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs">
-                <Gift className="w-6 h-6" />
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-950 font-black uppercase">
-                १००% रिफंड
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-slate-900 group-hover:text-emerald-950 transition-colors leading-tight">
-                रेफर आणि मिळवा
-              </h4>
-              <p className="text-[11px] text-emerald-800 mt-0.5 font-medium">
-                १० मित्रांना जोडा = फी परत
-              </p>
-            </div>
-          </div>
-
-          {/* Button 7: Coaching Classes Portal (30 Min Free Trial) */}
-          <div
-            id="home-btn-classes-portal"
-            onClick={() => onNavigate("classes_portal")}
-            className="group p-4 rounded-2xl bg-gradient-to-br from-purple-50 to-indigo-50 hover:from-purple-100 hover:to-indigo-100 border border-purple-300 hover:border-purple-400 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-700 to-indigo-800 text-white flex items-center justify-center group-hover:scale-105 transition-transform shadow-xs">
-                <Building2 className="w-6 h-6 text-amber-300" />
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-200 text-purple-950 font-black uppercase">
-                ३० Min Free
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-slate-900 group-hover:text-purple-950 transition-colors leading-tight">
-                कोचिंग क्लासेस पोर्टल
-              </h4>
-              <p className="text-[11px] text-purple-800 mt-0.5 font-medium">
-                २००० विद्यार्थी चाचणी पॅनल
-              </p>
-            </div>
-          </div>
-
-          {/* Button 8: Share & Rate App */}
-          <div
-            id="home-btn-share"
-            onClick={handleShareApp}
-            className="group p-4 rounded-2xl bg-white hover:bg-amber-50/50 border border-slate-200 hover:border-amber-300 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-11 h-11 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Share2 className="w-6 h-6" />
-              </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-black uppercase">
-                मित्र सराव
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-black text-slate-900 group-hover:text-amber-900 transition-colors leading-tight">
-                ॲप शेअर करा
-              </h4>
-              <p className="text-[11px] text-slate-500 mt-0.5 font-medium">
-                Share with Friends
-              </p>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* 3. Secondary Practical Utilities Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-        <button
-          onClick={() => onNavigate("all_questions")}
-          className="p-3 rounded-xl bg-white border border-slate-200 hover:border-indigo-300 text-left transition-all flex items-center gap-2.5 shadow-xs cursor-pointer"
-        >
-          <FileText className="w-4 h-4 text-indigo-600 shrink-0" />
-          <div className="min-w-0">
-            <p className="text-xs font-bold text-slate-900 truncate">सर्व प्रश्नसंच (Bank)</p>
-            <p className="text-[10px] text-slate-500">२५,०००+ प्रश्न</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => onNavigate("mistakes")}
-          className="p-3 rounded-xl bg-white border border-slate-200 hover:border-rose-300 text-left transition-all flex items-center gap-2.5 shadow-xs cursor-pointer"
-        >
-          <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
-          <div className="min-w-0">
-            <p className="text-xs font-bold text-slate-900 truncate">माझ्या चुका (Mistakes)</p>
-            <p className="text-[10px] text-slate-500">रिव्हिजन वही</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => onNavigate("flashcards")}
-          className="p-3 rounded-xl bg-white border border-slate-200 hover:border-amber-300 text-left transition-all flex items-center gap-2.5 shadow-xs cursor-pointer"
-        >
-          <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
-          <div className="min-w-0">
-            <p className="text-xs font-bold text-slate-900 truncate">फ्लॅशकार्ड्स (Flashcards)</p>
-            <p className="text-[10px] text-slate-500">महत्वाचे पॉइंट्स</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => onNavigate("pdf_bank")}
-          className="p-3 rounded-xl bg-white border border-slate-200 hover:border-emerald-300 text-left transition-all flex items-center gap-2.5 shadow-xs cursor-pointer"
-        >
-          <Printer className="w-4 h-4 text-emerald-600 shrink-0" />
-          <div className="min-w-0">
-            <p className="text-xs font-bold text-slate-900 truncate">PDF व प्रिंट जनरेटर</p>
-            <p className="text-[10px] text-slate-500">Offline सराव</p>
-          </div>
-        </button>
-      </div>
-
       {/* 4. Coaching Classes Special Notice & Trial Banner */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-indigo-900 to-purple-900 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-indigo-700">
+      <div className="p-5 rounded-3xl bg-linear-to-r from-indigo-950 via-purple-950 to-slate-950 text-white shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-indigo-700">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-amber-300 shrink-0" />
-            <h4 className="text-sm sm:text-base font-black">
+            <h4 className="text-base sm:text-lg font-black text-white">
               कोचिंग क्लासेस संचालक व शिक्षकांसाठी खास सुविधा!
             </h4>
           </div>
-          <p className="text-xs text-indigo-200 leading-relaxed max-w-2xl">
-            आपल्या क्लासच्या नावाचे स्वतंत्र पोर्टल, Excel/Word मधून प्रश्न अपलोड, मराठी/इंग्रजी स्पष्टीकरण, आणि २००० विद्यार्थ्यांपर्यंत रँकिंग. नोंदणी करा आणि <strong>अर्धा तास मोफत चाचणी</strong> मध्ये सर्व फीचर्स तपासा!
+          <p className="text-xs text-indigo-200 leading-relaxed max-w-2xl font-medium">
+            आपल्या क्लासच्या नावाचे स्वतंत्र पोर्टल, विद्यार्थी जोडणे (Add Student), Excel/Word मधून प्रश्न अपलोड, आणि २००० विद्यार्थ्यांपर्यंत रँकिंग. नोंदणी करा आणि <strong>अर्धा तास मोफत चाचणी</strong> मध्ये सर्व फीचर्स तपासा!
           </p>
         </div>
         <button
           onClick={() => onNavigate("classes_portal")}
-          className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-md shrink-0 transition-all cursor-pointer"
+          className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-2 shadow-lg shrink-0 transition-all cursor-pointer hover:scale-105"
         >
+          <Building2 className="w-4 h-4 text-slate-950" />
           <span>क्लासेस पोर्टल उघडा</span>
           <ChevronRight className="w-4 h-4" />
         </button>

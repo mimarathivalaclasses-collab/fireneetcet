@@ -340,6 +340,14 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
     showToast(`विद्यार्थी ${newSt.name} (${newSt.rollNo}) ॲड झाला!`);
   };
 
+  // Helper to open Add Student modal with auto-suggested roll number
+  const handleOpenAddStudentModal = () => {
+    if (!newStudentRoll) {
+      setNewStudentRoll(`R-${1000 + students.length + 1}`);
+    }
+    setShowAddStudentModal(true);
+  };
+
   // Delete Student
   const handleDeleteStudent = (id: string) => {
     const updated = students.filter((s) => s.id !== id);
@@ -560,30 +568,41 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
             </p>
           </div>
 
-          {/* Role Mode Switcher (Student vs Teacher Admin) */}
-          <div className="flex items-center bg-slate-900/80 p-1.5 rounded-2xl border border-indigo-400/40 shadow-inner">
+          {/* Role Mode Switcher & Add Student Button */}
+          <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={() => setActiveRole("student")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                activeRole === "student"
-                  ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md font-black"
-                  : "text-slate-300 hover:text-white"
-              }`}
+              onClick={handleOpenAddStudentModal}
+              className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-lg transition-all cursor-pointer hover:scale-105 border border-emerald-300"
+              title="नवीन विद्यार्थी जोडा"
             >
-              <GraduationCap className="w-4 h-4" />
-              <span>विद्यार्थी लॉगिन (Student)</span>
+              <UserPlus className="w-4 h-4 text-slate-950" />
+              <span>+ विद्यार्थी जोडा (Add Student)</span>
             </button>
-            <button
-              onClick={() => setActiveRole("teacher_admin")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                activeRole === "teacher_admin"
-                  ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md font-black"
-                  : "text-slate-300 hover:text-white"
-              }`}
-            >
-              <Lock className="w-4 h-4" />
-              <span>क्लासेस Admin / शिक्षक</span>
-            </button>
+
+            <div className="flex items-center bg-slate-900/80 p-1.5 rounded-2xl border border-indigo-400/40 shadow-inner">
+              <button
+                onClick={() => setActiveRole("student")}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                  activeRole === "student"
+                    ? "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md font-black"
+                    : "text-slate-300 hover:text-white"
+                }`}
+              >
+                <GraduationCap className="w-4 h-4" />
+                <span>विद्यार्थी लॉगिन (Student)</span>
+              </button>
+              <button
+                onClick={() => setActiveRole("teacher_admin")}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+                  activeRole === "teacher_admin"
+                    ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md font-black"
+                    : "text-slate-300 hover:text-white"
+                }`}
+              >
+                <Lock className="w-4 h-4" />
+                <span>क्लासेस Admin / शिक्षक</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -650,11 +669,23 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
+                    className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer hover:scale-[1.01]"
                   >
                     <LogIn className="w-4 h-4" />
                     <span>लॉगिन करा व परीक्षा सुरू करा</span>
                   </button>
+
+                  <div className="pt-2 flex items-center justify-between">
+                    <span className="text-xs text-slate-500 font-medium">तुमचे नाव रोस्टरमध्ये नाही का?</span>
+                    <button
+                      type="button"
+                      onClick={handleOpenAddStudentModal}
+                      className="text-xs font-black text-emerald-600 hover:text-emerald-700 flex items-center gap-1 cursor-pointer underline underline-offset-2"
+                    >
+                      <UserPlus className="w-3.5 h-3.5" />
+                      <span>+ नवीन विद्यार्थी नोंदणी / Add Student</span>
+                    </button>
+                  </div>
                 </form>
 
                 {/* Quick 1-Click Demo Students Whitelist Selector */}
@@ -690,27 +721,47 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
                 </div>
               </div>
 
-              {/* Right Col: Unlimited Open App Practice Card */}
-              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 sm:p-8 border-2 border-amber-200 shadow-md flex flex-col justify-between space-y-4">
-                <div className="space-y-3">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shadow-md">
-                    <Zap className="w-6 h-6" />
+              {/* Right Col: Add Student Quick Action & Open App Practice Card */}
+              <div className="space-y-4">
+                {/* Dedicated Add Student Action Card */}
+                <div className="bg-gradient-to-br from-emerald-500 to-teal-700 rounded-3xl p-6 text-white shadow-lg space-y-3 border border-emerald-400">
+                  <div className="w-11 h-11 rounded-2xl bg-white text-emerald-800 flex items-center justify-center shadow-md">
+                    <UserPlus className="w-6 h-6" />
                   </div>
-                  <h3 className="text-lg font-black text-slate-950">
-                    आपले मुख्य ॲप (Open Practice)
+                  <h3 className="text-lg font-black text-white">
+                    नवीन विद्यार्थी नोंदणी (Add Student)
                   </h3>
-                  <p className="text-xs text-slate-700 leading-relaxed">
-                    विद्यार्थी क्लासेसच्या चाचण्यांसोबतच संपूर्ण महाराष्ट्र लेव्हलचे <strong>१० Grand Mocks, ३५०+ प्रश्न बँक, फॉर्म्युला बँक व नोट्स</strong> कितीही वेळा अमर्याद वापरू शकतात!
+                  <p className="text-xs text-emerald-100 leading-relaxed font-medium">
+                    आपल्या क्लासेसमध्ये नवीन विद्यार्थ्याची नोंदणी करा. नाव, रोल नंबर आणि मोबाईल नंबर टाकून तात्काळ ॲड करा.
                   </p>
+                  <button
+                    onClick={handleOpenAddStudentModal}
+                    className="w-full py-3 rounded-2xl bg-slate-950 hover:bg-slate-900 text-emerald-300 font-black text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer hover:scale-105"
+                  >
+                    <UserPlus className="w-4 h-4 text-emerald-400" />
+                    <span>+ नवीन विद्यार्थी ॲड करा</span>
+                  </button>
                 </div>
 
-                <button
-                  onClick={onNavigateToOpenApp}
-                  className="w-full py-3 rounded-2xl bg-slate-950 hover:bg-slate-900 text-amber-400 hover:text-amber-300 font-black text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
-                >
-                  <span>मुख्य ॲपमध्ये सराव करा</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                {/* Open App Practice Card */}
+                <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-6 border-2 border-amber-200 shadow-md space-y-3">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shadow-md">
+                    <Zap className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-black text-slate-950">
+                    आपले मुख्य ॲप (Open Practice)
+                  </h3>
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                    विद्यार्थी क्लासेसच्या चाचण्यांसोबतच संपूर्ण महाराष्ट्र लेव्हलचे <strong>१० Grand Mocks, २५,०००+ प्रश्न व नोट्स</strong> कितीही वेळा मोफत वापरू शकतात!
+                  </p>
+                  <button
+                    onClick={onNavigateToOpenApp}
+                    className="w-full py-2.5 rounded-xl bg-slate-950 hover:bg-slate-900 text-amber-400 font-black text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+                  >
+                    <span>मुख्य ॲप उघडा</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -2016,26 +2067,46 @@ Explanation: Angular velocity is rate of change of angular displacement."
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">बॅच निवडा</label>
-                <select
-                  value={newStudentBatch}
-                  onChange={(e) => setNewStudentBatch(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold"
-                >
-                  {profile.batches.map((b) => (
-                    <option key={b} value={b}>
-                      {b}
-                    </option>
-                  ))}
-                </select>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">टार्गेट परीक्षा (Exam)</label>
+                  <select
+                    value={newStudentExam}
+                    onChange={(e) => setNewStudentExam(e.target.value as ExamType)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold bg-white"
+                  >
+                    <option value="MHT_CET">MHT-CET</option>
+                    <option value="NEET">NEET-UG</option>
+                    <option value="JEE_MAIN">JEE Main</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">बॅच निवडा (Batch)</label>
+                  <select
+                    value={newStudentBatch}
+                    onChange={(e) => setNewStudentBatch(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold bg-white"
+                  >
+                    {profile.batches.map((b) => (
+                      <option key={b} value={b}>
+                        {b}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 font-medium">
+                💡 <strong>टीप:</strong> विद्यार्थी त्यांच्या या रोल नंबरने किंवा मोबाईल नंबरने थेट क्लासेस चाचण्या देऊ शकतात.
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shadow-md transition-all cursor-pointer"
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs sm:text-sm shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2"
               >
-                विद्यार्थी ॲड करा
+                <UserPlus className="w-4 h-4" />
+                <span>विद्यार्थी ॲड करा (+ Add to Roster)</span>
               </button>
             </form>
           </div>

@@ -12,15 +12,25 @@ async function startServer() {
 
   app.use(express.json({ limit: "10mb" }));
 
-  // Initialize Gemini AI client
-  const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-    httpOptions: {
-      headers: {
-        "User-Agent": "aistudio-build",
-      },
-    },
-  });
+  // Lazy Initialize Gemini AI client
+  let aiClient: GoogleGenAI | null = null;
+  function getAI(): GoogleGenAI {
+    if (!aiClient) {
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        throw new Error("GEMINI_API_KEY is not configured in the environment");
+      }
+      aiClient = new GoogleGenAI({
+        apiKey,
+        httpOptions: {
+          headers: {
+            "User-Agent": "aistudio-build",
+          },
+        },
+      });
+    }
+    return aiClient;
+  }
 
   // Health check endpoint
   app.get("/api/health", (_req, res) => {
@@ -30,6 +40,7 @@ async function startServer() {
   // Generate customized exam questions using Gemini API
   app.post("/api/gemini/generate-questions", async (req, res) => {
     try {
+      const ai = getAI();
       const {
         exam = "NEET",
         subject = "Physics",
@@ -187,6 +198,7 @@ Provide:
 3. Common mistake alert (काय चूक होते?)
 4. Quick revision formula or shortcut trick (ट्रिक / सूत्र).`;
 
+      const ai = getAI();
       const response = await ai.models.generateContent({
         model: "gemini-3.7-flash",
         contents: prompt,

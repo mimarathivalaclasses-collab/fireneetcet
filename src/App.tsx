@@ -828,6 +828,8 @@ export default function App() {
                     onOpenAuthModal={() => setIsAuthModalOpen(true)}
                     onOpenPaymentModal={() => setIsPaymentModalOpen(true)}
                     onOpenAdminDashboard={() => setIsAdminDashboardOpen(true)}
+                    onLogout={handleLogout}
+                    onStartDemoTest={handleStartDemoTest}
                   />
                 )}
 
