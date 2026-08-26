@@ -7,7 +7,7 @@ export const REFERRAL_CONFIG = {
   MINIMUM_WITHDRAWAL_INR: 100, // Minimum ₹100 required for withdrawal
   FREE_REFUND_MILESTONE: 10, // 10 referrals = 100% refund milestone
   ADMIN_CONTACT_PHONE: "9307220454",
-  ADMIN_UPI_ID: "9307220454@pz",
+  ADMIN_UPI_ID: "9307220454@yz",
 };
 
 const REFERRALS_LOG_KEY = "mcq_app_referrals_log_v2";

@@ -213,46 +213,6 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           {/* Divider */}
           <div className="h-px bg-slate-200 dark:bg-slate-800 my-1.5" />
 
-          {/* Classes Portal */}
-          <button
-            onClick={() => handleItemClick("classes_portal")}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors text-xs font-bold ${
-              activeTab === "classes_portal"
-                ? "bg-purple-700 text-white"
-                : isDarkMode
-                ? "text-slate-200 hover:bg-slate-800"
-                : "text-slate-800 hover:bg-slate-100"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <Building2 className="w-4 h-4 text-purple-500" />
-              <span>🏫 क्लासेस पोर्टल (White-Label)</span>
-            </div>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-purple-100 text-purple-900 border border-purple-300">
-              ३० मि. फ्री
-            </span>
-          </button>
-
-          {/* Classes Info & 40% Referral */}
-          <button
-            onClick={() => handleItemClick("classes_info")}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors text-xs font-bold ${
-              activeTab === "classes_info"
-                ? "bg-indigo-700 text-white"
-                : isDarkMode
-                ? "text-slate-200 hover:bg-slate-800"
-                : "text-slate-800 hover:bg-slate-100"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <FileText className="w-4 h-4 text-indigo-500" />
-              <span>📝 क्लासेस नोंदणी व ४०% कमिशन माहिती</span>
-            </div>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-emerald-100 text-emerald-950 border border-emerald-300">
-              ४०% कमिशन
-            </span>
-          </button>
-
           {/* Agent Portal */}
           <button
             onClick={() => handleItemClick("agent_portal")}
@@ -266,10 +226,10 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>🤝 एजंट पोर्टल (५०० जागा · ३०% कमिशन)</span>
+              <span>💼 एजंट पार्टनर पोर्टल (२०% कमिशन)</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-amber-100 text-amber-950 border border-amber-300">
-              ₹१९९ फी
+              ₹५.८०/विद्यार्थी
             </span>
           </button>
 

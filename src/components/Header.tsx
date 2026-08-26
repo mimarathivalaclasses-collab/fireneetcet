@@ -390,24 +390,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span>⚡ सराव (१२.५ लाख MCQs)</span>
             </button>
 
-            {/* Coaching Classes Portal */}
-            <button
-              id="nav-classes-portal"
-              onClick={() => handleNavClick("classes_portal")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-black ${
-                activeNav === "classes_portal"
-                  ? "bg-purple-800 text-white shadow-sm ring-1 ring-purple-400"
-                  : "text-purple-950 bg-purple-100/90 border border-purple-300 hover:bg-purple-200"
-              }`}
-            >
-              <Building2 className={`w-3.5 h-3.5 ${activeNav === "classes_portal" ? "text-amber-300" : "text-purple-700"}`} />
-              <span>🏫 क्लासेस पोर्टल</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-purple-200 text-purple-950 uppercase">
-                White-Label
-              </span>
-            </button>
-
-            {/* Agent 30% Commission Portal */}
+            {/* Agent Commission Portal */}
             <button
               id="nav-agent-portal"
               onClick={() => handleNavClick("agent_portal")}
@@ -418,9 +401,9 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <Users className={`w-3.5 h-3.5 ${activeNav === "agent_portal" ? "text-amber-300" : "text-indigo-700"}`} />
-              <span>🤝 एजंट पोर्टल (३०% कमिशन)</span>
+              <span>💼 एजंट पोर्टल (२०% कमिशन)</span>
               <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase">
-                ५०० जागा
+                ₹५.८०/विद्यार्थी
               </span>
             </button>
 

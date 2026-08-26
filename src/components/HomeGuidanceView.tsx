@@ -37,6 +37,7 @@ import {
   ChevronRight,
   UserCheck,
   UserPlus,
+  Users,
   RefreshCw,
 } from "lucide-react";
 import { ExamType, LanguageMode, NavigationTab, StudentUser } from "../types";
@@ -89,13 +90,13 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       accentColor: "text-emerald-300",
     },
     {
-      badge: "🏫 कोचिंग क्लासेस • अर्धा तास मोफत चाचणी",
-      title: "कोचिंग क्लासेस टेस्ट सिस्टीम (२००० विद्यार्थी क्षमता)",
-      subtitle: "आपल्या क्लासच्या नावाने व लोगोसह साप्ताहिक परीक्षा घ्या. ३० मिनिटे फ्री डेमो उपलब्ध!",
-      ctaText: "क्लासेस नोंदणी करा",
-      action: () => onNavigate("classes_portal"),
-      bgGradient: "from-purple-950 via-indigo-950 to-slate-900",
-      accentColor: "text-purple-300",
+      badge: "💼 एजंट पार्टनर • थेट २०% कमिशन",
+      title: "एजंट पार्टनर बना आणि प्रत्येक विद्यार्थी रेफरलवर ₹५.८० कमवा!",
+      subtitle: "तुमचा युनिक रेफरल कोड किंवा थेट लिंक शेअर करा. किमान ₹१०० झाल्यावर थेट बँक/UPI मध्ये ट्रान्सफर करा.",
+      ctaText: "एजंट पोर्टल उघडा",
+      action: () => onNavigate("agent_portal"),
+      bgGradient: "from-indigo-950 via-blue-950 to-slate-900",
+      accentColor: "text-amber-300",
     },
   ];
 
@@ -187,17 +188,17 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       action: () => onNavigate("omr"),
     },
     {
-      id: "option-coaching-portal",
-      icon: Building2,
-      iconBg: "bg-purple-600 text-white shadow-purple-500/30",
-      borderHover: "hover:border-purple-400 hover:bg-purple-50/40",
-      titleMr: "कोचिंग क्लासेस पोर्टल (२००० विद्यार्थी क्षमता)",
-      titleEn: "Coaching Institute Hub & Roster Management",
-      badge: "३० Min Free Trial • Excel अपलोड",
-      badgeColor: "bg-purple-100 text-purple-950 font-black",
-      desc: "क्लासच्या नावाने व लोगोसह साप्ताहिक परीक्षांचे आयोजन, विद्यार्थी व्यवस्थापन (Add Student), Excel फाईल अपलोड आणि अचूक रँकिंग.",
-      btnText: "क्लासेस पोर्टल उघडा",
-      action: () => onNavigate("classes_portal"),
+      id: "option-agent-portal",
+      icon: Users,
+      iconBg: "bg-indigo-600 text-white shadow-indigo-500/30",
+      borderHover: "hover:border-indigo-400 hover:bg-indigo-50/40",
+      titleMr: "💼 अधिकृत एजंट पार्टनर (२०% कमिशन)",
+      titleEn: "Official Agent Partner (20% Earnings)",
+      badge: "₹५.८०/विद्यार्थी • थेट UPI पेआऊट",
+      badgeColor: "bg-indigo-100 text-indigo-950 font-black",
+      desc: "आपल्या भागातील विद्यार्थ्यांना ॲप रेफर करा. प्रत्येक यशस्वी ₹२९ नोंदणीवर थेट २०% (₹५.८०) कमवा. किमान ₹१०० पूर्ण होताच थेट बँक/UPI खात्यात पैसे मिळवा.",
+      btnText: "एजंट पोर्टल उघडा",
+      action: () => onNavigate("agent_portal"),
       highlightPurple: true,
     },
     {
@@ -389,11 +390,11 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
                 </button>
 
                 <button
-                  onClick={() => onNavigate("classes_portal")}
-                  className="px-3.5 py-3 rounded-2xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-400/30 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                  onClick={() => onNavigate("agent_portal")}
+                  className="px-3.5 py-3 rounded-2xl bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 border border-indigo-400/30 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 >
-                  <Building2 className="w-4 h-4 text-amber-400" />
-                  <span>क्लासेस लॉगिन</span>
+                  <Users className="w-4 h-4 text-amber-400" />
+                  <span>एजंट पोर्टल</span>
                 </button>
               </>
             )}
@@ -613,25 +614,25 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         </div>
       </div>
 
-      {/* 4. Coaching Classes Special Notice & Trial Banner */}
-      <div className="p-5 rounded-3xl bg-linear-to-r from-indigo-950 via-purple-950 to-slate-950 text-white shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-indigo-700">
+      {/* 4. Agent Partner Special Notice Banner */}
+      <div className="p-5 rounded-3xl bg-linear-to-r from-indigo-950 via-blue-950 to-slate-950 text-white shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-indigo-700">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-amber-300 shrink-0" />
+            <Users className="w-5 h-5 text-amber-300 shrink-0" />
             <h4 className="text-base sm:text-lg font-black text-white">
-              कोचिंग क्लासेस संचालक व शिक्षकांसाठी खास सुविधा!
+              अधिकृत एजंट पार्टनर बना आणि भरघोस २०% कमिशन मिळवा!
             </h4>
           </div>
           <p className="text-xs text-indigo-200 leading-relaxed max-w-2xl font-medium">
-            आपल्या क्लासच्या नावाचे स्वतंत्र पोर्टल, विद्यार्थी जोडणे (Add Student), Excel/Word मधून प्रश्न अपलोड, आणि २००० विद्यार्थ्यांपर्यंत रँकिंग. नोंदणी करा आणि <strong>अर्धा तास मोफत चाचणी</strong> मध्ये सर्व फीचर्स तपासा!
+            आपल्या परिसरातील १२वी, MHT-CET, NEET व JEE विद्यार्थ्यांना ॲप रेफर करा. प्रत्येक ₹२९ नोंदणीवर <strong>₹५.८० थेट कमिशन</strong>. किमान ₹१०० पूर्ण होताच थेट बँक खात्यात / UPI मध्ये विड्रॉल!
           </p>
         </div>
         <button
-          onClick={() => onNavigate("classes_portal")}
+          onClick={() => onNavigate("agent_portal")}
           className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm flex items-center gap-2 shadow-lg shrink-0 transition-all cursor-pointer hover:scale-105"
         >
-          <Building2 className="w-4 h-4 text-slate-950" />
-          <span>क्लासेस पोर्टल उघडा</span>
+          <Users className="w-4 h-4 text-slate-950" />
+          <span>एजंट पोर्टल उघडा</span>
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>

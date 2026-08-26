@@ -38,7 +38,7 @@ export const CoachingRegistrationPortalView: React.FC<CoachingRegistrationPortal
   onSelectInstitute,
   onOpenAdminDashboard,
 }) => {
-  const UPI_ID = "9307220454@pz";
+  const UPI_ID = "9307220454@yz";
   const ADMIN_PHONE = "9307220454";
 
   // Form Fields

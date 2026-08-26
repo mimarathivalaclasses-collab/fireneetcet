@@ -360,6 +360,8 @@ export default function App() {
       setIsAdminDashboardOpen(true);
     } else if (user.role === "class_admin") {
       setActiveTab("classes_portal");
+    } else if (user.role === "agent") {
+      setActiveTab("agent_portal");
     } else {
       // Regular student
       setActiveTab("practice");

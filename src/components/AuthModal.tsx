@@ -46,7 +46,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onOpenPaymentModal,
   onOpenAdminDashboard,
 }) => {
-  const UPI_ID = "9307220454@pz";
+  const UPI_ID = "9307220454@yz";
   const ADMIN_PHONE = "9307220454";
 
   const [mode, setMode] = useState<"login" | "register">("login");
@@ -614,7 +614,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                           थेट UPI द्वारे ॲक्सेस मिळवा
                         </div>
                         <div className="text-[10px] font-mono text-emerald-700">
-                          ID: 9307220454@pz (₹199)
+                          ID: 9307220454@yz (₹२९)
                         </div>
                       </div>
                     </div>

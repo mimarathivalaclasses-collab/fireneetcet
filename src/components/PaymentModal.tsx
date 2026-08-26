@@ -34,8 +34,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   initialPlanType = "student",
   onPaymentSuccess,
 }) => {
-  const UPI_ID = "9307220454@pz";
-  const PAYEE_NAME = "Mi Marathi Vala Classes / MHT-CET Prep";
+  const UPI_ID = "9307220454@yz";
+  const PAYEE_NAME = "AbhyasMitra MHT-CET";
   const CONTACT_NUMBER = "9307220454";
 
   // Selected Plan: "student" (₹29) or "coaching" (₹499 / 3 months)
