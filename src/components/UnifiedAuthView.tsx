@@ -42,6 +42,7 @@ import { getAllInstitutes } from "../data/coachingInstitutesData";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
 import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
 import { recordReferralTransaction } from "../utils/referralSystem";
+import { ForgotPasswordModal } from "./ForgotPasswordModal";
 
 interface UnifiedAuthViewProps {
   currentUser?: StudentUser | null;
@@ -1396,43 +1397,16 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         </div>
       )}
 
-      {/* FORGOT PASSWORD MODAL */}
-      {showForgotModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-white text-slate-900 rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 space-y-4 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center mx-auto">
-              <KeyRound className="w-6 h-6" />
-            </div>
-
-            <div className="space-y-1">
-              <h3 className="text-base font-black text-slate-900">पासवर्ड विसरलात का?</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                तुमचा नोंदणीकृत मोबाईल नंबर <strong>9970106432</strong> या ॲडमिन नंबरवर पाठवून झटपट नवीन पासवर्ड मिळवा.
-              </p>
-            </div>
-
-            <div className="space-y-2 pt-1">
-              <a
-                href={`https://wa.me/919970106432?text=${encodeURIComponent("सर, मी पासवर्ड विसरलो आहे. कृपया मला माझा पासवर्ड रिसेट करून द्या. मोबाईल: " + identifier)}`}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md"
-              >
-                <MessageCircle className="w-4 h-4 fill-white" />
-                <span>WhatsApp वर पासवर्ड रिसेट मेसेज पाठवा</span>
-              </a>
-
-              <button
-                type="button"
-                onClick={() => setShowForgotModal(false)}
-                className="w-full py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
-              >
-                रद्द करा
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* FORGOT PASSWORD MODAL (OTP & EMAIL VERIFICATION) */}
+      <ForgotPasswordModal
+        isOpen={showForgotModal}
+        onClose={() => setShowForgotModal(false)}
+        initialIdentifier={identifier}
+        onPasswordResetSuccess={(student) => {
+          setShowForgotModal(false);
+          onLoginSuccess(student);
+        }}
+      />
 
     </div>
   );

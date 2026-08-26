@@ -25,6 +25,7 @@ import {
 import { StudentUser, ExamType, DeviceApprovalRequest } from "../types";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
 import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
+import { ForgotPasswordModal } from "./ForgotPasswordModal";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -72,6 +73,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [approvalSent, setApprovalSent] = useState<boolean>(false);
   const [adminPin, setAdminPin] = useState<string>("");
   const [adminPinError, setAdminPinError] = useState<string>("");
+  const [showForgotModal, setShowForgotModal] = useState<boolean>(false);
 
   if (!isOpen) return null;
 
@@ -590,14 +592,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <span>लॉगिन करा व अभ्यास सुरू करा</span>
               </button>
 
-              <div className="text-center pt-2">
-                <span className="text-xs text-slate-500 font-medium">खाते नाही? </span>
+              <div className="flex items-center justify-between pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotModal(true)}
+                  className="text-xs font-bold text-slate-500 hover:text-indigo-700 cursor-pointer"
+                >
+                  🔑 पासवर्ड विसरलात? (Forgot Password)
+                </button>
                 <button
                   type="button"
                   onClick={() => setMode("register")}
                   className="text-xs font-black text-indigo-700 hover:underline cursor-pointer"
                 >
-                  नवीन नोंदणी करा (Sign Up)
+                  नवीन नोंदणी (Sign Up)
                 </button>
               </div>
 
@@ -753,6 +761,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           )}
         </div>
       </div>
+
+      {/* Forgot Password OTP/Email Modal */}
+      <ForgotPasswordModal
+        isOpen={showForgotModal}
+        onClose={() => setShowForgotModal(false)}
+        initialIdentifier={mobile}
+        onPasswordResetSuccess={(student) => {
+          setShowForgotModal(false);
+          onLoginSuccess(student);
+        }}
+      />
     </div>
   );
 };
