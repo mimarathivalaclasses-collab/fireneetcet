@@ -527,6 +527,33 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     }
   };
 
+  // ================= AGENT PAYOUT ACTIONS =================
+  const handleApprovePayout = (payoutId: string, utrInput?: string) => {
+    const utr = utrInput || prompt("कृपया ट्रान्सफर केलेला बँक UTR नंबर प्रविष्ट करा:") || `UTR${Date.now()}`;
+    const updated = agentPayouts.map((p) =>
+      p.id === payoutId
+        ? {
+            ...p,
+            status: "approved" as const,
+            adminUtr: utr,
+            processedAt: Date.now(),
+          }
+        : p
+    );
+    setAgentPayouts(updated);
+    localStorage.setItem("mcq_app_agent_payouts_v1", JSON.stringify(updated));
+    showToast("विड्रॉल पेआउट मंजूर व पेड म्हणून मार्क झाले!");
+  };
+
+  const handleDeletePayout = (payoutId: string) => {
+    if (window.confirm("ही विड्रॉल विनंती हटवायची आहे का?")) {
+      const updated = agentPayouts.filter((p) => p.id !== payoutId);
+      setAgentPayouts(updated);
+      localStorage.setItem("mcq_app_agent_payouts_v1", JSON.stringify(updated));
+      showToast("विड्रॉल विनंती हटवली गेली.");
+    }
+  };
+
   // ================= DEVICE & PAYMENT ACTIONS =================
   const handleDeleteDeviceRequest = (reqId: string) => {
     if (window.confirm("ही डिव्हाइस विनंती हटवायची आहे का?")) {
@@ -1301,52 +1328,151 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 </div>
               )}
 
-              {/* TAB 4: AGENTS (WITH EDIT & DELETE) */}
+              {/* TAB 4: AGENTS (WITH EDIT & DELETE & PAYOUT APPROVALS) */}
               {activeTab === "agents" && (
-                <div className="space-y-3">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {agents.map((agent) => (
-                      <div
-                        key={agent.id}
-                        className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between space-y-3 hover:border-teal-300 transition-all"
-                      >
-                        <div className="space-y-2">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h4 className="text-sm font-black text-slate-900">{agent.name}</h4>
-                              <p className="text-xs text-slate-500">📱 {agent.mobile}</p>
-                            </div>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 font-mono">
-                              {agent.referralCode}
-                            </span>
-                          </div>
-
-                          <div className="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1 text-slate-700">
-                            <div>📍 <strong>शहर:</strong> {agent.city || "महाराष्ट्र"}</div>
-                            <div>👥 <strong>एकूण रेफरल्स:</strong> {agent.totalReferredStudents}</div>
-                            <div>💰 <strong>कमिशन:</strong> ₹{agent.totalEarnedCommission}</div>
-                            {agent.upiId && <div>💳 <strong>UPI:</strong> {agent.upiId}</div>}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-1.5 pt-2 border-t border-slate-100">
-                          <button
-                            onClick={() => setEditingAgent(agent)}
-                            className="flex-1 py-1.5 px-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
-                          >
-                            <Edit3 className="w-3.5 h-3.5" />
-                            <span>एडिट करा</span>
-                          </button>
-                          <button
-                            onClick={() => handleDeleteAgent(agent.id, agent.name)}
-                            className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 cursor-pointer"
-                            title="एजंट हटवा"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                <div className="space-y-6">
+                  {/* Payout Withdrawal Requests Section */}
+                  <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                      <div className="flex items-center gap-2">
+                        <Wallet className="w-5 h-5 text-emerald-600" />
+                        <div>
+                          <h3 className="text-sm font-black text-slate-900">विड्रॉल पेआउट विनंत्या (Payout Requests)</h3>
+                          <p className="text-[11px] text-slate-500">एजंट व विद्यार्थ्यांच्या २०% कमिशन विड्रॉल विनंत्या (किमान ₹१००)</p>
                         </div>
                       </div>
-                    ))}
+                      <span className="px-2.5 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800">
+                        {agentPayouts.length} विनंत्या
+                      </span>
+                    </div>
+
+                    {agentPayouts.length === 0 ? (
+                      <div className="p-4 rounded-xl bg-slate-50 text-center text-xs text-slate-500 font-medium">
+                        सध्या कोणतीही प्रलंबित विड्रॉल विनंती नाही.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {agentPayouts.map((payout) => (
+                          <div
+                            key={payout.id}
+                            className={`p-4 rounded-2xl border transition-all ${
+                              payout.status === "approved"
+                                ? "bg-emerald-50/60 border-emerald-200"
+                                : "bg-amber-50/60 border-amber-200"
+                            }`}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h4 className="text-sm font-black text-slate-900">{payout.agentName}</h4>
+                                <p className="text-xs text-slate-500">📱 {payout.mobile} | कोड: <strong className="font-mono text-indigo-700">{payout.agentCode}</strong></p>
+                                <p className="text-xs text-slate-700 mt-1">
+                                  💳 <strong>UPI ID:</strong> <span className="font-mono font-bold text-slate-900 bg-white px-1.5 py-0.5 rounded border">{payout.upiId}</span>
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-lg font-black text-emerald-700 font-mono">₹{payout.amount}</div>
+                                <span
+                                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                                    payout.status === "approved"
+                                      ? "bg-emerald-100 text-emerald-800"
+                                      : "bg-amber-200 text-amber-900 animate-pulse"
+                                  }`}
+                                >
+                                  {payout.status === "approved" ? "पेड (Paid)" : "प्रलंबित (Pending)"}
+                                </span>
+                              </div>
+                            </div>
+
+                            {payout.adminUtr && (
+                              <p className="text-[11px] font-mono text-emerald-800 mt-2 bg-emerald-100/70 p-1.5 rounded-lg">
+                                ✅ बँक UTR: {payout.adminUtr}
+                              </p>
+                            )}
+
+                            <div className="flex items-center gap-2 mt-3 pt-2 border-t border-slate-200/60">
+                              {payout.status !== "approved" && (
+                                <button
+                                  onClick={() => handleApprovePayout(payout.id)}
+                                  className="flex-1 py-1.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1 shadow-xs cursor-pointer"
+                                >
+                                  <CheckCircle2 className="w-3.5 h-3.5" />
+                                  <span>पैसे पाठवले (Approve)</span>
+                                </button>
+                              )}
+                              <a
+                                href={`https://wa.me/91${payout.mobile.replace(/\D/g, "")}?text=${encodeURIComponent(
+                                  `नमस्ते ${payout.agentName}, तुमचे ₹${payout.amount} चे कमिशन पेआउट मंजूर झाले आहे!`
+                                )}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="py-1.5 px-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
+                              >
+                                WhatsApp
+                              </a>
+                              <button
+                                onClick={() => handleDeletePayout(payout.id)}
+                                className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 cursor-pointer"
+                                title="हटवा"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Registered Agents List */}
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-black text-slate-800 flex items-center gap-2">
+                      <Users className="w-4 h-4 text-teal-600" />
+                      <span>नोंदणीकृत एजंट पार्टनर यादी ({agents.length})</span>
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {agents.map((agent) => (
+                        <div
+                          key={agent.id}
+                          className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between space-y-3 hover:border-teal-300 transition-all"
+                        >
+                          <div className="space-y-2">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h4 className="text-sm font-black text-slate-900">{agent.name}</h4>
+                                <p className="text-xs text-slate-500">📱 {agent.mobile}</p>
+                              </div>
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 font-mono">
+                                {agent.agentCode || agent.referralCode}
+                              </span>
+                            </div>
+
+                            <div className="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1 text-slate-700">
+                              <div>📍 <strong>शहर:</strong> {agent.city || "महाराष्ट्र"}</div>
+                              <div>👥 <strong>एकूण रेफरल्स:</strong> {agent.totalReferredStudents || agent.totalStudentsReferred || 0}</div>
+                              <div>💰 <strong>कमिशन कमाई:</strong> ₹{agent.totalEarnedCommission || agent.totalEarnings || 0}</div>
+                              {agent.upiId && <div>💳 <strong>UPI:</strong> {agent.upiId}</div>}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 pt-2 border-t border-slate-100">
+                            <button
+                              onClick={() => setEditingAgent(agent)}
+                              className="flex-1 py-1.5 px-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                              <span>एडिट करा</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteAgent(agent.id, agent.name)}
+                              className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 cursor-pointer"
+                              title="एजंट हटवा"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}

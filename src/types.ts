@@ -340,8 +340,9 @@ export interface AgentUser {
     accountNumber: string;
     ifsc: string;
     bankName: string;
+    holderName?: string;
   };
-  commissionRate: number; // 30% by default
+  commissionRate: number; // 20% by default (₹5.80 of ₹29)
   totalEarnings: number;
   totalPaidOut: number;
   walletBalance: number;
@@ -358,22 +359,37 @@ export interface AgentPayoutRequest {
   agentId: string;
   agentName: string;
   agentMobile: string;
-  amount: number;
+  agentCode?: string;
+  userType?: "agent" | "student";
+  amount: number; // minimum 100
   upiId: string;
-  status: "pending" | "approved" | "rejected";
+  bankDetails?: {
+    accountNumber: string;
+    ifsc: string;
+    bankName: string;
+    holderName?: string;
+  };
+  status: "pending" | "approved" | "rejected" | "transferred";
   requestedAt: number;
   processedAt?: number;
   adminUtr?: string;
+  adminNotes?: string;
 }
 
 export interface StudentReferralRecord {
   id: string;
-  referrerStudentId: string;
-  referrerMobile: string;
+  referrerCode: string; // AGT-xxxx or REF-xxxx
+  referrerId?: string;
+  referrerName?: string;
+  referrerMobile?: string;
+  referrerType: "student" | "agent";
+  referredStudentId: string;
   referredStudentName: string;
   referredStudentMobile: string;
-  commissionEarned: number; // ₹5 per active student or 10-count milestone
-  status: "joined" | "subscribed";
+  referredStudentExam: ExamType | string;
+  planAmount: number; // ₹29
+  commissionEarned: number; // ₹5.80 (20%)
+  status: "joined" | "subscribed" | "verified";
   timestamp: number;
 }
 

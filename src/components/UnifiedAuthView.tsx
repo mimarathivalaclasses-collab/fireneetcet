@@ -41,6 +41,7 @@ import { ExamType, StudentUser, UserRole } from "../types";
 import { getAllInstitutes } from "../data/coachingInstitutesData";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
 import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
+import { recordReferralTransaction } from "../utils/referralSystem";
 
 interface UnifiedAuthViewProps {
   currentUser?: StudentUser | null;
@@ -73,7 +74,14 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
   const [fullName, setFullName] = useState<string>("");
   const [targetExam, setTargetExam] = useState<ExamType>("MHT_CET");
   const [instituteCode, setInstituteCode] = useState<string>("");
-  const [referralCode, setReferralCode] = useState<string>("");
+  const [referralCode, setReferralCode] = useState<string>(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("ref") || params.get("agent") || "";
+    } catch {
+      return "";
+    }
+  });
 
   // Payment Verification Fields (₹29 Access)
   const [utrNumber, setUtrNumber] = useState<string>("");
@@ -367,6 +375,25 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
       existingList.unshift(newStudent);
       localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(existingList));
+
+      // Record referral transaction for 20% (₹5.80) commission if referral code present
+      if (referralCode.trim()) {
+        try {
+          recordReferralTransaction({
+            referrerCode: referralCode.trim(),
+            referredStudent: {
+              id: newStudent.id,
+              name: newStudent.name,
+              mobile: newStudent.mobile,
+              examTarget: newStudent.examTarget,
+              paymentStatus: newStudent.paymentStatus,
+            },
+            planPrice: 29,
+          });
+        } catch (refErr) {
+          console.error("Failed to record referral transaction:", refErr);
+        }
+      }
 
       // Save payment receipt locally
       if (utrNumber.trim()) {

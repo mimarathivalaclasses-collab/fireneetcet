@@ -15,6 +15,7 @@ import {
   Users,
   Award,
 } from "lucide-react";
+import { recordReferralTransaction } from "../utils/referralSystem";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -59,6 +60,14 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [utrNumber, setUtrNumber] = useState("");
   const [studentName, setStudentName] = useState("");
   const [studentPhone, setStudentPhone] = useState("");
+  const [referralCodeInput, setReferralCodeInput] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("ref") || params.get("agent") || "";
+    } catch {
+      return "";
+    }
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
 
@@ -122,6 +131,21 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
             }
           }
+        }
+        // Record referral transaction if code present
+        if (referralCodeInput.trim()) {
+          try {
+            recordReferralTransaction({
+              referrerCode: referralCodeInput.trim(),
+              referredStudent: {
+                id: `pay_std_${studentPhone.trim() || Date.now()}`,
+                name: studentName.trim() || "विद्यार्थी",
+                mobile: studentPhone.trim() || CONTACT_NUMBER,
+                paymentStatus: "paid",
+              },
+              planPrice: activeAmount,
+            });
+          } catch (e) {}
         }
       } catch (err) {
         console.error("Failed to save receipt", err);
@@ -354,6 +378,16 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     onChange={(e) => setUtrNumber(e.target.value)}
                     required
                     className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-xl text-xs font-mono font-bold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <input
+                    type="text"
+                    placeholder="रेफरल कोड / एजंट कोड (ऐच्छिक - उदा. AGT-1001 किंवा REF-982341)"
+                    value={referralCodeInput}
+                    onChange={(e) => setReferralCodeInput(e.target.value.toUpperCase())}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs font-mono font-semibold uppercase focus:ring-2 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
 
