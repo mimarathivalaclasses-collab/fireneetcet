@@ -298,11 +298,14 @@ export interface StudentUser {
   isApproved: boolean;
   approvalStatus: "pending" | "approved" | "rejected";
   paymentStatus?: "unpaid" | "submitted" | "paid" | "verified";
+  isFeePaid?: boolean;
   paymentUtr?: string;
   amountPaid?: number;
   adminNotes?: string;
   registeredAt: number;
   lastLoginAt: number;
+  approvedAt?: number;
+  trialStartedAt?: number;
   instituteId?: string; // If registered under a coaching class
   instituteCode?: string;
   referralCode?: string; // Student's own referral code e.g. "REF-930722"

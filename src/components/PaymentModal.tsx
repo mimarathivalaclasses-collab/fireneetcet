@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import confetti from "canvas-confetti";
 import {
   QrCode,
   Copy,
@@ -14,8 +15,13 @@ import {
   Gift,
   Users,
   Award,
+  ExternalLink,
+  Smartphone,
+  Check,
 } from "lucide-react";
 import { recordReferralTransaction } from "../utils/referralSystem";
+import { saveStudentToCloud } from "../services/firebase";
+import { StudentUser } from "../types";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -24,6 +30,7 @@ interface PaymentModalProps {
   amount?: number;
   initialPlanType?: "student" | "coaching";
   onPaymentSuccess?: (utr: string) => void;
+  currentUser?: StudentUser | null;
 }
 
 export const PaymentModal: React.FC<PaymentModalProps> = ({
@@ -33,6 +40,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   amount: customAmount,
   initialPlanType = "student",
   onPaymentSuccess,
+  currentUser,
 }) => {
   const UPI_ID = "9307220454@yz";
   const PAYEE_NAME = "AbhyasMitra MHT-CET";
@@ -58,8 +66,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
   const [copied, setCopied] = useState(false);
   const [utrNumber, setUtrNumber] = useState("");
-  const [studentName, setStudentName] = useState("");
-  const [studentPhone, setStudentPhone] = useState("");
+  const [studentName, setStudentName] = useState(currentUser?.name || "");
+  const [studentPhone, setStudentPhone] = useState(currentUser?.mobile || "");
   const [referralCodeInput, setReferralCodeInput] = useState(() => {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -69,7 +77,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAutoActivating, setIsAutoActivating] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [autoActivated, setAutoActivated] = useState(false);
 
   if (!isOpen) return null;
 
@@ -78,7 +88,20 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     PAYEE_NAME
   )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent(activePlanTitle)}`;
 
-  // QR code URL using quickchart / qrserver
+  // Quick App Intent Links
+  const gpayUri = `gpay://upi/pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
+    PAYEE_NAME
+  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent(activePlanTitle)}`;
+
+  const phonepeUri = `phonepe://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
+    PAYEE_NAME
+  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent(activePlanTitle)}`;
+
+  const paytmUri = `paytmmp://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
+    PAYEE_NAME
+  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent(activePlanTitle)}`;
+
+  // QR code URL using qrserver
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(
     upiUri
   )}`;
@@ -89,58 +112,100 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     setTimeout(() => setCopied(false), 3000);
   };
 
-  const handleVerifySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!utrNumber.trim() || utrNumber.trim().length < 6) {
-      alert("कृपया वैध १२ अंकी UTR / Transaction Ref नंबर टाका.");
-      return;
-    }
+  // Instant 1-Second Auto Activation Logic
+  const handleInstantAutoActivate = (customUtr?: string) => {
+    const finalUtr = customUtr || utrNumber.trim() || `AUTO_UPI_${Date.now().toString().slice(-8)}`;
+    setIsAutoActivating(true);
 
-    setIsSubmitting(true);
     setTimeout(() => {
-      setIsSubmitting(false);
+      setIsAutoActivating(false);
+      setAutoActivated(true);
       setSuccessMessage(true);
 
-      // Store in local storage for admin verification
+      // Fire celebratory confetti
+      confetti({
+        particleCount: 100,
+        spread: 80,
+        origin: { y: 0.5 },
+      });
+
+      // Update student in LocalStorage and Cloud Firestore to Instant Approved & Fee Paid
       try {
-        const existingRaw = localStorage.getItem("mcq_app_payment_receipts_v1");
-        const existing = existingRaw ? JSON.parse(existingRaw) : [];
-        existing.push({
+        const phone = studentPhone.trim() || currentUser?.mobile || CONTACT_NUMBER;
+        const name = studentName.trim() || currentUser?.name || "विद्यार्थी";
+
+        const studentsRaw = localStorage.getItem("mcq_app_all_students_v1");
+        let students: StudentUser[] = studentsRaw ? JSON.parse(studentsRaw) : [];
+
+        let studentIdx = students.findIndex((s) => s.mobile === phone);
+        let updatedStudent: StudentUser;
+
+        if (studentIdx >= 0) {
+          students[studentIdx] = {
+            ...students[studentIdx],
+            isApproved: true,
+            isFeePaid: true,
+            paymentStatus: "paid",
+            paymentUtr: finalUtr,
+            amountPaid: activeAmount,
+            approvedAt: Date.now(),
+          };
+          updatedStudent = students[studentIdx];
+        } else {
+          updatedStudent = {
+            id: `student_user_${phone}`,
+            name: name,
+            mobile: phone,
+            password: "123",
+            examTarget: currentUser?.examTarget || "MHT_CET",
+            primaryDeviceId: currentUser?.primaryDeviceId || `dev_${phone}`,
+            primaryDeviceName: currentUser?.primaryDeviceName || "Mobile Browser",
+            approvalStatus: "approved",
+            registeredAt: Date.now(),
+            lastLoginAt: Date.now(),
+            isApproved: true,
+            isFeePaid: true,
+            paymentStatus: "paid",
+            paymentUtr: finalUtr,
+            amountPaid: activeAmount,
+            trialStartedAt: Date.now(),
+            approvedAt: Date.now(),
+          };
+          students.push(updatedStudent);
+        }
+
+        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
+        localStorage.setItem("mcq_current_user_v1", JSON.stringify(updatedStudent));
+
+        // Save to Firebase Cloud
+        saveStudentToCloud(updatedStudent);
+
+        // Record receipt
+        const existingReceiptsRaw = localStorage.getItem("mcq_app_payment_receipts_v1");
+        const existingReceipts = existingReceiptsRaw ? JSON.parse(existingReceiptsRaw) : [];
+        existingReceipts.push({
           id: `pay-${Date.now()}`,
           upiId: UPI_ID,
           amount: activeAmount,
           planName: activePlanTitle,
-          utr: utrNumber.trim(),
-          studentName: studentName.trim() || "User",
-          studentPhone: studentPhone.trim() || CONTACT_NUMBER,
+          utr: finalUtr,
+          studentName: name,
+          studentPhone: phone,
           date: new Date().toISOString(),
-          status: "pending",
+          status: "approved",
+          instantActivated: true,
         });
-        localStorage.setItem("mcq_app_payment_receipts_v1", JSON.stringify(existing));
+        localStorage.setItem("mcq_app_payment_receipts_v1", JSON.stringify(existingReceipts));
 
-        // Update student record
-        if (studentPhone.trim()) {
-          const studentsRaw = localStorage.getItem("mcq_app_all_students_v1");
-          if (studentsRaw) {
-            const students = JSON.parse(studentsRaw);
-            const idx = students.findIndex((s: any) => s.mobile === studentPhone.trim());
-            if (idx >= 0) {
-              students[idx].paymentUtr = utrNumber.trim();
-              students[idx].paymentStatus = "submitted";
-              students[idx].amountPaid = activeAmount;
-              localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
-            }
-          }
-        }
         // Record referral transaction if code present
         if (referralCodeInput.trim()) {
           try {
             recordReferralTransaction({
               referrerCode: referralCodeInput.trim(),
               referredStudent: {
-                id: `pay_std_${studentPhone.trim() || Date.now()}`,
-                name: studentName.trim() || "विद्यार्थी",
-                mobile: studentPhone.trim() || CONTACT_NUMBER,
+                id: updatedStudent.id,
+                name: updatedStudent.name,
+                mobile: updatedStudent.mobile,
                 paymentStatus: "paid",
               },
               planPrice: activeAmount,
@@ -148,18 +213,27 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           } catch (e) {}
         }
       } catch (err) {
-        console.error("Failed to save receipt", err);
+        console.error("Instant activation error:", err);
       }
 
       if (onPaymentSuccess) {
-        onPaymentSuccess(utrNumber);
+        onPaymentSuccess(finalUtr);
       }
-    }, 1000);
+    }, 1200);
+  };
+
+  const handleVerifySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!utrNumber.trim() || utrNumber.trim().length < 4) {
+      alert("कृपया वैध UTR / Transaction Ref नंबर टाका किंवा 'झटपट ॲक्टिव्हेट करा' दाबा.");
+      return;
+    }
+    handleInstantAutoActivate(utrNumber.trim());
   };
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
-      <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative my-6">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative my-6">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -170,15 +244,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
         {/* Header Banner */}
         <div className="bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 p-6 text-white text-center relative">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center mx-auto mb-2.5">
-            <QrCode className="w-6 h-6 text-emerald-400" />
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center mx-auto mb-2.5 shadow-sm">
+            <Zap className="w-6 h-6 text-amber-400 fill-amber-400" />
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-            थेट UPI द्वारे ॲक्टिव्ह करा (Direct UPI Pay)
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight flex items-center justify-center gap-2">
+            <span>थेट UPI व झटपट ॲक्टिव्हेशन</span>
           </h2>
           <p className="text-emerald-200/90 text-xs mt-1 font-medium">
-            PhonePe, Google Pay, Paytm, BHIM द्वारे फक्त QR स्कॅन करा किंवा UPI ID वापरा
+            PhonePe, Google Pay, Paytm, BHIM द्वारे फक्त ₹{activeAmount} भरा आणि १ सेकंदात खाते सुरू करा!
           </p>
 
           {/* Plan Selector Buttons */}
@@ -213,63 +287,55 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         {/* Body */}
         <div className="p-5 sm:p-7 space-y-5">
           {successMessage ? (
-            <div className="p-6 rounded-3xl bg-emerald-50 border-2 border-emerald-300 text-center space-y-3">
-              <div className="w-16 h-16 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-lg">
-                <CheckCircle2 className="w-8 h-8" />
+            <div className="p-6 rounded-3xl bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-700 text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-lg animate-bounce">
+                <CheckCircle2 className="w-9 h-9" />
               </div>
-              <h3 className="text-lg font-black text-emerald-950">
-                पेमेंट तपशील यशस्वीरीत्या नोंदवला गेला!
+              <h3 className="text-xl font-black text-emerald-950 dark:text-emerald-300">
+                🎉 अभिनंदन! तुमचे खाते तात्काळ सक्रिय झाले आहे!
               </h3>
-              <p className="text-xs text-emerald-800 font-medium leading-relaxed">
-                तुमचा UTR क्रमांक (<strong>{utrNumber}</strong>) प्राप्त झाला आहे. <strong>पेमेंट पडताळणी सुरू असून पुढील १५ मिनिटांत ॲडमिन कडून मंजुरी (Approval) मिळेल.</strong>
+              <p className="text-xs text-emerald-800 dark:text-emerald-400 font-semibold leading-relaxed">
+                तुमचे <strong>{activePlanTitle}</strong> १ सेकंदात यशस्वीरीत्या अनलॉक झाले आहे. आता तुम्ही सर्व २५,०००+ प्रश्न, १० ग्रँड टेस्ट्स, OMR व नोट्स अमर्याद वापरू शकता!
               </p>
 
-              <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-300 text-xs text-amber-950 text-left space-y-1">
-                <div className="font-bold flex items-center gap-1.5 text-amber-900">
-                  <span>⏱️ १५ मिनिटांत मंजुरी न झाल्यास:</span>
-                </div>
-                <p className="text-[11px] text-amber-800">
-                  काही कारणास्तव १५ मिनिटांत खाते सुरू न झाल्यास त्वरित खालील बटनावर क्लिक करून ॲडमिनला व्हॉट्सॲप मेसेज किंवा स्क्रीनशॉट पाठवा.
-                </p>
+              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-emerald-200 dark:border-slate-800 text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
+                रक्कम: ₹{activeAmount} | खाते: {studentPhone || currentUser?.mobile || "सक्रिय"}
               </div>
 
-              <div className="p-3 bg-white rounded-xl border border-emerald-200 text-xs font-mono font-bold text-slate-700">
-                रक्कम: ₹{activeAmount} | प्राप्तकर्ता: {UPI_ID}
-              </div>
-
+              {/* 1-Click WhatsApp Confirmation Link */}
               <a
                 href={`https://wa.me/91${CONTACT_NUMBER}?text=${encodeURIComponent(
-                  `नमस्कार ॲडमिन, मी ₹${activeAmount} चे पेमेंट केले आहे. UTR: ${utrNumber}. १५ मिनिटे झाली आहेत, कृपया माझे खाते मंजूर करा.`
+                  `🎉 नमस्कार सर, मी ₹${activeAmount} चे पेमेंट केले आहे आणि माझे खाते यशस्वीरीत्या सक्रिय झाले आहे!\n👤 नाव: ${studentName || currentUser?.name || "विद्यार्थी"}\n📱 मोबाईल: ${studentPhone || currentUser?.mobile || CONTACT_NUMBER}\n📚 परीक्षा: ${currentUser?.examTarget || "MHT-CET"}`
                 )}`}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>WhatsApp द्वारे ॲडमिनशी संपर्क करा ({CONTACT_NUMBER})</span>
+                <span>WhatsApp वर पावती पाठवा / संपर्क करा ({CONTACT_NUMBER})</span>
               </a>
 
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                className="w-full py-3 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black text-xs shadow-xs transition-colors cursor-pointer"
               >
-                बंद करा (Close)
+                सराव सुरू करा (Start Practice Now) →
               </button>
             </div>
           ) : (
             <>
               {/* Active Plan Pricing Card */}
-              <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200 flex items-center justify-between">
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center justify-between">
                 <div>
-                  <div className="text-[10px] font-black uppercase tracking-wider text-emerald-700">
+                  <div className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
                     {selectedPlan === "student"
                       ? "🎯 विद्यार्थी संपूर्ण ॲक्सेस"
                       : "🏫 क्लासेस व इन्स्टिट्यूट ३ महिने प्लॅन"}
                   </div>
-                  <div className="text-xs font-black text-slate-900 line-clamp-1 mt-0.5">
+                  <div className="text-xs font-black text-slate-900 dark:text-white line-clamp-1 mt-0.5">
                     {activePlanTitle}
                   </div>
-                  <div className="text-[11px] text-emerald-800 font-semibold mt-0.5">
+                  <div className="text-[11px] text-emerald-800 dark:text-emerald-300 font-semibold mt-0.5">
                     {selectedPlan === "student"
                       ? "✓ सर्व सराव MCQs + १० ग्रँड मॉक टेस्ट्स + नोट्स"
                       : "✓ व्हाईट-लेबल पोर्टल + अमर्याद टेस्ट्स (२००० विद्यार्थी)"}
@@ -277,7 +343,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 </div>
                 <div className="text-right shrink-0 pl-3">
                   <div className="text-[10px] text-slate-500 font-bold uppercase">फीस</div>
-                  <div className="text-2xl font-black text-emerald-950 font-mono-numbers">
+                  <div className="text-2xl font-black text-emerald-950 dark:text-emerald-300 font-mono-numbers">
                     ₹{activeAmount}
                   </div>
                 </div>
@@ -285,19 +351,53 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
               {/* 10 Referral Refund Offer Banner */}
               {selectedPlan === "student" && (
-                <div className="p-3 rounded-2xl bg-amber-50 border border-amber-300 flex items-start gap-2.5">
-                  <Gift className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-                  <div className="text-xs text-amber-950">
-                    <span className="font-black text-amber-900">🎁 १० मित्रांना रेफर करा आणि १००% पैसे वापस मिळवा!</span>
-                    <p className="text-[11px] text-amber-800 mt-0.5 leading-snug">
+                <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 flex items-start gap-2.5">
+                  <Gift className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                  <div className="text-xs text-amber-950 dark:text-amber-300">
+                    <span className="font-black text-amber-900 dark:text-amber-200">🎁 १० मित्रांना रेफर करा आणि १००% फी परत मिळवा!</span>
+                    <p className="text-[11px] text-amber-800 dark:text-amber-400 mt-0.5 leading-snug">
                       तुमच्या रेफरल कोडने १० मित्रांनी ॲप सुरू केल्यास तुमचे भरलेले सर्व ₹२९ थेट तुमच्या खात्यावर पूर्णपणे रिफंड मिळतील!
                     </p>
                   </div>
                 </div>
               )}
 
+              {/* Instant UPI App Launch Buttons (Mobile friendly) */}
+              <div className="space-y-1.5">
+                <div className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                  <Smartphone className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <span>१-क्लिकने थेट UPI ॲप उघडा (Direct UPI Pay):</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <a
+                    href={gpayUri}
+                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-700 text-center font-bold text-xs text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <span>Google Pay</span>
+                  </a>
+                  <a
+                    href={phonepeUri}
+                    className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 border border-purple-300 dark:border-purple-800 text-center font-bold text-xs text-purple-900 dark:text-purple-300 flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <span>PhonePe</span>
+                  </a>
+                  <a
+                    href={paytmUri}
+                    className="p-2.5 rounded-xl bg-cyan-50 dark:bg-cyan-950/40 hover:bg-cyan-100 border border-cyan-300 dark:border-cyan-800 text-center font-bold text-xs text-cyan-900 dark:text-cyan-300 flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <span>Paytm</span>
+                  </a>
+                  <a
+                    href={upiUri}
+                    className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 border border-emerald-300 dark:border-emerald-800 text-center font-bold text-xs text-emerald-900 dark:text-emerald-300 flex items-center justify-center gap-1.5 transition-all"
+                  >
+                    <span>BHIM / Any</span>
+                  </a>
+                </div>
+              </div>
+
               {/* QR Code Box */}
-              <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3 text-center">
+              <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3 text-center">
                 <div className="bg-white p-3 rounded-2xl border border-slate-300 shadow-md inline-block">
                   <img
                     src={qrCodeUrl}
@@ -305,17 +405,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     className="w-44 h-44 sm:w-48 sm:h-48 object-contain mx-auto"
                   />
                   <div className="mt-2 text-[10px] font-black text-slate-600 uppercase tracking-wider">
-                    Scan with PhonePe / GPay / Paytm (₹{activeAmount})
+                    Scan with Any UPI App (₹{activeAmount})
                   </div>
                 </div>
 
                 {/* Copy Official Payee UPI ID */}
                 <div className="w-full max-w-sm space-y-1.5">
-                  <div className="text-xs font-bold text-slate-700 flex items-center justify-center gap-1">
+                  <div className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-center gap-1">
                     <span>माझा अधिकृत UPI ID (Payee UPI ID):</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-white p-1.5 rounded-xl border-2 border-emerald-500 shadow-xs">
-                    <span className="flex-1 font-mono font-black text-sm text-slate-950 tracking-wide text-left pl-2 select-all">
+                  <div className="flex items-center gap-2 bg-white dark:bg-slate-900 p-1.5 rounded-xl border-2 border-emerald-500 shadow-xs">
+                    <span className="flex-1 font-mono font-black text-sm text-slate-950 dark:text-white tracking-wide text-left pl-2 select-all">
                       {UPI_ID}
                     </span>
                     <button
@@ -340,33 +440,51 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                       )}
                     </button>
                   </div>
-                  <p className="text-[11px] text-slate-500">
-                    PhonePe / GPay / Paytm मध्ये <strong>{UPI_ID}</strong> वर थेट ₹{activeAmount} पाठवू शकता.
-                  </p>
+                </div>
+              </div>
+
+              {/* Instant 1-Second Auto Activation Button */}
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={() => handleInstantAutoActivate()}
+                  disabled={isAutoActivating}
+                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer"
+                >
+                  {isAutoActivating ? (
+                    <span>१ सेकंदात ॲक्टिव्हेट होत आहे...</span>
+                  ) : (
+                    <>
+                      <Zap className="w-4 h-4 fill-slate-950" />
+                      <span>⚡ पेमेंट केले, १ सेकंदात ऑटो-ॲक्टिव्हेट करा (Instant Activate)</span>
+                    </>
+                  )}
+                </button>
+
+                <div className="relative flex items-center justify-center">
+                  <div className="border-t border-slate-200 dark:border-slate-700 w-full"></div>
+                  <span className="bg-white dark:bg-slate-900 px-3 text-[11px] font-bold text-slate-400 uppercase">
+                    किंवा UTR टाका
+                  </span>
                 </div>
               </div>
 
               {/* UTR Submission Form */}
-              <form onSubmit={handleVerifySubmit} className="space-y-2.5 pt-1">
-                <div className="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
-                  <CreditCard className="w-4 h-4 text-emerald-600" />
-                  <span>पेमेंट झाल्यावर UTR किंवा Transaction Ref नंबर प्रविष्ट करा:</span>
-                </div>
-
+              <form onSubmit={handleVerifySubmit} className="space-y-2.5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <input
                     type="text"
                     placeholder="नाव (Student / Class Name)"
                     value={studentName}
                     onChange={(e) => setStudentName(e.target.value)}
-                    className="px-3 py-2 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-600 focus:outline-none"
+                    className="px-3 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-600 focus:outline-none"
                   />
                   <input
                     type="tel"
                     placeholder="मोबाईल नंबर (Phone)"
                     value={studentPhone}
                     onChange={(e) => setStudentPhone(e.target.value)}
-                    className="px-3 py-2 border border-slate-300 rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-600 focus:outline-none"
+                    className="px-3 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl text-xs font-semibold focus:ring-2 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
 
@@ -376,8 +494,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     placeholder="12 अंकी UTR / Ref No (उदा. 423819028341)"
                     value={utrNumber}
                     onChange={(e) => setUtrNumber(e.target.value)}
-                    required
-                    className="w-full px-3 py-2.5 border-2 border-slate-300 rounded-xl text-xs font-mono font-bold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 focus:outline-none"
+                    className="w-full px-3 py-2.5 border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl text-xs font-mono font-bold focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 focus:outline-none"
                   />
                 </div>
 
@@ -387,7 +504,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                     placeholder="रेफरल कोड / एजंट कोड (ऐच्छिक - उदा. AGT-1001 किंवा REF-982341)"
                     value={referralCodeInput}
                     onChange={(e) => setReferralCodeInput(e.target.value.toUpperCase())}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs font-mono font-semibold uppercase focus:ring-2 focus:ring-emerald-600 focus:outline-none"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl text-xs font-mono font-semibold uppercase focus:ring-2 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
 
@@ -396,30 +513,24 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   disabled={isSubmitting}
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
-                  {isSubmitting ? (
-                    <span>पडताळणी चालू आहे...</span>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>पेमेंट सबमिट करा व खाते त्वरित अनलॉक करा</span>
-                    </>
-                  )}
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>UTR सबमिट करा व खाते अनलॉक करा</span>
                 </button>
               </form>
 
               {/* Direct Help / WhatsApp Contact */}
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-slate-600 text-[11px] flex items-center justify-between">
+              <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-[11px] flex items-center justify-between">
                 <div className="flex items-center gap-1.5 font-medium">
                   <Phone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>पेमेंट अडचण किंवा तात्काळ मंजुरीसाठी: <strong>{CONTACT_NUMBER}</strong></span>
+                  <span>मदत / तात्काळ मंजुरी: <strong>{CONTACT_NUMBER}</strong></span>
                 </div>
                 <a
                   href={`https://wa.me/91${CONTACT_NUMBER}?text=${encodeURIComponent(
-                    `नमस्कार, मी ₹${activeAmount} चे पेमेंट केले आहे. कृपया माझे खाते सक्रिय करा.`
+                    `नमस्कार सर, मी ₹${activeAmount} चे पेमेंट केले आहे. कृपया खाते सक्रिय करा.`
                   )}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-bold text-emerald-700 hover:underline cursor-pointer"
+                  className="font-bold text-emerald-700 dark:text-emerald-400 hover:underline cursor-pointer"
                 >
                   WhatsApp
                 </a>

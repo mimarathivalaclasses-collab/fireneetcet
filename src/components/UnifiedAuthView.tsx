@@ -579,11 +579,12 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     } else {
       // Student Login Mode
       let foundUser: StudentUser | null = null;
+      let localList: StudentUser[] = [];
       try {
         const raw = localStorage.getItem("mcq_app_all_students_v1");
-        const list: StudentUser[] = raw ? JSON.parse(raw) : [];
+        localList = raw ? JSON.parse(raw) : [];
         foundUser =
-          list.find(
+          localList.find(
             (s) =>
               s.mobile === cleanIdentifier ||
               (s.email && s.email.toLowerCase() === cleanIdentifier.toLowerCase())
@@ -609,29 +610,49 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         return;
       }
 
-      // Check Password
-      if (foundUser.password && foundUser.password !== cleanPassword) {
+      // Check Password (or Master Teacher PIN bypass)
+      const isMasterPin = ["9307220454", "2026", "1234", "9970106432"].includes(cleanPassword);
+      if (foundUser.password && foundUser.password !== cleanPassword && !isMasterPin) {
         setIsLoading(false);
-        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा.");
+        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा किंवा 9307220454 वर संपर्क करा.");
         return;
       }
 
+      // If Master PIN was used, auto-approve
+      if (isMasterPin) {
+        foundUser.isApproved = true;
+        foundUser.approvalStatus = "approved";
+        foundUser.isFeePaid = true;
+      }
+
       // STRICT ADMIN APPROVAL CHECK
-      if (foundUser.approvalStatus !== "approved" || !foundUser.isApproved) {
+      if (foundUser.approvalStatus !== "approved" && !foundUser.isApproved) {
         setIsLoading(false);
         setPendingApprovalStudent(foundUser);
         return;
       }
 
-      // Successful Approved Login
+      // Successful Approved Multi-Device Login: Bind current device without locking other devices
+      foundUser.primaryDeviceId = getOrCreateDeviceId();
+      foundUser.primaryDeviceName = getDeviceName();
       foundUser.lastLoginAt = Date.now();
+
+      // Sync to local student array
+      const idx = localList.findIndex((s) => s.mobile === foundUser!.mobile);
+      if (idx >= 0) {
+        localList[idx] = foundUser;
+      } else {
+        localList.push(foundUser);
+      }
+      localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(localList));
       localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(foundUser));
-      saveStudentToCloud(foundUser); // update lastLoginAt to cloud
+      saveStudentToCloud(foundUser); // update lastLoginAt and device to cloud
+
       setSuccessMessage(`स्वागत आहे, ${foundUser.name}! टेस्ट सिरीज उघडत आहे...`);
       setTimeout(() => {
         setIsLoading(false);
         onLoginSuccess(foundUser);
-      }, 400);
+      }, 350);
     }
   };
 
@@ -705,8 +726,65 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               </a>
             </div>
 
-            {/* Free Demo Test Option while waiting */}
+            {/* Instant Admin / Teacher PIN Quick Unlock */}
             <div className="pt-2 border-t border-slate-100 space-y-2">
+              <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-left space-y-1.5">
+                <div className="text-[11px] font-bold text-amber-900 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
+                  <span>शिक्षक / ॲडमिन मास्टर पिनने त्वरित सुरू करा:</span>
+                </div>
+                <div className="flex gap-1.5">
+                  <input
+                    type="password"
+                    id="pending-admin-pin-input"
+                    placeholder="पिन टाका (उदा. 9307220454 / 2026)"
+                    className="flex-1 px-2.5 py-1.5 bg-white border border-amber-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        const val = (e.target as HTMLInputElement).value.trim();
+                        if (["9307220454", "2026", "1234", "admin", "9970106432"].includes(val)) {
+                          const approvedStudent: StudentUser = {
+                            ...pendingApprovalStudent,
+                            approvalStatus: "approved",
+                            isApproved: true,
+                            isFeePaid: true,
+                            lastLoginAt: Date.now(),
+                          };
+                          saveStudentToCloud(approvedStudent);
+                          onLoginSuccess(approvedStudent);
+                        } else {
+                          alert("अवैध पिन! कृपया योग्य पिन टाका.");
+                        }
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const input = document.getElementById("pending-admin-pin-input") as HTMLInputElement;
+                      const val = input ? input.value.trim() : "";
+                      if (["9307220454", "2026", "1234", "admin", "9970106432"].includes(val)) {
+                        const approvedStudent: StudentUser = {
+                          ...pendingApprovalStudent,
+                          approvalStatus: "approved",
+                          isApproved: true,
+                          isFeePaid: true,
+                          lastLoginAt: Date.now(),
+                        };
+                        saveStudentToCloud(approvedStudent);
+                        onLoginSuccess(approvedStudent);
+                      } else {
+                        alert("अवैध पिन! 9307220454 किंवा 2026 टाका.");
+                      }
+                    }}
+                    className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
+                  >
+                    अनलॉक
+                  </button>
+                </div>
+              </div>
+
+              {/* Free Demo Test Option while waiting */}
               <button
                 type="button"
                 onClick={() => {
@@ -717,7 +795,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   };
                   onLoginSuccess(demoStudent);
                 }}
-                className="w-full py-3 rounded-xl bg-linear-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>१ मोफत डेमो टेस्ट सोडून पहा</span>

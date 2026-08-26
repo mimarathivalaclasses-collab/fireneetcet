@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { StudentUser, ExamType, DeviceApprovalRequest } from "../types";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
+import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -125,13 +126,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
     students.push(newUser);
     localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
+    saveStudentToCloud(newUser);
 
     // Show pending approval screen to student
     setPendingStudent(newUser);
   };
 
   // Login Handler
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!mobile.trim()) {
       alert("कृपया आपला नोंदणीकृत मोबाईल नंबर टाका.");
@@ -150,8 +152,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
 
     const savedStudentsRaw = localStorage.getItem("mcq_app_all_students_v1");
-    const students: StudentUser[] = savedStudentsRaw ? JSON.parse(savedStudentsRaw) : [];
-    const student = students.find((s) => s.mobile === mobile.trim());
+    let students: StudentUser[] = savedStudentsRaw ? JSON.parse(savedStudentsRaw) : [];
+    let student = students.find((s) => s.mobile === mobile.trim());
+
+    if (!student) {
+      // Check cloud Firestore
+      const cloudStudents = await fetchStudentsFromCloud();
+      const cloudMatch = cloudStudents.find((s) => s.mobile === mobile.trim());
+      if (cloudMatch) {
+        student = cloudMatch;
+        students.push(cloudMatch);
+        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
+      }
+    }
 
     if (!student) {
       alert("या मोबाईल नंबरवर नोंदणी सापडली नाही. कृपया प्रथम नाव व पासवर्ड टाकून 'नवीन नोंदणी' (Register) करा.");
@@ -176,15 +189,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    // Device Conflict Check
-    if (student.primaryDeviceId && student.primaryDeviceId !== currentDeviceId) {
-      setDeviceMismatchError({
-        student,
-        oldDevice: student.primaryDeviceName || student.primaryDeviceId,
-        newDeviceId: currentDeviceId,
-      });
-      return;
-    }
+    // Auto-update device on new login (Seamless multi-device support enabled)
+    student.primaryDeviceId = currentDeviceId;
+    student.primaryDeviceName = currentDeviceName;
 
     // Login Approved!
     student.lastLoginAt = Date.now();

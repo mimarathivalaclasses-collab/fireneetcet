@@ -851,6 +851,7 @@ export default function App() {
                 {activeTab === "home" && (
                   <HomeGuidanceView
                     currentExam={currentExam}
+                    onSelectExam={(exam) => setCurrentExam(exam)}
                     language={language}
                     onNavigate={handleNavigateTab}
                     currentUser={currentUser}

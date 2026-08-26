@@ -26,11 +26,14 @@ import {
   Timer,
   Flame,
   BellRing,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { Question, ExamType, SubjectType, DifficultyLevel, LanguageMode } from "../types";
 import { CHAPTERS_DATA, getSubjectsForExam, getMarkingScheme } from "../data/chaptersData";
 import { generateProceduralQuestions } from "../utils/proceduralQuestionGenerator";
 import { recordDailyActivity } from "../utils/achievementSystem";
+import { speakExplanation, stopExplanation } from "../utils/audioSpeechHelper";
 
 interface PracticeModeProps {
   questions: Question[];
@@ -87,6 +90,32 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
   const [autoCount, setAutoCount] = useState<number>(25);
   const [autoDiff, setAutoDiff] = useState<DifficultyLevel>("Medium");
   const [extraGeneratedQuestions, setExtraGeneratedQuestions] = useState<Question[]>([]);
+  const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
+
+  // Stop audio on question change
+  useEffect(() => {
+    stopExplanation();
+    setIsAudioPlaying(false);
+  }, [currentIndex]);
+
+  const handleToggleAudio = (q: Question) => {
+    if (isAudioPlaying) {
+      stopExplanation();
+      setIsAudioPlaying(false);
+    } else {
+      const textToSpeak = q.explanationMr
+        ? `प्रश्न स्पष्टीकरण: ${q.explanationMr}`
+        : `Explanation: ${q.explanation}`;
+      const isMr = Boolean(q.explanationMr);
+
+      speakExplanation(textToSpeak, {
+        lang: isMr ? "mr-IN" : "en-IN",
+        onStart: () => setIsAudioPlaying(true),
+        onEnd: () => setIsAudioPlaying(false),
+        onError: () => setIsAudioPlaying(false),
+      });
+    }
+  };
 
   const handleGenerateAutoSet = () => {
     const newQs = generateProceduralQuestions(currentExam, autoSubj, autoCount, autoDiff);
@@ -762,16 +791,42 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                 {/* Step-by-Step Detailed Solution */}
                 {showExplanation && (
                   <div className="mt-4 p-5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3">
-                    <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
                       <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
                         <Lightbulb className="w-4 h-4 text-amber-500" />
                         <span>सविस्तर स्पष्टीकरण व सूत्र (Detailed Solution)</span>
                       </div>
-                      {marking && (
-                        <span className="text-[11px] font-semibold text-slate-500">
-                          गुणदान पद्धती: {marking.descriptionMr}
-                        </span>
-                      )}
+                      
+                      <div className="flex items-center gap-2">
+                        {/* Audio Explanation Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleToggleAudio(currentQuestion)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                            isAudioPlaying
+                              ? "bg-rose-600 text-white animate-pulse"
+                              : "bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200"
+                          }`}
+                        >
+                          {isAudioPlaying ? (
+                            <>
+                              <VolumeX className="w-3.5 h-3.5" />
+                              <span>ऑडिओ थांबवा</span>
+                            </>
+                          ) : (
+                            <>
+                              <Volume2 className="w-3.5 h-3.5 text-indigo-600" />
+                              <span>🔊 स्पष्टीकरण ऐका</span>
+                            </>
+                          )}
+                        </button>
+
+                        {marking && (
+                          <span className="hidden sm:inline text-[11px] font-semibold text-slate-500">
+                            गुणदान: {marking.descriptionMr}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Formula Callout */}

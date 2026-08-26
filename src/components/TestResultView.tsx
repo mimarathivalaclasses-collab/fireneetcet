@@ -20,9 +20,14 @@ import {
   Zap,
   Gauge,
   AlertTriangle,
+  MessageCircle,
+  Share2,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { TestResultData, LanguageMode, Question } from "../types";
 import { printTestResultReport } from "../utils/pdfExport";
+import { speakExplanation, stopExplanation } from "../utils/audioSpeechHelper";
 
 interface TestResultViewProps {
   result: TestResultData;
@@ -44,6 +49,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
   bookmarkedIds,
 }) => {
   const [filterType, setFilterType] = useState<"all" | "correct" | "wrong" | "unattempted">("all");
+  const [playingQId, setPlayingQId] = useState<string | null>(null);
 
   useEffect(() => {
     // Fire celebratory confetti if score percentage >= 60%
@@ -54,6 +60,10 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
         origin: { y: 0.6 },
       });
     }
+
+    return () => {
+      stopExplanation();
+    };
   }, [result.percentage]);
 
   const formatSeconds = (secs: number) => {
@@ -68,6 +78,65 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
 
   const handlePrintPdf = () => {
     printTestResultReport(result, language);
+  };
+
+  // 1-Click WhatsApp Parent Share
+  const handleShareWithParents = () => {
+    let studentName = "विद्यार्थी";
+    try {
+      const userRaw = localStorage.getItem("mcq_current_user_v1");
+      if (userRaw) {
+        const u = JSON.parse(userRaw);
+        if (u.name) studentName = u.name;
+      }
+    } catch {}
+
+    const appraisalMsg =
+      result.percentage >= 80
+        ? "🌟 अप्रतिम कामगिरी! पालकांनी विद्यार्थ्याचे कौतुक करावे."
+        : result.percentage >= 60
+        ? "👍 चांगला प्रयत्न! नियमित सरावाने अजून चांगले गुण मिळतील."
+        : "💡 सराव वाढवण्याची गरज आहे. कमजोर विषयांवर विशेष लक्ष द्यावे.";
+
+    const message = `📊 *अभ्यास मित्र - टेस्ट निकाल अहवाल* 🎯
+👤 *विद्यार्थी:* ${studentName}
+📚 *परीक्षा:* ${result.exam} (${result.title})
+📅 *दिनांक:* ${new Date(result.completedAt || Date.now()).toLocaleDateString("mr-IN")}
+----------------------------------------
+🏆 *मिळालेले गुण:* ${result.score} / ${result.maxMarks} (${result.percentage}%)
+✅ *बरोबर उत्तरे:* ${result.correct} / ${result.totalQuestions}
+❌ *चुकीची उत्तरे:* ${result.wrong}
+⚪ *न सोडवलेले:* ${result.unattempted}
+🎯 *अचूकता (Accuracy):* ${result.accuracy}%
+⏱️ *घेतलेला वेळ:* ${formatSeconds(result.timeTakenSeconds)}
+----------------------------------------
+💬 *संदेश:* ${appraisalMsg}
+
+🔗 *ऑनलाइन सराव सुरू ठेवा:* ${window.location.origin}`;
+
+    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  };
+
+  // Audio Speech Explanation
+  const handleToggleAudio = (q: Question) => {
+    if (playingQId === q.id) {
+      stopExplanation();
+      setPlayingQId(null);
+    } else {
+      const textToSpeak = q.explanationMr
+        ? `प्रश्न स्पष्टीकरण: ${q.explanationMr}`
+        : `Explanation: ${q.explanation}`;
+
+      const isMr = Boolean(q.explanationMr);
+
+      speakExplanation(textToSpeak, {
+        lang: isMr ? "mr-IN" : "en-IN",
+        onStart: () => setPlayingQId(q.id),
+        onEnd: () => setPlayingQId(null),
+        onError: () => setPlayingQId(null),
+      });
+    }
   };
 
   // Speed & Time Management Analytics
@@ -285,6 +354,16 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
 
         {/* Action CTA Buttons */}
         <div className="flex flex-wrap gap-3 no-print">
+          {/* Prominent WhatsApp Share with Parents Button */}
+          <button
+            id="btn-share-parents-whatsapp"
+            onClick={handleShareWithParents}
+            className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md flex items-center gap-2 transition-all cursor-pointer animate-pulse"
+          >
+            <MessageCircle className="w-4 h-4 fill-white" />
+            <span>पालकांना निकाल WhatsApp करा (Share with Parents)</span>
+          </button>
+
           <button
             id="btn-retake-test"
             onClick={onRetakeTest}
@@ -514,9 +593,34 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
 
                   {/* Detailed Solution Box */}
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
-                    <div className="flex items-center gap-1.5 font-bold text-slate-800">
-                      <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
-                      <span>सविस्तर स्पष्टीकरण (Step-by-step Solution):</span>
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
+                      <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                        <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
+                        <span>सविस्तर स्पष्टीकरण (Step-by-step Solution):</span>
+                      </div>
+
+                      {/* Listen to Audio Explanation Button */}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleAudio(q)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                          playingQId === q.id
+                            ? "bg-rose-600 text-white animate-pulse"
+                            : "bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200"
+                        }`}
+                      >
+                        {playingQId === q.id ? (
+                          <>
+                            <VolumeX className="w-3.5 h-3.5" />
+                            <span>ऑडिओ थांबवा (Stop)</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="w-3.5 h-3.5 text-indigo-600" />
+                            <span>🔊 स्पष्टीकरण ऐका (Listen Explanation)</span>
+                          </>
+                        )}
+                      </button>
                     </div>
 
                     {q.formula && (

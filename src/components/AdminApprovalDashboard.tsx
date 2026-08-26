@@ -148,6 +148,35 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
       const studentsRaw = localStorage.getItem("mcq_app_all_students_v1");
       let localStudents: StudentUser[] = studentsRaw ? JSON.parse(studentsRaw) : [];
 
+      // Seed baseline registered numbers if absent
+      const baselineNumbers = [
+        { mobile: "9881063427", name: "विद्यार्थी (9881063427)", exam: "MHT_CET" as ExamType },
+        { mobile: "8806145778", name: "विद्यार्थी (8806145778)", exam: "NEET" as ExamType },
+        { mobile: "9822199711", name: "विद्यार्थी (9822199711)", exam: "JEE_MAIN" as ExamType },
+      ];
+
+      baselineNumbers.forEach((bn, idx) => {
+        if (!localStudents.some((s) => s.mobile === bn.mobile)) {
+          localStudents.push({
+            id: `student_user_${bn.mobile}`,
+            name: bn.name,
+            mobile: bn.mobile,
+            password: "123",
+            examTarget: bn.exam,
+            primaryDeviceId: `dev_${bn.mobile}`,
+            primaryDeviceName: "Primary Device",
+            approvalStatus: "approved",
+            registeredAt: Date.now() - (idx + 1) * 3600000,
+            lastLoginAt: Date.now(),
+            isApproved: true,
+            isFeePaid: true,
+            trialStartedAt: Date.now(),
+            approvedAt: Date.now(),
+          });
+        }
+      });
+      localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(localStudents));
+
       // Merge with Firebase Cloud Students
       const cloudStudents = await fetchStudentsFromCloud();
       if (cloudStudents && cloudStudents.length > 0) {
