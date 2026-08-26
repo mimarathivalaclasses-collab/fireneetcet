@@ -115,6 +115,30 @@ export default function App() {
     return (saved as LanguageMode) || "bilingual";
   });
 
+  // Dark Mode Theme State
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem("app_theme_dark");
+      if (saved !== null) return saved === "true";
+      return false;
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("app_theme_dark", String(isDarkMode));
+  }, [isDarkMode]);
+
+  const handleToggleDarkMode = () => {
+    setIsDarkMode((prev) => !prev);
+  };
+
   // 4. Active View Navigation (Defaults to "home" guidance)
   const [activeTab, setActiveTab] = useState<NavigationTab>("home");
   const [historyStack, setHistoryStack] = useState<NavigationTab[]>([]);
@@ -646,7 +670,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col font-sans selection:bg-slate-900 selection:text-white antialiased">
+    <div className={`min-h-screen ${isDarkMode ? "dark bg-slate-950 text-slate-100" : "bg-[#F8FAFC] text-slate-900"} flex flex-col font-sans selection:bg-indigo-600 selection:text-white antialiased transition-colors duration-200`}>
       {/* If active test is ongoing, render dedicated full-screen ActiveTestView */}
       {activeTestConfig ? (
         <ActiveTestView
@@ -721,6 +745,8 @@ export default function App() {
             currentUser={currentUser}
             currentExam={currentExam}
             onSelectExam={setCurrentExam}
+            isDarkMode={isDarkMode}
+            onToggleDarkMode={handleToggleDarkMode}
             bookmarkCount={bookmarkedIds.size}
             mistakesCount={unresolvedMistakesCount}
             trialSecondsRemaining={trialSecondsRemaining}
@@ -759,6 +785,8 @@ export default function App() {
             pendingApprovalsCount={pendingApprovalsCount}
             onOpenDrawer={() => setIsDrawerOpen(true)}
             onLogout={handleLogout}
+            isDarkMode={isDarkMode}
+            onToggleDarkMode={handleToggleDarkMode}
           />
 
           {/* Universal Sticky Back & Breadcrumb Navigation Bar */}

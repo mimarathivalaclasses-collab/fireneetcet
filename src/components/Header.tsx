@@ -27,6 +27,8 @@ import {
   Gift,
   Share2,
   Users,
+  Sun,
+  Moon,
 } from "lucide-react";
 import {
   ExamType,
@@ -64,6 +66,8 @@ interface HeaderProps {
   onLogoutInstitute?: () => void;
   onLogout?: () => void;
   onOpenDrawer?: () => void;
+  isDarkMode?: boolean;
+  onToggleDarkMode?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -91,6 +95,8 @@ export const Header: React.FC<HeaderProps> = ({
   onLogoutInstitute,
   onLogout,
   onOpenDrawer,
+  isDarkMode = false,
+  onToggleDarkMode,
 }) => {
   const currentLang = language;
   const handleLangChange = (lang: LanguageMode) => {
@@ -108,7 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
   const isExamActive = (exam: ExamType) => currentExam === exam;
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs transition-colors">
       {/* Top Header Bar */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-2.5">
         {/* Left: Drawer Trigger + App / Institute Dynamic Branding */}
@@ -117,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="btn-open-navigation-drawer"
               onClick={onOpenDrawer}
-              className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition-colors cursor-pointer"
               title="मेनू उघडा (Menu)"
               aria-label="Open Navigation Menu"
             >
@@ -138,14 +144,14 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-sm sm:text-base font-black tracking-tight text-slate-900 truncate max-w-[160px] sm:max-w-xs">
+                  <span className="text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white truncate max-w-[160px] sm:max-w-xs">
                     {activeInstitute.nameMr || activeInstitute.name}
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider bg-purple-100 text-purple-900 border border-purple-300 font-mono">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider bg-purple-100 dark:bg-purple-950/80 text-purple-900 dark:text-purple-300 border border-purple-300 dark:border-purple-700 font-mono">
                     {activeInstitute.instituteCode}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
+                <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                   <span className="truncate">{activeInstitute.directorName || activeInstitute.city}</span>
                   {onLogoutInstitute && (
                     <button
@@ -154,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({
                         e.stopPropagation();
                         onLogoutInstitute();
                       }}
-                      className="text-rose-600 hover:text-rose-800 font-bold underline cursor-pointer text-[10px]"
+                      className="text-rose-600 dark:text-rose-400 hover:text-rose-800 font-bold underline cursor-pointer text-[10px]"
                       title="क्लासेस मोड बंद करून मुख्य ॲपवर जा"
                     >
                       लॉग आऊट
@@ -169,19 +175,19 @@ export const Header: React.FC<HeaderProps> = ({
               className="flex items-center gap-2 cursor-pointer select-none group"
               onClick={() => handleNavClick("home")}
             >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform shrink-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-slate-900 dark:bg-slate-800 text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform shrink-0 ring-1 ring-slate-700/50">
                 <GraduationCap className="w-5 h-5 text-indigo-400" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-sm sm:text-base font-black tracking-tight text-slate-900">
+                  <span className="text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white">
                     MHT-CET · NEET · JEE
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-md font-black uppercase tracking-wider bg-emerald-100 text-emerald-950 border border-emerald-300 font-mono-numbers">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-md font-black uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/80 text-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 font-mono-numbers">
                     ₹२९ PRO
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 font-medium tracking-tight">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-tight">
                   सराव, १० Grand Tests व नोट्स
                 </p>
               </div>
@@ -190,14 +196,14 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Geometric Segmented Exam Selector */}
-        <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200/80">
+        <div className="flex items-center bg-slate-100 dark:bg-slate-800/90 p-0.5 rounded-xl border border-slate-200/80 dark:border-slate-700">
           <button
             id="exam-btn-mhtcet"
             onClick={() => onSelectExam("MHT_CET")}
             className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
               isExamActive("MHT_CET")
                 ? "bg-amber-600 text-white shadow-xs"
-                : "text-slate-600 hover:text-slate-900"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${isExamActive("MHT_CET") ? "bg-white" : "bg-amber-500"}`}></span>
@@ -209,7 +215,7 @@ export const Header: React.FC<HeaderProps> = ({
             className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
               isExamActive("NEET")
                 ? "bg-emerald-600 text-white shadow-xs"
-                : "text-slate-600 hover:text-slate-900"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${isExamActive("NEET") ? "bg-white" : "bg-emerald-500"}`}></span>
@@ -221,7 +227,7 @@ export const Header: React.FC<HeaderProps> = ({
             className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 ${
               isExamActive("JEE_MAIN")
                 ? "bg-blue-600 text-white shadow-xs"
-                : "text-slate-600 hover:text-slate-900"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${isExamActive("JEE_MAIN") ? "bg-white" : "bg-blue-500"}`}></span>
@@ -313,15 +319,28 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {/* Dark / Light Mode Theme Toggle */}
+          {onToggleDarkMode && (
+            <button
+              id="btn-header-theme-toggle"
+              onClick={onToggleDarkMode}
+              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-amber-300 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shadow-2xs"
+              title={isDarkMode ? "लाइट मोड सुरू करा (Switch to Light)" : "डार्क मोड सुरू करा (Switch to Dark)"}
+              aria-label="Toggle Theme"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4 text-amber-400 fill-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+            </button>
+          )}
+
           {/* Language Toggle */}
-          <div className="flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200 text-xs">
+          <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-0.5 border border-slate-200 dark:border-slate-700 text-xs">
             <button
               id="lang-bilingual"
               onClick={() => handleLangChange("bilingual")}
               className={`px-1.5 py-1 rounded-lg text-xs font-bold transition-all ${
                 currentLang === "bilingual"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
               title="द्विभाषिक (English + मराठी)"
             >
@@ -332,8 +351,8 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => handleLangChange("mr")}
               className={`px-1.5 py-1 rounded-lg text-xs font-bold transition-all ${
                 currentLang === "mr"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
               title="मराठी माध्यम"
             >
@@ -344,8 +363,8 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => handleLangChange("en")}
               className={`px-1.5 py-1 rounded-lg text-xs font-bold transition-all ${
                 currentLang === "en"
-                  ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
               title="English"
             >
@@ -356,20 +375,20 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Navigation Sub-Bar */}
-      <div className="bg-slate-50 border-t border-slate-200">
+      <div className="bg-slate-50 dark:bg-slate-900/90 border-t border-slate-200 dark:border-slate-800 transition-colors">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <nav className="flex items-center gap-1.5 overflow-x-auto py-1.5 scrollbar-none text-xs font-bold">
             {/* Home / Guidance */}
             <button
               id="nav-home"
               onClick={() => handleNavClick("home")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-bold ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-bold cursor-pointer ${
                 activeNav === "home"
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "text-slate-700 bg-white border border-slate-200 hover:bg-slate-100"
+                  ? "bg-slate-900 dark:bg-indigo-600 text-white shadow-xs"
+                  : "text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/80"
               }`}
             >
-              <Compass className="w-3.5 h-3.5 text-indigo-600" />
+              <Compass className="w-3.5 h-3.5 text-indigo-500" />
               <span>मुख्य मेनू (Home)</span>
             </button>
 
@@ -377,13 +396,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-grand-tests"
               onClick={() => handleNavClick("grand_tests")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-bold ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-bold cursor-pointer ${
                 activeNav === "grand_tests"
                   ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 shadow-sm ring-1 ring-amber-400"
-                  : "text-amber-950 bg-amber-100/90 border border-amber-300 hover:bg-amber-200"
+                  : "text-amber-950 dark:text-amber-200 bg-amber-100/90 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/50 hover:bg-amber-200 dark:hover:bg-amber-900/50"
               }`}
             >
-              <Trophy className="w-3.5 h-3.5 text-slate-950" />
+              <Trophy className="w-3.5 h-3.5 text-amber-500" />
               <span>🏆 १० Grand Tests</span>
               <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-500 text-slate-950 uppercase">
                 १० संच
@@ -394,13 +413,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-practice"
               onClick={() => handleNavClick("practice")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-bold ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-bold cursor-pointer ${
                 activeNav === "practice"
                   ? "bg-emerald-600 text-white shadow-xs"
-                  : "text-slate-700 bg-white border border-slate-200 hover:bg-slate-100"
+                  : "text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/80"
               }`}
             >
-              <Zap className="w-3.5 h-3.5 text-emerald-600" />
+              <Zap className="w-3.5 h-3.5 text-emerald-500" />
               <span>⚡ सराव (१२.५ लाख MCQs)</span>
             </button>
 
@@ -408,13 +427,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-refer-earn"
               onClick={() => handleNavClick("refer_earn")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-black ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-black cursor-pointer ${
                 activeNav === "refer_earn"
                   ? "bg-emerald-700 text-white shadow-sm ring-1 ring-emerald-400"
-                  : "text-emerald-950 bg-emerald-100/90 border border-emerald-300 hover:bg-emerald-200"
+                  : "text-emerald-950 dark:text-emerald-200 bg-emerald-100/90 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700/50 hover:bg-emerald-200 dark:hover:bg-emerald-900/50"
               }`}
             >
-              <Gift className={`w-3.5 h-3.5 ${activeNav === "refer_earn" ? "text-amber-300" : "text-emerald-700"}`} />
+              <Gift className={`w-3.5 h-3.5 ${activeNav === "refer_earn" ? "text-amber-300" : "text-emerald-500"}`} />
               <span>🎁 रेफर करा आणि कमवा (₹२९ परत)</span>
               <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-emerald-600 text-white uppercase">
                 १० रेफर = १००% परत
@@ -425,13 +444,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-agent-portal"
               onClick={() => handleNavClick("agent_portal")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-black ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-black cursor-pointer ${
                 activeNav === "agent_portal"
                   ? "bg-indigo-800 text-white shadow-sm ring-1 ring-indigo-400"
-                  : "text-indigo-950 bg-indigo-100/90 border border-indigo-300 hover:bg-indigo-200"
+                  : "text-indigo-950 dark:text-indigo-200 bg-indigo-100/90 dark:bg-indigo-950/40 border border-indigo-300 dark:border-indigo-700/50 hover:bg-indigo-200 dark:hover:bg-indigo-900/50"
               }`}
             >
-              <Users className={`w-3.5 h-3.5 ${activeNav === "agent_portal" ? "text-amber-300" : "text-indigo-700"}`} />
+              <Users className={`w-3.5 h-3.5 ${activeNav === "agent_portal" ? "text-amber-300" : "text-indigo-400"}`} />
               <span>💼 एजंट पोर्टल (२०% कमिशन)</span>
               <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase">
                 ₹५.८०/विद्यार्थी
@@ -442,16 +461,16 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-mock-test"
               onClick={() => handleNavClick("mock_test")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all cursor-pointer ${
                 activeNav === "mock_test" ||
                 (activeNav as string) === "mock_test_setup" ||
                 (activeNav as string) === "active_test" ||
                 (activeNav as string) === "test_result"
                   ? "bg-emerald-600 text-white shadow-xs"
-                  : "text-slate-700 bg-white border border-slate-200 hover:bg-slate-100"
+                  : "text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/80"
               }`}
             >
-              <Timer className="w-3.5 h-3.5 text-emerald-600" />
+              <Timer className="w-3.5 h-3.5 text-emerald-500" />
               <span>मॉक टेस्ट (Mock)</span>
             </button>
 
@@ -459,13 +478,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-all-questions"
               onClick={() => handleNavClick("all_questions")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all cursor-pointer ${
                 activeNav === "all_questions"
                   ? "bg-indigo-600 text-white shadow-xs"
-                  : "text-indigo-900 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100"
+                  : "text-indigo-900 dark:text-indigo-200 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-700/50 hover:bg-indigo-100 dark:hover:bg-indigo-900/50"
               }`}
             >
-              <Layers className="w-3.5 h-3.5 text-indigo-600" />
+              <Layers className="w-3.5 h-3.5 text-indigo-400" />
               <span>सर्व प्रश्न ({totalQuestionsCount || "५०००+"})</span>
             </button>
 
@@ -473,13 +492,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-notes"
               onClick={() => handleNavClick("notes")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all cursor-pointer ${
                 activeNav === "notes"
                   ? "bg-emerald-600 text-white shadow-xs"
-                  : "text-emerald-900 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100"
+                  : "text-emerald-900 dark:text-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-700/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/50"
               }`}
             >
-              <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
+              <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
               <span>अभ्यास नोट्स व PDF</span>
             </button>
 
@@ -487,13 +506,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-pyq"
               onClick={() => handleNavClick("pyq")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all cursor-pointer ${
                 activeNav === "pyq"
                   ? "bg-blue-700 text-white shadow-xs"
-                  : "text-blue-900 bg-blue-50 border border-blue-200 hover:bg-blue-100"
+                  : "text-blue-900 dark:text-blue-200 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-700/50 hover:bg-blue-100 dark:hover:bg-blue-900/50"
               }`}
             >
-              <Calendar className="w-3.5 h-3.5 text-blue-600" />
+              <Calendar className="w-3.5 h-3.5 text-blue-400" />
               <span>PYQs (मागील वर्षे)</span>
             </button>
 
@@ -501,13 +520,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-omr"
               onClick={() => handleNavClick("omr")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all cursor-pointer ${
                 activeNav === "omr"
                   ? "bg-amber-600 text-white shadow-xs"
-                  : "text-amber-900 bg-amber-50 border border-amber-200 hover:bg-amber-100"
+                  : "text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-700/50 hover:bg-amber-100 dark:hover:bg-amber-900/50"
               }`}
             >
-              <CircleDot className="w-3.5 h-3.5 text-amber-600" />
+              <CircleDot className="w-3.5 h-3.5 text-amber-400" />
               <span>OMR शीट</span>
             </button>
 
@@ -515,13 +534,13 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="nav-mistakes"
               onClick={() => handleNavClick("mistakes")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl whitespace-nowrap transition-all cursor-pointer ${
                 activeNav === "mistakes"
                   ? "bg-red-600 text-white shadow-xs"
-                  : "text-red-900 bg-red-50 border border-red-200 hover:bg-red-100"
+                  : "text-red-900 dark:text-red-200 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-700/50 hover:bg-red-100 dark:hover:bg-red-900/50"
               }`}
             >
-              <AlertTriangle className="w-3.5 h-3.5 text-red-500" />
+              <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
               <span>माझ्या चुका</span>
               {mistakesCount > 0 && (
                 <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono-numbers bg-red-600 text-white font-bold">
