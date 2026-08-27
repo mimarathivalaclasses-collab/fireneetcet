@@ -294,42 +294,38 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       return;
     }
 
-    // 1. SUPER ADMIN ROLE LOGIN (Master Credentials: 9970106432 / 9970106432 or 9307220454)
-    if (selectedRole === "admin") {
-      if (
-        (cleanIdentifier === "9970106432" || cleanIdentifier === "admin" || cleanIdentifier === "9307220454") &&
-        (cleanPassword === "9970106432" || cleanPassword === "2026" || cleanPassword === "admin" || cleanPassword === "9307220454" || cleanPassword === "1234")
-      ) {
-        sessionStorage.setItem("mcq_admin_logged_in", "true");
-        const adminUser: StudentUser = {
-          id: "super_admin_master",
-          name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
-          mobile: "9970106432",
-          email: "admin@abhyasmitra.com",
-          role: "admin",
-          examTarget: "MHT_CET",
-          primaryDeviceId: getOrCreateDeviceId(),
-          primaryDeviceName: getDeviceName(),
-          approvalStatus: "approved",
-          isApproved: true,
-          paymentStatus: "paid",
-          registeredAt: Date.now() - 86400000 * 30,
-          lastLoginAt: Date.now(),
-        };
+    // Direct 1-Click Master Admin Launch Helper
+    const handleDirectAdminLaunch = () => {
+      sessionStorage.setItem("mcq_admin_logged_in", "true");
+      const adminUser: StudentUser = {
+        id: "super_admin_master",
+        name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
+        mobile: "9970106432",
+        email: "admin@abhyasmitra.com",
+        role: "admin",
+        examTarget: "MHT_CET",
+        primaryDeviceId: getOrCreateDeviceId(),
+        primaryDeviceName: getDeviceName(),
+        approvalStatus: "approved",
+        isApproved: true,
+        paymentStatus: "paid",
+        registeredAt: Date.now() - 86400000 * 30,
+        lastLoginAt: Date.now(),
+      };
 
-        localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(adminUser));
-        setSuccessMessage("मास्टर ॲडमिन लॉगिन यशस्वी! डॅशबोर्ड उघडत आहे...");
-        setTimeout(() => {
-          setIsLoading(false);
-          onLoginSuccess(adminUser);
-          if (onOpenAdmin) onOpenAdmin();
-        }, 400);
-        return;
-      } else {
+      localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(adminUser));
+      setSuccessMessage("मास्टर ॲडमिन पॅनल उघडत आहे...");
+      setTimeout(() => {
         setIsLoading(false);
-        setErrorMessage("अवैध ॲडमिन युझरनेम किंवा पासवर्ड. कृपया योग्य क्रेडेन्शियल्स वापरा.");
-        return;
-      }
+        onLoginSuccess(adminUser);
+        if (onOpenAdmin) onOpenAdmin();
+      }, 250);
+    };
+
+    // 1. SUPER ADMIN ROLE LOGIN (Master Credentials or Direct Access)
+    if (selectedRole === "admin") {
+      handleDirectAdminLaunch();
+      return;
     }
 
     // 2. COACHING CLASS ADMIN ROLE
@@ -1069,13 +1065,58 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               }}
               className={`py-2 px-2 rounded-lg transition-all cursor-pointer text-center truncate ${
                 selectedRole === "admin"
-                  ? "bg-white text-slate-900 shadow-xs font-black ring-1 ring-slate-200"
+                  ? "bg-amber-500 text-slate-950 shadow-xs font-black ring-2 ring-amber-400"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
               👑 ॲडमिन (Admin)
             </button>
           </div>
+
+          {/* Admin Role Instant Direct Launch Box */}
+          {selectedRole === "admin" && (
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 text-white space-y-3 shadow-lg">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-black uppercase tracking-wider bg-black/20 px-2.5 py-1 rounded-full">
+                  👑 मुख्य ॲडमिन डायरेक्टर पॅनल
+                </span>
+                <span className="text-[10px] font-bold bg-white/30 px-2 py-0.5 rounded-full">
+                  १-क्लिक ॲक्सेस
+                </span>
+              </div>
+              <p className="text-xs text-white/95 leading-relaxed font-medium">
+                विद्यार्थी मंजुरी (Approve Students), पेमेंट पावत्या पडताळणी आणि संपूर्ण ॲप व्यवस्थापन थेट सुरू करा.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  sessionStorage.setItem("mcq_admin_logged_in", "true");
+                  const adminUser: StudentUser = {
+                    id: "super_admin_master",
+                    name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
+                    mobile: "9970106432",
+                    email: "admin@abhyasmitra.com",
+                    role: "admin",
+                    examTarget: "MHT_CET",
+                    primaryDeviceId: getOrCreateDeviceId(),
+                    primaryDeviceName: getDeviceName(),
+                    approvalStatus: "approved",
+                    isApproved: true,
+                    paymentStatus: "paid",
+                    registeredAt: Date.now() - 86400000 * 30,
+                    lastLoginAt: Date.now(),
+                  };
+                  localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(adminUser));
+                  onLoginSuccess(adminUser);
+                  if (onOpenAdmin) onOpenAdmin();
+                }}
+                className="w-full py-3.5 bg-white hover:bg-amber-50 text-slate-950 font-black rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md cursor-pointer transition-transform active:scale-95"
+              >
+                <ShieldCheck className="w-5 h-5 text-amber-600" />
+                <span>🚀 थेट ॲडमिन डॅशबोर्ड उघडा (Approve Students)</span>
+              </button>
+            </div>
+          )}
 
           {/* Agent Highlighting Info Banner */}
           {selectedRole === "agent" && (
@@ -1397,14 +1438,77 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       </main>
 
       {/* Footer Support Info */}
-      <footer className="relative z-10 w-full max-w-md mx-auto text-center text-[11px] text-slate-400 space-y-1 mt-4">
+      <footer className="relative z-10 w-full max-w-md mx-auto text-center text-[11px] text-slate-400 space-y-2 mt-4 pb-16">
         <div>
           मदत व ॲडमिन मंजुरी WhatsApp: <a href="https://wa.me/919970106432" className="text-teal-400 font-mono font-bold underline">9970106432</a>
         </div>
-        <div className="text-slate-500">
+        <div className="flex items-center justify-center gap-2 pt-1">
+          <button
+            type="button"
+            onClick={() => {
+              sessionStorage.setItem("mcq_admin_logged_in", "true");
+              const adminUser: StudentUser = {
+                id: "super_admin_master",
+                name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
+                mobile: "9970106432",
+                email: "admin@abhyasmitra.com",
+                role: "admin",
+                examTarget: "MHT_CET",
+                primaryDeviceId: getOrCreateDeviceId(),
+                primaryDeviceName: getDeviceName(),
+                approvalStatus: "approved",
+                isApproved: true,
+                paymentStatus: "paid",
+                registeredAt: Date.now() - 86400000 * 30,
+                lastLoginAt: Date.now(),
+              };
+              localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(adminUser));
+              onLoginSuccess(adminUser);
+              if (onOpenAdmin) onOpenAdmin();
+            }}
+            className="px-3 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold border border-amber-500/40 text-[11px] flex items-center gap-1.5 cursor-pointer"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+            <span>👑 ॲडमिन लॉगिन / मंजुरी पॅनल</span>
+          </button>
+        </div>
+        <div className="text-slate-500 text-[10px]">
           एक डिव्हाइस एक विद्यार्थी सुरक्षा बंधन (Strict Single-Device Policy)
         </div>
       </footer>
+
+      {/* Floating Bottom-Right Corner Admin Approval Button */}
+      <div className="fixed bottom-4 right-4 z-40">
+        <button
+          type="button"
+          onClick={() => {
+            sessionStorage.setItem("mcq_admin_logged_in", "true");
+            const adminUser: StudentUser = {
+              id: "super_admin_master",
+              name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
+              mobile: "9970106432",
+              email: "admin@abhyasmitra.com",
+              role: "admin",
+              examTarget: "MHT_CET",
+              primaryDeviceId: getOrCreateDeviceId(),
+              primaryDeviceName: getDeviceName(),
+              approvalStatus: "approved",
+              isApproved: true,
+              paymentStatus: "paid",
+              registeredAt: Date.now() - 86400000 * 30,
+              lastLoginAt: Date.now(),
+            };
+            localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(adminUser));
+            onLoginSuccess(adminUser);
+            if (onOpenAdmin) onOpenAdmin();
+          }}
+          className="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 text-amber-300 border-2 border-amber-400/80 shadow-2xl backdrop-blur-md text-xs font-black transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          title="Open Admin Approval Panel"
+        >
+          <ShieldCheck className="w-4 h-4 text-amber-400" />
+          <span>👑 ॲडमिन पॅनल (Approval)</span>
+        </button>
+      </div>
 
       {/* 3 FREE DEMO MOCK TESTS MODAL */}
       {showDemoModal && (
