@@ -25,7 +25,6 @@ import {
 import { StudentUser, ExamType, DeviceApprovalRequest } from "../types";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
 import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
-import { ForgotPasswordModal } from "./ForgotPasswordModal";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -73,7 +72,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [approvalSent, setApprovalSent] = useState<boolean>(false);
   const [adminPin, setAdminPin] = useState<string>("");
   const [adminPinError, setAdminPinError] = useState<string>("");
-  const [showForgotModal, setShowForgotModal] = useState<boolean>(false);
 
   if (!isOpen) return null;
 
@@ -208,24 +206,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    // Password Check (with master pin and special bypass)
-    const isMaster = ["9307220454", "2026", "1234", "9970106432"].includes(cleanPassword);
-    const isKnownSpecial = cleanMobile === "9881063427" && ["123", "9881063427", "2026", "1234", "123456"].includes(cleanPassword);
-
-    if (student.password && student.password !== cleanPassword && !isMaster && !isKnownSpecial) {
-      alert("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड प्रविष्ट करा किंवा 'पासवर्ड विसरलात?' वर क्लिक करा.");
+    // Password Check
+    if (student.password && student.password !== cleanPassword) {
+      alert("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड प्रविष्ट करा.");
       return;
     }
 
-    if (cleanMobile === "9881063427") {
-      student.isApproved = true;
-      student.approvalStatus = "approved";
-      student.isFeePaid = true;
-      student.password = cleanPassword;
-    }
-
     // Approval Status Check
-    if (student.approvalStatus === "pending" && !isMaster && cleanMobile !== "9881063427") {
+    if (student.approvalStatus === "pending") {
       setPendingStudent(student);
       return;
     }
@@ -485,36 +473,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   </button>
                 </div>
               </div>
-
-              {/* Master PIN Override Box for Teacher/Admin In-Person */}
-              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                <div className="text-[11px] font-bold text-slate-600 flex items-center gap-1">
-                  <KeyRound className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>शिक्षक / ॲडमिन थेट पिनद्वारे त्वरित अनलॉक करा:</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="password"
-                    placeholder="मास्टर पिन (उदा. 9307220454 किंवा 2026)"
-                    value={adminPin}
-                    onChange={(e) => {
-                      setAdminPin(e.target.value);
-                      setAdminPinError("");
-                    }}
-                    className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold focus:ring-2 focus:ring-indigo-600 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleVerifyAdminPin}
-                    className="px-4 py-2 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-black shadow-xs cursor-pointer"
-                  >
-                    अनलॉक
-                  </button>
-                </div>
-                {adminPinError && (
-                  <p className="text-[11px] text-rose-600 font-bold">{adminPinError}</p>
-                )}
-              </div>
             </div>
           ) : deviceMismatchError ? (
             /* SCREEN 2: DEVICE CONFLICT ERROR */
@@ -546,35 +504,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   ✅ शिक्षकांकडे विनंती पाठवली आहे. कृपया शिक्षकांशी संपर्क साधा.
                 </div>
               )}
-
-              {/* In-person Teacher PIN Unlock */}
-              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                <div className="text-[11px] font-bold text-slate-700">
-                  किंवा शिक्षकांचा मास्टर पिन प्रविष्ट करा:
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="password"
-                    placeholder="मास्टर पिन (उदा. 9307220454 / 2026)"
-                    value={adminPin}
-                    onChange={(e) => {
-                      setAdminPin(e.target.value);
-                      setAdminPinError("");
-                    }}
-                    className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleVerifyAdminPin}
-                    className="px-4 py-2 rounded-xl bg-indigo-700 text-white text-xs font-black cursor-pointer"
-                  >
-                    अनलॉक
-                  </button>
-                </div>
-                {adminPinError && (
-                  <p className="text-[11px] text-rose-600 font-bold">{adminPinError}</p>
-                )}
-              </div>
 
               <button
                 type="button"
@@ -636,14 +565,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <span>लॉगिन करा व अभ्यास सुरू करा</span>
               </button>
 
-              <div className="flex items-center justify-between pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowForgotModal(true)}
-                  className="text-xs font-bold text-slate-500 hover:text-indigo-700 cursor-pointer"
-                >
-                  🔑 पासवर्ड विसरलात? (Forgot Password)
-                </button>
+              <div className="text-center pt-2">
+                <span className="text-xs text-slate-500 font-medium">खाते नाही? </span>
                 <button
                   type="button"
                   onClick={() => setMode("register")}
@@ -805,17 +728,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           )}
         </div>
       </div>
-
-      {/* Forgot Password OTP/Email Modal */}
-      <ForgotPasswordModal
-        isOpen={showForgotModal}
-        onClose={() => setShowForgotModal(false)}
-        initialIdentifier={mobile}
-        onPasswordResetSuccess={(student) => {
-          setShowForgotModal(false);
-          onLoginSuccess(student);
-        }}
-      />
     </div>
   );
 };

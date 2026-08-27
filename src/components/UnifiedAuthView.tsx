@@ -42,7 +42,6 @@ import { getAllInstitutes } from "../data/coachingInstitutesData";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
 import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
 import { recordReferralTransaction } from "../utils/referralSystem";
-import { ForgotPasswordModal } from "./ForgotPasswordModal";
 
 interface UnifiedAuthViewProps {
   currentUser?: StudentUser | null;
@@ -97,9 +96,6 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
   // Demo Tests Modal
   const [showDemoModal, setShowDemoModal] = useState<boolean>(false);
-
-  // Forgot Password Modal
-  const [showForgotModal, setShowForgotModal] = useState<boolean>(false);
 
   // Status & Feedback States
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -718,28 +714,11 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         return;
       }
 
-      // Check Password (or Master Teacher PIN bypass or 9881063427 recovery)
-      const isMasterPin = ["9307220454", "2026", "1234", "9970106432"].includes(cleanPassword);
-      const isKnownSpecial = cleanIdentifier === "9881063427" && ["123", "9881063427", "2026", "1234", "123456"].includes(cleanPassword);
-      
-      if (foundUser.password && foundUser.password !== cleanPassword && !isMasterPin && !isKnownSpecial) {
+      // Check Password
+      if (foundUser.password && foundUser.password !== cleanPassword) {
         setIsLoading(false);
-        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा किंवा खाली 'पासवर्ड विसरलात?' वर क्लिक करा.");
+        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा.");
         return;
-      }
-
-      // If Special student or Master PIN was used, auto-approve and update password
-      if (cleanIdentifier === "9881063427") {
-        foundUser.isApproved = true;
-        foundUser.approvalStatus = "approved";
-        foundUser.isFeePaid = true;
-        foundUser.password = cleanPassword;
-      }
-
-      if (isMasterPin) {
-        foundUser.isApproved = true;
-        foundUser.approvalStatus = "approved";
-        foundUser.isFeePaid = true;
       }
 
       // STRICT ADMIN APPROVAL CHECK
@@ -843,64 +822,8 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               </a>
             </div>
 
-            {/* Instant Admin / Teacher PIN Quick Unlock */}
+            {/* Action options while waiting */}
             <div className="pt-2 border-t border-slate-100 space-y-2">
-              <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-left space-y-1.5">
-                <div className="text-[11px] font-bold text-amber-900 flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
-                  <span>शिक्षक / ॲडमिन मास्टर पिनने त्वरित सुरू करा:</span>
-                </div>
-                <div className="flex gap-1.5">
-                  <input
-                    type="password"
-                    id="pending-admin-pin-input"
-                    placeholder="पिन टाका (उदा. 9307220454 / 2026)"
-                    className="flex-1 px-2.5 py-1.5 bg-white border border-amber-300 rounded-xl text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        const val = (e.target as HTMLInputElement).value.trim();
-                        if (["9307220454", "2026", "1234", "admin", "9970106432"].includes(val)) {
-                          const approvedStudent: StudentUser = {
-                            ...pendingApprovalStudent,
-                            approvalStatus: "approved",
-                            isApproved: true,
-                            isFeePaid: true,
-                            lastLoginAt: Date.now(),
-                          };
-                          saveStudentToCloud(approvedStudent);
-                          onLoginSuccess(approvedStudent);
-                        } else {
-                          alert("अवैध पिन! कृपया योग्य पिन टाका.");
-                        }
-                      }
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const input = document.getElementById("pending-admin-pin-input") as HTMLInputElement;
-                      const val = input ? input.value.trim() : "";
-                      if (["9307220454", "2026", "1234", "admin", "9970106432"].includes(val)) {
-                        const approvedStudent: StudentUser = {
-                          ...pendingApprovalStudent,
-                          approvalStatus: "approved",
-                          isApproved: true,
-                          isFeePaid: true,
-                          lastLoginAt: Date.now(),
-                        };
-                        saveStudentToCloud(approvedStudent);
-                        onLoginSuccess(approvedStudent);
-                      } else {
-                        alert("अवैध पिन! 9307220454 किंवा 2026 टाका.");
-                      }
-                    }}
-                    className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow-xs cursor-pointer transition-colors"
-                  >
-                    अनलॉक
-                  </button>
-                </div>
-              </div>
-
               {/* Free Demo Test Option while waiting */}
               <button
                 type="button"
@@ -1360,17 +1283,6 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             </button>
           </form>
 
-          {/* Forgot Password Link (Matches photo) */}
-          <div className="text-center pt-1">
-            <button
-              type="button"
-              onClick={() => setShowForgotModal(true)}
-              className="text-xs text-slate-500 hover:text-indigo-600 font-medium cursor-pointer transition-all"
-            >
-              Forgot Password?
-            </button>
-          </div>
-
           {/* Bottom Switcher: "Don't have an account? Sign Up" (Matches photo) */}
           <div className="pt-2 border-t border-slate-100 text-center text-xs text-slate-600">
             {authMode === "login" ? (
@@ -1512,17 +1424,6 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           </div>
         </div>
       )}
-
-      {/* FORGOT PASSWORD MODAL (OTP & EMAIL VERIFICATION) */}
-      <ForgotPasswordModal
-        isOpen={showForgotModal}
-        onClose={() => setShowForgotModal(false)}
-        initialIdentifier={identifier}
-        onPasswordResetSuccess={(student) => {
-          setShowForgotModal(false);
-          onLoginSuccess(student);
-        }}
-      />
 
     </div>
   );

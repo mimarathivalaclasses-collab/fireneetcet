@@ -458,16 +458,6 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                     <input type="checkbox" defaultChecked className="rounded text-indigo-600" />
                     <span>लॉगिन सेव्ह ठेवा (Remember Me)</span>
                   </label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLoginPassword("123456");
-                      alert("पासवर्ड '123456' सेट केला आहे.");
-                    }}
-                    className="text-indigo-600 hover:underline font-bold"
-                  >
-                    पासवर्ड विसरलात?
-                  </button>
                 </div>
 
                 <button
