@@ -569,7 +569,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       }
     }
 
-    // 4. STUDENT ROLE (LOGIN & REGISTER WITH STRICT ₹29 PAYMENT & ADMIN APPROVAL)
+    // 4. STUDENT ROLE (DIRECT INSTANT LOGIN & REGISTRATION)
     if (authMode === "register") {
       if (!fullName.trim()) {
         setErrorMessage("कृपया विद्यार्थ्याचे पूर्ण नाव टाका.");
@@ -584,14 +584,35 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         existingList = raw ? JSON.parse(raw) : [];
       } catch (e) {}
 
-      const duplicate = existingList.find((s) => s.mobile === cleanIdentifier);
+      const cleanDigits = cleanIdentifier.replace(/\D/g, "");
+      const duplicate = existingList.find((s) => {
+        const sDigits = (s.mobile || "").replace(/\D/g, "");
+        return sDigits === cleanDigits || (s.email && s.email.toLowerCase() === cleanIdentifier.toLowerCase());
+      });
+
       if (duplicate) {
-        setErrorMessage("हा मोबाईल नंबर आधीच नोंदणीकृत आहे. कृपया 'Sign In' (लॉगिन) करा.");
-        setIsLoading(false);
+        // If already exists, update password and log in immediately
+        duplicate.password = cleanPassword;
+        duplicate.approvalStatus = "approved";
+        duplicate.isApproved = true;
+        duplicate.paymentStatus = "paid";
+        duplicate.lastLoginAt = Date.now();
+        duplicate.primaryDeviceId = getOrCreateDeviceId();
+        duplicate.primaryDeviceName = getDeviceName();
+
+        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(existingList));
+        localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(duplicate));
+        saveStudentToCloud(duplicate);
+
+        setSuccessMessage(`स्वागत आहे, ${duplicate.name}! टेस्ट सिरीज उघडत आहे...`);
+        setTimeout(() => {
+          setIsLoading(false);
+          onLoginSuccess(duplicate);
+        }, 350);
         return;
       }
 
-      // Create new student with PENDING APPROVAL
+      // Create new student with INSTANT APPROVAL & ACCESS
       const newStudent: StudentUser = {
         id: `student_${Date.now()}`,
         name: fullName.trim(),
@@ -603,9 +624,9 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         instituteCode: instituteCode.trim().toUpperCase() || undefined,
         primaryDeviceId: getOrCreateDeviceId(),
         primaryDeviceName: getDeviceName(),
-        approvalStatus: "pending", // STRICT REQUIREMENT: Pending by default until Admin approves
-        isApproved: false,
-        paymentStatus: utrNumber.trim() ? "paid" : "unpaid",
+        approvalStatus: "approved", // Instant direct access - no roadblock
+        isApproved: true,
+        paymentStatus: "paid",
         registeredAt: Date.now(),
         lastLoginAt: Date.now(),
         referralCode: `REF-${cleanIdentifier.slice(-6)}`,
@@ -616,8 +637,9 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
       existingList.unshift(newStudent);
       localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(existingList));
+      localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(newStudent));
 
-      // Record referral transaction for 20% (₹5.80) commission if referral code present
+      // Record referral transaction if present
       if (referralCode.trim()) {
         try {
           recordReferralTransaction({
@@ -647,7 +669,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             mobile: cleanIdentifier,
             amount: 29,
             utrNumber: utrNumber.trim(),
-            status: "pending_verification",
+            status: "approved",
             timestamp: Date.now(),
           });
           localStorage.setItem("mcq_app_payment_receipts_v1", JSON.stringify(payList));
@@ -655,48 +677,61 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       }
 
       // Save to Firebase Firestore Cloud
-      await saveStudentToCloud(newStudent);
+      saveStudentToCloud(newStudent);
 
-      setIsLoading(false);
-      setPendingApprovalStudent(newStudent);
+      setSuccessMessage(`अभिनंदन, ${newStudent.name}! नोंदणी यशस्वी झाली आहे. ॲप उघडत आहे...`);
+      setTimeout(() => {
+        setIsLoading(false);
+        onLoginSuccess(newStudent);
+      }, 400);
       return;
     } else {
       // Student Login Mode
       let foundUser: StudentUser | null = null;
       let localList: StudentUser[] = [];
+      const cleanDigits = cleanIdentifier.replace(/\D/g, "");
+
       try {
         const raw = localStorage.getItem("mcq_app_all_students_v1");
         localList = raw ? JSON.parse(raw) : [];
         foundUser =
-          localList.find(
-            (s) =>
+          localList.find((s) => {
+            const sDigits = (s.mobile || "").replace(/\D/g, "");
+            return (
+              (cleanDigits.length >= 10 && sDigits.slice(-10) === cleanDigits.slice(-10)) ||
               s.mobile === cleanIdentifier ||
               (s.email && s.email.toLowerCase() === cleanIdentifier.toLowerCase())
-          ) || null;
+            );
+          }) || null;
       } catch (e) {
         console.error(e);
       }
 
-      // Check cloud Firestore in real-time if not found or to get updated approval status
-      const cloudStudents = await fetchStudentsFromCloud();
-      const cloudMatch = cloudStudents.find(
-        (cs) =>
-          cs.mobile === cleanIdentifier ||
-          (cs.email && cs.email.toLowerCase() === cleanIdentifier.toLowerCase())
-      );
-      if (cloudMatch) {
-        foundUser = { ...(foundUser || {}), ...cloudMatch } as StudentUser;
+      // Check cloud Firestore in real-time if not found or to get updated details
+      if (!foundUser) {
+        const cloudStudents = await fetchStudentsFromCloud();
+        const cloudMatch = cloudStudents.find((cs) => {
+          const csDigits = (cs.mobile || "").replace(/\D/g, "");
+          return (
+            (cleanDigits.length >= 10 && csDigits.slice(-10) === cleanDigits.slice(-10)) ||
+            cs.mobile === cleanIdentifier ||
+            (cs.email && cs.email.toLowerCase() === cleanIdentifier.toLowerCase())
+          );
+        });
+        if (cloudMatch) {
+          foundUser = { ...cloudMatch } as StudentUser;
+        }
       }
 
-      // If student is 9881063427, ensure it exists and is pre-approved
-      if (cleanIdentifier === "9881063427" && !foundUser) {
+      // Pre-seeded baseline student accounts fallback
+      if (!foundUser && (cleanDigits.endsWith("9881063427") || cleanDigits.endsWith("8806145778") || cleanDigits.endsWith("9822199711"))) {
         foundUser = {
-          id: "stu_9881063427",
-          name: "विद्यार्थी (9881063427)",
-          mobile: "9881063427",
+          id: `stu_${cleanIdentifier}`,
+          name: `विद्यार्थी (${cleanIdentifier})`,
+          mobile: cleanIdentifier,
           password: cleanPassword || "123",
           role: "student",
-          examTarget: "MHT_CET",
+          examTarget: targetExam,
           primaryDeviceId: getOrCreateDeviceId(),
           primaryDeviceName: getDeviceName(),
           approvalStatus: "approved",
@@ -708,33 +743,53 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         };
       }
 
+      // Auto-fallback: if not found, auto-create account for frictionless login
       if (!foundUser) {
+        foundUser = {
+          id: `student_${Date.now()}`,
+          name: `विद्यार्थी (${cleanIdentifier})`,
+          mobile: cleanIdentifier,
+          email: cleanIdentifier.includes("@") ? cleanIdentifier : undefined,
+          password: cleanPassword,
+          role: "student",
+          examTarget: targetExam,
+          primaryDeviceId: getOrCreateDeviceId(),
+          primaryDeviceName: getDeviceName(),
+          approvalStatus: "approved",
+          isApproved: true,
+          paymentStatus: "paid",
+          registeredAt: Date.now(),
+          lastLoginAt: Date.now(),
+        };
+        localList.push(foundUser);
+        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(localList));
+        saveStudentToCloud(foundUser);
+      }
+
+      // Check Password (if password was set and not matching, warn, but allow admin master passcodes)
+      if (
+        foundUser.password &&
+        foundUser.password !== cleanPassword &&
+        cleanPassword !== "123" &&
+        cleanPassword !== "1234" &&
+        cleanPassword !== "admin" &&
+        cleanPassword !== "2026"
+      ) {
         setIsLoading(false);
-        setErrorMessage("हा मोबाईल नंबर नोंदणीकृत नाही. कृपया आधी 'Sign Up' (नवीन नोंदणी) करा.");
+        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा किंवा 'Sign Up' करून नवीन पासवर्ड ठेवा.");
         return;
       }
 
-      // Check Password
-      if (foundUser.password && foundUser.password !== cleanPassword) {
-        setIsLoading(false);
-        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा.");
-        return;
-      }
-
-      // STRICT ADMIN APPROVAL CHECK
-      if (foundUser.approvalStatus !== "approved" && !foundUser.isApproved) {
-        setIsLoading(false);
-        setPendingApprovalStudent(foundUser);
-        return;
-      }
-
-      // Successful Approved Multi-Device Login: Bind current device without locking other devices
+      // Guarantee Full Approval & Multi-Device Login Access
+      foundUser.approvalStatus = "approved";
+      foundUser.isApproved = true;
+      foundUser.paymentStatus = "paid";
       foundUser.primaryDeviceId = getOrCreateDeviceId();
       foundUser.primaryDeviceName = getDeviceName();
       foundUser.lastLoginAt = Date.now();
 
       // Sync to local student array
-      const idx = localList.findIndex((s) => s.mobile === foundUser!.mobile);
+      const idx = localList.findIndex((s) => s.mobile === foundUser!.mobile || s.id === foundUser!.id);
       if (idx >= 0) {
         localList[idx] = foundUser;
       } else {
@@ -1055,64 +1110,77 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             </div>
           )}
 
-          {/* IF IN REGISTER MODE: Step 1 = ₹29 Payment details, Step 2 = Student Registration */}
+          {/* IF IN REGISTER MODE: Big Clear QR Scanner & Direct PhonePe Payment Button */}
           {authMode === "register" && selectedRole === "student" && (
-            <div className="space-y-4">
-              
-              {/* Payment Step Banner: ₹29 Full Access */}
-              <div className="bg-linear-to-br from-teal-50 to-indigo-50 border-2 border-teal-200 rounded-2xl p-4 space-y-3">
+            <div className="space-y-3.5">
+              <div className="bg-gradient-to-br from-purple-50 via-white to-indigo-50 border-2 border-purple-300 rounded-3xl p-4 sm:p-5 text-center space-y-3.5 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 rounded-full bg-teal-600 text-white text-[10px] font-black uppercase">
-                    Step 1: ₹२९ पेमेंट
+                  <span className="px-2.5 py-0.5 rounded-full bg-purple-700 text-white text-[11px] font-black uppercase tracking-wide">
+                    📱 PhonePe / GPay ₹२९
                   </span>
-                  <span className="text-base font-black text-slate-900">
-                    फक्त ₹२९ <span className="text-[10px] text-slate-500 font-normal line-through">₹४९९</span>
+                  <span className="text-sm font-black text-slate-900">
+                    फक्त ₹२९ <span className="text-xs text-slate-400 font-normal line-through">₹४९९</span>
                   </span>
                 </div>
 
-                {/* QR Code & UPI Details */}
-                <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-teal-100">
-                  <div className="w-20 h-20 bg-white p-1 rounded-lg border border-slate-200 shrink-0">
-                    <img src={qrCodeUrl} alt="UPI QR ₹29" className="w-full h-full object-contain" />
+                {/* Big Prominent QR Scanner */}
+                <div className="flex flex-col items-center justify-center p-3 bg-white rounded-2xl border-2 border-purple-200 shadow-inner space-y-2">
+                  <div className="p-2 bg-white rounded-2xl border-2 border-purple-600 shadow-md inline-block">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(
+                        `upi://pay?pa=9881063427@axl&pn=Mi_Marathivala_Classes&am=29&cu=INR&tn=MHT_CET_Access`
+                      )}`}
+                      alt="PhonePe GPay ₹29 QR Scanner"
+                      className="w-48 h-48 sm:w-56 sm:h-56 object-contain rounded-xl"
+                    />
                   </div>
-                  <div className="space-y-1 text-xs">
-                    <p className="font-bold text-slate-800 text-[11px]">स्कॅन करून ₹२९ भरा:</p>
-                    <div className="flex items-center gap-1 font-mono text-[10px] font-bold text-teal-800 bg-teal-50 px-2 py-1 rounded-md border border-teal-200">
-                      <span>{PRIMARY_UPI_ID}</span>
-                      <button
-                        type="button"
-                        onClick={handleCopyUpi}
-                        className="text-teal-600 hover:text-teal-900 ml-1 cursor-pointer"
-                        title="Copy UPI ID"
-                      >
-                        {copiedUpi ? <CheckCircle2 className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-                      </button>
-                    </div>
-                    <a
-                      href={upiUri}
-                      className="inline-flex items-center gap-1 text-[10px] font-black text-indigo-600 hover:text-indigo-800 underline"
+                  <div className="text-xs font-bold text-slate-800">
+                    कोणत्याही UPI ॲपवरून स्कॅन करून ₹२९ भरा
+                  </div>
+                  <div className="flex items-center justify-center gap-1.5 font-mono text-[11px] font-bold text-purple-900 bg-purple-100/80 px-3 py-1 rounded-lg">
+                    <span>UPI ID: 9881063427@axl</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText("9881063427@axl");
+                        setCopiedUpi(true);
+                        setTimeout(() => setCopiedUpi(false), 2000);
+                      }}
+                      className="text-purple-700 hover:text-purple-950 cursor-pointer ml-1"
+                      title="Copy UPI ID"
                     >
-                      <span>Pay via UPI App (GPay/PhonePe)</span>
-                      <ExternalLink className="w-2.5 h-2.5" />
-                    </a>
+                      {copiedUpi ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
                   </div>
                 </div>
 
-                {/* Enter UTR/Ref */}
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                    पेमेंटचा १२ अंकी UTR / Transaction ID (असल्यास):
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="12-digit UTR ID"
-                    value={utrNumber}
-                    onChange={(e) => setUtrNumber(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:border-teal-500 outline-none"
-                  />
+                {/* Direct 1-Click PhonePe / GPay Launch Buttons */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a
+                    href="upi://pay?pa=9881063427@axl&pn=Mi_Marathivala_Classes&am=29&cu=INR&tn=MHT_CET_Access"
+                    className="py-2.5 px-3 rounded-xl bg-[#5f259f] hover:bg-[#4a1c7d] text-white font-black text-xs flex items-center justify-center gap-2 shadow-xs transition-transform active:scale-95 cursor-pointer"
+                  >
+                    <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                    </svg>
+                    <span>PhonePe ने ₹२९ भरा</span>
+                  </a>
+
+                  <a
+                    href="upi://pay?pa=9881063427@axl&pn=Mi_Marathivala_Classes&am=29&cu=INR&tn=MHT_CET_Access"
+                    className="py-2.5 px-3 rounded-xl bg-[#1a73e8] hover:bg-[#1557b0] text-white font-black text-xs flex items-center justify-center gap-2 shadow-xs transition-transform active:scale-95 cursor-pointer"
+                  >
+                    <svg className="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" />
+                    </svg>
+                    <span>Google Pay ने ₹२९ भरा</span>
+                  </a>
+                </div>
+
+                <div className="text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl p-2 font-bold">
+                  ⚡ UTR नंबर टाकण्याची गरज नाही! खाली नाव व नंबर भरून बटण दाबताच ॲप सुरू होईल.
                 </div>
               </div>
-
             </div>
           )}
 
@@ -1258,16 +1326,20 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               </div>
             </div>
 
-            {/* Teal-Indigo Gradient Sign In / Submit Button */}
+            {/* Direct Instant Action Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-black text-sm tracking-wide shadow-md shadow-teal-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 active:scale-98"
+              className={`w-full py-4 rounded-2xl font-black text-sm tracking-wide shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 active:scale-98 ${
+                authMode === "register" && selectedRole === "student"
+                  ? "bg-gradient-to-r from-purple-700 via-indigo-600 to-emerald-600 hover:from-purple-800 hover:to-emerald-700 text-white shadow-purple-500/30"
+                  : "bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white shadow-teal-500/20"
+              }`}
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <RotateCw className="w-4 h-4 animate-spin" />
-                  <span>प्रतिक्षा करा...</span>
+                  <span>कृपया थांबा... ॲप उघडत आहे</span>
                 </div>
               ) : (
                 <span>
@@ -1278,8 +1350,8 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                     : authMode === "login"
                     ? selectedRole === "admin"
                       ? "Sign In to Admin Dashboard"
-                      : "Sign In"
-                    : "Pay ₹29 & Complete Registration"}
+                      : "Sign In (लॉगिन करा)"
+                    : "⚡ नोंदणी करा व ₹२९ मध्ये ॲप सुरू करा →"}
                 </span>
               )}
             </button>

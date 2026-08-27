@@ -364,12 +364,12 @@ export default function App() {
     return () => clearInterval(timer);
   }, [currentUser]);
 
-  // Device verification on load
+  // Seamless Multi-Device Session Update
   useEffect(() => {
-    if (currentUser) {
-      if (currentUser.primaryDeviceId && currentUser.primaryDeviceId !== currentDeviceId) {
-        setIsAuthModalOpen(true);
-      }
+    if (currentUser && currentUser.primaryDeviceId !== currentDeviceId) {
+      const updatedUser = { ...currentUser, primaryDeviceId: currentDeviceId };
+      setCurrentUser(updatedUser);
+      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(updatedUser));
     }
   }, [currentUser, currentDeviceId]);
 
