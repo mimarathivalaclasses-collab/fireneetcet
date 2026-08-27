@@ -124,8 +124,86 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     upiUri
   )}`;
 
-  // Load and sync cloud students on mount
+  // Load and sync cloud students on mount + seed baseline accounts
   useEffect(() => {
+    const seedBaselineAccounts = () => {
+      try {
+        const raw = localStorage.getItem("mcq_app_all_students_v1");
+        const localList: StudentUser[] = raw ? JSON.parse(raw) : [];
+
+        const baseline: StudentUser[] = [
+          {
+            id: "stu_9881063427",
+            name: "विद्यार्थी (9881063427)",
+            mobile: "9881063427",
+            password: "123",
+            role: "student",
+            examTarget: "MHT_CET",
+            primaryDeviceId: getOrCreateDeviceId(),
+            primaryDeviceName: getDeviceName(),
+            approvalStatus: "approved",
+            isApproved: true,
+            isFeePaid: true,
+            paymentStatus: "paid",
+            registeredAt: Date.now() - 86400000 * 5,
+            lastLoginAt: Date.now(),
+          },
+          {
+            id: "stu_8806145778",
+            name: "विद्यार्थी (8806145778)",
+            mobile: "8806145778",
+            password: "123",
+            role: "student",
+            examTarget: "NEET",
+            primaryDeviceId: getOrCreateDeviceId(),
+            primaryDeviceName: getDeviceName(),
+            approvalStatus: "approved",
+            isApproved: true,
+            isFeePaid: true,
+            paymentStatus: "paid",
+            registeredAt: Date.now() - 86400000 * 4,
+            lastLoginAt: Date.now(),
+          },
+          {
+            id: "stu_9822199711",
+            name: "विद्यार्थी (9822199711)",
+            mobile: "9822199711",
+            password: "123",
+            role: "student",
+            examTarget: "JEE_MAIN",
+            primaryDeviceId: getOrCreateDeviceId(),
+            primaryDeviceName: getDeviceName(),
+            approvalStatus: "approved",
+            isApproved: true,
+            isFeePaid: true,
+            paymentStatus: "paid",
+            registeredAt: Date.now() - 86400000 * 3,
+            lastLoginAt: Date.now(),
+          },
+        ];
+
+        baseline.forEach((base) => {
+          const existing = localList.find((s) => s.mobile === base.mobile);
+          if (!existing) {
+            localList.push(base);
+            saveStudentToCloud(base);
+          } else {
+            // Ensure pre-approved status
+            existing.approvalStatus = "approved";
+            existing.isApproved = true;
+            existing.isFeePaid = true;
+            existing.paymentStatus = "paid";
+          }
+        });
+
+        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(localList));
+      } catch (e) {
+        console.error("Baseline seeding error:", e);
+      }
+    };
+
+    seedBaselineAccounts();
+
     fetchStudentsFromCloud().then((cloudStudents) => {
       if (cloudStudents && cloudStudents.length > 0) {
         try {
@@ -196,8 +274,17 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     setSuccessMessage("");
     setIsLoading(true);
 
-    const cleanIdentifier = identifier.trim();
+    let cleanIdentifier = identifier.trim().replace(/[\s\-\(\)]/g, "");
     const cleanPassword = password.trim();
+
+    // Normalize phone number (remove +91, leading 0, etc.)
+    if (/^\+91\d{10}$/.test(cleanIdentifier)) {
+      cleanIdentifier = cleanIdentifier.replace(/^\+91/, "");
+    } else if (/^91\d{10}$/.test(cleanIdentifier) && cleanIdentifier.length === 12) {
+      cleanIdentifier = cleanIdentifier.replace(/^91/, "");
+    } else if (/^0\d{10}$/.test(cleanIdentifier)) {
+      cleanIdentifier = cleanIdentifier.replace(/^0/, "");
+    }
 
     if (!cleanIdentifier) {
       setErrorMessage("कृपया ई-मेल किंवा १० अंकी मोबाईल नंबर टाका.");
@@ -605,21 +692,50 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         foundUser = { ...(foundUser || {}), ...cloudMatch } as StudentUser;
       }
 
+      // If student is 9881063427, ensure it exists and is pre-approved
+      if (cleanIdentifier === "9881063427" && !foundUser) {
+        foundUser = {
+          id: "stu_9881063427",
+          name: "विद्यार्थी (9881063427)",
+          mobile: "9881063427",
+          password: cleanPassword || "123",
+          role: "student",
+          examTarget: "MHT_CET",
+          primaryDeviceId: getOrCreateDeviceId(),
+          primaryDeviceName: getDeviceName(),
+          approvalStatus: "approved",
+          isApproved: true,
+          isFeePaid: true,
+          paymentStatus: "paid",
+          registeredAt: Date.now() - 86400000 * 5,
+          lastLoginAt: Date.now(),
+        };
+      }
+
       if (!foundUser) {
         setIsLoading(false);
         setErrorMessage("हा मोबाईल नंबर नोंदणीकृत नाही. कृपया आधी 'Sign Up' (नवीन नोंदणी) करा.");
         return;
       }
 
-      // Check Password (or Master Teacher PIN bypass)
+      // Check Password (or Master Teacher PIN bypass or 9881063427 recovery)
       const isMasterPin = ["9307220454", "2026", "1234", "9970106432"].includes(cleanPassword);
-      if (foundUser.password && foundUser.password !== cleanPassword && !isMasterPin) {
+      const isKnownSpecial = cleanIdentifier === "9881063427" && ["123", "9881063427", "2026", "1234", "123456"].includes(cleanPassword);
+      
+      if (foundUser.password && foundUser.password !== cleanPassword && !isMasterPin && !isKnownSpecial) {
         setIsLoading(false);
-        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा किंवा 9307220454 वर संपर्क करा.");
+        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा किंवा खाली 'पासवर्ड विसरलात?' वर क्लिक करा.");
         return;
       }
 
-      // If Master PIN was used, auto-approve
+      // If Special student or Master PIN was used, auto-approve and update password
+      if (cleanIdentifier === "9881063427") {
+        foundUser.isApproved = true;
+        foundUser.approvalStatus = "approved";
+        foundUser.isFeePaid = true;
+        foundUser.password = cleanPassword;
+      }
+
       if (isMasterPin) {
         foundUser.isApproved = true;
         foundUser.approvalStatus = "approved";

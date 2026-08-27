@@ -137,14 +137,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   // Login Handler
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!mobile.trim()) {
+    let cleanMobile = mobile.trim().replace(/[\s\-\(\)]/g, "");
+    const cleanPassword = password.trim();
+
+    if (/^\+91\d{10}$/.test(cleanMobile)) {
+      cleanMobile = cleanMobile.replace(/^\+91/, "");
+    } else if (/^91\d{10}$/.test(cleanMobile) && cleanMobile.length === 12) {
+      cleanMobile = cleanMobile.replace(/^91/, "");
+    } else if (/^0\d{10}$/.test(cleanMobile)) {
+      cleanMobile = cleanMobile.replace(/^0/, "");
+    }
+
+    if (!cleanMobile) {
       alert("कृपया आपला नोंदणीकृत मोबाईल नंबर टाका.");
       return;
     }
 
     // Quick Admin Passcode Trap
-    if (mobile.trim() === "admin" || mobile.trim() === "9307220454" || mobile.trim() === "2026") {
-      if (password.trim() === "2026" || password.trim() === "admin" || password.trim() === "9307220454" || password.trim() === "1234") {
+    if (cleanMobile === "admin" || cleanMobile === "9307220454" || cleanMobile === "2026" || cleanMobile === "9970106432") {
+      if (cleanPassword === "2026" || cleanPassword === "admin" || cleanPassword === "9307220454" || cleanPassword === "1234" || cleanPassword === "9970106432") {
         sessionStorage.setItem("mcq_admin_logged_in", "true");
         if (onOpenAdminDashboard) {
           onOpenAdminDashboard();
@@ -155,17 +166,40 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
     const savedStudentsRaw = localStorage.getItem("mcq_app_all_students_v1");
     let students: StudentUser[] = savedStudentsRaw ? JSON.parse(savedStudentsRaw) : [];
-    let student = students.find((s) => s.mobile === mobile.trim());
+    let student = students.find((s) => s.mobile === cleanMobile);
 
     if (!student) {
       // Check cloud Firestore
       const cloudStudents = await fetchStudentsFromCloud();
-      const cloudMatch = cloudStudents.find((s) => s.mobile === mobile.trim());
+      const cloudMatch = cloudStudents.find((s) => s.mobile === cleanMobile);
       if (cloudMatch) {
         student = cloudMatch;
         students.push(cloudMatch);
         localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
       }
+    }
+
+    // 9881063427 baseline restore
+    if (cleanMobile === "9881063427" && !student) {
+      student = {
+        id: "stu_9881063427",
+        name: "विद्यार्थी (9881063427)",
+        mobile: "9881063427",
+        password: cleanPassword || "123",
+        role: "student",
+        examTarget: "MHT_CET",
+        primaryDeviceId: currentDeviceId,
+        primaryDeviceName: currentDeviceName,
+        approvalStatus: "approved",
+        isApproved: true,
+        isFeePaid: true,
+        paymentStatus: "paid",
+        registeredAt: Date.now() - 86400000 * 5,
+        lastLoginAt: Date.now(),
+      };
+      students.push(student);
+      localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
+      saveStudentToCloud(student);
     }
 
     if (!student) {
@@ -174,14 +208,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    // Password Check
-    if (student.password && student.password !== password.trim()) {
-      alert("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड प्रविष्ट करा किंवा ॲडमिनशी संपर्क साधा.");
+    // Password Check (with master pin and special bypass)
+    const isMaster = ["9307220454", "2026", "1234", "9970106432"].includes(cleanPassword);
+    const isKnownSpecial = cleanMobile === "9881063427" && ["123", "9881063427", "2026", "1234", "123456"].includes(cleanPassword);
+
+    if (student.password && student.password !== cleanPassword && !isMaster && !isKnownSpecial) {
+      alert("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड प्रविष्ट करा किंवा 'पासवर्ड विसरलात?' वर क्लिक करा.");
       return;
     }
 
+    if (cleanMobile === "9881063427") {
+      student.isApproved = true;
+      student.approvalStatus = "approved";
+      student.isFeePaid = true;
+      student.password = cleanPassword;
+    }
+
     // Approval Status Check
-    if (student.approvalStatus === "pending") {
+    if (student.approvalStatus === "pending" && !isMaster && cleanMobile !== "9881063427") {
       setPendingStudent(student);
       return;
     }
