@@ -824,22 +824,24 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
             {/* Action options while waiting */}
             <div className="pt-2 border-t border-slate-100 space-y-2">
+              {/* Notice regarding strict admin approval */}
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 font-medium text-center">
+                🔒 <strong>सुरक्षा नियम:</strong> खाते मंजुरी (Approval) फक्त आणि फक्त <strong>मुख्य ॲडमिनद्वारेच</strong> केली जाते. कोणतीही शॉर्टकट किंवा परस्पर मंजुरी प्रणाली नाही.
+              </div>
+
               {/* Free Demo Test Option while waiting */}
-              <button
-                type="button"
-                onClick={() => {
-                  const demoStudent: StudentUser = {
-                    ...pendingApprovalStudent,
-                    approvalStatus: "approved",
-                    isApproved: true,
-                  };
-                  onLoginSuccess(demoStudent);
-                }}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
-              >
-                <Play className="w-4 h-4 fill-white" />
-                <span>१ मोफत डेमो टेस्ट सोडून पहा</span>
-              </button>
+              {onStartDemoTest && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onStartDemoTest("MHT_CET", 1);
+                  }}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
+                >
+                  <Play className="w-4 h-4 fill-white" />
+                  <span>१ मोफत डेमो टेस्ट सोडून पहा (तात्पुरता सराव)</span>
+                </button>
+              )}
 
               <button
                 type="button"

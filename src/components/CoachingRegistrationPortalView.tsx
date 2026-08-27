@@ -81,10 +81,6 @@ export const CoachingRegistrationPortalView: React.FC<CoachingRegistrationPortal
   const [utrInput, setUtrInput] = useState("");
   const [utrSubmitted, setUtrSubmitted] = useState(false);
 
-  // Admin In-Person Bypass PIN
-  const [adminBypassPin, setAdminBypassPin] = useState("");
-  const [bypassError, setBypassError] = useState("");
-
   // Countdown effect
   useEffect(() => {
     if (!activeApp || activeApp.status === "approved") return;
@@ -183,58 +179,6 @@ export const CoachingRegistrationPortalView: React.FC<CoachingRegistrationPortal
 
       setActiveApp(updatedApp);
       setUtrSubmitted(true);
-    }
-  };
-
-  const handleAdminBypass = () => {
-    const clean = adminBypassPin.trim();
-    if (
-      clean === "2026" ||
-      clean === "admin" ||
-      clean === "9307220454" ||
-      clean === "1234" ||
-      clean === "class2026"
-    ) {
-      if (activeApp) {
-        // Approve application and create real InstituteProfile
-        const profile: InstituteProfile = {
-          id: `inst_${Date.now()}`,
-          name: activeApp.instituteName,
-          nameMr: activeApp.instituteNameMr,
-          instituteCode: activeApp.desiredCode,
-          directorName: `संचालक: ${activeApp.directorName}`,
-          contactNumber: activeApp.contactNumber,
-          city: activeApp.city,
-          adminPasscode: activeApp.adminPasscode,
-          maxStudentsLimit: 2000,
-          batches: [
-            "12th Science Toppers (PCM)",
-            "Target NEET 650+ (PCB)",
-            "MHT-CET FastTrack Crash Batch",
-          ],
-          bannerNotice: `Welcome to ${activeApp.instituteName} CBT Portal.`,
-          bannerNoticeMr: `📢 ${activeApp.instituteNameMr} च्या सर्व बॅचेससाठी ऑनलाईन सराव सुरू झाला आहे.`,
-          createdAt: Date.now(),
-        };
-
-        const all = getAllInstitutes();
-        all.push(profile);
-        saveAllInstitutes(all);
-        sessionStorage.setItem("mhtcet_active_whitelabel_institute_v1", JSON.stringify(profile));
-
-        const approvedApp: CoachingRegistrationApplication = {
-          ...activeApp,
-          status: "approved",
-          isApproved: true,
-          approvedAt: Date.now(),
-        };
-
-        setActiveApp(approvedApp);
-        onSelectInstitute(profile);
-        setBypassError("");
-      }
-    } else {
-      setBypassError("अवैध ॲडमिन पिन. कृपया 9307220454 किंवा 2026 टाका.");
     }
   };
 
@@ -414,32 +358,15 @@ export const CoachingRegistrationPortalView: React.FC<CoachingRegistrationPortal
             </button>
           </div>
 
-          {/* Teacher/Admin Master Passcode Bypass */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-            <div className="text-[11px] font-bold text-slate-600 flex items-center gap-1.5">
-              <KeyRound className="w-3.5 h-3.5 text-purple-600" />
-              <span>संचालक / ॲडमिन थेट पिनद्वारे त्वरित अनलॉक (In-Person / Master PIN):</span>
+          {/* Strict Admin Approval Policy Notice */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-1">
+            <div className="font-bold flex items-center gap-1.5 text-slate-900">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>सुरक्षा व मंजुरी धोरण (Strict Admin Approval Policy):</span>
             </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="password"
-                placeholder="मास्टर पिन (उदा. 9307220454 किंवा 2026)"
-                value={adminBypassPin}
-                onChange={(e) => {
-                  setAdminBypassPin(e.target.value);
-                  setBypassError("");
-                }}
-                className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold focus:outline-none bg-white"
-              />
-              <button
-                type="button"
-                onClick={handleAdminBypass}
-                className="px-5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-xs font-black shadow-xs cursor-pointer"
-              >
-                तात्काळ ॲक्टिव्हेट
-              </button>
-            </div>
-            {bypassError && <p className="text-[11px] text-rose-600 font-bold">{bypassError}</p>}
+            <p className="text-[11px] text-slate-600 leading-relaxed">
+              क्लासेस नोंदणी व पोर्टल सक्रियता ही फक्त आणि फक्त <strong>मुख्य ॲडमिनद्वारे (Master Admin)</strong> पडताळणीनंतर केली जाते. कोणत्याही तात्पुरत्या किंवा अनधिकृत पद्धतीद्वारे खाते सक्रिय केले जात नाही.
+            </p>
           </div>
         </div>
       ) : activeApp && activeApp.status === "approved" ? (

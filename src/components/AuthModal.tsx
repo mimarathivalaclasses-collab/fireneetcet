@@ -70,8 +70,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     newDeviceId: string;
   } | null>(null);
   const [approvalSent, setApprovalSent] = useState<boolean>(false);
-  const [adminPin, setAdminPin] = useState<string>("");
-  const [adminPinError, setAdminPinError] = useState<string>("");
 
   if (!isOpen) return null;
 
@@ -250,39 +248,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
     onRequestDeviceApproval(req);
     setApprovalSent(true);
-  };
-
-  // Instant teacher / admin bypass approval PIN
-  const handleVerifyAdminPin = () => {
-    const cleanPin = adminPin.trim();
-    if (cleanPin === "2026" || cleanPin === "1234" || cleanPin === "admin" || cleanPin === "9307220454") {
-      const savedStudentsRaw = localStorage.getItem("mcq_app_all_students_v1");
-      const students: StudentUser[] = savedStudentsRaw ? JSON.parse(savedStudentsRaw) : [];
-
-      const targetStudent = pendingStudent || (deviceMismatchError ? deviceMismatchError.student : null);
-
-      if (targetStudent) {
-        const idx = students.findIndex((s) => s.id === targetStudent.id);
-        const updatedStudent: StudentUser = {
-          ...targetStudent,
-          primaryDeviceId: currentDeviceId,
-          primaryDeviceName: currentDeviceName,
-          isApproved: true,
-          approvalStatus: "approved",
-          paymentStatus: "verified",
-          lastLoginAt: Date.now(),
-        };
-
-        if (idx >= 0) {
-          students[idx] = updatedStudent;
-          localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
-        }
-
-        onLoginSuccess(updatedStudent);
-      }
-    } else {
-      setAdminPinError("अवैध ॲडमिन पिन. कृपया क्लास शिक्षकांशी संपर्क साधा किंवा 9307220454 / 2026 टाका.");
-    }
   };
 
   // Submit UTR from Pending screen

@@ -504,28 +504,28 @@ export const MockTestSetup: React.FC<MockTestSetupProps> = ({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {categoryChapters.map((ch) => (
+              {categoryChapters.map((ch, idx) => (
                 <div
-                  key={ch.chapter}
+                  key={`${ch.name}_${idx}`}
                   className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-300 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between gap-3"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-slate-100 text-slate-700">
-                        {ch.classStandard}
+                        {ch.subject}
                       </span>
                       <span className="text-[10px] px-2 py-0.5 rounded-full font-black bg-emerald-100 text-emerald-900">
                         {ch.weightage} Weightage
                       </span>
                     </div>
                     <h4 className="text-xs sm:text-sm font-bold text-slate-900 mt-2 leading-tight">
-                      {ch.chapter}
+                      {ch.name}
                     </h4>
-                    <p className="text-[11px] text-slate-500 mt-0.5">{ch.chapterMr}</p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">{ch.nameMr}</p>
                   </div>
 
                   <button
-                    onClick={() => handleLaunchCategoryTest(currentCategorySubject, ch.chapter, selectedMarkTier)}
+                    onClick={() => handleLaunchCategoryTest(currentCategorySubject, ch.name, selectedMarkTier)}
                     className="w-full py-2 rounded-xl bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-blue-200 transition-colors cursor-pointer"
                   >
                     <Play className="w-3.5 h-3.5" />
@@ -565,7 +565,7 @@ export const MockTestSetup: React.FC<MockTestSetupProps> = ({
             <div className="space-y-3">
               {testHistory.map((res, index) => (
                 <div
-                  key={res.testId || index}
+                  key={`${res.testId || "test"}_${res.completedAt || index}_${index}`}
                   className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1">
