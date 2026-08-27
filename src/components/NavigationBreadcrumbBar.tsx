@@ -302,11 +302,11 @@ export const NavigationBreadcrumbBar: React.FC<NavigationBreadcrumbBarProps> = (
       </div>
 
       {/* Floating Bottom-Left Back Button for Mobile & Long Pages */}
-      <div className="fixed bottom-4 left-4 z-40 sm:hidden">
+      <div className="fixed bottom-20 left-3 z-30 sm:hidden pb-[env(safe-area-inset-bottom,0px)]">
         <button
           onClick={onBack}
           id="floating-mobile-btn-back"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-slate-900/95 hover:bg-slate-900 text-white text-xs font-black shadow-xl ring-2 ring-amber-400/80 backdrop-blur-md cursor-pointer active:scale-95 transition-transform"
+          className="flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-slate-900/95 text-white text-xs font-black shadow-xl ring-2 ring-amber-400/80 backdrop-blur-md cursor-pointer active:scale-95 transition-transform"
         >
           <ArrowLeft className="w-4 h-4 text-amber-400" />
           <span>मागे जा</span>

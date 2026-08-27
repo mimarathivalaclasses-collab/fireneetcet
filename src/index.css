@@ -6,7 +6,18 @@
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
   
+  html {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
   body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
     font-family: var(--font-sans);
     background-color: #F8FAFC;
     color: #0F172A;
@@ -17,6 +28,17 @@
     -ms-user-select: none;
     user-select: none;
     -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   input, textarea, select {
@@ -24,19 +46,31 @@
     -moz-user-select: text;
     -ms-user-select: text;
     user-select: text;
+    touch-action: manipulation;
+  }
+
+  button, a, summary {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Responsive image and embed scaling */
+  img, svg, video, canvas, audio, iframe, embed, object {
+    max-width: 100%;
+    height: auto;
   }
 
   /* Custom Geometric Scrollbars */
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
   ::-webkit-scrollbar-track {
     background: #F1F5F9;
   }
   ::-webkit-scrollbar-thumb {
     background: #CBD5E1;
-    border-radius: 3px;
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #94A3B8;
@@ -49,9 +83,29 @@
   background-size: 24px 24px;
 }
 
+.dark .bg-grid-pattern {
+  background-image: radial-gradient(#334155 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
 .font-mono-numbers {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+}
+
+/* iOS Safe Area & Mobile Bottom Navigation Utilities */
+.safe-area-bottom {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+}
+
+.safe-area-top {
+  padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+}
+
+/* Smooth momentum scrolling for mobile overflow containers */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
 }
 
 /* Dedicated Print Styles for Mock Test PDF Generation */
@@ -82,4 +136,5 @@
     break-inside: avoid;
   }
 }
+
 

@@ -670,7 +670,7 @@ export default function App() {
   }
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? "dark bg-slate-950 text-slate-100" : "bg-[#F8FAFC] text-slate-900"} flex flex-col font-sans selection:bg-indigo-600 selection:text-white antialiased transition-colors duration-200`}>
+    <div className={`min-h-screen w-full max-w-[100vw] overflow-x-hidden ${isDarkMode ? "dark bg-slate-950 text-slate-100" : "bg-[#F8FAFC] text-slate-900"} flex flex-col font-sans selection:bg-indigo-600 selection:text-white antialiased transition-colors duration-200`}>
       {/* If active test is ongoing, render dedicated full-screen ActiveTestView */}
       {activeTestConfig ? (
         <ActiveTestView
@@ -810,7 +810,7 @@ export default function App() {
           />
 
           {/* Main Content Area */}
-          <main className="flex-1 pb-16 bg-grid-pattern">
+          <main className="flex-1 pb-24 sm:pb-12 bg-grid-pattern w-full max-w-full overflow-x-hidden">
             {/* If viewing a completed test result */}
             {currentTestResult ? (
               <TestResultView
