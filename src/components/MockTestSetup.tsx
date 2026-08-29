@@ -642,7 +642,7 @@ export const MockTestSetup: React.FC<MockTestSetupProps> = ({
                   <button
                     type="button"
                     onClick={() => {
-                      const count = Math.min(test.questionsCount, questions.length);
+                      const count = test.questionsCount;
                       const chosen = buildGuaranteedNonRepeatingMock(
                         currentExam,
                         test.subject,

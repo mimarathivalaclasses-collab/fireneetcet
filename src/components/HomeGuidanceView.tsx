@@ -4,13 +4,13 @@ import {
   Play,
   Zap,
   FileText,
-  Trophy,
   FileCheck,
   ChevronRight,
   CircleDot,
   AlertTriangle,
   Printer,
   Gift,
+  Trophy,
 } from "lucide-react";
 import { ExamType, LanguageMode, NavigationTab, StudentUser } from "../types";
 
@@ -32,51 +32,62 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
 }) => {
   const isDemoUser = currentUser?.id?.startsWith("demo_user_");
 
-  // फक्त ४ मुख्य आणि सर्वात महत्त्वाचे ऑप्शन्स
-  const mainTestOptions = [
+  // फक्त मुख्य अधिकृत अभ्यास आणि सराव पर्याय (No generated fake mock tests)
+  const mainStudyOptions = [
     {
-      id: "main-mock-test",
-      title: "मॉक टेस्ट (Mock Test)",
-      desc: "चॅप्टरनुसार किंवा पूर्ण विषयाची टेस्ट सोडवा",
+      id: "main-grand-tests",
+      title: "🏆 ग्रँड टेस्ट्स (NEET १८० प्रश्न • ७२० गुण / CET)",
+      desc: "NEET Full Mock Test (Physics 45, Chem 45, Botany 45, Zoology 45) + MHT-CET Full Shifts",
+      action: () => onNavigate("grand_tests"),
+      bg: "bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-700/60 hover:border-amber-500 shadow-xs",
+      iconBg: "bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950",
+      icon: Trophy,
+      btnText: "ग्रँड टेस्ट द्या",
+      btnColor: "bg-amber-500 hover:bg-amber-600 text-slate-950 font-black",
+    },
+    {
+      id: "main-chapter-practice",
+      title: "विषय व चॅप्टरनिहाय सराव",
+      desc: "Physics, Chemistry, Maths व Bio चॅप्टरनुसार अधिकृत प्रश्न सराव",
       action: () => onNavigate("mock_test"),
       bg: "bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 hover:border-blue-500",
       iconBg: "bg-blue-600 text-white",
       icon: Play,
-      btnText: "सुरू करा",
+      btnText: "सराव सुरू करा",
       btnColor: "bg-blue-600 hover:bg-blue-700 text-white",
     },
     {
-      id: "main-grand-tests",
-      title: "१० ग्रँड टेस्ट्स (Full Exam)",
-      desc: "प्रत्यक्ष परीक्षेसारख्या संपूर्ण मॉक टेस्ट्स",
-      action: () => onNavigate("grand_tests"),
-      bg: "bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800 hover:border-amber-500",
-      iconBg: "bg-amber-500 text-slate-950",
-      icon: Trophy,
-      btnText: "टेस्ट्स पहा",
-      btnColor: "bg-amber-500 hover:bg-amber-600 text-slate-950",
-    },
-    {
       id: "main-pyq",
-      title: "मागील प्रश्नपत्रिका (PYQ)",
-      desc: "२०१९ ते २०२५ पर्यंतचे सर्व प्रश्न व उत्तरे",
+      title: "मागील अधिकृत प्रश्नपत्रिका (PYQ)",
+      desc: "२०१९ ते २०२५ पर्यंतचे सर्व अधिकृत बोर्ड व CET प्रश्न आणि उत्तरे",
       action: () => onNavigate("pyq"),
       bg: "bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-800 hover:border-purple-500",
       iconBg: "bg-purple-600 text-white",
       icon: FileCheck,
-      btnText: "सराव करा",
+      btnText: "PYQ सोडवा",
       btnColor: "bg-purple-600 hover:bg-purple-700 text-white",
     },
     {
       id: "main-notes",
-      title: "रिव्हिजन नोट्स व सूत्रे",
-      desc: "सर्व विषयांच्या संक्षिप्त नोट्स आणि फॉर्म्युला",
+      title: "रिव्हिजन नोट्स (Revision Notes)",
+      desc: "सर्व विषयांच्या संक्षिप्त हाय-यिल्ड नोट्स आणि कन्सेप्ट्स",
       action: () => onNavigate("notes"),
       bg: "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 hover:border-emerald-500",
       iconBg: "bg-emerald-600 text-white",
       icon: BookOpen,
       btnText: "नोट्स वाचा",
       btnColor: "bg-emerald-600 hover:bg-emerald-700 text-white",
+    },
+    {
+      id: "main-formulas",
+      title: "महत्त्वाची सूत्रे (Formulas & Tricks)",
+      desc: "Physics, Chemistry व Maths सर्व आवश्यक सूत्रे व शॉर्ट ट्रिक्स",
+      action: () => onNavigate("formulas"),
+      bg: "bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800 hover:border-amber-500",
+      iconBg: "bg-amber-500 text-slate-950",
+      icon: Zap,
+      btnText: "सूत्रे पहा",
+      btnColor: "bg-amber-500 hover:bg-amber-600 text-slate-950",
     },
   ];
 
@@ -86,11 +97,6 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       title: "डिजिटल OMR",
       icon: CircleDot,
       action: () => onNavigate("omr"),
-    },
-    {
-      title: "महत्त्वाची सूत्रे",
-      icon: Zap,
-      action: () => onNavigate("formulas"),
     },
     {
       title: "माझ्या चुकांची वही",
@@ -153,7 +159,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
 
       {/* २. फक्त ४ मुख्य सराव कार्ड्स */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {mainTestOptions.map((item) => {
+        {mainStudyOptions.map((item) => {
           const Icon = item.icon;
           return (
             <div
@@ -204,7 +210,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
           इतर साधने:
         </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
           {quickTools.map((t, idx) => {
             const Icon = t.icon;
             return (

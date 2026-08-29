@@ -62,10 +62,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           }`}
         >
           <Layers className={`w-5 h-5 ${activeTab === "mock_test" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[10px] mt-0.5 font-bold tracking-tight">टेस्ट</span>
+          <span className="text-[10px] mt-0.5 font-bold tracking-tight">चाचणी</span>
         </button>
 
-        {/* 3. 10 Grand Tests */}
+        {/* 3. Grand Tests */}
         <button
           type="button"
           onClick={() => handleNav("grand_tests")}
@@ -76,8 +76,22 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           }`}
         >
           <Trophy className={`w-5 h-5 ${activeTab === "grand_tests" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[10px] mt-0.5 font-bold tracking-tight">ग्रँड टेस्ट्स</span>
-          <span className="absolute top-1 right-1.5 w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+          <span className="text-[10px] mt-0.5 font-bold tracking-tight">ग्रँड टेस्ट</span>
+          <span className="absolute top-1 right-1.5 w-2 h-2 rounded-full bg-amber-500"></span>
+        </button>
+
+        {/* 4. PYQ Papers */}
+        <button
+          type="button"
+          onClick={() => handleNav("pyq")}
+          className={`flex-1 min-h-[48px] flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all active:scale-95 cursor-pointer relative ${
+            activeTab === "pyq"
+              ? "text-purple-600 dark:text-purple-400 bg-purple-50/80 dark:bg-purple-950/60 font-black shadow-2xs"
+              : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+          }`}
+        >
+          <FileText className={`w-5 h-5 ${activeTab === "pyq" ? "stroke-[2.5]" : "stroke-2"}`} />
+          <span className="text-[10px] mt-0.5 font-bold tracking-tight">PYQ</span>
         </button>
 
         {/* 4. Notes */}

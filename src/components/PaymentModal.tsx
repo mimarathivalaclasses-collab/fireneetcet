@@ -46,23 +46,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const PAYEE_NAME = "AbhyasMitra MHT-CET";
   const CONTACT_NUMBER = "9307220454";
 
-  // Selected Plan: "student" (₹29) or "coaching" (₹499 / 3 months)
-  const [selectedPlan, setSelectedPlan] = useState<"student" | "coaching">(
-    initialPlanType
-  );
-
-  const activeAmount =
-    customAmount !== undefined
-      ? customAmount
-      : selectedPlan === "student"
-      ? 29
-      : 499;
-
-  const activePlanTitle =
-    planName ||
-    (selectedPlan === "student"
-      ? "NEET/JEE/MHT-CET संपूर्ण सराव व १० ग्रँड टेस्ट्स प्लॅन (Student Access)"
-      : "क्लासेस व इन्स्टिट्यूट ३ महिन्यांचा संपूर्ण पोर्टल प्लॅन (२००० विद्यार्थी)");
+  const activeAmount = customAmount !== undefined ? customAmount : 29;
+  const activePlanTitle = planName || "NEET/JEE/MHT-CET संपूर्ण सराव व ग्रँड टेस्ट्स विद्यार्थी प्लॅन (Student Access)";
 
   const [copied, setCopied] = useState(false);
   const [utrNumber, setUtrNumber] = useState("");
@@ -255,32 +240,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             PhonePe, Google Pay, Paytm, BHIM द्वारे फक्त ₹{activeAmount} भरा आणि १ सेकंदात खाते सुरू करा!
           </p>
 
-          {/* Plan Selector Buttons */}
-          <div className="mt-3 inline-flex p-1 rounded-2xl bg-white/10 border border-white/15 text-xs font-bold w-full max-w-xs">
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("student")}
-              className={`flex-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                selectedPlan === "student"
-                  ? "bg-white text-slate-950 font-black shadow-md"
-                  : "text-slate-300 hover:text-white"
-              }`}
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-              <span>विद्यार्थी प्लॅन (₹२९)</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedPlan("coaching")}
-              className={`flex-1 py-1.5 px-3 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                selectedPlan === "coaching"
-                  ? "bg-white text-slate-950 font-black shadow-md"
-                  : "text-slate-300 hover:text-white"
-              }`}
-            >
-              <Building2 className="w-3.5 h-3.5 text-indigo-600" />
-              <span>क्लासेस प्लॅन (₹४९९)</span>
-            </button>
+          <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold">
+            <Zap className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+            <span>विद्यार्थी ऑल-इन-वन ॲक्सेस • फक्त ₹२९ (आजीवन सराव)</span>
           </div>
         </div>
 
@@ -328,17 +290,13 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 dark:from-emerald-950/40 dark:via-slate-900 dark:to-teal-950/40 border border-emerald-200 dark:border-emerald-800 flex items-center justify-between">
                 <div>
                   <div className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-                    {selectedPlan === "student"
-                      ? "🎯 विद्यार्थी संपूर्ण ॲक्सेस"
-                      : "🏫 क्लासेस व इन्स्टिट्यूट ३ महिने प्लॅन"}
+                    🎯 विद्यार्थी संपूर्ण ॲक्सेस (Student Plan)
                   </div>
                   <div className="text-xs font-black text-slate-900 dark:text-white line-clamp-1 mt-0.5">
                     {activePlanTitle}
                   </div>
                   <div className="text-[11px] text-emerald-800 dark:text-emerald-300 font-semibold mt-0.5">
-                    {selectedPlan === "student"
-                      ? "✓ सर्व सराव MCQs + १० ग्रँड मॉक टेस्ट्स + नोट्स"
-                      : "✓ व्हाईट-लेबल पोर्टल + अमर्याद टेस्ट्स (२००० विद्यार्थी)"}
+                    ✓ सर्व सराव MCQs + ग्रँड मॉक टेस्ट्स + नोट्स + OMR
                   </div>
                 </div>
                 <div className="text-right shrink-0 pl-3">
@@ -350,17 +308,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               </div>
 
               {/* 10 Referral Refund Offer Banner */}
-              {selectedPlan === "student" && (
-                <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 flex items-start gap-2.5">
-                  <Gift className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                  <div className="text-xs text-amber-950 dark:text-amber-300">
-                    <span className="font-black text-amber-900 dark:text-amber-200">🎁 १० मित्रांना रेफर करा आणि १००% फी परत मिळवा!</span>
-                    <p className="text-[11px] text-amber-800 dark:text-amber-400 mt-0.5 leading-snug">
-                      तुमच्या रेफरल कोडने १० मित्रांनी ॲप सुरू केल्यास तुमचे भरलेले सर्व ₹२९ थेट तुमच्या खात्यावर पूर्णपणे रिफंड मिळतील!
-                    </p>
-                  </div>
+              <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 flex items-start gap-2.5">
+                <Gift className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                <div className="text-xs text-amber-950 dark:text-amber-300">
+                  <span className="font-black text-amber-900 dark:text-amber-200">🎁 १० मित्रांना रेफर करा आणि १००% फी परत मिळवा!</span>
+                  <p className="text-[11px] text-amber-800 dark:text-amber-400 mt-0.5 leading-snug">
+                    तुमच्या रेफरल कोडने १० मित्रांनी ॲप सुरू केल्यास तुमचे भरलेले सर्व ₹२९ थेट तुमच्या खात्यावर पूर्णपणे रिफंड मिळतील!
+                  </p>
                 </div>
-              )}
+              </div>
 
               {/* Instant UPI App Launch Buttons (Mobile friendly) */}
               <div className="space-y-1.5">

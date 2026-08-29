@@ -2,8 +2,12 @@ import { GrandMockTestItem, ExamType, SubjectType, Question } from "../types";
 import { INITIAL_QUESTIONS } from "./initialQuestions";
 import { PYQ_QUESTIONS } from "./pyqQuestionsData";
 import { buildGuaranteedNonRepeatingMock } from "../utils/proceduralQuestionEngine";
+import { NEET_180_FULL_QUESTIONS, NEET_180_GRAND_TEST_ITEM } from "./neetFullMock180Questions";
+
+export { NEET_180_FULL_QUESTIONS, NEET_180_GRAND_TEST_ITEM };
 
 export const GRAND_MOCK_TESTS: GrandMockTestItem[] = [
+  NEET_180_GRAND_TEST_ITEM,
   {
     id: "grand-test-01",
     testNumber: 1,
@@ -687,8 +691,16 @@ export function buildGrandMockQuestionSet(
   testItem: GrandMockTestItem,
   availableQuestions: Question[]
 ): Question[] {
+  // If this is the specific 180-Question NEET Grand Mock, return the exact official 180 questions in order
+  if (testItem.id === "grand-test-neet-180" || testItem.id === "grand-test-03") {
+    return NEET_180_FULL_QUESTIONS.map((q, idx) => ({
+      ...q,
+      id: `${testItem.id}-official-q-${idx + 1}`,
+    }));
+  }
+
   const resultQuestions: Question[] = [];
-  const pool = [...availableQuestions, ...INITIAL_QUESTIONS, ...PYQ_QUESTIONS];
+  const pool = [...NEET_180_FULL_QUESTIONS, ...availableQuestions, ...INITIAL_QUESTIONS, ...PYQ_QUESTIONS];
 
   testItem.subjectDistribution.forEach((dist) => {
     // 1. Gather all questions matching exam and subject

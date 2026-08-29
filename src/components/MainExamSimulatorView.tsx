@@ -43,6 +43,8 @@ import {
   ALL_GRAND_MOCK_TESTS,
   calculatePredictedRealExamScore,
   buildGrandMockQuestionSet,
+  NEET_180_GRAND_TEST_ITEM,
+  NEET_180_FULL_QUESTIONS,
 } from "../data/grandMockTestsData";
 
 interface MainExamSimulatorViewProps {
@@ -131,181 +133,85 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 animate-in fade-in">
-      {/* 1. Hero Banner */}
-      <div className="bg-gradient-to-br from-slate-950 via-indigo-950 to-blue-950 text-white rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border border-indigo-500/20">
-        <div className="absolute -right-16 -top-16 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute right-20 -bottom-20 w-60 h-60 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div className="relative z-10 space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            {onBack && (
-              <button
-                onClick={onBack}
-                className="px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ring-1 ring-white/30"
-                title="मागे जा"
-              >
-                <ArrowLeft className="w-3.5 h-3.5 text-amber-300" />
-                <span>← मागे जा</span>
-              </button>
-            )}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 text-xs font-bold border border-amber-500/30 shadow-xs">
-              <Trophy className="w-4 h-4 text-amber-400" />
-              <span>NTA व State CET Cell अधिकृत पॅटर्न सिम्युलेटर</span>
-              <span className="bg-amber-400 text-slate-950 px-2 py-0.2 rounded-full text-[10px] font-black uppercase">
-                100+ Grand Tests
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-3xl">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
-                मुख्य परीक्षा सिम्युलेटर (100+ Full Grand Tests)
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                प्रत्यक्ष परीक्षेसारखा हुबेहूब अनुभव देणारे १००+ ग्रँड पेपर्स! MHT-CET (PCM/PCB), NEET-UG आणि JEE Main चे रिअल शिफ्ट पेपर्स, निगेटिव्ह मार्किंग, अचूक टाइमर, राज्यस्तरीय संभाव्य रँक, पर्सेंटाईल व कॉलेज प्रवेशाचा अचूक अंदाज.
-              </p>
-            </div>
-
-            {/* Quick Stats Pill */}
-            <div className="grid grid-cols-3 gap-2 bg-white/5 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 text-center shrink-0">
-              <div className="px-2">
-                <span className="text-[10px] text-slate-400 block font-semibold">एकूण ग्रँड पेपर्स</span>
-                <span className="text-xl font-black text-amber-400 font-mono-numbers">110+ पेपर्स</span>
-              </div>
-              <div className="px-2 border-x border-white/10">
-                <span className="text-[10px] text-slate-400 block font-semibold">पॅटर्न</span>
-                <span className="text-xl font-black text-emerald-400 font-mono-numbers">१००% Real</span>
-              </div>
-              <div className="px-2">
-                <span className="text-[10px] text-slate-400 block font-semibold">रँक प्रेडिक्शन</span>
-                <span className="text-xl font-black text-cyan-300 font-mono-numbers">AI Enabled</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Exam Badges Strip */}
-          <div className="pt-3 flex flex-wrap items-center gap-2 border-t border-white/10 text-xs">
-            <span className="text-slate-400 font-bold">समाविष्ट परीक्षा पॅटर्न:</span>
-            <span className="px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-200 border border-orange-400/30 font-bold">
-              🔥 MHT-CET (200 Marks • PCM / PCB)
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 font-bold">
-              🌿 NEET-UG (720 Marks • +4/-1)
-            </span>
-            <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-200 border border-blue-400/30 font-bold">
-              ⚡ JEE Main (300 Marks • +4/-1)
-            </span>
+      {/* Clean Student Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-3">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer"
+              title="मागे जा"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">मागे जा</span>
+            </button>
+          )}
+          <div>
+            <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+              <Trophy className="w-6 h-6 text-amber-500" />
+              <span>🏆 ग्रँड टेस्ट्स (Full Length Mock Tests)</span>
+            </h1>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+              NEET (१८० प्रश्न • ७२० गुण), MHT-CET आणि JEE Main चे अधिकृत फुल-लेन्थ सराव पेपर्स
+            </p>
           </div>
         </div>
       </div>
 
-      {/* 2. Interactive Real Exam Rank & Percentile Predictor Widget */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-900 to-slate-900 text-white rounded-3xl p-6 sm:p-7 border border-indigo-500/30 shadow-xl space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-800/60 pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-black">
-              <Percent className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-base sm:text-lg font-black text-white">
-                थेट संभाव्य रँक व पर्सेंटाईल कॅल्क्युलेटर (Live Rank & College Predictor)
-              </h2>
-              <p className="text-xs text-indigo-200">
-                तुमचे अपेक्षित गुण निवडा आणि प्रत्यक्ष परीक्षेत मिळणारा अंदाजित पर्सेंटाईल व संभाव्य कॉलेज तपासा.
-              </p>
-            </div>
-          </div>
-
-          {/* Exam selector buttons */}
-          <div className="flex items-center gap-1.5 bg-slate-950/60 p-1 rounded-xl border border-indigo-700/50">
-            {([
-              { key: "MHT_CET" as ExamType, label: "MHT-CET" },
-              { key: "NEET" as ExamType, label: "NEET" },
-              { key: "JEE_MAIN" as ExamType, label: "JEE Main" },
-            ]).map((item) => (
-              <button
-                key={item.key}
-                onClick={() => {
-                  setCalcExam(item.key);
-                  if (item.key === "NEET") setCalcRawScore(620);
-                  else if (item.key === "MHT_CET") setCalcRawScore(155);
-                  else setCalcRawScore(175);
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  calcExam === item.key
-                    ? "bg-indigo-600 text-white shadow-xs"
-                    : "text-indigo-300 hover:text-white"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Slider & Dynamic Prediction Display */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-          {/* Left: Interactive Score Slider */}
-          <div className="lg:col-span-6 space-y-4 bg-slate-950/40 p-4 sm:p-5 rounded-2xl border border-indigo-800/40">
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-bold text-slate-300">
-                {calcExam} चाचणीत मिळालेले अंदाजित गुण:
+      {/* Featured NEET 180 Questions Official Mock Banner */}
+      <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 rounded-3xl p-6 sm:p-7 border-2 border-emerald-500/50 shadow-2xl text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-3 max-w-2xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5" />
+                NEET Official 180 Questions Test
               </span>
-              <div className="text-2xl font-black text-amber-400 font-mono-numbers">
-                {calcRawScore}{" "}
-                <span className="text-xs text-slate-400 font-normal">/ {maxScoreForCalc}</span>
-              </div>
-            </div>
-
-            <input
-              type="range"
-              min={0}
-              max={maxScoreForCalc}
-              value={calcRawScore}
-              onChange={(e) => setCalcRawScore(Number(e.target.value))}
-              className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
-            />
-
-            <div className="flex justify-between text-[11px] text-slate-400 font-mono-numbers">
-              <span>0 Marks</span>
-              <span>
-                {Math.round(maxScoreForCalc / 2)} Marks (50%)
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black">
+                +4 / -1 Marking
               </span>
-              <span>{maxScoreForCalc} Max</span>
+              <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-emerald-200 text-[10px] font-bold">
+                200 Min (3:20:00)
+              </span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-white">
+              🌿 NEET Full Mock Test — 180 Questions / 720 Marks
+            </h2>
+            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+              Physics (४५ प्रश्न), Chemistry (४५ प्रश्न), Botany (४५ प्रश्न), Zoology (४५ प्रश्न) एकूण १८० प्रश्न आणि ७२० गुण. संपूर्ण मराठी भाषांतरासह अचूक उत्तरे व स्पष्टीकरणासहित!
+            </p>
+            <div className="flex flex-wrap gap-4 pt-1 text-xs text-emerald-300">
+              <span className="flex items-center gap-1.5 font-semibold">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                Physics ४५ Qs (१८० गुण)
+              </span>
+              <span className="flex items-center gap-1.5 font-semibold">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                Chemistry ४५ Qs (१८० गुण)
+              </span>
+              <span className="flex items-center gap-1.5 font-semibold">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                Biology ९० Qs (३६० गुण)
+              </span>
             </div>
           </div>
 
-          {/* Right: Predicted Results Box */}
-          <div className="lg:col-span-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 text-center">
-              <span className="text-[11px] text-indigo-200 block font-semibold">अंदाजित पर्सेंटाईल</span>
-              <div className="text-xl sm:text-2xl font-black text-emerald-400 font-mono-numbers mt-1">
-                {calcPrediction.predictedPercentile}%
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 text-center">
-              <span className="text-[11px] text-indigo-200 block font-semibold">महाराष्ट्र राज्य रँक</span>
-              <div className="text-base sm:text-lg font-black text-amber-300 font-mono-numbers mt-1">
-                {calcPrediction.estimatedStateRank}
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 text-center col-span-2 sm:col-span-1">
-              <span className="text-[11px] text-indigo-200 block font-semibold">All India रँक</span>
-              <div className="text-base sm:text-lg font-black text-cyan-300 font-mono-numbers mt-1">
-                {calcPrediction.estimatedAllIndiaRank}
-              </div>
-            </div>
-
-            <div className="col-span-2 sm:col-span-3 bg-emerald-950/60 border border-emerald-500/40 p-3 rounded-2xl flex items-center gap-2.5 text-xs text-emerald-200">
-              <GraduationCap className="w-5 h-5 text-emerald-400 shrink-0" />
-              <div>
-                <strong className="text-white">संभाव्य कॉलेज प्रवेश: </strong>
-                <span>{calcPrediction.admissionChance}</span>
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+            <button
+              onClick={() => handleLaunchTest(NEET_180_GRAND_TEST_ITEM)}
+              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-105 active:scale-95 ring-2 ring-white/40"
+            >
+              <Play className="w-4 h-4 fill-slate-950" />
+              <span>ही १८० प्रश्नांची टेस्ट सुरू करा →</span>
+            </button>
+            <button
+              onClick={() => setActiveInstructionModal(NEET_180_GRAND_TEST_ITEM)}
+              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-white/20"
+            >
+              <Info className="w-3.5 h-3.5 text-emerald-300" />
+              <span>नियम व गुणदान पद्धत</span>
+            </button>
           </div>
         </div>
       </div>

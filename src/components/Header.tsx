@@ -392,20 +392,20 @@ export const Header: React.FC<HeaderProps> = ({
               <span>मुख्य मेनू (Home)</span>
             </button>
 
-            {/* 10 Grand Real Exam Full Mocks */}
+            {/* Grand Tests */}
             <button
               id="nav-grand-tests"
               onClick={() => handleNavClick("grand_tests")}
               className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-bold cursor-pointer ${
                 activeNav === "grand_tests"
-                  ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 shadow-sm ring-1 ring-amber-400"
+                  ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 shadow-sm ring-1 ring-amber-400 font-black"
                   : "text-amber-950 dark:text-amber-200 bg-amber-100/90 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/50 hover:bg-amber-200 dark:hover:bg-amber-900/50"
               }`}
             >
               <Trophy className="w-3.5 h-3.5 text-amber-500" />
-              <span>🏆 १० Grand Tests</span>
+              <span>🏆 ग्रँड टेस्ट्स (NEET / MHT-CET)</span>
               <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-500 text-slate-950 uppercase">
-                १० संच
+                NEET 180Q
               </span>
             </button>
 

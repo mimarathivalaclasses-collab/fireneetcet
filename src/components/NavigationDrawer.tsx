@@ -233,25 +233,6 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
             </span>
           </button>
 
-          {/* Agent Portal */}
-          <button
-            onClick={() => handleItemClick("agent_portal")}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors text-xs font-bold ${
-              activeTab === "agent_portal"
-                ? "bg-indigo-600 text-white"
-                : isDarkMode
-                ? "text-slate-200 hover:bg-slate-800"
-                : "text-slate-800 hover:bg-slate-100"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>💼 एजंट पार्टनर पोर्टल (२०% कमिशन)</span>
-            </div>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-amber-100 text-amber-950 border border-amber-300">
-              ₹५.८०/विद्यार्थी
-            </span>
-          </button>
 
           {/* Practice Auto-Question Engine */}
           <button
@@ -273,12 +254,12 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
             </span>
           </button>
 
-          {/* 10 Grand Tests */}
+          {/* Grand Tests */}
           <button
             onClick={() => handleItemClick("grand_tests")}
             className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors text-xs font-bold ${
               activeTab === "grand_tests"
-                ? "bg-amber-500 text-slate-950"
+                ? "bg-amber-500 text-slate-950 font-black shadow-sm"
                 : isDarkMode
                 ? "text-slate-200 hover:bg-slate-800"
                 : "text-slate-800 hover:bg-slate-100"
@@ -286,10 +267,10 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Trophy className="w-4 h-4 text-amber-500" />
-              <span>🏆 १० Grand Mock Tests</span>
+              <span>🏆 ग्रँड टेस्ट्स (NEET १८० प्रश्न / MHT-CET)</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-amber-100 text-amber-900">
-              १० संच
+              NEET 180Q
             </span>
           </button>
 
