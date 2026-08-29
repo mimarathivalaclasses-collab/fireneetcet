@@ -3,10 +3,12 @@ import { INITIAL_QUESTIONS } from "./initialQuestions";
 import { PYQ_QUESTIONS } from "./pyqQuestionsData";
 import { buildGuaranteedNonRepeatingMock } from "../utils/proceduralQuestionEngine";
 import { NEET_180_FULL_QUESTIONS, NEET_180_GRAND_TEST_ITEM } from "./neetFullMock180Questions";
+import { SPECIAL_1_QUESTIONS, SPECIAL_1_GRAND_TEST_ITEM } from "./special1MockQuestions";
 
-export { NEET_180_FULL_QUESTIONS, NEET_180_GRAND_TEST_ITEM };
+export { NEET_180_FULL_QUESTIONS, NEET_180_GRAND_TEST_ITEM, SPECIAL_1_QUESTIONS, SPECIAL_1_GRAND_TEST_ITEM };
 
 export const GRAND_MOCK_TESTS: GrandMockTestItem[] = [
+  SPECIAL_1_GRAND_TEST_ITEM,
   NEET_180_GRAND_TEST_ITEM,
   {
     id: "grand-test-01",
@@ -691,6 +693,15 @@ export function buildGrandMockQuestionSet(
   testItem: GrandMockTestItem,
   availableQuestions: Question[]
 ): Question[] {
+  // If this is Special 1 Combined Mock Test (100 Qs)
+  if (testItem.id === "special-1" || testItem.fixedQuestions) {
+    const list = testItem.fixedQuestions || SPECIAL_1_QUESTIONS;
+    return list.map((q, idx) => ({
+      ...q,
+      id: `${testItem.id}-q-${idx + 1}`,
+    }));
+  }
+
   // If this is the specific 180-Question NEET Grand Mock, return the exact official 180 questions in order
   if (testItem.id === "grand-test-neet-180" || testItem.id === "grand-test-03") {
     return NEET_180_FULL_QUESTIONS.map((q, idx) => ({
@@ -700,7 +711,7 @@ export function buildGrandMockQuestionSet(
   }
 
   const resultQuestions: Question[] = [];
-  const pool = [...NEET_180_FULL_QUESTIONS, ...availableQuestions, ...INITIAL_QUESTIONS, ...PYQ_QUESTIONS];
+  const pool = [...SPECIAL_1_QUESTIONS, ...NEET_180_FULL_QUESTIONS, ...availableQuestions, ...INITIAL_QUESTIONS, ...PYQ_QUESTIONS];
 
   testItem.subjectDistribution.forEach((dist) => {
     // 1. Gather all questions matching exam and subject

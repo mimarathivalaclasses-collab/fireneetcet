@@ -257,7 +257,7 @@ export interface GrandMockTestItem {
   title: string;
   titleMr: string;
   exam: ExamType;
-  group?: "PCM" | "PCB" | "All";
+  group?: "PCM" | "PCB" | "PCMB" | "All";
   targetPercentileGoal: string;
   totalMarks: number;
   durationMinutes: number;
@@ -280,6 +280,7 @@ export interface GrandMockTestItem {
   predictedCollegeTargets: string[];
   descriptionMr: string;
   instructionsMr: string[];
+  fixedQuestions?: Question[];
 }
 
 export type UserRole = "admin" | "student" | "class_admin" | "agent";

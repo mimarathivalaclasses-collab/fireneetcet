@@ -3,6 +3,7 @@ import { PYQ_QUESTIONS } from "./pyqQuestionsData";
 import { EXTRA_QUESTIONS } from "./extraQuestionsData";
 import { TARGET_TRIUMPH_PHYSICS_QUESTIONS } from "./targetTriumphPhysicsData";
 import { NEET_180_FULL_QUESTIONS } from "./neetFullMock180Questions";
+import { SPECIAL_1_QUESTIONS } from "./special1MockQuestions";
 
 const BASE_QUESTIONS: Question[] = [
   // ==========================================
@@ -1878,6 +1879,7 @@ const BASE_QUESTIONS: Question[] = [
 ];
 
 export const INITIAL_QUESTIONS: Question[] = [
+  ...SPECIAL_1_QUESTIONS,
   ...BASE_QUESTIONS,
   ...PYQ_QUESTIONS,
   ...EXTRA_QUESTIONS,

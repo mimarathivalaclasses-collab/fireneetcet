@@ -403,9 +403,9 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <Trophy className="w-3.5 h-3.5 text-amber-500" />
-              <span>🏆 ग्रँड टेस्ट्स (NEET / MHT-CET)</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-500 text-slate-950 uppercase">
-                NEET 180Q
+              <span>🏆 १० Grand Tests</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-emerald-600 text-white uppercase">
+                Special 1 + NEET 180Q
               </span>
             </button>
 
@@ -423,7 +423,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span>⚡ सराव (१२.५ लाख MCQs)</span>
             </button>
 
-            {/* Refer & Earn (10 Referrals = 100% Refund / ₹5.80 commission) */}
+            {/* Refer & Earn (10 Referrals = 100% Refund / Student Plan) */}
             <button
               id="nav-refer-earn"
               onClick={() => handleNavClick("refer_earn")}
@@ -440,23 +440,6 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             </button>
 
-            {/* Agent Commission Portal */}
-            <button
-              id="nav-agent-portal"
-              onClick={() => handleNavClick("agent_portal")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all font-black cursor-pointer ${
-                activeNav === "agent_portal"
-                  ? "bg-indigo-800 text-white shadow-sm ring-1 ring-indigo-400"
-                  : "text-indigo-950 dark:text-indigo-200 bg-indigo-100/90 dark:bg-indigo-950/40 border border-indigo-300 dark:border-indigo-700/50 hover:bg-indigo-200 dark:hover:bg-indigo-900/50"
-              }`}
-            >
-              <Users className={`w-3.5 h-3.5 ${activeNav === "agent_portal" ? "text-amber-300" : "text-indigo-400"}`} />
-              <span>💼 एजंट पोर्टल (२०% कमिशन)</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase">
-                ₹५.८०/विद्यार्थी
-              </span>
-            </button>
-
             {/* Mock Test */}
             <button
               id="nav-mock-test"
@@ -470,7 +453,7 @@ export const Header: React.FC<HeaderProps> = ({
                   : "text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700/80"
               }`}
             >
-              <Timer className="w-3.5 h-3.5 text-emerald-500" />
+              <Timer className="w-3.5 h-3.5 text-blue-500" />
               <span>मॉक टेस्ट (Mock)</span>
             </button>
 

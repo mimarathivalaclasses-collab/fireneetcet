@@ -45,6 +45,7 @@ import {
   buildGrandMockQuestionSet,
   NEET_180_GRAND_TEST_ITEM,
   NEET_180_FULL_QUESTIONS,
+  SPECIAL_1_GRAND_TEST_ITEM,
 } from "../data/grandMockTestsData";
 
 interface MainExamSimulatorViewProps {
@@ -158,59 +159,120 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
         </div>
       </div>
 
-      {/* Featured NEET 180 Questions Official Mock Banner */}
-      <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 rounded-3xl p-6 sm:p-7 border-2 border-emerald-500/50 shadow-2xl text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3 max-w-2xl">
+      {/* Featured Test Banners */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        {/* Special 1 (100 Questions PCMB Grand Test) */}
+        <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-blue-950 rounded-3xl p-6 border-2 border-indigo-500/50 shadow-2xl text-white relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="relative z-10 space-y-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" />
-                NEET Official 180 Questions Test
+              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 text-[11px] font-black uppercase tracking-wider flex items-center gap-1 shadow-xs">
+                <Sparkles className="w-3.5 h-3.5 fill-slate-950" />
+                🔥 Special 1 (Combined 100 Qs)
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black">
-                +4 / -1 Marking
+              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 text-[10px] font-black">
+                MHT-CET / NEET / JEE
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-emerald-200 text-[10px] font-bold">
-                200 Min (3:20:00)
+              <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-slate-300 text-[10px] font-bold">
+                120 Min • 100 Qs
               </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white">
-              🌿 NEET Full Mock Test — 180 Questions / 720 Marks
+              ⭐ Special 1 Grand Mock Test (100 Questions)
             </h2>
-            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-              Physics (४५ प्रश्न), Chemistry (४५ प्रश्न), Botany (४५ प्रश्न), Zoology (४५ प्रश्न) एकूण १८० प्रश्न आणि ७२० गुण. संपूर्ण मराठी भाषांतरासह अचूक उत्तरे व स्पष्टीकरणासहित!
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Physics (२५ प्रश्न), Chemistry (२५ प्रश्न), Biology (२५ प्रश्न), Maths (२५ प्रश्न). संपूर्ण मराठी भाषांतर, अचूक उत्तरांच्या स्पष्टीकरणासह १०० दर्जेदार प्रश्नांचा संच!
             </p>
-            <div className="flex flex-wrap gap-4 pt-1 text-xs text-emerald-300">
-              <span className="flex items-center gap-1.5 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Physics ४५ Qs (१८० गुण)
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs text-indigo-200">
+              <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
+                Physics २५
               </span>
-              <span className="flex items-center gap-1.5 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Chemistry ४५ Qs (१८० गुण)
+              <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
+                Chemistry २५
               </span>
-              <span className="flex items-center gap-1.5 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Biology ९० Qs (३६० गुण)
+              <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
+                Biology २५
+              </span>
+              <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
+                Maths २५
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+          <div className="relative z-10 flex flex-col sm:flex-row gap-2.5 pt-5">
             <button
-              onClick={() => handleLaunchTest(NEET_180_GRAND_TEST_ITEM)}
-              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-105 active:scale-95 ring-2 ring-white/40"
+              onClick={() => handleLaunchTest(SPECIAL_1_GRAND_TEST_ITEM)}
+              className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-[1.02] active:scale-98"
             >
               <Play className="w-4 h-4 fill-slate-950" />
-              <span>ही १८० प्रश्नांची टेस्ट सुरू करा →</span>
+              <span>Special 1 टेस्ट सुरू करा →</span>
+            </button>
+            <button
+              onClick={() => setActiveInstructionModal(SPECIAL_1_GRAND_TEST_ITEM)}
+              className="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-white/20"
+            >
+              <Info className="w-3.5 h-3.5 text-indigo-300" />
+              <span>नियम</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Featured NEET 180 Questions Official Mock Banner */}
+        <div className="bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 rounded-3xl p-6 border-2 border-emerald-500/50 shadow-2xl text-white relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="relative z-10 space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="px-3 py-1 rounded-full bg-emerald-500 text-slate-950 text-[11px] font-black uppercase tracking-wider flex items-center gap-1 shadow-xs">
+                <Sparkles className="w-3.5 h-3.5" />
+                🌿 NEET Official (180 Qs / 720 Marks)
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-black">
+                +4 / -1 Marking
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-white/10 text-emerald-200 text-[10px] font-bold">
+                200 Min (3:20:00)
+              </span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-white">
+              🌿 NEET Full Mock Test — 180 Questions
+            </h2>
+            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+              Physics (४५ प्रश्न), Chemistry (४५ प्रश्न), Botany (४५ प्रश्न), Zoology (४५ प्रश्न) एकूण १८० प्रश्न आणि ७२० गुण. संपूर्ण मराठी भाषांतरासह अचूक उत्तरे व स्पष्टीकरणासहित!
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 text-xs text-emerald-300">
+              <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                Physics ४५ Qs
+              </span>
+              <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                Chemistry ४५ Qs
+              </span>
+              <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                Biology ९० Qs
+              </span>
+            </div>
+          </div>
+
+          <div className="relative z-10 flex flex-col sm:flex-row gap-2.5 pt-5">
+            <button
+              onClick={() => handleLaunchTest(NEET_180_GRAND_TEST_ITEM)}
+              className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-[1.02] active:scale-98"
+            >
+              <Play className="w-4 h-4 fill-slate-950" />
+              <span>NEET १८० प्रश्नांची टेस्ट सुरू करा →</span>
             </button>
             <button
               onClick={() => setActiveInstructionModal(NEET_180_GRAND_TEST_ITEM)}
-              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-white/20"
+              className="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-white/20"
             >
               <Info className="w-3.5 h-3.5 text-emerald-300" />
-              <span>नियम व गुणदान पद्धत</span>
+              <span>नियम</span>
             </button>
           </div>
         </div>
