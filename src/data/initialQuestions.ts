@@ -1878,11 +1878,27 @@ const BASE_QUESTIONS: Question[] = [
   },
 ];
 
-export const INITIAL_QUESTIONS: Question[] = [
+function deduplicateBaseQuestions(list: Question[]): Question[] {
+  const seen = new Set<string>();
+  const out: Question[] = [];
+  for (const q of list) {
+    if (!q || !q.questionText) continue;
+    const textSig = `${q.questionText} ${q.questionTextMr || ""}`.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "").slice(0, 160);
+    const key = `${q.id}__${textSig}`;
+    if (!seen.has(key) && !seen.has(textSig)) {
+      seen.add(key);
+      seen.add(textSig);
+      out.push(q);
+    }
+  }
+  return out;
+}
+
+export const INITIAL_QUESTIONS: Question[] = deduplicateBaseQuestions([
   ...SPECIAL_1_QUESTIONS,
   ...BASE_QUESTIONS,
   ...PYQ_QUESTIONS,
   ...EXTRA_QUESTIONS,
   ...TARGET_TRIUMPH_PHYSICS_QUESTIONS,
   ...NEET_180_FULL_QUESTIONS,
-];
+]);

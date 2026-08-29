@@ -15,6 +15,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { Question, ExamType, SubjectType, LanguageMode } from "../types";
+import { deduplicateQuestionsList } from "../utils/proceduralQuestionEngine";
 
 interface PyqViewProps {
   questions: Question[];
@@ -43,9 +44,10 @@ export const PyqView: React.FC<PyqViewProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedSolutions, setExpandedSolutions] = useState<Record<string, boolean>>({});
 
-  // Filter only PYQ questions
+  // Filter only PYQ questions with strict deduplication
   const pyqQuestions = useMemo(() => {
-    return questions.filter((q) => Boolean(q.pyqYear));
+    const raw = questions.filter((q) => Boolean(q.pyqYear));
+    return deduplicateQuestionsList(raw);
   }, [questions]);
 
   // Extract distinct years present in the dataset

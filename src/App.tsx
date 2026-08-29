@@ -47,6 +47,7 @@ import { AdminApprovalDashboard } from "./components/AdminApprovalDashboard";
 import { SecurityWatermark } from "./components/SecurityWatermark";
 import { getOrCreateDeviceId, getDeviceName } from "./utils/deviceSecurity";
 import { findInstituteByCode } from "./data/coachingInstitutesData";
+import { deduplicateQuestionsList } from "./utils/proceduralQuestionEngine";
 
 const STORAGE_KEYS = {
   QUESTIONS: "mcq_app_questions_v1",
@@ -223,13 +224,13 @@ export default function App() {
           const idMap = new Map<string, Question>();
           INITIAL_QUESTIONS.forEach((q) => idMap.set(q.id, q));
           parsed.forEach((q: Question) => idMap.set(q.id, q));
-          return Array.from(idMap.values());
+          return deduplicateQuestionsList(Array.from(idMap.values()));
         }
       }
     } catch (e) {
       console.error("Error reading saved questions", e);
     }
-    return INITIAL_QUESTIONS;
+    return deduplicateQuestionsList(INITIAL_QUESTIONS);
   });
 
   // 4. Bookmarks State
@@ -496,7 +497,13 @@ export default function App() {
   };
 
   const handleStartMockTest = (config: any) => {
-    setActiveTestConfig(config);
+    const rawQuestions = config.selectedQuestions || [];
+    const cleanQuestions = deduplicateQuestionsList(rawQuestions);
+    setActiveTestConfig({
+      ...config,
+      selectedQuestions: cleanQuestions,
+      questionCount: cleanQuestions.length,
+    });
     setCurrentTestResult(null);
   };
 

@@ -1,7 +1,11 @@
 import { GrandMockTestItem, ExamType, SubjectType, Question } from "../types";
 import { INITIAL_QUESTIONS } from "./initialQuestions";
 import { PYQ_QUESTIONS } from "./pyqQuestionsData";
-import { buildGuaranteedNonRepeatingMock } from "../utils/proceduralQuestionEngine";
+import {
+  buildGuaranteedNonRepeatingMock,
+  deduplicateQuestionsList,
+  normalizeQuestionSignature,
+} from "../utils/proceduralQuestionEngine";
 import { NEET_180_FULL_QUESTIONS, NEET_180_GRAND_TEST_ITEM } from "./neetFullMock180Questions";
 import { SPECIAL_1_QUESTIONS, SPECIAL_1_GRAND_TEST_ITEM } from "./special1MockQuestions";
 
@@ -688,6 +692,7 @@ export function calculatePredictedRealExamScore(
 
 /**
  * Builds the exact question set for a Grand Mock Test by combining standard curated questions and procedural engine
+ * with a GUARANTEED ZERO-DUPLICATE policy.
  */
 export function buildGrandMockQuestionSet(
   testItem: GrandMockTestItem,
@@ -696,7 +701,8 @@ export function buildGrandMockQuestionSet(
   // If this is Special 1 Combined Mock Test (100 Qs)
   if (testItem.id === "special-1" || testItem.fixedQuestions) {
     const list = testItem.fixedQuestions || SPECIAL_1_QUESTIONS;
-    return list.map((q, idx) => ({
+    const cleanList = deduplicateQuestionsList(list);
+    return cleanList.map((q, idx) => ({
       ...q,
       id: `${testItem.id}-q-${idx + 1}`,
     }));
@@ -704,45 +710,67 @@ export function buildGrandMockQuestionSet(
 
   // If this is the specific 180-Question NEET Grand Mock, return the exact official 180 questions in order
   if (testItem.id === "grand-test-neet-180" || testItem.id === "grand-test-03") {
-    return NEET_180_FULL_QUESTIONS.map((q, idx) => ({
+    const cleanList = deduplicateQuestionsList(NEET_180_FULL_QUESTIONS);
+    return cleanList.map((q, idx) => ({
       ...q,
       id: `${testItem.id}-official-q-${idx + 1}`,
     }));
   }
 
   const resultQuestions: Question[] = [];
-  const pool = [...SPECIAL_1_QUESTIONS, ...NEET_180_FULL_QUESTIONS, ...availableQuestions, ...INITIAL_QUESTIONS, ...PYQ_QUESTIONS];
+  const globalSeenSignatures = new Set<string>();
+
+  // Master pool with deduplication upfront
+  const rawPool = [
+    ...SPECIAL_1_QUESTIONS,
+    ...NEET_180_FULL_QUESTIONS,
+    ...availableQuestions,
+    ...INITIAL_QUESTIONS,
+    ...PYQ_QUESTIONS,
+  ];
+  const pool = deduplicateQuestionsList(rawPool);
 
   testItem.subjectDistribution.forEach((dist) => {
-    // 1. Gather all questions matching exam and subject
-    const matching = pool.filter(
-      (q) => (q.exam === testItem.exam || testItem.exam === "MHT_CET") && q.subject === dist.subject
-    );
+    // 1. Gather all questions matching subject from pool that haven't been picked yet
+    const matchingSubjectQuestions = pool.filter((q) => q.subject === dist.subject);
+    const shuffledPool = [...matchingSubjectQuestions].sort(() => Math.random() - 0.5);
 
-    // 2. Fallback matching if not enough
-    const anySubMatching = pool.filter((q) => q.subject === dist.subject);
-    const combined = matching.length >= dist.questionCount ? matching : anySubMatching;
+    const subjectChosen: Question[] = [];
+    for (const q of shuffledPool) {
+      if (subjectChosen.length >= dist.questionCount) break;
+      const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
+      if (!globalSeenSignatures.has(sig)) {
+        globalSeenSignatures.add(sig);
+        subjectChosen.push(q);
+      }
+    }
 
-    // 3. Shuffle
-    const shuffled = [...combined].sort(() => Math.random() - 0.5);
-
-    // 4. If we still need more to reach exact count, procedural generate
-    if (shuffled.length < dist.questionCount) {
+    // 2. If deficit exists, generate procedural questions with strict seen signature tracking
+    const deficit = dist.questionCount - subjectChosen.length;
+    if (deficit > 0) {
       const generated = buildGuaranteedNonRepeatingMock(
         testItem.exam,
         dist.subject,
         "All",
-        dist.questionCount - shuffled.length,
-        pool
+        deficit,
+        pool,
+        globalSeenSignatures
       );
-      resultQuestions.push(...shuffled, ...generated);
-    } else {
-      resultQuestions.push(...shuffled.slice(0, dist.questionCount));
+      for (const gq of generated) {
+        const sig = normalizeQuestionSignature(gq.questionText, gq.questionTextMr);
+        if (!globalSeenSignatures.has(sig)) {
+          globalSeenSignatures.add(sig);
+          subjectChosen.push(gq);
+        }
+      }
     }
+
+    resultQuestions.push(...subjectChosen);
   });
 
-  // Ensure unique IDs
-  return resultQuestions.map((q, idx) => ({
+  // Ensure 100% strictly unique questions and unique IDs
+  const finalClean = deduplicateQuestionsList(resultQuestions);
+  return finalClean.map((q, idx) => ({
     ...q,
     id: `${testItem.id}-q-${idx + 1}-${q.id || "gen"}`,
   }));

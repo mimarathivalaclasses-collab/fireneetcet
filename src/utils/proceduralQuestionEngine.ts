@@ -6,9 +6,9 @@ import { ExamType, SubjectType, DifficultyLevel, Question } from "../types";
  * across ALL topics in Physics, Chemistry, Mathematics, and Biology with bilingual support (Marathi & English).
  * 
  * STRICT ZERO-DUPLICATE GUARANTEE:
- * 1. Normalized signature hashing (strips punctuation, whitespace, case)
+ * 1. Unicode-safe normalized signature hashing (preserves Devanagari/Marathi and English text)
  * 2. Multi-tier pool selection (Exact chapter -> Subject-wide -> Dynamic Procedural)
- * 3. Dynamic mathematical and conceptual parameterization
+ * 3. Dynamic mathematical and conceptual parameterization with vast random space
  */
 
 export interface GeneratorTemplate {
@@ -19,13 +19,13 @@ export interface GeneratorTemplate {
   generate: (index: number, exam: ExamType) => RawQuestionData;
 }
 
-interface RawQuestionData {
+export interface RawQuestionData {
   idPrefix: string;
   chapter: string;
   topic: string;
   difficulty: DifficultyLevel;
   questionText: string;
-  questionTextMr: string;
+  questionTextMr?: string;
   correctAnswer: string;
   correctAnswerMr?: string;
   wrongAnswers: [string, string, string];
@@ -36,12 +36,20 @@ interface RawQuestionData {
   pyqYear?: string;
 }
 
-// Helper: Normalize question text for strict duplicate detection
-export function normalizeQuestionSignature(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, "")
-    .slice(0, 120);
+// Helper: Unicode-safe Normalize question text for strict duplicate detection
+export function normalizeQuestionSignature(text: string, textMr?: string): string {
+  const combined = `${text || ""} ${textMr || ""}`.toLowerCase();
+  // Strip whitespace, punctuation, math operators, special symbols, but KEEP unicode letters (\p{L}) and numbers (\p{N})
+  const cleaned = combined.replace(/[^\p{L}\p{N}]/gu, "");
+  if (cleaned.length >= 10) {
+    return cleaned.slice(0, 160);
+  }
+  // Fallback if cleaned is very short
+  return combined.trim().replace(/\s+/g, " ").slice(0, 160);
+}
+
+export function getQuestionSignature(q: Question): string {
+  return normalizeQuestionSignature(q.questionText, q.questionTextMr);
 }
 
 // Random helpers
@@ -75,28 +83,23 @@ function buildFinalQuestion(
   const correctMr = raw.correctAnswerMr || raw.correctAnswer;
 
   const rawOptionsEn = [correctEn, ...raw.wrongAnswers];
-  const rawOptionsMr = [correctMr, ...(raw.wrongAnswersMr || raw.wrongAnswers)];
+  const rawOptionsMr = raw.wrongAnswersMr
+    ? [correctMr, ...raw.wrongAnswersMr]
+    : [correctMr, ...raw.wrongAnswers];
 
-  const order = shuffleArray([0, 1, 2, 3]);
+  // Random permutation 0..3
+  const indices = [0, 1, 2, 3];
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
 
-  const finalOptionsEn: [string, string, string, string] = [
-    rawOptionsEn[order[0]],
-    rawOptionsEn[order[1]],
-    rawOptionsEn[order[2]],
-    rawOptionsEn[order[3]],
-  ];
-
-  const finalOptionsMr: [string, string, string, string] = [
-    rawOptionsMr[order[0]],
-    rawOptionsMr[order[1]],
-    rawOptionsMr[order[2]],
-    rawOptionsMr[order[3]],
-  ];
-
-  const correctIndex = order.indexOf(0);
+  const shuffledOptionsEn = indices.map((idx) => rawOptionsEn[idx]) as [string, string, string, string];
+  const shuffledOptionsMr = indices.map((idx) => rawOptionsMr[idx]) as [string, string, string, string];
+  const correctOptionIndex = indices.indexOf(0);
 
   return {
-    id: `${raw.idPrefix}_${index}_${Math.random().toString(36).substring(2, 9)}`,
+    id: `${raw.idPrefix}_${Date.now()}_${index}_${Math.random().toString(36).substring(2, 7)}`,
     exam,
     subject,
     chapter: raw.chapter,
@@ -104,14 +107,35 @@ function buildFinalQuestion(
     difficulty: raw.difficulty,
     questionText: raw.questionText,
     questionTextMr: raw.questionTextMr,
-    options: finalOptionsEn,
-    optionsMr: finalOptionsMr,
-    correctOption: correctIndex,
+    options: shuffledOptionsEn,
+    optionsMr: shuffledOptionsMr,
+    correctOption: correctOptionIndex,
     formula: raw.formula,
     explanation: raw.explanation,
     explanationMr: raw.explanationMr,
-    pyqYear: raw.pyqYear || "Procedural Master Bank",
+    pyqYear: raw.pyqYear || "MHT-CET / NEET Special",
   };
+}
+
+/**
+ * Deduplicates any question array strictly by ID and Normalized Text Signature
+ */
+export function deduplicateQuestionsList(questions: Question[]): Question[] {
+  const seenIds = new Set<string>();
+  const seenSigs = new Set<string>();
+  const clean: Question[] = [];
+
+  for (const q of questions) {
+    if (!q || !q.questionText) continue;
+    const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
+    if (seenIds.has(q.id) || seenSigs.has(sig)) {
+      continue;
+    }
+    seenIds.add(q.id);
+    seenSigs.add(sig);
+    clean.push(q);
+  }
+  return clean;
 }
 
 export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
@@ -126,8 +150,8 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     topic: "Centripetal Acceleration & Circular Motion",
     difficulty: "Medium",
     generate: (idx, exam) => {
-      const radius = getRandomChoice([2, 5, 8, 10, 12, 15, 20, 25, 40, 50]);
-      const speed = getRandomChoice([3, 4, 6, 8, 10, 12, 16, 20, 24]);
+      const radius = getRandomChoice([2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 40, 50]);
+      const speed = getRandomChoice([3, 4, 5, 6, 8, 10, 12, 15, 16, 20, 24, 30]);
       const acc = (speed * speed) / radius;
       const accFixed = Number.isInteger(acc) ? acc.toString() : acc.toFixed(1);
       return {
@@ -153,8 +177,8 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     topic: "Moment of Inertia",
     difficulty: "Medium",
     generate: (idx, exam) => {
-      const mass = getRandomChoice([2, 3, 4, 5, 6, 8, 10]);
-      const radius = getRandomChoice([0.5, 1, 1.5, 2, 2.5, 3]);
+      const mass = getRandomChoice([2, 3, 4, 5, 6, 8, 10, 12]);
+      const radius = getRandomChoice([0.5, 1, 1.5, 2, 2.5, 3, 4]);
       const type = getRandomChoice([
         { name: "solid disc about its central transverse axis", nameMr: "मध्य अक्षाभोवती भरीव चकती (Solid Disc)", factor: 0.5, factorFormula: "1/2 M R²" },
         { name: "thin circular ring about its central transverse axis", nameMr: "मध्य अक्षाभोवती पातळ वर्तुळाकार कडे (Ring)", factor: 1.0, factorFormula: "M R²" },
@@ -186,8 +210,8 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     topic: "Time Period of Spring-Mass System",
     difficulty: "Medium",
     generate: (idx, exam) => {
-      const mass = getRandomChoice([1, 2, 4, 9, 16]);
-      const k = getRandomChoice([100, 400, 900, 1600]);
+      const mass = getRandomChoice([1, 2, 4, 9, 16, 25]);
+      const k = getRandomChoice([100, 400, 900, 1600, 2500]);
       const freqVal = (Math.sqrt(k) / Math.sqrt(mass)).toFixed(0);
       const ansVal = `(2π / ${freqVal}) s`;
       return {
@@ -242,7 +266,7 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     topic: "EMF, Internal Resistance and Terminal Voltage",
     difficulty: "Medium",
     generate: (idx, exam) => {
-      const emf = getRandomChoice([6, 9, 12, 15, 24]);
+      const emf = getRandomChoice([6, 9, 12, 15, 18, 24]);
       const r = getRandomChoice([0.5, 1, 1.5, 2]);
       const R = getRandomChoice([4, 5, 8, 10, 20]);
       const current = emf / (R + r);
@@ -255,7 +279,7 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
         questionText: `A battery of EMF ${emf} V and internal resistance ${r} Ω is connected across an external resistor of ${R} Ω. What is the terminal potential difference across the battery?`,
         questionTextMr: `${emf} V विद्युतवाहक बल (EMF) आणि ${r} Ω अंतर्गत रोध (Internal Resistance) असलेली बॅटरी ${R} Ω च्या बाह्य रोधाला जोडली आहे. बॅटरीच्या टोकांमधील विभवांतर (Terminal PD) किती असेल?`,
         correctAnswer: `${vTerminal.toFixed(2)} V`,
-        wrongAnswers: [`${emf.toFixed(2)} V`, `${(vTerminal * 0.75).toFixed(2)} V`, `${(current).toFixed(2)} V`],
+        wrongAnswers: [`${emf.toFixed(2)} V`, `${(vTerminal * 0.75).toFixed(2)} V`, `${current.toFixed(2)} V`],
         formula: `I = E / (R + r) = ${current.toFixed(2)} A, V = I × R = ${vTerminal.toFixed(2)} V`,
         explanation: `Total circuit current I = E / (R + r) = ${emf} / (${R} + ${r}) = ${current.toFixed(2)} A. Terminal voltage V = I × R = ${vTerminal.toFixed(2)} V.`,
         explanationMr: `एकूण विद्युतप्रवाह I = E / (R + r) = ${current.toFixed(2)} A. टोकांमधील विभवांतर V = I × R = ${vTerminal.toFixed(2)} V.`,
@@ -272,8 +296,7 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     generate: (idx, exam) => {
       const f = getRandomChoice([10, 15, 20, 25, 30]);
       const u = getRandomChoice([-20, -30, -40, -50]);
-      // 1/f = 1/v - 1/u => 1/v = 1/f + 1/u = 1/f - 1/|u|
-      const inv_v = (1 / f) + (1 / u);
+      const inv_v = 1 / f + 1 / u;
       const v = 1 / inv_v;
       return {
         idPrefix: `proc_phy_optics_lens`,
@@ -283,10 +306,72 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
         questionText: `An object is placed at a distance of ${Math.abs(u)} cm in front of a convex lens of focal length ${f} cm. At what distance from the lens is the real image formed?`,
         questionTextMr: `${f} cm नाभीय अंतर (Focal Length) असलेल्या बहिर्गोल भिंगासमोर ${Math.abs(u)} cm अंतरावर एक वस्तू ठेवली आहे. भिंगापासून किती अंतरावर तिची वास्तव प्रतिमा तयार होईल?`,
         correctAnswer: `${v.toFixed(1)} cm`,
-        wrongAnswers: [`${(v * 1.5).toFixed(1)} cm`, `${(f).toFixed(1)} cm`, `${(Math.abs(u) + f).toFixed(1)} cm`],
+        wrongAnswers: [`${(v * 1.5).toFixed(1)} cm`, `${f.toFixed(1)} cm`, `${(Math.abs(u) + f).toFixed(1)} cm`],
         formula: `1/f = 1/v - 1/u => 1/v = 1/${f} - 1/${Math.abs(u)} => v = ${v.toFixed(1)} cm`,
         explanation: `By lens formula 1/f = 1/v - 1/u, substituting f = +${f} cm and u = ${u} cm yields v = +${v.toFixed(1)} cm.`,
         explanationMr: `भिंगाचे सूत्र 1/f = 1/v - 1/u वापरून प्रतिमेचे अंतर v = +${v.toFixed(1)} cm मिळते.`,
+      };
+    },
+  },
+
+  // 7. Electrostatics - Capacitors
+  {
+    subject: "Physics",
+    chapter: "Electrostatics & Current",
+    topic: "Capacitance Combinations",
+    difficulty: "Easy",
+    generate: (idx, exam) => {
+      const c1 = getRandomChoice([2, 4, 6, 8, 12]);
+      const c2 = getRandomChoice([3, 6, 12, 24]);
+      const isParallel = idx % 2 === 0;
+      const cEq = isParallel ? c1 + c2 : (c1 * c2) / (c1 + c2);
+      const textEn = isParallel
+        ? `Two capacitors of capacitance ${c1} µF and ${c2} µF are connected in parallel. What is the equivalent capacitance?`
+        : `Two capacitors of capacitance ${c1} µF and ${c2} µF are connected in series. What is the equivalent capacitance?`;
+      const textMr = isParallel
+        ? `${c1} µF आणि ${c2} µF धारकता असलेले दोन संधारित्र (Capacitors) समांतर जोडणीत जोडले आहेत. समतुल्य धारकता किती?`
+        : `${c1} µF आणि ${c2} µF धारकता असलेले दोन संधारित्र एकसर जोडणीत जोडले आहेत. समतुल्य धारकता किती?`;
+      return {
+        idPrefix: `proc_phy_cap_eq`,
+        chapter: "Electrostatics & Current",
+        topic: "Capacitance Combinations",
+        difficulty: "Easy",
+        questionText: textEn,
+        questionTextMr: textMr,
+        correctAnswer: `${cEq.toFixed(2)} µF`,
+        wrongAnswers: [`${(cEq * 2).toFixed(2)} µF`, `${(c1 * c2).toFixed(2)} µF`, `${Math.abs(c1 - c2).toFixed(2)} µF`],
+        formula: isParallel ? `C_eq = C1 + C2 = ${c1} + ${c2} = ${cEq} µF` : `1/C_eq = 1/C1 + 1/C2 => C_eq = ${cEq.toFixed(2)} µF`,
+        explanation: isParallel
+          ? `In parallel combination, equivalent capacitance is simply C = C1 + C2 = ${cEq} µF.`
+          : `In series combination, equivalent capacitance is C = (C1 × C2)/(C1 + C2) = ${cEq.toFixed(2)} µF.`,
+        explanationMr: isParallel
+          ? `समांतर जोडणीत C_eq = C1 + C2 = ${cEq} µF असते.`
+          : `एकसर जोडणीत C_eq = (C1 × C2)/(C1 + C2) = ${cEq.toFixed(2)} µF असते.`,
+      };
+    },
+  },
+
+  // 8. Modern Physics - De Broglie Wavelength
+  {
+    subject: "Physics",
+    chapter: "Dual Nature of Radiation and Matter",
+    topic: "De Broglie Wavelength of Electron",
+    difficulty: "Medium",
+    generate: (idx, exam) => {
+      const vVolt = getRandomChoice([100, 144, 400, 625, 900]);
+      const lambda = (12.27 / Math.sqrt(vVolt)).toFixed(3);
+      return {
+        idPrefix: `proc_phy_debroglie`,
+        chapter: "Dual Nature of Radiation and Matter",
+        topic: "De Broglie Wavelength",
+        difficulty: "Medium",
+        questionText: `An electron is accelerated from rest through a potential difference of V = ${vVolt} Volts. What is the de Broglie wavelength associated with it?`,
+        questionTextMr: `एक इलेक्ट्रॉन स्थिर अवस्थेतून V = ${vVolt} व्होल्ट विभवांतराने गतिमान केला जातो. त्याच्याशी संबंधित डि-ब्रॉग्ली तरंगलांबी (de Broglie wavelength) किती असेल?`,
+        correctAnswer: `${lambda} Å`,
+        wrongAnswers: [`${(parseFloat(lambda) * 2).toFixed(3)} Å`, `${(parseFloat(lambda) / 2).toFixed(3)} Å`, `${Math.sqrt(vVolt).toFixed(3)} Å`],
+        formula: `λ = 12.27 / √V Å = 12.27 / √${vVolt} = ${lambda} Å`,
+        explanation: `For an electron accelerated through V volts, de Broglie wavelength is given by λ = 12.27 / √V Å = ${lambda} Å.`,
+        explanationMr: `इलेक्ट्रॉनसाठी डि-ब्रॉग्ली तरंगलांबी सूत्र: λ = १२.२७ / √V Å = ${lambda} Å.`,
       };
     },
   },
@@ -295,7 +380,7 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
   // CHEMISTRY TEMPLATES
   // =========================================================================
 
-  // 7. Electrochemistry - Nernst Equation / EMF
+  // 9. Electrochemistry - Standard Cell Potential
   {
     subject: "Chemistry",
     chapter: "Electrochemistry & Chemical Kinetics",
@@ -304,9 +389,10 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     generate: (idx, exam) => {
       const metals = [
         { name: "Zn - Cu (Daniell Cell)", E_cat: 0.34, E_ano: -0.76, cat: "Cu²⁺/Cu", ano: "Zn²⁺/Zn" },
-        { name: "Mg - Ag Cell", E_cat: 0.80, E_ano: -2.37, cat: "Ag⁺/Ag", ano: "Mg²⁺/Mg" },
-        { name: "Fe - Cd Cell", E_cat: -0.40, E_ano: -0.44, cat: "Cd²⁺/Cd", ano: "Fe²⁺/Fe" },
+        { name: "Mg - Ag Cell", E_cat: 0.8, E_ano: -2.37, cat: "Ag⁺/Ag", ano: "Mg²⁺/Mg" },
+        { name: "Fe - Cd Cell", E_cat: -0.4, E_ano: -0.44, cat: "Cd²⁺/Cd", ano: "Fe²⁺/Fe" },
         { name: "Ni - Cu Cell", E_cat: 0.34, E_ano: -0.25, cat: "Cu²⁺/Cu", ano: "Ni²⁺/Ni" },
+        { name: "Al - Cu Cell", E_cat: 0.34, E_ano: -1.66, cat: "Cu²⁺/Cu", ano: "Al³⁺/Al" },
       ];
       const m = getRandomChoice(metals);
       const E_cell = m.E_cat - m.E_ano;
@@ -326,14 +412,14 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     },
   },
 
-  // 8. Chemical Kinetics - First Order Half Life
+  // 10. Chemical Kinetics - First Order Half Life
   {
     subject: "Chemistry",
     chapter: "Electrochemistry & Chemical Kinetics",
     topic: "First Order Reaction & Half Life",
     difficulty: "Medium",
     generate: (idx, exam) => {
-      const k_val = getRandomChoice([0.0693, 0.0231, 0.03465, 0.1386]);
+      const k_val = getRandomChoice([0.0693, 0.0231, 0.03465, 0.1386, 0.01155]);
       const t_half = 0.693 / k_val;
       return {
         idPrefix: `proc_chem_kin_t_half`,
@@ -351,15 +437,15 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     },
   },
 
-  // 9. Solutions - Osmotic Pressure / Molarity
+  // 11. Solutions - Osmotic Pressure / Molarity
   {
     subject: "Chemistry",
     chapter: "Solutions & Colligative Properties",
     topic: "Osmotic Pressure Calculation",
     difficulty: "Medium",
     generate: (idx, exam) => {
-      const M = getRandomChoice([0.1, 0.2, 0.5, 1.0]);
-      const T_celsius = getRandomChoice([27, 37, 47]);
+      const M = getRandomChoice([0.1, 0.2, 0.25, 0.5, 1.0, 1.5]);
+      const T_celsius = getRandomChoice([27, 37, 47, 57]);
       const T_kelvin = T_celsius + 273;
       const R = 0.0821;
       const pi = M * R * T_kelvin;
@@ -379,11 +465,40 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     },
   },
 
+  // 12. Structure of Atom - Number of Photons / Energy
+  {
+    subject: "Chemistry",
+    chapter: "Structure of Atom",
+    topic: "Planck Quantum Theory & Photon Energy",
+    difficulty: "Medium",
+    generate: (idx, exam) => {
+      const wavelengths = [
+        { val: 300, energy: "6.626 × 10⁻¹⁹ J", wrong: ["3.313 × 10⁻¹⁹ J", "13.25 × 10⁻¹⁹ J", "1.98 × 10⁻¹⁹ J"] },
+        { val: 400, energy: "4.969 × 10⁻¹⁹ J", wrong: ["2.484 × 10⁻¹⁹ J", "9.938 × 10⁻¹⁹ J", "6.626 × 10⁻¹⁹ J"] },
+        { val: 600, energy: "3.313 × 10⁻¹⁹ J", wrong: ["6.626 × 10⁻¹⁹ J", "1.656 × 10⁻¹⁹ J", "4.969 × 10⁻¹⁹ J"] },
+      ];
+      const w = getRandomChoice(wavelengths);
+      return {
+        idPrefix: `proc_chem_atom_photon`,
+        chapter: "Structure of Atom",
+        topic: "Photon Energy",
+        difficulty: "Medium",
+        questionText: `Calculate the energy of a single photon of electromagnetic radiation having a wavelength of λ = ${w.val} nm. (h = 6.626 × 10⁻³⁴ J·s, c = 3 × 10⁸ m/s)`,
+        questionTextMr: `λ = ${w.val} nm तरंगलांबी असलेल्या एका फोटॉनची ऊर्जा किती असेल? (h = 6.626 × 10⁻³⁴ J·s, c = 3 × 10⁸ m/s)`,
+        correctAnswer: w.energy,
+        wrongAnswers: w.wrong as [string, string, string],
+        formula: `E = h c / λ = (6.626 × 10⁻³⁴ × 3 × 10⁸) / (${w.val} × 10⁻⁹) = ${w.energy}`,
+        explanation: `Using Einstein-Planck formula E = hc/λ, substituting λ = ${w.val} × 10⁻⁹ m gives E = ${w.energy}.`,
+        explanationMr: `फोटॉन ऊर्जेचे सूत्र E = hc/λ वापरून उत्तर ${w.energy} मिळते.`,
+      };
+    },
+  },
+
   // =========================================================================
   // BIOLOGY TEMPLATES
   // =========================================================================
 
-  // 10. Genetics - Monohybrid & Dihybrid Phenotypic/Genotypic Ratios
+  // 13. Genetics - Monohybrid & Dihybrid Phenotypic/Genotypic Ratios
   {
     subject: "Biology",
     chapter: "Principles of Inheritance and Variation (Genetics)",
@@ -413,7 +528,7 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     },
   },
 
-  // 11. Cell Biology - Stages of Meiosis Prophase I
+  // 14. Cell Biology - Stages of Meiosis Prophase I
   {
     subject: "Biology",
     chapter: "Cell Structure and Cell Division",
@@ -446,7 +561,38 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     },
   },
 
-  // 12. Human Physiology - Blood Clotting & Factors
+  // 15. Plant Physiology - Photosynthesis & Light Reactions
+  {
+    subject: "Biology",
+    chapter: "Photosynthesis & Respiration in Plants",
+    topic: "Light Reaction End Products & Photosystems",
+    difficulty: "Easy",
+    generate: (idx, exam) => {
+      const facts = [
+        { qEn: "The primary assimilatory power products generated during the light reactions of photosynthesis are:", qMr: "प्रकाश संश्लेषणाच्या प्रकाश अभिक्रियेत तयार होणारी प्राथमिक ऊर्जा उत्पादने कोणती?", ansEn: "ATP, NADPH and O₂", ansMr: "ATP, NADPH आणि O₂", wEn: ["Glucose and Starch", "ADP and NADP⁺", "RuBP and 3-PGA"], wMr: ["ग्लुकोज आणि स्टार्च", "ADP आणि NADP⁺", "RuBP आणि 3-PGA"] },
+        { qEn: "The primary CO₂ acceptor molecule in C3 cycle (Calvin cycle) is:", qMr: "C3 चक्रात (Calvin Cycle) कार्बन डायऑक्साईड (CO₂) स्वीकारणारा प्राथमिक घटक कोणता?", ansEn: "Ribulose-1,5-bisphosphate (RuBP)", ansMr: "रिब्युलोझ-१,५-बायफॉस्फेट (RuBP)", wEn: ["Phosphoenolpyruvate (PEP)", "Oxaloacetic acid (OAA)", "Phosphoglyceraldehyde (PGAL)"], wMr: ["फॉस्फोइनॉलपायरुव्हेट (PEP)", "ऑक्झॅलोॲसिटिक ॲसिड (OAA)", "PGAL"] },
+        { qEn: "The primary CO₂ acceptor molecule in C4 plants mesophyll cells is:", qMr: "C4 वनस्पतींच्या मेसोफिल पेशींमध्ये CO₂ स्वीकारणारा प्राथमिक रेणू कोणता?", ansEn: "Phosphoenolpyruvate (PEP)", ansMr: "फॉस्फोइनॉलपायरुव्हेट (PEP)", wEn: ["RuBP", "Malic acid", "Pyruvic acid"], wMr: ["RuBP", "मॅलिक ॲसिड", "पायरुव्हिक ॲसिड"] },
+      ];
+      const f = getRandomChoice(facts);
+      return {
+        idPrefix: `proc_bio_photosynth`,
+        chapter: "Photosynthesis & Respiration in Plants",
+        topic: "Photosynthesis Mechanisms",
+        difficulty: "Easy",
+        questionText: f.qEn,
+        questionTextMr: f.qMr,
+        correctAnswer: f.ansEn,
+        correctAnswerMr: f.ansMr,
+        wrongAnswers: f.wEn as [string, string, string],
+        wrongAnswersMr: f.wMr as [string, string, string],
+        formula: `Light Reactions: H2O + NADP+ + ADP + Pi --(Light/Chlorophyll)--> O2 + NADPH + ATP`,
+        explanation: `In plant physiology, ${f.ansEn} represents the fundamental accepted fact in photosynthesis biochemical pathways.`,
+        explanationMr: `प्रकाश संश्लेषणातील मूलभूत प्रक्रियेनुसार ${f.ansMr} हे योग्य उत्तर आहे.`,
+      };
+    },
+  },
+
+  // 16. Human Physiology - Blood Clotting & Factors
   {
     subject: "Biology",
     chapter: "Body Fluids and Circulation",
@@ -481,7 +627,7 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
   // MATHEMATICS TEMPLATES
   // =========================================================================
 
-  // 13. Integration - Standard Definite Integrals
+  // 17. Integration - Standard Definite Integrals
   {
     subject: "Mathematics",
     chapter: "Definite & Indefinite Integration",
@@ -489,9 +635,8 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     difficulty: "Medium",
     generate: (idx, exam) => {
       const a = getRandomInt(1, 4);
-      const b = a + getRandomInt(1, 3);
-      const m = getRandomChoice([2, 4, 6]);
-      // ∫ (m x) dx from a to b = m * (b² - a²) / 2
+      const b = a + getRandomInt(1, 4);
+      const m = getRandomChoice([2, 4, 6, 8]);
       const integralVal = (m * (b * b - a * a)) / 2;
       return {
         idPrefix: `proc_math_def_int`,
@@ -502,25 +647,25 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
         questionTextMr: `निश्चित समाकलन (Definite Integral) सोडवा: ∫ (${a} ते ${b}) (${m}x) dx चे मूल्य किती?`,
         correctAnswer: `${integralVal}`,
         wrongAnswers: [`${integralVal + m}`, `${integralVal - a}`, `${integralVal * 2}`],
-        formula: `∫ (${m}x) dx = [${m} x² / 2] from ${a} to ${b} = ${m/2} × (${b}² - ${a}²) = ${integralVal}`,
+        formula: `∫ (${m}x) dx = [${m} x² / 2] from ${a} to ${b} = ${m / 2} × (${b}² - ${a}²) = ${integralVal}`,
         explanation: `Integrating ${m}x gives (${m}/2)x². Evaluating between limits [${a}, ${b}]: (${m}/2) × (${b * b} - ${a * a}) = ${integralVal}.`,
         explanationMr: `${m}x चे समाकलन (${m}/2)x² येते. सीमा [${a}, ${b}] टाकल्यास उत्तर = ${integralVal} मिळते.`,
       };
     },
   },
 
-  // 14. Matrices - Determinant of 2x2 Matrix
+  // 18. Matrices - Determinant of 2x2 Matrix
   {
     subject: "Mathematics",
     chapter: "Matrices & Determinants",
     topic: "Determinant Calculation",
     difficulty: "Easy",
     generate: (idx, exam) => {
-      const a11 = getRandomInt(2, 6);
-      const a12 = getRandomInt(1, 5);
-      const a21 = getRandomInt(1, 4);
-      const a22 = getRandomInt(2, 7);
-      const det = (a11 * a22) - (a12 * a21);
+      const a11 = getRandomInt(2, 7);
+      const a12 = getRandomInt(1, 6);
+      const a21 = getRandomInt(1, 5);
+      const a22 = getRandomInt(2, 8);
+      const det = a11 * a22 - a12 * a21;
       return {
         idPrefix: `proc_math_det`,
         chapter: "Matrices & Determinants",
@@ -529,7 +674,7 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
         questionText: `Find the determinant of the 2×2 matrix: A = [[${a11}, ${a12}], [${a21}, ${a22}]].`,
         questionTextMr: `२×२ मॅट्रिक्स A = [[${a11}, ${a12}], [${a21}, ${a22}]] चा निश्चयक (Determinant) किती?`,
         correctAnswer: `${det}`,
-        wrongAnswers: [`${det + 2}`, `${det - 3}`, `${(a11 * a22) + (a12 * a21)}`],
+        wrongAnswers: [`${det + 2}`, `${det - 3}`, `${a11 * a22 + a12 * a21}`],
         formula: `|A| = (a₁₁ × a₂₂) - (a₁₂ × a₂₁) = (${a11} × ${a22}) - (${a12} × ${a21}) = ${det}`,
         explanation: `Determinant of 2x2 matrix is computed by ad - bc = (${a11} × ${a22}) - (${a12} × ${a21}) = ${det}.`,
         explanationMr: `२×२ निश्चयकाचे मूल्य ad - bc = (${a11} × ${a22}) - (${a12} × ${a21}) = ${det} येते.`,
@@ -537,20 +682,20 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
     },
   },
 
-  // 15. Vectors - Dot Product of Two Vectors
+  // 19. Vectors - Dot Product of Two Vectors
   {
     subject: "Mathematics",
     chapter: "Vectors & 3D Geometry",
     topic: "Scalar (Dot) Product",
     difficulty: "Easy",
     generate: (idx, exam) => {
-      const x1 = getRandomInt(1, 4);
-      const y1 = getRandomInt(1, 4);
-      const z1 = getRandomInt(1, 4);
-      const x2 = getRandomInt(1, 4);
-      const y2 = getRandomInt(1, 4);
-      const z2 = getRandomInt(1, 4);
-      const dot = (x1 * x2) + (y1 * y2) + (z1 * z2);
+      const x1 = getRandomInt(1, 5);
+      const y1 = getRandomInt(1, 5);
+      const z1 = getRandomInt(1, 5);
+      const x2 = getRandomInt(1, 5);
+      const y2 = getRandomInt(1, 5);
+      const z2 = getRandomInt(1, 5);
+      const dot = x1 * x2 + y1 * y2 + z1 * z2;
       return {
         idPrefix: `proc_math_vector_dot`,
         chapter: "Vectors & 3D Geometry",
@@ -559,10 +704,36 @@ export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
         questionText: `Find the dot product of two vectors a = ${x1}i + ${y1}j + ${z1}k and b = ${x2}i + ${y2}j + ${z2}k.`,
         questionTextMr: `a = ${x1}i + ${y1}j + ${z1}k आणि b = ${x2}i + ${y2}j + ${z2}k या दोन सदिश राशींचा (Vectors) अदिश गुणाकार (Dot Product a · b) काढा.`,
         correctAnswer: `${dot}`,
-        wrongAnswers: [`${dot + 4}`, `${dot - 2}`, `${(x1 * x2 * y1 * y2)}`],
+        wrongAnswers: [`${dot + 4}`, `${dot - 2}`, `${x1 * x2 * y1 * y2}`],
         formula: `a · b = (a_x × b_x) + (a_y × b_y) + (a_z × b_z) = (${x1}×${x2}) + (${y1}×${y2}) + (${z1}×${z2}) = ${dot}`,
         explanation: `Scalar dot product is sum of products of corresponding components: (${x1}×${x2}) + (${y1}×${y2}) + (${z1}×${z2}) = ${dot}.`,
         explanationMr: `अदिश गुणाकार a · b = (${x1}×${x2}) + (${y1}×${y2}) + (${z1}×${z2}) = ${dot}.`,
+      };
+    },
+  },
+
+  // 20. Probability - Conditional Probability
+  {
+    subject: "Mathematics",
+    chapter: "Probability & Statistics",
+    topic: "Conditional Probability Formula",
+    difficulty: "Easy",
+    generate: (idx, exam) => {
+      const pB = getRandomChoice([0.4, 0.5, 0.6, 0.8]);
+      const pAB = getRandomChoice([0.1, 0.2, 0.24, 0.3]);
+      const pAgivenB = (pAB / pB).toFixed(2);
+      return {
+        idPrefix: `proc_math_prob_cond`,
+        chapter: "Probability & Statistics",
+        topic: "Conditional Probability",
+        difficulty: "Easy",
+        questionText: `If P(B) = ${pB} and P(A ∩ B) = ${pAB}, calculate the conditional probability P(A | B).`,
+        questionTextMr: `जर P(B) = ${pB} आणि P(A ∩ B) = ${pAB} असेल, तर सशर्त संभाव्यता P(A | B) काढा.`,
+        correctAnswer: `${pAgivenB}`,
+        wrongAnswers: [`${(pAB * pB).toFixed(2)}`, `${(pB - pAB).toFixed(2)}`, `0.95`],
+        formula: `P(A | B) = P(A ∩ B) / P(B) = ${pAB} / ${pB} = ${pAgivenB}`,
+        explanation: `By definition of conditional probability, P(A | B) = P(A ∩ B) / P(B) = ${pAB} / ${pB} = ${pAgivenB}.`,
+        explanationMr: `सशर्त संभाव्यतेचे सूत्र P(A | B) = P(A ∩ B) / P(B) = ${pAgivenB} येते.`,
       };
     },
   },
@@ -601,13 +772,13 @@ export function generateProceduralQuestions(
   let attempts = 0;
   let templateIndex = 0;
 
-  while (questions.length < count && attempts < count * 30) {
+  while (questions.length < count && attempts < count * 50) {
     attempts++;
     const template = templatesToUse[templateIndex % templatesToUse.length];
     templateIndex++;
 
-    const raw = template.generate(questions.length + 1, exam);
-    const sig = normalizeQuestionSignature(raw.questionText);
+    const raw = template.generate(questions.length + 1 + attempts, exam);
+    const sig = normalizeQuestionSignature(raw.questionText, raw.questionTextMr);
 
     if (!seenSignatures.has(sig)) {
       seenSignatures.add(sig);
@@ -621,29 +792,63 @@ export function generateProceduralQuestions(
 
 /**
  * Master Question Assembler for Guaranteed Non-Repeating Mock Tests
- * Assembles exact question counts (10, 20, 25, 30, 45, 50, 75, 90, 100, 150, 180) from static pool
- * and dynamic procedural generator with STRICT ZERO DUPLICATES.
+ * Assembles exact question counts from static pool and dynamic procedural generator
+ * with STRICT ZERO DUPLICATES per test session.
  */
 export function buildGuaranteedNonRepeatingMock(
   exam: ExamType,
   subject: SubjectType | "All",
   chapterFilter: string,
   targetCount: number,
-  staticQuestions: Question[]
+  staticQuestions: Question[],
+  existingSeenSignatures?: Set<string>
 ): Question[] {
-  const seen = new Set<string>();
+  const seen = existingSeenSignatures || new Set<string>();
   const result: Question[] = [];
 
+  // Deduplicate static questions first
+  const cleanStatic = deduplicateQuestionsList(staticQuestions);
+
+  // If subject === "All", distribute questions evenly across the exam subjects
+  if (subject === "All") {
+    const subjectsForExam: SubjectType[] =
+      exam === "NEET"
+        ? ["Physics", "Chemistry", "Biology"]
+        : exam === "JEE_MAIN"
+        ? ["Physics", "Chemistry", "Mathematics"]
+        : ["Physics", "Chemistry", "Mathematics", "Biology"];
+
+    const perSubjectCount = Math.floor(targetCount / subjectsForExam.length);
+    const remainder = targetCount % subjectsForExam.length;
+
+    subjectsForExam.forEach((sub, subIdx) => {
+      const countForSub = perSubjectCount + (subIdx < remainder ? 1 : 0);
+      if (countForSub <= 0) return;
+
+      const subQuestions = buildGuaranteedNonRepeatingMock(
+        exam,
+        sub,
+        chapterFilter,
+        countForSub,
+        cleanStatic,
+        seen
+      );
+      result.push(...subQuestions);
+    });
+
+    return shuffleArray(result);
+  }
+
   // 1. Tier 1: Exact Match (Subject + Chapter)
-  const tier1Pool = staticQuestions.filter((q) => {
-    if (subject !== "All" && q.subject !== subject) return false;
+  const tier1Pool = cleanStatic.filter((q) => {
+    if (q.subject !== subject) return false;
     if (chapterFilter !== "All" && q.chapter.toLowerCase() !== chapterFilter.toLowerCase()) return false;
     return true;
   });
 
   for (const q of shuffleArray(tier1Pool)) {
     if (result.length >= targetCount) break;
-    const sig = normalizeQuestionSignature(q.questionText);
+    const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
     if (!seen.has(sig)) {
       seen.add(sig);
       result.push(q);
@@ -652,14 +857,11 @@ export function buildGuaranteedNonRepeatingMock(
 
   // 2. Tier 2: If chapterFilter was specific but pool was exhausted, pull related questions from the SAME subject
   if (result.length < targetCount && chapterFilter !== "All") {
-    const tier2SubjectPool = staticQuestions.filter((q) => {
-      if (subject !== "All" && q.subject !== subject) return false;
-      return true;
-    });
+    const tier2SubjectPool = cleanStatic.filter((q) => q.subject === subject);
 
     for (const q of shuffleArray(tier2SubjectPool)) {
       if (result.length >= targetCount) break;
-      const sig = normalizeQuestionSignature(q.questionText);
+      const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
       if (!seen.has(sig)) {
         seen.add(sig);
         result.push(q);
@@ -679,7 +881,7 @@ export function buildGuaranteedNonRepeatingMock(
     );
     for (const pq of procedural) {
       if (result.length >= targetCount) break;
-      const sig = normalizeQuestionSignature(pq.questionText);
+      const sig = normalizeQuestionSignature(pq.questionText, pq.questionTextMr);
       if (!seen.has(sig)) {
         seen.add(sig);
         result.push(pq);
@@ -692,7 +894,7 @@ export function buildGuaranteedNonRepeatingMock(
   const finalSeen = new Set<string>();
 
   for (const q of result) {
-    const sig = normalizeQuestionSignature(q.questionText);
+    const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
     if (!finalSeen.has(sig)) {
       finalSeen.add(sig);
       finalCleanQuestions.push(q);
