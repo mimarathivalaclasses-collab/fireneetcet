@@ -20,7 +20,9 @@ import {
   Zap,
   Phone,
   MessageSquare,
+  MessageCircle,
   X,
+  RefreshCw,
 } from "lucide-react";
 import { StudentUser, ExamType, DeviceApprovalRequest } from "../types";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
@@ -55,21 +57,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [mobile, setMobile] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [rollNo, setRollNo] = useState<string>("");
   const [examTarget, setExamTarget] = useState<ExamType>("MHT_CET");
 
   // Status for pending approval student
   const [pendingStudent, setPendingStudent] = useState<StudentUser | null>(null);
   const [utrInput, setUtrInput] = useState<string>("");
   const [utrSubmitted, setUtrSubmitted] = useState<boolean>(false);
-
-  // Device Conflict / Approval State
-  const [deviceMismatchError, setDeviceMismatchError] = useState<{
-    student: StudentUser;
-    oldDevice: string;
-    newDeviceId: string;
-  } | null>(null);
-  const [approvalSent, setApprovalSent] = useState<boolean>(false);
+  const [isCheckingStatus, setIsCheckingStatus] = useState<boolean>(false);
 
   if (!isOpen) return null;
 
@@ -105,33 +99,34 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     });
 
     if (existing) {
-      existing.password = password.trim();
-      existing.approvalStatus = "approved";
-      existing.isApproved = true;
-      existing.paymentStatus = "paid";
-      existing.lastLoginAt = Date.now();
-      existing.primaryDeviceId = currentDeviceId;
-      existing.primaryDeviceName = currentDeviceName;
+      if (existing.approvalStatus === "approved" && existing.isApproved) {
+        existing.password = password.trim();
+        existing.lastLoginAt = Date.now();
+        existing.primaryDeviceId = currentDeviceId;
+        existing.primaryDeviceName = currentDeviceName;
 
-      localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
-      localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(existing));
-      saveStudentToCloud(existing);
-      onLoginSuccess(existing);
-      return;
+        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
+        localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(existing));
+        saveStudentToCloud(existing);
+        onLoginSuccess(existing);
+        return;
+      } else {
+        setPendingStudent(existing);
+        return;
+      }
     }
 
-    // Create New Student with instant approval
+    // Create New Student: approvalStatus: "pending", isApproved: false
     const newUser: StudentUser = {
       id: `std-${Date.now()}`,
       name: name.trim(),
       mobile: mobile.trim(),
       password: password.trim(),
-      rollNo: rollNo.trim() || undefined,
       examTarget,
       primaryDeviceId: currentDeviceId,
       primaryDeviceName: currentDeviceName,
-      isApproved: true,
-      approvalStatus: "approved",
+      isApproved: false,
+      approvalStatus: "pending",
       paymentStatus: "paid",
       registeredAt: Date.now(),
       lastLoginAt: Date.now(),
@@ -142,7 +137,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(newUser));
     saveStudentToCloud(newUser);
 
-    onLoginSuccess(newUser);
+    setPendingStudent(newUser);
   };
 
   // Login Handler
@@ -155,17 +150,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     if (!cleanDigits && !cleanMobile) {
       alert("कृपया आपला नोंदणीकृत मोबाईल नंबर टाका.");
       return;
-    }
-
-    // Quick Admin Passcode Trap
-    if (cleanMobile === "admin" || cleanMobile === "9307220454" || cleanMobile === "2026" || cleanMobile === "9970106432") {
-      if (cleanPassword === "2026" || cleanPassword === "admin" || cleanPassword === "9307220454" || cleanPassword === "1234" || cleanPassword === "9970106432") {
-        sessionStorage.setItem("mcq_admin_logged_in", "true");
-        if (onOpenAdminDashboard) {
-          onOpenAdminDashboard();
-        }
-        return;
-      }
     }
 
     const savedStudentsRaw = localStorage.getItem("mcq_app_all_students_v1");
@@ -195,46 +179,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       }
     }
 
-    // Baseline restore or auto-create for 100% frictionless login
     if (!student) {
-      student = {
-        id: `stu_${cleanDigits || Date.now()}`,
-        name: `विद्यार्थी (${cleanMobile})`,
-        mobile: cleanMobile,
-        password: cleanPassword || "123",
-        role: "student",
-        examTarget: examTarget || "MHT_CET",
-        primaryDeviceId: currentDeviceId,
-        primaryDeviceName: currentDeviceName,
-        approvalStatus: "approved",
-        isApproved: true,
-        isFeePaid: true,
-        paymentStatus: "paid",
-        registeredAt: Date.now(),
-        lastLoginAt: Date.now(),
-      };
-      students.push(student);
-      localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
-      saveStudentToCloud(student);
+      alert("हे विद्यार्थी खाते सापडले नाही. कृपया 'नवीन नोंदणी' (Sign Up) करा.");
+      return;
     }
 
     // Password Check
-    if (
-      student.password &&
-      student.password !== cleanPassword &&
-      cleanPassword !== "123" &&
-      cleanPassword !== "1234" &&
-      cleanPassword !== "admin" &&
-      cleanPassword !== "2026"
-    ) {
+    if (student.password && student.password !== cleanPassword) {
       alert("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड प्रविष्ट करा.");
       return;
     }
 
-    // Ensure Approved State
-    student.approvalStatus = "approved";
-    student.isApproved = true;
-    student.paymentStatus = "paid";
+    // STRICT APPROVAL CHECK: Block unapproved student
+    if (student.approvalStatus !== "approved" || !student.isApproved) {
+      setPendingStudent(student);
+      return;
+    }
+
+    // Multi-device access: Update device info
     student.primaryDeviceId = currentDeviceId;
     student.primaryDeviceName = currentDeviceName;
     student.lastLoginAt = Date.now();
@@ -246,66 +208,78 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     onLoginSuccess(student);
   };
 
-  const handleSendApprovalRequest = () => {
-    if (!deviceMismatchError) return;
-
-    const req: DeviceApprovalRequest = {
-      id: `req-${Date.now()}`,
-      studentId: deviceMismatchError.student.id,
-      studentName: deviceMismatchError.student.name,
-      mobile: deviceMismatchError.student.mobile,
-      registeredDeviceId: deviceMismatchError.student.primaryDeviceId,
-      newDeviceId: currentDeviceId,
-      newDeviceName: currentDeviceName,
-      requestTime: Date.now(),
-      status: "pending",
-    };
-
-    onRequestDeviceApproval(req);
-    setApprovalSent(true);
-  };
-
   // Submit UTR from Pending screen
   const handleSubmitUtr = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!utrInput.trim() || utrInput.trim().length < 6) {
+    if (!utrInput.trim() || utrInput.trim().length < 4) {
       alert("कृपया योग्य UTR / Transaction ID टाका.");
       return;
     }
 
     if (pendingStudent) {
-      // 1. Save receipt
       try {
         const existingRaw = localStorage.getItem("mcq_app_payment_receipts_v1");
         const existing = existingRaw ? JSON.parse(existingRaw) : [];
-        existing.push({
+        existing.unshift({
           id: `pay-${Date.now()}`,
           studentId: pendingStudent.id,
           studentName: pendingStudent.name,
           studentPhone: pendingStudent.mobile,
           upiId: UPI_ID,
-          amount: 199,
-          planName: "NEET/JEE/MHT-CET संपूर्ण प्रो प्लॅन",
+          amount: 29,
+          planName: "MHT-CET / NEET संपूर्ण सराव पॅक",
           utr: utrInput.trim(),
           date: new Date().toISOString(),
-          status: "pending",
+          status: "pending_approval",
         });
         localStorage.setItem("mcq_app_payment_receipts_v1", JSON.stringify(existing));
 
-        // 2. Update student record with UTR
+        // Update student record with UTR
         const savedStudentsRaw = localStorage.getItem("mcq_app_all_students_v1");
         const students: StudentUser[] = savedStudentsRaw ? JSON.parse(savedStudentsRaw) : [];
-        const idx = students.findIndex((s) => s.id === pendingStudent.id);
+        const idx = students.findIndex((s) => s.id === pendingStudent.id || s.mobile === pendingStudent.mobile);
         if (idx >= 0) {
           students[idx].paymentUtr = utrInput.trim();
-          students[idx].paymentStatus = "submitted";
+          students[idx].paymentStatus = "paid";
           localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
+          saveStudentToCloud(students[idx]);
         }
       } catch (err) {
         console.error("Failed to store payment receipt", err);
       }
 
       setUtrSubmitted(true);
+    }
+  };
+
+  // Check approval in cloud
+  const handleCheckCloudApproval = async () => {
+    if (!pendingStudent) return;
+    setIsCheckingStatus(true);
+    try {
+      const cloudStudents = await fetchStudentsFromCloud();
+      const match = cloudStudents.find(
+        (s) => s.mobile === pendingStudent.mobile || s.id === pendingStudent.id
+      );
+      if (match && (match.approvalStatus === "approved" || match.isApproved)) {
+        match.approvalStatus = "approved";
+        match.isApproved = true;
+        match.paymentStatus = "paid";
+        match.primaryDeviceId = currentDeviceId;
+        match.primaryDeviceName = currentDeviceName;
+        match.lastLoginAt = Date.now();
+
+        localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(match));
+        saveStudentToCloud(match);
+        alert("🎉 अभिनंदन! आपले खाते मंजूर झाले आहे!");
+        onLoginSuccess(match);
+      } else {
+        alert("अद्याप ॲडमिन मंजुरी प्रलंबित आहे. कृपया ॲडमिनशी संपर्क साधा.");
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsCheckingStatus(false);
     }
   };
 
@@ -337,7 +311,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </p>
 
           {/* Mode Switch Tabs */}
-          {!pendingStudent && !deviceMismatchError && (
+          {!pendingStudent && (
             <div className="mt-4 inline-flex p-1 rounded-2xl bg-white/10 border border-white/10 text-xs font-bold">
               <button
                 type="button"
@@ -383,15 +357,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     नमस्कार {pendingStudent.name}, तुमची नोंदणी ॲडमिनकडे पाठवण्यात आली आहे!
                   </h3>
                   <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                    तुमचा मोबाईल नंबर: <strong>{pendingStudent.mobile}</strong>. ॲडमिनने मंजुरी (Approve) दिल्यानंतर तुमचे खाते तात्काळ अनलॉक होईल.
+                    मोबाईल: <strong>{pendingStudent.mobile}</strong>. ॲडमिनने मंजुरी दिल्यावर तुमचे खाते तात्काळ अनलॉक होईल.
                   </p>
                 </div>
 
                 {/* UTR Submission Box */}
                 {!utrSubmitted ? (
-                  <form onSubmit={handleSubmitUtr} className="pt-2 border-t border-amber-200/60 space-y-2">
+                  <form onSubmit={handleSubmitUtr} className="pt-2 border-t border-amber-200 space-y-2">
                     <div className="text-[11px] font-black text-slate-800">
-                      💳 पेमेंट केले असल्यास UTR प्रविष्ट करा (तात्काळ मंजुरीसाठी):
+                      💳 पेमेंट केले असल्यास UTR प्रविष्ट करा:
                     </div>
                     <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-amber-300">
                       <input
@@ -410,17 +384,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     </div>
                   </form>
                 ) : (
-                  <div className="p-3 bg-emerald-100/90 rounded-2xl border border-emerald-300 text-xs text-emerald-950 font-bold flex items-center justify-center gap-1.5">
+                  <div className="p-3 bg-emerald-100 rounded-2xl border border-emerald-300 text-xs text-emerald-950 font-bold flex items-center justify-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
-                    <span>UTR ({utrInput}) प्राप्त झाले! ॲडमिन पडताळणी करत आहेत.</span>
+                    <span>UTR प्राप्त झाले! ॲडमिन पडताळणी करत आहेत.</span>
                   </div>
                 )}
 
-                {/* Direct Pay QR Code Pill */}
-                <div className="p-3 rounded-2xl bg-white border border-amber-200 text-xs text-slate-700 space-y-1.5">
-                  <div className="font-bold flex items-center justify-center gap-1.5 text-emerald-800">
+                {/* UPI ID Pill */}
+                <div className="p-3 rounded-2xl bg-white border border-amber-200 text-xs text-slate-700 space-y-1">
+                  <div className="font-bold flex items-center justify-center gap-1 text-emerald-800">
                     <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
-                    <span>अधिकृत UPI ID वर ₹199 पाठवा:</span>
+                    <span>अधिकृत UPI ID वर ₹२९ पाठवा:</span>
                   </div>
                   <div className="font-mono font-black text-sm text-slate-900 bg-slate-100 py-1 px-3 rounded-lg select-all">
                     {UPI_ID}
@@ -431,15 +405,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div className="pt-1 flex flex-col gap-2">
                   <a
                     href={`https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(
-                      `नमस्कार ॲडमिन, मी ${pendingStudent.name} (${pendingStudent.mobile}) MHT-CET/NEET ॲपमध्ये नोंदणी केली आहे. कृपया माझे खाते मंजूर (Approve) करा.`
+                      `नमस्कार ॲडमिन सर, मी ${pendingStudent.name} (${pendingStudent.mobile}) MHT-CET/NEET ॲपमध्ये नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.`
                     )}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center justify-center gap-2"
                   >
-                    <MessageSquare className="w-4 h-4" />
-                    <span>ॲडमिनशी WhatsApp वर संपर्क करा (९३०७२२०४५४)</span>
+                    <MessageCircle className="w-4 h-4" />
+                    <span>ॲडमिनशी WhatsApp वर संपर्क करा ({ADMIN_PHONE})</span>
                   </a>
+
+                  <button
+                    type="button"
+                    onClick={handleCheckCloudApproval}
+                    disabled={isCheckingStatus}
+                    className="w-full py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 text-amber-400 ${isCheckingStatus ? "animate-spin" : ""}`} />
+                    <span>{isCheckingStatus ? "तपासत आहे..." : "मंजुरी स्थिती तपासा (Check Approval)"}</span>
+                  </button>
 
                   <button
                     type="button"
@@ -447,90 +431,51 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       setPendingStudent(null);
                       setMode("login");
                     }}
-                    className="text-xs text-slate-500 hover:text-slate-800 font-bold underline"
+                    className="text-xs text-slate-500 hover:text-slate-800 font-bold underline cursor-pointer"
                   >
-                    दुसऱ्या नंबरने लॉगिन करा
+                    लॉगिन स्क्रीनवर परत जा
                   </button>
                 </div>
               </div>
             </div>
-          ) : deviceMismatchError ? (
-            /* SCREEN 2: DEVICE CONFLICT ERROR */
-            <div className="space-y-4">
-              <div className="p-4 rounded-2xl bg-rose-50 border-2 border-rose-200 space-y-2 text-center">
-                <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
-                  <Smartphone className="w-6 h-6" />
-                </div>
-                <h3 className="text-sm font-black text-rose-950">
-                  डिव्हाइस सुरक्षा चेतावणी (Device Binding Mismatch)
-                </h3>
-                <p className="text-xs text-rose-800 leading-relaxed font-medium">
-                  विद्यार्थी <strong>{deviceMismatchError.student.name}</strong> चे खाते आधीच{" "}
-                  <span className="font-bold underline">{deviceMismatchError.oldDevice}</span> वर नोंदणीकृत आहे.
-                </p>
-              </div>
-
-              {!approvalSent ? (
-                <button
-                  type="button"
-                  onClick={handleSendApprovalRequest}
-                  className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>शिक्षकांना डिव्हाइस बदल विनंती पाठवा</span>
-                </button>
-              ) : (
-                <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900 font-bold text-center">
-                  ✅ शिक्षकांकडे विनंती पाठवली आहे. कृपया शिक्षकांशी संपर्क साधा.
-                </div>
-              )}
-
-              <button
-                type="button"
-                onClick={() => setDeviceMismatchError(null)}
-                className="w-full text-center text-xs text-slate-500 hover:underline font-bold"
-              >
-                मागे जा
-              </button>
-            </div>
           ) : mode === "login" ? (
-            /* SCREEN 3: STUDENT LOGIN FORM */
+            /* LOGIN FORM */
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="text-xs font-black text-slate-700 block mb-1.5">
-                  नोंदणीकृत मोबाईल नंबर (Mobile Number):
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  नोंदणीकृत मोबाईल नंबर:
                 </label>
                 <div className="relative">
-                  <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                  <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="tel"
                     required
-                    placeholder="१० अंकी मोबाईल नंबर टाका"
+                    placeholder="उदा. 9881063427"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 font-mono font-bold text-sm text-slate-900 outline-none transition-all"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-300 text-slate-900 text-sm font-bold focus:border-indigo-600 outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-black text-slate-700 block mb-1.5">
-                  पासवर्ड (Password):
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  पासवर्ड:
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type={showPassword ? "text" : "password"}
                     required
-                    placeholder="आपला पासवर्ड टाका"
+                    placeholder="आपला पासवर्ड प्रविष्ट करा"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 font-mono font-bold text-sm text-slate-900 outline-none transition-all"
+                    className="w-full pl-10 pr-11 py-3 rounded-2xl border border-slate-300 text-slate-900 text-sm font-bold focus:border-indigo-600 outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -539,171 +484,88 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-700 via-purple-700 to-indigo-800 hover:from-indigo-800 hover:to-purple-900 text-white font-black text-xs uppercase tracking-wider shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2 hover:scale-[1.01]"
+                className="w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
               >
                 <LogIn className="w-4 h-4" />
-                <span>लॉगिन करा व अभ्यास सुरू करा</span>
+                <span>लॉगिन करा (Sign In)</span>
               </button>
-
-              <div className="text-center pt-2">
-                <span className="text-xs text-slate-500 font-medium">खाते नाही? </span>
-                <button
-                  type="button"
-                  onClick={() => setMode("register")}
-                  className="text-xs font-black text-indigo-700 hover:underline cursor-pointer"
-                >
-                  नवीन नोंदणी (Sign Up)
-                </button>
-              </div>
-
-              {/* Direct UPI Payment Banner */}
-              {onOpenPaymentModal && (
-                <div className="pt-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onClose) onClose();
-                      onOpenPaymentModal();
-                    }}
-                    className="w-full p-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 hover:border-emerald-400 transition-all flex items-center justify-between text-left cursor-pointer"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
-                        <Zap className="w-4 h-4 text-amber-300 fill-amber-300" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-black text-emerald-950">
-                          थेट UPI द्वारे ॲक्सेस मिळवा
-                        </div>
-                        <div className="text-[10px] font-mono text-emerald-700">
-                          ID: 9307220454@yz (₹२९)
-                        </div>
-                      </div>
-                    </div>
-                    <span className="text-xs font-bold text-emerald-700 underline">
-                      QR कोड
-                    </span>
-                  </button>
-                </div>
-              )}
-
-              {/* Master Admin Panel Trigger */}
-              {onOpenAdminDashboard && (
-                <div className="text-center pt-1 border-t border-slate-100">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onClose) onClose();
-                      onOpenAdminDashboard();
-                    }}
-                    className="text-[11px] font-bold text-slate-500 hover:text-indigo-700 flex items-center justify-center gap-1 mx-auto"
-                  >
-                    <KeyRound className="w-3.5 h-3.5" />
-                    <span>शिक्षक / ॲडमिन डॅशबोर्ड लॉगिन</span>
-                  </button>
-                </div>
-              )}
             </form>
           ) : (
-            /* SCREEN 4: STUDENT REGISTRATION FORM */
+            /* REGISTER FORM */
             <form onSubmit={handleRegister} className="space-y-3.5">
               <div>
-                <label className="text-xs font-black text-slate-700 block mb-1">
-                  विद्यार्थ्याचे पूर्ण नाव (Username / Full Name):
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  विद्यार्थ्याचे पूर्ण नाव:
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="उदा. अमित संजय देशमुख"
+                  placeholder="उदा. राहुल सचिन पाटील"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-bold text-xs text-slate-900 outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <div>
-                  <label className="text-xs font-black text-slate-700 block mb-1">
-                    मोबाईल नंबर (Mobile):
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="१० अंकी मोबाईल नंबर"
-                    value={mobile}
-                    onChange={(e) => setMobile(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-mono font-bold text-xs text-slate-900 outline-none"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  मोबाईल नंबर (WhatsApp):
+                </label>
+                <input
+                  type="tel"
+                  required
+                  placeholder="उदा. 9881063427"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
+                />
+              </div>
 
-                <div>
-                  <label className="text-xs font-black text-slate-700 block mb-1">
-                    पासवर्ड तयार करा (Password):
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      required
-                      placeholder="किमान ४ अक्षरे"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-3.5 pr-8 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-mono font-bold text-xs text-slate-900 outline-none"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600"
-                    >
-                      {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                    </button>
-                  </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  पासवर्ड तयार करा:
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    placeholder="किमान ३ अक्षरी पासवर्ड"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 pr-11 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-black text-slate-700 block mb-1">
-                  लक्ष्य परीक्षा (Target Exam):
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  टारगेट परीक्षा:
                 </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["MHT_CET", "NEET", "JEE_MAIN"] as ExamType[]).map((ex) => (
-                    <button
-                      key={ex}
-                      type="button"
-                      onClick={() => setExamTarget(ex)}
-                      className={`py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
-                        examTarget === ex
-                          ? "bg-indigo-700 text-white shadow-xs"
-                          : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                      }`}
-                    >
-                      {ex === "MHT_CET" ? "MHT-CET" : ex === "NEET" ? "NEET" : "JEE Main"}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 font-medium">
-                ℹ️ <strong>महत्त्वाची सूचना:</strong> नोंदणी केल्यानंतर विनंती ॲडमिनकडे जाईल. ॲडमिनने मंजूर केल्यावर किंवा पेमेंट पडताळणी झाल्यावर ॲप पूर्णपणे सुरू होईल.
+                <select
+                  value={examTarget}
+                  onChange={(e) => setExamTarget(e.target.value as ExamType)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold bg-white focus:border-indigo-600 outline-none"
+                >
+                  <option value="MHT_CET">MHT-CET (PCM/PCB Engineering & Pharmacy)</option>
+                  <option value="NEET">NEET-UG (Medical MBBS/BDS/BAMS)</option>
+                  <option value="JEE_MAIN">JEE Main (IIT/NIT Engineering)</option>
+                </select>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs uppercase tracking-wider shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2 hover:scale-[1.01]"
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
               >
                 <UserPlus className="w-4 h-4" />
-                <span>नोंदणी करा व मंजुरीसाठी पाठवा (Submit)</span>
+                <span>नोंदणी पूर्ण करा (Sign Up) →</span>
               </button>
-
-              <div className="text-center pt-1">
-                <span className="text-xs text-slate-500 font-medium">आधीच नोंदणी आहे? </span>
-                <button
-                  type="button"
-                  onClick={() => setMode("login")}
-                  className="text-xs font-black text-indigo-700 hover:underline cursor-pointer"
-                >
-                  लॉगिन करा (Login)
-                </button>
-              </div>
             </form>
           )}
         </div>
