@@ -407,6 +407,23 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
             </span>
           </button>
 
+          {/* Feedback & Problem Report */}
+          <button
+            onClick={() => handleItemClick("feedback")}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors text-xs font-bold ${
+              activeTab === "feedback"
+                ? "bg-rose-600 text-white"
+                : isDarkMode
+                ? "text-slate-200 hover:bg-slate-800"
+                : "text-slate-800 hover:bg-slate-100"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <MessageSquare className="w-4 h-4 text-rose-500" />
+              <span>💬 त्रुटी तक्रार / अभिप्राय (Feedback)</span>
+            </div>
+          </button>
+
           {/* Share App */}
           <button
             onClick={handleShareApp}

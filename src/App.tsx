@@ -34,6 +34,7 @@ import { PdfBankGeneratorView } from "./components/PdfBankGeneratorView";
 import { FlashcardsView } from "./components/FlashcardsView";
 import { AgentPortalView } from "./components/AgentPortalView";
 import { StudentReferEarnView } from "./components/StudentReferEarnView";
+import { FeedbackReportView } from "./components/FeedbackReportView";
 import { ClassesInfoRegistrationView } from "./components/ClassesInfoRegistrationView";
 import { UnifiedAuthView } from "./components/UnifiedAuthView";
 import { RoleBasedAccessWrapper } from "./components/RoleBasedAccessWrapper";
@@ -1107,6 +1108,15 @@ export default function App() {
                 {activeTab === "refer_earn" && (
                   <StudentReferEarnView
                     currentUser={currentUser}
+                    onBack={handleBackNavigation}
+                  />
+                )}
+
+                {/* 14. Feedback & Error Report View */}
+                {activeTab === "feedback" && (
+                  <FeedbackReportView
+                    currentUser={currentUser}
+                    currentExam={currentExam}
                     onBack={handleBackNavigation}
                   />
                 )}

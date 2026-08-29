@@ -49,7 +49,7 @@ export const FeedbackReportView: React.FC<FeedbackReportViewProps> = ({
   // Load existing reports
   const loadReports = async () => {
     try {
-      const raw = localStorage.getItem("mcq_app_user_feedback_reports_v1");
+      const raw = localStorage.getItem("mcq_app_user_feedbacks_v1");
       let localList: UserFeedbackReport[] = raw ? JSON.parse(raw) : [];
       
       const cloudReports = await fetchFeedbackReportsFromCloud();
@@ -58,7 +58,7 @@ export const FeedbackReportView: React.FC<FeedbackReportViewProps> = ({
         localList.forEach((r) => map.set(r.id, r));
         cloudReports.forEach((cr) => map.set(cr.id, cr));
         localList = Array.from(map.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-        localStorage.setItem("mcq_app_user_feedback_reports_v1", JSON.stringify(localList));
+        localStorage.setItem("mcq_app_user_feedbacks_v1", JSON.stringify(localList));
       }
       setSubmittedReports(localList);
     } catch (e) {
@@ -100,6 +100,8 @@ export const FeedbackReportView: React.FC<FeedbackReportViewProps> = ({
       id: `rep_${Date.now()}`,
       userName: userName.trim(),
       userMobile: userMobile.trim(),
+      studentName: userName.trim(),
+      studentMobile: userMobile.trim(),
       userRole: currentUser?.role || "student",
       category,
       categoryMr: categoryNames[category],
@@ -112,10 +114,10 @@ export const FeedbackReportView: React.FC<FeedbackReportViewProps> = ({
     };
 
     try {
-      const raw = localStorage.getItem("mcq_app_user_feedback_reports_v1");
+      const raw = localStorage.getItem("mcq_app_user_feedbacks_v1");
       const list: UserFeedbackReport[] = raw ? JSON.parse(raw) : [];
       list.unshift(newReport);
-      localStorage.setItem("mcq_app_user_feedback_reports_v1", JSON.stringify(list));
+      localStorage.setItem("mcq_app_user_feedbacks_v1", JSON.stringify(list));
       setSubmittedReports(list);
 
       // Save to Firestore Cloud
