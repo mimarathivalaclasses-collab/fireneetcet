@@ -14,7 +14,7 @@ import {
   onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
-import { StudentUser, UserFeedbackReport, TestResultData } from "../types";
+import { StudentUser, UserFeedbackReport, TestResultData, StudentTestSubmission } from "../types";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDsjW4JPyQLljXq8wotHBV1G25aiFYzXlo",
@@ -35,6 +35,7 @@ export const COLLECTIONS = {
   STUDENTS: "students",
   FEEDBACK_REPORTS: "feedback_reports",
   TEST_RESULTS: "test_results",
+  TEST_SUBMISSIONS: "student_test_submissions",
   INSTITUTES: "institutes",
   SYSTEM_CONFIG: "system_config",
 };
@@ -174,7 +175,7 @@ export async function deleteFeedbackReportFromCloud(reportId: string): Promise<b
 }
 
 // ==========================================
-// 3. TEST RESULT CLOUD BACKUP
+// 3. TEST RESULT & SUBMISSION CLOUD BACKUP
 // ==========================================
 
 export async function saveTestResultToCloud(result: TestResultData, userMobile?: string): Promise<boolean> {
@@ -190,5 +191,35 @@ export async function saveTestResultToCloud(result: TestResultData, userMobile?:
   } catch (error) {
     console.warn("Firestore saveTestResultToCloud error:", error);
     return false;
+  }
+}
+
+export async function saveStudentTestSubmissionToCloud(submission: StudentTestSubmission): Promise<boolean> {
+  try {
+    const docId = submission.id || `sub_${submission.studentMobile}_${Date.now()}`;
+    const docRef = doc(db, COLLECTIONS.TEST_SUBMISSIONS, docId);
+    await setDoc(docRef, {
+      ...submission,
+      savedAt: Date.now(),
+    });
+    return true;
+  } catch (error) {
+    console.warn("Firestore saveStudentTestSubmissionToCloud error:", error);
+    return false;
+  }
+}
+
+export async function fetchStudentTestSubmissionsFromCloud(): Promise<StudentTestSubmission[]> {
+  try {
+    const colRef = collection(db, COLLECTIONS.TEST_SUBMISSIONS);
+    const snap = await getDocs(colRef);
+    const submissions: StudentTestSubmission[] = [];
+    snap.forEach((docSnap) => {
+      submissions.push(docSnap.data() as StudentTestSubmission);
+    });
+    return submissions.sort((a, b) => (b.submittedAt || 0) - (a.submittedAt || 0));
+  } catch (error) {
+    console.warn("Firestore fetchStudentTestSubmissionsFromCloud error:", error);
+    return [];
   }
 }

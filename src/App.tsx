@@ -8,6 +8,7 @@ import {
   MistakeItem,
   StudentUser,
   DeviceApprovalRequest,
+  StudentTestSubmission,
 } from "./types";
 import { INITIAL_QUESTIONS } from "./data/initialQuestions";
 import { Header } from "./components/Header";
@@ -48,6 +49,7 @@ import { SecurityWatermark } from "./components/SecurityWatermark";
 import { getOrCreateDeviceId, getDeviceName } from "./utils/deviceSecurity";
 import { findInstituteByCode } from "./data/coachingInstitutesData";
 import { deduplicateQuestionsList } from "./utils/proceduralQuestionEngine";
+import { saveStudentTestSubmissionToCloud, saveStudentToCloud } from "./services/firebase";
 
 const STORAGE_KEYS = {
   QUESTIONS: "mcq_app_questions_v1",
@@ -539,6 +541,84 @@ export default function App() {
         subjectWise: updatedSubjectWise,
       };
     });
+
+    // Record detailed Student Test Submission for Admin Visibility & Student History
+    try {
+      const submissionId = `sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      const studentSubmission: StudentTestSubmission = {
+        id: submissionId,
+        studentId: currentUser?.id || "guest",
+        studentName: currentUser?.name || "विद्यार्थी (Guest)",
+        studentMobile: currentUser?.mobile || "9999999999",
+        exam: result.exam,
+        testTitle: result.title || `Mock Test (${result.exam})`,
+        testId: result.testId,
+        score: result.score,
+        totalMarks: result.maxMarks || (result.totalQuestions * (result.exam === "NEET" ? 4 : 1)),
+        percentage: result.percentage,
+        totalQuestions: result.totalQuestions,
+        correct: result.correct,
+        wrong: result.wrong,
+        unattempted: result.unattempted,
+        accuracy: result.accuracy,
+        timeSpentSeconds: result.timeTakenSeconds,
+        submittedAt: Date.now(),
+        subjectBreakdown: result.subjectBreakdown?.map((sb) => ({
+          subject: sb.subject,
+          total: sb.totalQuestions,
+          attempted: sb.attempted,
+          correct: sb.correct,
+          wrong: sb.wrong,
+          score: sb.score,
+        })),
+      };
+
+      // 1. Save to local submissions collection
+      const savedSubsRaw = localStorage.getItem("mcq_app_all_student_submissions_v1");
+      const subsList: StudentTestSubmission[] = savedSubsRaw ? JSON.parse(savedSubsRaw) : [];
+      subsList.unshift(studentSubmission);
+      localStorage.setItem("mcq_app_all_student_submissions_v1", JSON.stringify(subsList.slice(0, 500)));
+
+      // 2. Backup to Firestore Cloud
+      saveStudentTestSubmissionToCloud(studentSubmission);
+
+      // 3. Update student user record in all_students list
+      if (currentUser?.mobile) {
+        const allStudentsRaw = localStorage.getItem("mcq_app_all_students_v1");
+        if (allStudentsRaw) {
+          const allStudents: StudentUser[] = JSON.parse(allStudentsRaw);
+          const idx = allStudents.findIndex((s) => s.mobile === currentUser.mobile || s.id === currentUser.id);
+          if (idx !== -1) {
+            const st = allStudents[idx];
+            const testsCount = (st.totalTestsTaken || 0) + 1;
+            const qSolved = (st.totalQuestionsSolved || 0) + result.attempted;
+            const qCorrect = (st.totalCorrect || 0) + result.correct;
+            const qWrong = (st.totalWrong || 0) + result.wrong;
+            const acc = qSolved > 0 ? Math.round((qCorrect / qSolved) * 100) : 0;
+            const best = Math.max(st.highestScore || 0, result.score);
+            const recent = [studentSubmission, ...(st.recentTestResults || [])].slice(0, 15);
+
+            const updatedStudent: StudentUser = {
+              ...st,
+              totalTestsTaken: testsCount,
+              totalQuestionsSolved: qSolved,
+              totalCorrect: qCorrect,
+              totalWrong: qWrong,
+              overallAccuracy: acc,
+              highestScore: best,
+              lastActiveTime: Date.now(),
+              recentTestResults: recent,
+            };
+            allStudents[idx] = updatedStudent;
+            localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(allStudents));
+            setCurrentUser(updatedStudent);
+            saveStudentToCloud(updatedStudent);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to sync student test submission stats", err);
+    }
   };
 
   const handleClearHistory = () => {

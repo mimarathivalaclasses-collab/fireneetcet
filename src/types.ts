@@ -285,6 +285,34 @@ export interface GrandMockTestItem {
 
 export type UserRole = "admin" | "student" | "class_admin" | "agent";
 
+export interface StudentTestSubmission {
+  id: string;
+  studentId: string;
+  studentName: string;
+  studentMobile: string;
+  exam: ExamType;
+  testTitle: string;
+  testId?: string;
+  score: number;
+  totalMarks: number;
+  percentage: number;
+  totalQuestions: number;
+  correct: number;
+  wrong: number;
+  unattempted: number;
+  accuracy: number;
+  timeSpentSeconds?: number;
+  submittedAt: number;
+  subjectBreakdown?: {
+    subject: SubjectType;
+    total: number;
+    attempted: number;
+    correct: number;
+    wrong: number;
+    score: number;
+  }[];
+}
+
 export interface StudentUser {
   id: string;
   name: string;
@@ -314,6 +342,16 @@ export interface StudentUser {
   referralEarnings?: number; // Total ₹ earned from referrals
   totalReferredCount?: number; // Count of friends referred
   refundClaimed?: boolean; // If 10 referrals reached and full refund given
+
+  // Activity & Performance Metrics (कोणी किती सोडवले)
+  totalTestsTaken?: number;
+  totalQuestionsSolved?: number;
+  totalCorrect?: number;
+  totalWrong?: number;
+  overallAccuracy?: number;
+  highestScore?: number;
+  lastActiveTime?: number;
+  recentTestResults?: StudentTestSubmission[];
 }
 
 export interface LeaderboardTopper {

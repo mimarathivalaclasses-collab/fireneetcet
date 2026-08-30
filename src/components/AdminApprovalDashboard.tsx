@@ -36,9 +36,13 @@ import {
   Layers,
   ArrowRight,
   Check,
+  BarChart3,
+  TrendingUp,
+  Activity,
 } from "lucide-react";
 import {
   StudentUser,
+  StudentTestSubmission,
   ExamType,
   PaymentReceiptRecord,
   DeviceApprovalRequest,
@@ -55,7 +59,9 @@ import {
   fetchFeedbackReportsFromCloud,
   updateFeedbackReportStatusInCloud,
   deleteFeedbackReportFromCloud,
+  fetchStudentTestSubmissionsFromCloud,
 } from "../services/firebase";
+import { AdminStudentProgressView } from "./AdminStudentProgressView";
 
 interface AdminApprovalDashboardProps {
   isOpen: boolean;
@@ -74,7 +80,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 }) => {
   // Navigation Tabs in Admin Console (Classes tab permanently removed)
   const [activeTab, setActiveTab] = useState<
-    "pending_approvals" | "all_students" | "payments" | "feedback_inbox" | "agents"
+    "pending_approvals" | "all_students" | "student_progress" | "payments" | "feedback_inbox" | "agents"
   >("pending_approvals");
 
   // Admin Authentication State
@@ -89,6 +95,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 
   // Core Data Lists
   const [students, setStudents] = useState<StudentUser[]>([]);
+  const [testSubmissions, setTestSubmissions] = useState<StudentTestSubmission[]>([]);
   const [feedbackReports, setFeedbackReports] = useState<UserFeedbackReport[]>([]);
   const [payments, setPayments] = useState<PaymentReceiptRecord[]>([]);
   const [agents, setAgents] = useState<AgentUser[]>([]);
@@ -163,6 +170,19 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 
       const paymentsRaw = localStorage.getItem("mcq_app_payment_receipts_v1");
       setPayments(paymentsRaw ? JSON.parse(paymentsRaw) : []);
+
+      // Load Test Submissions & Activity
+      const subRaw = localStorage.getItem("mcq_app_all_student_submissions_v1");
+      let localSubs: StudentTestSubmission[] = subRaw ? JSON.parse(subRaw) : [];
+      const cloudSubs = await fetchStudentTestSubmissionsFromCloud();
+      if (cloudSubs && cloudSubs.length > 0) {
+        const subMap = new Map<string, StudentTestSubmission>();
+        localSubs.forEach((s) => subMap.set(s.id, s));
+        cloudSubs.forEach((cs) => subMap.set(cs.id, cs));
+        localSubs = Array.from(subMap.values()).sort((a, b) => (b.submittedAt || 0) - (a.submittedAt || 0));
+        localStorage.setItem("mcq_app_all_student_submissions_v1", JSON.stringify(localSubs.slice(0, 500)));
+      }
+      setTestSubmissions(localSubs);
 
       const agentsRaw = localStorage.getItem("mcq_app_all_agents_v1");
       setAgents(agentsRaw ? JSON.parse(agentsRaw) : []);
@@ -618,6 +638,23 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               </button>
 
               <button
+                onClick={() => setActiveTab("student_progress")}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === "student_progress"
+                    ? "bg-blue-600 text-white font-black shadow-sm"
+                    : "text-slate-300 hover:bg-slate-800"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4 text-blue-400" />
+                  <span>विद्यार्थी सराव व निकाल</span>
+                </div>
+                <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-blue-500/30 text-blue-300">
+                  {testSubmissions.length}
+                </span>
+              </button>
+
+              <button
                 onClick={() => setActiveTab("payments")}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === "payments"
@@ -703,6 +740,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 <span className="text-sm font-black text-slate-900">
                   {activeTab === "pending_approvals" && "विद्यार्थी मंजुरी विनंत्या (Pending Approvals)"}
                   {activeTab === "all_students" && "विद्यार्थी व्यवस्थापन (संपादन व हटवणे)"}
+                  {activeTab === "student_progress" && "विद्यार्थी सराव व निकाल ट्रॅकर (Student Performance & Activity)"}
                   {activeTab === "payments" && "पेमेंट पावत्या व UTR पडताळणी"}
                   {activeTab === "feedback_inbox" && "विद्यार्थी तक्रार व त्रुटी निवारण इनबॉक्स"}
                   {activeTab === "agents" && "एजंट नेटवर्क व कमिशन व्यवस्थापन"}
@@ -747,6 +785,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 विद्यार्थी ({students.length})
               </button>
               <button
+                onClick={() => setActiveTab("student_progress")}
+                className={`px-3 py-1 rounded-lg shrink-0 ${
+                  activeTab === "student_progress" ? "bg-blue-600 text-white font-black" : "text-slate-300"
+                }`}
+              >
+                सराव ट्रॅकर
+              </button>
+              <button
                 onClick={() => setActiveTab("payments")}
                 className={`px-3 py-1 rounded-lg shrink-0 ${
                   activeTab === "payments" ? "bg-emerald-600 text-white font-black" : "text-slate-300"
@@ -768,7 +814,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   activeTab === "agents" ? "bg-teal-600 text-white font-black" : "text-slate-300"
                 }`}
               >
-                एजंट्स ({agents.length})
+                एजंट ({agents.length})
               </button>
             </div>
 
@@ -939,6 +985,17 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                             <div>🎯 <strong>{std.examTarget}</strong></div>
                             <div>🔑 <strong>{std.password || "123456"}</strong></div>
                           </div>
+
+                          {/* Performance Mini Status */}
+                          <div className="bg-indigo-50/70 p-2 rounded-xl text-[11px] flex items-center justify-between text-indigo-900 border border-indigo-100">
+                            <span className="font-bold flex items-center gap-1">
+                              <Activity className="w-3.5 h-3.5 text-indigo-600" />
+                              <span>{std.totalTestsTaken || 0} टेस्ट्स • {std.totalQuestionsSolved || 0} Qs</span>
+                            </span>
+                            <span className="font-mono font-black text-emerald-700 bg-white px-1.5 py-0.5 rounded-md border border-indigo-100 text-[10px]">
+                              {std.overallAccuracy || 0}% अचूक
+                            </span>
+                          </div>
                         </div>
 
                         {/* Actions */}
@@ -991,7 +1048,16 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 </div>
               )}
 
-              {/* TAB 3: PAYMENTS */}
+              {/* TAB 3: STUDENT PROGRESS & TEST ACTIVITY TRACKER */}
+              {activeTab === "student_progress" && (
+                <AdminStudentProgressView
+                  students={students}
+                  testSubmissions={testSubmissions}
+                  onRefresh={loadAllData}
+                />
+              )}
+
+              {/* TAB 4: PAYMENTS */}
               {activeTab === "payments" && (
                 <div className="space-y-3">
                   <div className="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
