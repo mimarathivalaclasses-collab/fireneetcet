@@ -1,15 +1,15 @@
 {
-  "name": "MHT-CET · NEET · JEE MCQ Master",
-  "short_name": "MCQ Master",
-  "description": "Maharashtra MHT-CET (PCM/PCB), NEET & JEE Main 10,000+ Question Bank, Instant Solutions & Timed Mock Tests.",
-  "id": "com.abhyasmitra.mhtcetmcq",
+  "name": "सराव मित्र - MHT-CET NEET JEE Study Portal",
+  "short_name": "सराव मित्र",
+  "description": "महाराष्ट्र अधिकृत MHT-CET, NEET व JEE Main १० ग्रँड मॉक टेस्ट्स, डिजिटल OMR, मराठी-इंग्रजी नोट्स आणि AI सराव पोर्टल.",
+  "id": "com.saravmitra.mhtcet.neet.jee",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "window-controls-overlay"],
   "orientation": "portrait-primary",
-  "background_color": "#070714",
-  "theme_color": "#0d9488",
+  "background_color": "#0f172a",
+  "theme_color": "#4f46e5",
   "categories": ["education", "books", "productivity"],
   "lang": "mr",
   "dir": "ltr",
@@ -42,17 +42,24 @@
   ],
   "shortcuts": [
     {
-      "name": "३ मोफत डेमो टेस्ट्स",
-      "short_name": "डेमो टेस्ट्स",
-      "description": "MHT-CET व NEET मोफत ३ डेमो मॉक टेस्ट्स",
-      "url": "/?mode=demo",
+      "name": "१० ग्रँड मॉक टेस्ट्स",
+      "short_name": "ग्रँड टेस्ट्स",
+      "description": "MHT-CET, NEET व JEE १० ग्रँड मॉक टेस्ट्स",
+      "url": "/?tab=grand_tests",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "MHT-CET Physics सराव",
-      "short_name": "Physics सराव",
-      "description": "Target Publication Physics MCQ प्रश्नसंच",
-      "url": "/?subject=Physics",
+      "name": "रिव्हिजन नोट्स & शॉर्ट ट्रिक्स",
+      "short_name": "अभ्यास नोट्स",
+      "description": "मराठी व इंग्रजी हाय-यिल्ड चॅप्टर नोट्स",
+      "url": "/?tab=notes",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "मागील वर्षांचे पेपर्स (PYQ)",
+      "short_name": "PYQ पेपर्स",
+      "description": "मागील १० वर्षांचे स्पष्टीकरणासह पेपर्स",
+      "url": "/?tab=pyq",
       "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]

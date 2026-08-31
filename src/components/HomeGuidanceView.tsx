@@ -140,64 +140,82 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 space-y-5 pb-24">
-      {/* १. स्वच्छ व सोपे हेडर */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <h1 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-            <span>नमस्ते, {currentUser?.name || "विद्यार्थी मित्र"}!</span>
-            {currentUser && !isDemoUser ? (
-              <span className="px-2 py-0.5 text-xs bg-emerald-100 text-emerald-800 rounded-full font-bold">
-                सक्रिय ✅
-              </span>
-            ) : null}
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            तुमचा आजचा अभ्यास सुरू करण्यासाठी खालीलपैकी एक पर्याय निवडा:
-          </p>
-        </div>
+      {/* १. Study Center Hero Banner with Welcome & Quick Target Selector */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white rounded-3xl p-5 sm:p-7 shadow-lg border border-indigo-800/40">
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-1/3 -mb-10 w-48 h-48 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
-        {/* परीक्षा स्विच बटन्स */}
-        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-          {(["MHT_CET", "NEET", "JEE"] as ExamType[]).map((ex) => (
-            <button
-              key={ex}
-              type="button"
-              onClick={() => onSelectExam(ex)}
-              className={`px-3 py-1.5 text-xs font-black rounded-lg transition-all cursor-pointer ${
-                currentExam === ex
-                  ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs font-black"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
-              }`}
-            >
-              {ex === "MHT_CET" ? "MHT-CET" : ex}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* २. विद्यार्थी सराव प्रगती बॅनर (Student Performance Snapshot) */}
-      {currentUser && hasTestActivity && (
-        <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              <span className="text-xs font-bold text-indigo-200">तुमची सराव प्रगती:</span>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="space-y-2 max-w-xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-amber-300 text-xs font-black border border-white/15">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>महाराष्ट्र अधिकृत स्टडी सेंटर & टेस्ट पोर्टल</span>
             </div>
-            <div className="flex items-center gap-4 text-sm font-bold">
-              <span>📝 <strong className="text-white">{currentUser.totalTestsTaken || 0}</strong> टेस्ट्स पूर्ण</span>
-              <span>🎯 <strong className="text-emerald-300">{currentUser.overallAccuracy || 0}%</strong> अचूकता</span>
-              <span>🔢 <strong className="text-amber-300">{currentUser.totalQuestionsSolved || 0}</strong> MCQs</span>
+            
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white leading-tight">
+              नमस्ते, {currentUser?.name || "विद्यार्थी मित्र"}! 👋
+            </h1>
+            
+            <p className="text-xs sm:text-sm text-indigo-100/90 leading-relaxed">
+              MHT-CET, NEET व JEE परीक्षेसाठी १० अस्सल ग्रँड टेस्ट्स, चॅप्टरवाईज सराव आणि हाय-यिल्ड रिव्हिजन नोट्स.
+            </p>
+
+            {currentUser && !isDemoUser && (
+              <div className="inline-flex items-center gap-2 pt-1 text-xs font-bold text-emerald-300">
+                <Award className="w-4 h-4 text-emerald-400" />
+                <span>विद्यार्थी सदस्यत्व: सक्रिय (Full Access Unlocked)</span>
+              </div>
+            )}
+          </div>
+
+          {/* Exam Selection Badge Selector */}
+          <div className="bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/20 flex flex-col gap-2 shrink-0">
+            <span className="text-[11px] font-bold text-indigo-200 uppercase tracking-wider text-center">
+              लक्ष्य परीक्षा निवडा:
+            </span>
+            <div className="flex items-center gap-1.5">
+              {(["MHT_CET", "NEET", "JEE"] as ExamType[]).map((ex) => (
+                <button
+                  key={ex}
+                  type="button"
+                  onClick={() => onSelectExam(ex)}
+                  className={`px-3.5 py-2 text-xs font-black rounded-xl transition-all cursor-pointer ${
+                    currentExam === ex
+                      ? "bg-amber-400 text-slate-950 shadow-md scale-105"
+                      : "bg-white/10 text-white hover:bg-white/20"
+                  }`}
+                >
+                  {ex === "MHT_CET" ? "🎯 MHT-CET" : ex === "NEET" ? "🩺 NEET" : "⚡ JEE"}
+                </button>
+              ))}
             </div>
           </div>
-          <button
-            onClick={() => onNavigate("mistakes")}
-            className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer border border-white/20"
-          >
-            <span>चुका तपासा</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
         </div>
-      )}
+
+        {/* Student Test Performance Tracker inside Hero */}
+        {currentUser && hasTestActivity && (
+          <div className="mt-5 pt-4 border-t border-white/15 grid grid-cols-3 gap-2 sm:gap-4 text-center">
+            <div className="bg-white/5 rounded-xl p-2.5 backdrop-blur-xs border border-white/10">
+              <span className="block text-[11px] text-indigo-200 font-medium">एकूण सोडवलेले प्रश्न</span>
+              <strong className="text-base sm:text-lg font-black text-amber-300 font-mono-numbers">
+                {currentUser.totalQuestionsSolved || 0}
+              </strong>
+            </div>
+            <div className="bg-white/5 rounded-xl p-2.5 backdrop-blur-xs border border-white/10">
+              <span className="block text-[11px] text-indigo-200 font-medium">एकूण अचूकता</span>
+              <strong className="text-base sm:text-lg font-black text-emerald-300 font-mono-numbers">
+                {currentUser.overallAccuracy || 0}%
+              </strong>
+            </div>
+            <div className="bg-white/5 rounded-xl p-2.5 backdrop-blur-xs border border-white/10">
+              <span className="block text-[11px] text-indigo-200 font-medium">पूर्ण झालेल्या टेस्ट्स</span>
+              <strong className="text-base sm:text-lg font-black text-white font-mono-numbers">
+                {currentUser.totalTestsTaken || 0}
+              </strong>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* ३. मुख्य सराव कार्ड्स (Clean & Spacious) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">

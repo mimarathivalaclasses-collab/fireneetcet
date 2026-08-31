@@ -683,4 +683,75 @@ export const BIOLOGY_NOTES: TopicNote[] = [
       },
     ],
   },
+  // 6. Molecular Basis of Inheritance (DNA, Replication, Transcription, Lac Operon)
+  {
+    id: "note_bio_molecular_inheritance",
+    chapter: "Molecular Basis of Inheritance",
+    chapterMr: "वारशाचा रेण्वीय आधार (DNA, ट्रान्सक्रिप्शन व लॅक ऑपेरॉन)",
+    subject: "Biology",
+    exams: ["NEET", "MHT_CET"],
+    title: "DNA Double Helix, Replication, Transcription, Genetic Code & Lac Operon Notes",
+    titleMr: "DNA द्विसर्पिलाकार रचना, प्रतिकृतीकरण, ट्रान्सक्रिप्शन, जनुकीय संकेत व लॅक ऑपेरॉन",
+    summary: "High-yield NCERT biology points covering Chargaff's rules, Meselson-Stahl experiment, Genetic code characteristics, Translation steps, and Lac Operon regulation.",
+    summaryMr: "चारगाफचे नियम, मेसल्सन-स्टाल प्रयोग, ट्रान्सक्रिप्शन, जेनेटिक कोडची वैशिष्ट्ये आणि लॅक ऑपेरॉन वरील अत्यंत महत्त्वाचे मुद्दे.",
+    highYieldWeightage: "High",
+    sections: [
+      {
+        title: "1. DNA Structure & Experiments (Griffith, Hershey-Chase, Meselson-Stahl)",
+        titleMr: "१. DNA रचना व महत्त्वाचे ऐतिहासिक प्रयोग",
+        points: [
+          "Chargaff's Rule: In double-stranded DNA, Purines = Pyrimidines => [A] + [G] = [T] + [C]. Specifically [A] = [T] and [G] = [C]. The ratio (A+T)/(G+C) varies across species but is constant within a species.",
+          "DNA Double Helix (Watson & Crick, 1953): Pitch of helix = 3.4 nm (34 Å), distance between adjacent base pairs = 0.34 nm (3.4 Å), 10 base pairs per turn.",
+          "Griffith's Transformation Experiment (1928): Used Streptococcus pneumoniae (S-strain virulent/smooth coat, R-strain avirulent/rough coat). Heat-killed S + Live R -> Mice died. Proved 'Transforming Principle'.",
+          "Hershey and Chase Experiment (1952): Used T2 bacteriophage with ³⁵S (labels protein coat) and ³²P (labels DNA). Unequivocally proved that DNA is the genetic material.",
+          "Meselson and Stahl Experiment (1958): Used heavy nitrogen ¹⁵N and ¹⁴N with CsCl density gradient centrifugation in E. coli. Proved Semi-conservative mode of DNA replication.",
+        ],
+        pointsMr: [
+          "चारगाफचा नियम: द्विसर्पिल DNA मध्ये [A] = [T] आणि [G] = [C] असते. [A+G] = [T+C].",
+          "DNA द्विसर्पिलाकार: १ आवर्तनाची लांबी = ३.४ nm (१० बेस पेअर्स). दोन बेस पेअर्समधील अंतर = ०.३४ nm.",
+          "ग्रिफिथचा प्रयोग (१९२८): स्ट्रेप्टोकोकस न्युमोनी (S-strain आणि R-strain) वापरून ट्रान्सफॉर्मिंग प्रिन्सिपल सिद्ध केला.",
+          "हर्षी आणि चेस (१९५२): ³⁵S (प्रोटीन) आणि ³²P (DNA) किरणोत्सारी घटक वापरून DNA हेच अनुवंशिक घटक असल्याचे निर्विवाद सिद्ध केले.",
+          "मेसल्सन आणि स्टाल (१९५८): E. coli मध्ये ¹⁵N आणि CsCl वापरून DNA चे सेमी-कंझर्व्हेटिव्ह प्रतिकृतीकरण सिद्ध केले.",
+        ],
+        keyFormula: "[A] = [T] | [G] = [C] | Purines (A+G) = Pyrimidines (T+C) | DNA Pitch = 3.4 nm (10 bp)",
+      },
+      {
+        title: "2. Genetic Code, Translation & The Lac Operon",
+        titleMr: "२. जेनेटिक कोड, ट्रान्सलेशन आणि लॅक ऑपेरॉन (Lac Operon)",
+        points: [
+          "Genetic Code Properties: Triplet (61 sense codons + 3 stop codons: UAA, UAG, UGA), Unambiguous (1 codon codes for only 1 amino acid), Degenerate (some amino acids coded by more than 1 codon), Universal, Commaless.",
+          "AUG has DUAL functions: Codes for Methionine AND acts as Initiator Codon.",
+          "Lac Operon Regulation (Jacob & Monod): Negative regulation with inducible system. Inducer is ALLOLACTOSE / Lactose.",
+          "Structural Genes: z-gene -> β-galactosidase (hydrolyzes lactose into glucose + galactose); y-gene -> Permease (increases cell permeability to β-galactosides); a-gene -> Transacetylase.",
+          "In the absence of inducer: Repressor protein (produced constitutively by i-gene) binds to Operator (O) region, preventing RNA Polymerase from transcribing structural genes.",
+        ],
+        pointsMr: [
+          "जेनेटिक कोड: ट्रिपलेट (६१ कोडॉन्स + ३ स्टॉप कोडॉन्स UAA, UAG, UGA), अनअॅम्ब्युग्युअस, डीजनरेट, युनिव्हर्सल.",
+          "AUG ची दुहेरी भूमिका: मिथियोनाइन (Methionine) तयार करतो + इनिशिएटर कोडॉन म्हणून काम करतो.",
+          "लॅक ऑपेरॉन: प्रेरक (Inducer) = लॅक्टोज / ॲलोलॅक्टोज.",
+          "रचनात्मक जनुके: z-gene -> β-गॅलॅक्टोसिडेज, y-gene -> पर्मिएज, a-gene -> ट्रान्सॲसिटायलेज.",
+          "लॅक्टोज नसल्यास: रिप्रेशर ऑपरेटरला बांधला जातो व ट्रान्सक्रिप्शन थांबवतो.",
+        ],
+        keyFormula: "z-gene = β-galactosidase | y-gene = Permease | a-gene = Transacetylase | Stop Codons = UAA, UAG, UGA",
+      },
+    ],
+    quickRevisionPoints: [
+      { en: "Leading strand synthesis is continuous in 5'->3' direction, while lagging strand synthesis is discontinuous forming Okazaki fragments joined by DNA Ligase.", mr: "लीडिंग स्ट्रँड ५'->३' दिशेत सलग बनते, तर लॅगिंग स्ट्रँडवर ओकाझाकी तुकडे तयार होतात जे DNA Ligase ने जोडले जातात." },
+      { en: "tRNA is the adapter molecule having an anticodon loop that reads mRNA codon and an amino acid acceptor 3' CCA end.", mr: "tRNA मध्ये ॲन्टिकोडॉन लूप असतो आणि ३' टोकावर CCA सिक्वेन्सवर अमिनो ॲसिड जोडले जाते." },
+    ],
+    keyFormulasTable: [
+      { name: "DNA Base Pair Rule", formula: "A+G = T+C (d.s. DNA)", description: "Chargaff equivalency rule for double-stranded DNA molecules" },
+      { name: "Initiator Codon", formula: "AUG (Methionine / Formyl-Met)", description: "Universal start codon for protein synthesis" },
+      { name: "Nonsense Stop Codons", formula: "UAA (Ochre), UAG (Amber), UGA (Opal)", description: "Terminates translation as no tRNA recognizes them" },
+      { name: "Lac Structural Genes", formula: "z-gene (β-gal), y-gene (permease), a-gene (transacetylase)", description: "Genes responsible for lactose metabolism in E. coli" },
+    ],
+    commonMistakesToAvoid: [
+      {
+        mistake: "Assuming RNA Polymerase can synthesize RNA in both 5' to 3' and 3' to 5' directions.",
+        mistakeMr: "RNA पॉलिमरेज दोन्ही दिशांमध्ये काम करू शकते असे मानणे.",
+        correction: "All nucleic acid polymerases (DNA Pol and RNA Pol) can ONLY catalyze chain elongation in the 5' to 3' direction!",
+        correctionMr: "सर्व न्युक्लिक ॲसिड पॉलिमरेजेस (DNA आणि RNA पॉलिमरेज) फक्त ५' ते ३' दिशेनेच नवीन धागा तयार करू शकतात!",
+      },
+    ],
+  },
 ];

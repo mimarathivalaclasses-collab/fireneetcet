@@ -887,15 +887,17 @@ export default function App() {
             onNavigateTab={handleNavigateTab}
           />
 
-          {/* Top Global Live Status & Question Counter Dashboard */}
-          <TopStatsDashboard
-            currentExam={currentExam}
-            questions={questions}
-            practiceStats={practiceStats}
-            onNavigate={handleNavigateTab}
-            bookmarkCount={bookmarkedIds.size}
-            mistakesCount={unresolvedMistakesCount}
-          />
+          {/* Top Global Live Status & Question Counter Dashboard - displayed cleanly in Analytics */}
+          {activeTab === "analytics" && (
+            <TopStatsDashboard
+              currentExam={currentExam}
+              questions={questions}
+              practiceStats={practiceStats}
+              onNavigate={handleNavigateTab}
+              bookmarkCount={bookmarkedIds.size}
+              mistakesCount={unresolvedMistakesCount}
+            />
+          )}
 
           {/* Main Content Area */}
           <main className="flex-1 pb-24 sm:pb-12 bg-grid-pattern w-full max-w-full overflow-x-hidden">
