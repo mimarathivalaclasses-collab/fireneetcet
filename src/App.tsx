@@ -41,6 +41,7 @@ import { UnifiedAuthView } from "./components/UnifiedAuthView";
 import { RoleBasedAccessWrapper } from "./components/RoleBasedAccessWrapper";
 import { NavigationBreadcrumbBar } from "./components/NavigationBreadcrumbBar";
 import { NavigationDrawer } from "./components/NavigationDrawer";
+import { VerticalSidebar } from "./components/VerticalSidebar";
 import { MobileBottomNav } from "./components/MobileBottomNav";
 import { AuthModal } from "./components/AuthModal";
 import { PaymentModal } from "./components/PaymentModal";
@@ -877,30 +878,47 @@ export default function App() {
             onToggleDarkMode={handleToggleDarkMode}
           />
 
-          {/* Universal Sticky Back & Breadcrumb Navigation Bar */}
-          <NavigationBreadcrumbBar
-            activeTab={activeTab}
-            currentExam={currentExam}
-            historyStack={historyStack}
-            onBack={handleBackNavigation}
-            onNavigateHome={handleNavigateHome}
-            onNavigateTab={handleNavigateTab}
-          />
-
-          {/* Top Global Live Status & Question Counter Dashboard - displayed cleanly in Analytics */}
-          {activeTab === "analytics" && (
-            <TopStatsDashboard
-              currentExam={currentExam}
-              questions={questions}
-              practiceStats={practiceStats}
+          {/* Master Layout: Left Vertical Sidebar + Right Main Content */}
+          <div className="flex-1 flex w-full max-w-full min-h-[calc(100vh-65px)]">
+            {/* Left Vertical Sidebar (उभी मेनू पट्टी) */}
+            <VerticalSidebar
+              activeTab={activeTab}
               onNavigate={handleNavigateTab}
-              bookmarkCount={bookmarkedIds.size}
+              currentExam={currentExam}
               mistakesCount={unresolvedMistakesCount}
+              bookmarkCount={bookmarkedIds.size}
+              currentUser={currentUser}
+              onOpenPaymentModal={() => setIsPaymentModalOpen(true)}
+              onOpenAdminDashboard={() => setIsAdminDashboardOpen(true)}
+              pendingApprovalsCount={pendingApprovalsCount}
             />
-          )}
 
-          {/* Main Content Area */}
-          <main className="flex-1 pb-24 sm:pb-12 bg-grid-pattern w-full max-w-full overflow-x-hidden">
+            {/* Right Main Content & Breadcrumbs Panel */}
+            <div className="flex-1 flex flex-col min-w-0 w-full overflow-hidden">
+              {/* Universal Sticky Back & Breadcrumb Navigation Bar */}
+              <NavigationBreadcrumbBar
+                activeTab={activeTab}
+                currentExam={currentExam}
+                historyStack={historyStack}
+                onBack={handleBackNavigation}
+                onNavigateHome={handleNavigateHome}
+                onNavigateTab={handleNavigateTab}
+              />
+
+              {/* Top Global Live Status & Question Counter Dashboard - displayed cleanly in Analytics */}
+              {activeTab === "analytics" && (
+                <TopStatsDashboard
+                  currentExam={currentExam}
+                  questions={questions}
+                  practiceStats={practiceStats}
+                  onNavigate={handleNavigateTab}
+                  bookmarkCount={bookmarkedIds.size}
+                  mistakesCount={unresolvedMistakesCount}
+                />
+              )}
+
+              {/* Main Content Area */}
+              <main className="flex-1 pb-24 sm:pb-12 bg-grid-pattern w-full max-w-full overflow-x-hidden">
             {/* If viewing a completed test result */}
             {currentTestResult ? (
               <TestResultView
@@ -1212,8 +1230,10 @@ export default function App() {
               </>
             )}
           </main>
+        </div>
+      </div>
 
-          {/* Mobile Bottom Navigation Bar (PWA Style) */}
+      {/* Mobile Bottom Navigation Bar (PWA Style) */}
           <MobileBottomNav
             activeTab={activeTab}
             onNavigate={handleNavigateTab}
