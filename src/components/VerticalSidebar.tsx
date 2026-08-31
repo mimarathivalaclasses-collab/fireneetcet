@@ -17,6 +17,7 @@ import {
   KeyRound,
   ShieldCheck,
   Award,
+  Rocket,
 } from "lucide-react";
 import { NavigationTab, ExamType, StudentUser } from "../types";
 
@@ -24,6 +25,7 @@ interface VerticalSidebarProps {
   activeTab: NavigationTab;
   onNavigate: (tab: NavigationTab) => void;
   currentExam: ExamType;
+  onSelectExam?: (exam: ExamType) => void;
   mistakesCount?: number;
   bookmarkCount?: number;
   currentUser: StudentUser | null;
@@ -36,6 +38,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
   activeTab,
   onNavigate,
   currentExam,
+  onSelectExam,
   mistakesCount = 0,
   bookmarkCount = 0,
   currentUser,
@@ -158,17 +161,52 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
       aria-label="Sidebar Navigation"
       className="hidden md:flex flex-col w-64 lg:w-72 shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 h-[calc(100vh-65px)] sticky top-[65px] overflow-y-auto scrollbar-thin transition-colors z-30 select-none"
     >
-      {/* Target Exam Indicator */}
-      <div className="p-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-950/40">
+      {/* Target Exam Indicator & Selector */}
+      <div className="p-3 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-950/40 space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-xs font-bold text-slate-500 dark:text-slate-400">सध्याचे लक्ष्य:</span>
+            <Rocket className="w-4 h-4 text-indigo-600 dark:text-indigo-400 transform -rotate-45" />
+            <span className="text-xs font-black text-slate-800 dark:text-slate-200">लक्ष्य परीक्षा:</span>
           </div>
-          <span className="px-2 py-0.5 rounded-md text-xs font-black bg-indigo-100 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-300 font-mono">
-            {currentExam === "MHT_CET" ? "🎯 MHT-CET" : currentExam === "NEET" ? "🩺 NEET" : "⚡ JEE MAIN"}
+          <span className="px-2 py-0.5 rounded-md text-[11px] font-black bg-indigo-100 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-300 font-mono">
+            {currentExam === "MHT_CET" ? "MHT-CET" : currentExam === "NEET" ? "NEET" : "JEE MAIN"}
           </span>
         </div>
+
+        {onSelectExam && (
+          <div className="grid grid-cols-3 gap-1 bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] font-bold">
+            <button
+              onClick={() => onSelectExam("MHT_CET")}
+              className={`py-1 rounded-lg text-center transition-all cursor-pointer ${
+                currentExam === "MHT_CET"
+                  ? "bg-amber-500 text-slate-950 font-black shadow-xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              MHT-CET
+            </button>
+            <button
+              onClick={() => onSelectExam("NEET")}
+              className={`py-1 rounded-lg text-center transition-all cursor-pointer ${
+                currentExam === "NEET"
+                  ? "bg-emerald-600 text-white font-black shadow-xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              NEET
+            </button>
+            <button
+              onClick={() => onSelectExam("JEE_MAIN")}
+              className={`py-1 rounded-lg text-center transition-all cursor-pointer ${
+                currentExam === "JEE_MAIN"
+                  ? "bg-blue-600 text-white font-black shadow-xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              JEE
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Main Navigation Items (उभी मेनू यादी) */}
@@ -311,9 +349,9 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
       <div className="mt-auto p-3 border-t border-slate-100 dark:border-slate-800">
         <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-800/90 dark:to-indigo-950/40 p-3 rounded-2xl border border-indigo-100 dark:border-indigo-900/50 space-y-2">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-500" />
+            <Rocket className="w-4 h-4 text-amber-500 transform -rotate-45" />
             <span className="text-xs font-black text-slate-900 dark:text-white">
-              सराव मित्र PRO
+              रॉकेट टेस्ट PRO
             </span>
           </div>
           <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-tight">

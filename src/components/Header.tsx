@@ -9,6 +9,7 @@ import {
   BarChart3,
   Languages,
   GraduationCap,
+  Rocket,
   Layers,
   Calendar,
   CircleDot,
@@ -159,20 +160,20 @@ export const Header: React.FC<HeaderProps> = ({
               className="flex items-center gap-2 cursor-pointer select-none group"
               onClick={() => handleNavClick("home")}
             >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-700 via-blue-800 to-slate-900 text-white flex items-center justify-center shadow-sm shrink-0 ring-1 ring-white/20">
-                <GraduationCap className="w-5 h-5 text-amber-300" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-600 via-purple-600 to-rose-600 text-white flex items-center justify-center shadow-md shrink-0 ring-1 ring-white/20 group-hover:scale-105 transition-transform">
+                <Rocket className="w-5 h-5 text-amber-300 transform -rotate-45" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white">
-                    🎯 सराव मित्र
+                  <span className="text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
+                    <span>🚀 रॉकेट टेस्ट</span>
                   </span>
-                  <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950 text-indigo-800 dark:text-indigo-300">
-                    STUDY CENTER
+                  <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-950 text-rose-800 dark:text-rose-300">
+                    TEST PORTAL
                   </span>
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-bold tracking-tight">
-                  MHT-CET • NEET • JEE PORTAL
+                  MHT-CET • NEET • JEE MASTER
                 </p>
               </div>
             </div>

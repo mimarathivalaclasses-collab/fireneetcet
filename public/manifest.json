@@ -1,8 +1,8 @@
 {
-  "name": "सराव मित्र - MHT-CET NEET JEE Study Portal",
-  "short_name": "सराव मित्र",
-  "description": "महाराष्ट्र अधिकृत MHT-CET, NEET व JEE Main १० ग्रँड मॉक टेस्ट्स, डिजिटल OMR, मराठी-इंग्रजी नोट्स आणि AI सराव पोर्टल.",
-  "id": "com.saravmitra.mhtcet.neet.jee",
+  "name": "रॉकेट टेस्ट - MHT-CET NEET JEE Study Portal",
+  "short_name": "रॉकेट टेस्ट",
+  "description": "रॉकेट टेस्ट - महाराष्ट्र अधिकृत MHT-CET, NEET व JEE Main १० ग्रँड मॉक टेस्ट्स, डिजिटल OMR, मराठी-इंग्रजी नोट्स आणि AI सराव पोर्टल.",
+  "id": "com.rockettest.mhtcet.neet.jee",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

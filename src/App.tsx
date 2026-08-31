@@ -885,6 +885,7 @@ export default function App() {
               activeTab={activeTab}
               onNavigate={handleNavigateTab}
               currentExam={currentExam}
+              onSelectExam={setCurrentExam}
               mistakesCount={unresolvedMistakesCount}
               bookmarkCount={bookmarkedIds.size}
               currentUser={currentUser}
