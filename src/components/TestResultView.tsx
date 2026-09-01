@@ -208,102 +208,137 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
       </div>
 
       <div id="printable-test-report" className="space-y-8 bg-white p-2 sm:p-4 rounded-3xl">
-        {/* Scorecard Hero Banner */}
-        <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden border border-slate-800">
+        {/* Scorecard Hero Banner matching Rocket App Screen 4 */}
+        <div className="bg-gradient-to-r from-[#292bb2] via-[#3a3dc7] to-[#4e51ec] text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden border border-indigo-700/40">
+          <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold border border-blue-400/30">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span>{result.exam} टेस्ट निकाल व विश्लेषण</span>
+              <span className="text-xs text-indigo-200 uppercase tracking-wider font-bold">
+                Your Score
+              </span>
+              <div className="text-4xl sm:text-5xl font-black text-white font-mono-numbers leading-none">
+                {result.score} <span className="text-xl sm:text-2xl text-indigo-200 font-medium">/ {result.maxMarks}</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold">{result.title}</h2>
-              <p className="text-xs sm:text-sm text-slate-300">
+              <p className="text-xs sm:text-sm text-indigo-100/90 font-medium pt-1 max-w-md">
                 {result.percentage >= 75
-                  ? "🌟 उत्कृष्ट कामगिरी! तुमची संकल्पनांची तयारी खूप चांगली आहे."
+                  ? `Excellent! You scored higher than ${Math.min(99, Math.max(50, result.percentage + 10))}% of students.`
                   : result.percentage >= 50
-                  ? "👍 चांगला प्रयत्न! कमजोर अध्यायांचा अधिक सराव करा."
-                  : "💡 सराव वाढवण्याची गरज आहे. खालील सविस्तर स्पष्टीकरणे काळजीपूर्वक अभ्यासा."}
+                  ? `Good effort! You scored higher than ${result.percentage}% of students.`
+                  : "Keep practicing! Review detailed solutions below to improve your score."}
               </p>
             </div>
 
-            {/* Big Score Box */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/15 text-center min-w-[200px] shrink-0 shadow-lg">
-              <span className="text-xs text-slate-300 uppercase tracking-wider font-semibold block mb-1">
-                मिळालेले गुण (Total Score)
-              </span>
-              <div className="text-4xl font-extrabold text-amber-400 leading-none">
-                {result.score} <span className="text-lg text-slate-300 font-normal">/ {result.maxMarks}</span>
-              </div>
-              <div className="text-xs text-emerald-400 font-bold mt-2">
-                टक्केवारी: {result.percentage}% • अचूकता: {result.accuracy}%
+            {/* Radial Percentile Gauge */}
+            <div className="flex flex-col items-center justify-center bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 min-w-[160px]">
+              <div className="relative w-24 h-24 flex items-center justify-center">
+                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    className="text-white/20 stroke-current"
+                    strokeWidth="8"
+                    fill="transparent"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    className="text-emerald-400 stroke-current drop-shadow-md"
+                    strokeWidth="8"
+                    strokeDasharray={`${2 * Math.PI * 40}`}
+                    strokeDashoffset={`${2 * Math.PI * 40 * (1 - result.accuracy / 100)}`}
+                    strokeLinecap="round"
+                    fill="transparent"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <span className="text-lg font-black text-white font-mono-numbers leading-tight">
+                    {result.accuracy}%
+                  </span>
+                  <span className="text-[9px] font-bold text-indigo-200">
+                    Percentile
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Quick KPI stats strip */}
-          <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10">
-            <div className="bg-white/5 rounded-xl p-3 text-center border border-white/10">
-              <span className="text-[11px] text-slate-400 block">बरोबर (Correct)</span>
-              <strong className="text-emerald-400 text-lg font-bold">
-                {result.correct} / {result.totalQuestions}
+          {/* 4 KPI Metrics Strip (Correct, Incorrect, Unattempted, Accuracy) */}
+          <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/15">
+            <div className="bg-white/10 rounded-2xl p-3 text-center backdrop-blur-xs">
+              <span className="text-[11px] text-indigo-200 block font-bold uppercase">Correct</span>
+              <strong className="text-emerald-300 text-xl font-black font-mono-numbers">
+                {result.correct}
               </strong>
             </div>
-            <div className="bg-white/5 rounded-xl p-3 text-center border border-white/10">
-              <span className="text-[11px] text-slate-400 block">चूक (Incorrect)</span>
-              <strong className="text-rose-400 text-lg font-bold">
+            <div className="bg-white/10 rounded-2xl p-3 text-center backdrop-blur-xs">
+              <span className="text-[11px] text-indigo-200 block font-bold uppercase">Incorrect</span>
+              <strong className="text-rose-300 text-xl font-black font-mono-numbers">
                 {result.wrong}
               </strong>
             </div>
-            <div className="bg-white/5 rounded-xl p-3 text-center border border-white/10">
-              <span className="text-[11px] text-slate-400 block">न सोडवलेले (Skipped)</span>
-              <strong className="text-slate-300 text-lg font-bold">
+            <div className="bg-white/10 rounded-2xl p-3 text-center backdrop-blur-xs">
+              <span className="text-[11px] text-indigo-200 block font-bold uppercase">Unattempted</span>
+              <strong className="text-amber-300 text-xl font-black font-mono-numbers">
                 {result.unattempted}
               </strong>
             </div>
-            <div className="bg-white/5 rounded-xl p-3 text-center border border-white/10">
-              <span className="text-[11px] text-slate-400 block">घेतलेला वेळ</span>
-              <strong className="text-blue-300 text-lg font-bold">
-                {formatSeconds(result.timeTakenSeconds)}
+            <div className="bg-white/10 rounded-2xl p-3 text-center backdrop-blur-xs">
+              <span className="text-[11px] text-indigo-200 block font-bold uppercase">Accuracy</span>
+              <strong className="text-white text-xl font-black font-mono-numbers">
+                {result.accuracy}%
               </strong>
             </div>
           </div>
         </div>
 
-        {/* Subject-Wise Performance Breakdown */}
+        {/* Subject-Wise Performance Breakdown matching Screen 4 */}
         {result.subjectBreakdown.length > 0 && (
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4 shadow-xs">
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-              विषयानुसार विश्लेषण (Subject-wise Breakdown)
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {result.subjectBreakdown.map((sub) => (
-                <div
-                  key={sub.subject}
-                  className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3"
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="font-bold text-xs text-slate-900">{sub.subject}</span>
-                    <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
-                      {sub.score} / {sub.maxScore} Marks
-                    </span>
-                  </div>
+          <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4 shadow-xs">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm sm:text-base font-black text-slate-900">
+                Subject Wise Performance
+              </h3>
+              <span className="text-xs font-bold text-indigo-600 hover:underline cursor-pointer">
+                View Detailed
+              </span>
+            </div>
 
-                  <div className="space-y-1 text-[11px] text-slate-600">
-                    <div className="flex justify-between">
-                      <span>बरोबर: {sub.correct}</span>
-                      <span>चूक: {sub.wrong}</span>
-                      <span>अचूकता: {sub.accuracy}%</span>
+            <div className="space-y-4 pt-1">
+              {result.subjectBreakdown.map((sub, idx) => {
+                const colors = [
+                  { bar: "bg-blue-600", text: "text-blue-600" },
+                  { bar: "bg-emerald-500", text: "text-emerald-600" },
+                  { bar: "bg-teal-500", text: "text-teal-600" },
+                  { bar: "bg-orange-500", text: "text-orange-600" },
+                ];
+                const color = colors[idx % colors.length];
+
+                return (
+                  <div key={sub.subject} className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
+                      <span className="font-bold text-slate-800">{sub.subject}</span>
+                      <div className="flex items-center gap-2 font-mono-numbers">
+                        <span className="font-bold text-slate-700">
+                          {sub.score}/{sub.maxScore}
+                        </span>
+                        <span className={`font-black ${color.text}`}>
+                          {sub.accuracy}%
+                        </span>
+                      </div>
                     </div>
-                    {/* Progress bar */}
-                    <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                    {/* Linear bar */}
+                    <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                       <div
-                        className="bg-blue-600 h-2 rounded-full transition-all"
-                        style={{ width: `${Math.max(0, sub.accuracy)}%` }}
+                        className={`${color.bar} h-2 rounded-full transition-all duration-700`}
+                        style={{ width: `${Math.max(8, sub.accuracy)}%` }}
                       ></div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

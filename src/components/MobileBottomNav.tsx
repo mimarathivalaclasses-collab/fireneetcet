@@ -1,13 +1,10 @@
 import React from "react";
 import {
   Home,
-  Layers,
-  FileText,
-  BookOpen,
+  FileCheck2,
+  BarChart3,
+  Bookmark,
   User,
-  Users,
-  Trophy,
-  Gift,
 } from "lucide-react";
 import { NavigationTab, StudentUser } from "../types";
 
@@ -34,76 +31,81 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   return (
     <nav
       aria-label="Mobile Navigation"
-      className="fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200/90 dark:border-slate-800 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] px-2 sm:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.3)] transition-colors"
+      className="fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200/90 dark:border-slate-800 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] px-3 sm:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.3)] transition-colors select-none"
     >
-      <div className="flex items-center justify-between max-w-md mx-auto">
+      <div className="flex items-center justify-around max-w-md mx-auto">
         {/* 1. Home */}
         <button
           type="button"
           onClick={() => handleNav("home")}
-          className={`flex-1 min-h-[48px] flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all active:scale-95 cursor-pointer ${
+          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all active:scale-95 cursor-pointer ${
             activeTab === "home"
-              ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/80 dark:bg-indigo-950/60 font-black"
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+              ? "text-indigo-600 dark:text-indigo-400 font-black"
+              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
           }`}
         >
           <Home className={`w-5 h-5 ${activeTab === "home" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[11px] mt-0.5 font-bold tracking-tight">होम</span>
+          <span className="text-[10px] mt-0.5 font-bold tracking-tight">Home</span>
         </button>
 
-        {/* 2. Grand Tests */}
+        {/* 2. Tests */}
         <button
           type="button"
           onClick={() => handleNav("grand_tests")}
-          className={`flex-1 min-h-[48px] flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all active:scale-95 cursor-pointer relative ${
-            activeTab === "grand_tests"
-              ? "text-amber-600 dark:text-amber-400 bg-amber-50/80 dark:bg-amber-950/60 font-black"
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all active:scale-95 cursor-pointer ${
+            activeTab === "grand_tests" || activeTab === "mock_test"
+              ? "text-indigo-600 dark:text-indigo-400 font-black"
+              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
           }`}
         >
-          <Trophy className={`w-5 h-5 ${activeTab === "grand_tests" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[11px] mt-0.5 font-bold tracking-tight">ग्रँड टेस्ट</span>
+          <FileCheck2 className={`w-5 h-5 ${activeTab === "grand_tests" || activeTab === "mock_test" ? "stroke-[2.5]" : "stroke-2"}`} />
+          <span className="text-[10px] mt-0.5 font-bold tracking-tight">Tests</span>
         </button>
 
-        {/* 3. Chapter Practice */}
+        {/* 3. Performance / Analytics */}
         <button
           type="button"
-          onClick={() => handleNav("mock_test")}
-          className={`flex-1 min-h-[48px] flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all active:scale-95 cursor-pointer ${
-            activeTab === "mock_test" || activeTab === "practice"
-              ? "text-blue-600 dark:text-blue-400 bg-blue-50/80 dark:bg-blue-950/60 font-black"
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+          onClick={() => handleNav("analytics")}
+          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all active:scale-95 cursor-pointer ${
+            activeTab === "analytics"
+              ? "text-indigo-600 dark:text-indigo-400 font-black"
+              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
           }`}
         >
-          <Layers className={`w-5 h-5 ${activeTab === "mock_test" || activeTab === "practice" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[11px] mt-0.5 font-bold tracking-tight">सराव</span>
+          <BarChart3 className={`w-5 h-5 ${activeTab === "analytics" ? "stroke-[2.5]" : "stroke-2"}`} />
+          <span className="text-[10px] mt-0.5 font-bold tracking-tight">Performance</span>
         </button>
 
-        {/* 4. Revision Notes */}
+        {/* 4. Bookmarks */}
         <button
           type="button"
-          onClick={() => handleNav("notes")}
-          className={`flex-1 min-h-[48px] flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all active:scale-95 cursor-pointer ${
-            activeTab === "notes"
-              ? "text-emerald-600 dark:text-emerald-400 bg-emerald-50/80 dark:bg-emerald-950/60 font-black"
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+          onClick={() => handleNav("bookmarks")}
+          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all active:scale-95 cursor-pointer ${
+            activeTab === "bookmarks"
+              ? "text-indigo-600 dark:text-indigo-400 font-black"
+              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
           }`}
         >
-          <BookOpen className={`w-5 h-5 ${activeTab === "notes" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[11px] mt-0.5 font-bold tracking-tight">नोट्स</span>
+          <Bookmark className={`w-5 h-5 ${activeTab === "bookmarks" ? "stroke-[2.5]" : "stroke-2"}`} />
+          <span className="text-[10px] mt-0.5 font-bold tracking-tight">Bookmarks</span>
         </button>
 
-        {/* 5. Profile / Auth */}
+        {/* 5. Profile */}
         <button
           type="button"
           onClick={onOpenAuthModal}
-          className="flex-1 min-h-[48px] flex flex-col items-center justify-center py-1 px-1 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all active:scale-95 cursor-pointer"
+          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all active:scale-95 cursor-pointer ${
+            activeTab === "profile"
+              ? "text-indigo-600 dark:text-indigo-400 font-black"
+              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+          }`}
         >
           <User className="w-5 h-5 stroke-2" />
-          <span className="text-[11px] mt-0.5 font-bold tracking-tight">{currentUser ? "खाते" : "लॉगिन"}</span>
+          <span className="text-[10px] mt-0.5 font-bold tracking-tight">Profile</span>
         </button>
       </div>
     </nav>
   );
 };
+
 
