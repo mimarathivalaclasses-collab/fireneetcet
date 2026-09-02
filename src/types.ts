@@ -134,6 +134,15 @@ export interface FlashcardItem {
   mnemonic?: string;
 }
 
+export interface ChapterPointItem {
+  id: number;
+  point: string;
+  pointMr: string;
+  category?: "Concept" | "Formula" | "Rule" | "Definition" | "Shortcut" | "PYQ_Trend" | "Exception";
+  formula?: string;
+  badge?: string;
+}
+
 export interface TopicNoteSection {
   title: string;
   titleMr: string;
@@ -157,6 +166,7 @@ export interface TopicNote {
   summaryMr: string;
   highYieldWeightage: "High" | "Medium" | "Low";
   sections: TopicNoteSection[];
+  points100?: ChapterPointItem[];
   quickRevisionPoints: {
     en: string;
     mr: string;

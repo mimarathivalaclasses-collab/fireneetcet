@@ -755,6 +755,42 @@ export const printTopicNotesReport = (
           </div>
 
           ${
+            note.points100 && note.points100.length > 0
+              ? `
+              <div style="margin-top: 14px; margin-bottom: 14px; background: #faf5ff; border: 1.5px solid #d8b4fe; border-radius: 8px; padding: 12px;">
+                <h4 style="margin: 0 0 8px 0; font-size: 13px; font-weight: 800; color: #6b21a8; border-bottom: 1px solid #e9d5ff; padding-bottom: 4px;">
+                  💯 १०० अत्यंत महत्त्वाचे परीक्षा पॉईंट्स (100 High-Yield Exam Points)
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  ${note.points100
+                    .map(
+                      (p) => `
+                    <div style="background: #ffffff; border: 1px solid #f3e8ff; border-radius: 6px; padding: 6px 8px; font-size: 10.5px; line-height: 1.4;">
+                      <div style="font-weight: 700; color: #581c87;">
+                        <span style="background: #e9d5ff; color: #581c87; border-radius: 3px; padding: 1px 4px; margin-right: 4px; font-size: 10px;">#${p.id}</span>
+                        ${isMr || isBilingual ? p.pointMr : ""}
+                      </div>
+                      ${
+                        (isBilingual || isEn) && p.point !== p.pointMr
+                          ? `<div style="color: #64748b; margin-top: 2px; font-size: 10px;">${p.point}</div>`
+                          : ""
+                      }
+                      ${
+                        p.formula
+                          ? `<div style="font-family: monospace; font-weight: 700; color: #2563eb; margin-top: 2px; font-size: 10px;">सूत्र: ${p.formula}</div>`
+                          : ""
+                      }
+                    </div>
+                  `
+                    )
+                    .join("")}
+                </div>
+              </div>
+            `
+              : ""
+          }
+
+          ${
             note.keyFormulasTable.length > 0
               ? `
               <div style="margin-top: 12px; margin-bottom: 12px;">
