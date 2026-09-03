@@ -1,8 +1,8 @@
 {
-  "name": "रॉकेट टेस्ट - MHT-CET NEET JEE Study Portal",
-  "short_name": "रॉकेट टेस्ट",
-  "description": "रॉकेट टेस्ट - महाराष्ट्र अधिकृत MHT-CET, NEET व JEE Main १० ग्रँड मॉक टेस्ट्स, डिजिटल OMR, मराठी-इंग्रजी नोट्स आणि AI सराव पोर्टल.",
-  "id": "com.rockettest.mhtcet.neet.jee",
+  "name": "PLPC Learning App - Perfect Learning Point for Competitive Exams",
+  "short_name": "PLPC Learning App",
+  "description": "PLPC Learning App - Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET). १० ग्रँड मॉक टेस्ट्स, डिजिटल OMR, मराठी-इंग्रजी नोट्स आणि AI सराव पोर्टल.",
+  "id": "com.plpclearningapp.neet.jee.mhtcet",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

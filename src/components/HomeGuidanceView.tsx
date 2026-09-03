@@ -169,8 +169,8 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             onClick={() => onNavigate("grand_tests")}
             className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-xs font-bold hover:bg-indigo-100 transition-colors"
           >
-            <Rocket className="w-3.5 h-3.5 transform -rotate-45" />
-            <span>रॉकेट टेस्ट PRO</span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>PLPC PRO</span>
           </button>
         </div>
       </div>

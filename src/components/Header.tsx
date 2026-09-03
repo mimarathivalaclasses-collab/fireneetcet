@@ -157,23 +157,27 @@ export const Header: React.FC<HeaderProps> = ({
               className="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none min-w-0 group"
               onClick={() => handleNavClick("home")}
             >
-              {/* Rocket Logo Icon */}
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-rose-500 text-white flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 ring-1 ring-white/20 group-hover:scale-105 transition-transform">
-                <Rocket className="w-5 h-5 text-amber-300 transform -rotate-45" />
+              {/* PLPC Logo Badge */}
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-rose-500 text-white flex flex-col items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 ring-1 ring-white/20 group-hover:scale-105 transition-transform font-black">
+                <span className="text-[11px] sm:text-xs font-black tracking-tighter leading-none">PLPC</span>
+                <span className="text-[8px] text-amber-300 font-bold uppercase leading-none tracking-widest mt-0.5">APP</span>
               </div>
 
-              {/* Rocket Test Title & Subtitle */}
+              {/* PLPC Learning App Title & Subtitle */}
               <div className="min-w-0 flex flex-col justify-center">
                 <div className="flex items-center gap-1.5 leading-none">
                   <span className="text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white truncate">
-                    रॉकेट टेस्ट
+                    PLPC Learning App
                   </span>
                   <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 shrink-0">
-                    PORTAL
+                    PREP
                   </span>
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-bold tracking-tight truncate mt-0.5">
-                  MHT-CET • NEET • JEE
+                <p
+                  className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-bold tracking-tight truncate mt-0.5 max-w-[260px] sm:max-w-md"
+                  title="Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)"
+                >
+                  Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
                 </p>
               </div>
             </div>

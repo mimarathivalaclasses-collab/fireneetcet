@@ -47,7 +47,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
     new Set(TOPIC_NOTES_DATA.map((n) => n.id))
   );
   const [cardTabState, setCardTabState] = useState<Record<string, "points100" | "sections" | "formulas">>({});
-  const [instituteName, setInstituteName] = useState<string>("Mi Marathi Vala Classes");
+  const [instituteName, setInstituteName] = useState<string>("PLPC Learning App");
 
   // Toggle single note expansion
   const toggleExpand = (id: string) => {

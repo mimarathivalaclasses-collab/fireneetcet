@@ -349,9 +349,11 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
       <div className="mt-auto p-3 border-t border-slate-100 dark:border-slate-800">
         <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-800/90 dark:to-indigo-950/40 p-3 rounded-2xl border border-indigo-100 dark:border-indigo-900/50 space-y-2">
           <div className="flex items-center gap-2">
-            <Rocket className="w-4 h-4 text-amber-500 transform -rotate-45" />
+            <div className="w-5 h-5 rounded-md bg-indigo-600 text-white flex items-center justify-center font-black text-[9px] shadow-xs">
+              P
+            </div>
             <span className="text-xs font-black text-slate-900 dark:text-white">
-              रॉकेट टेस्ट PRO
+              PLPC PRO
             </span>
           </div>
           <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-tight">
