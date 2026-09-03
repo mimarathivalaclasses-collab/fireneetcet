@@ -668,8 +668,21 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
               <span>सपोर्ट हेल्पलाईन: <strong>9307220454</strong></span>
             </div>
             <div className="text-[11px] text-slate-400">
-              © 2026 Abhyas Mitra Applet • Secure Cloud Storage
+              © 2026 PLPC Learning App • Secure Educational Portal
             </div>
+          </div>
+
+          {/* Legal Disclaimer & Naming Terms (बारीक अक्षरांमध्ये अस्वीकरण व अटी) */}
+          <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed space-y-1 bg-slate-50/80 p-3 rounded-xl border border-slate-200/60">
+            <p className="font-bold text-slate-700 flex items-center gap-1.5">
+              <span>⚖️ शैक्षणिक अस्वीकरण व अटी (Educational Disclaimer & Terms):</span>
+            </p>
+            <p>
+              हे ॲप गरीब व ग्रामीण भागातील होतकरू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मार्गदर्शनासाठी बिगर-व्यावसायिक तत्त्वावर चालवले जाते. या ॲपच्या नावाचे (PLPC) इतर कोणत्याही व्यावसायिक क्लासेस किंवा ट्रेडमार्कशी साधर्म्य असल्यास तो निव्वळ योगायोग समजावा.
+            </p>
+            <p>
+              कोणाचेही या नावावर कायदेशीर हक्क असल्यास किंवा अधिकृत आक्षेप असल्यास, योग्य सूचना मिळाल्यास कोणत्याही वादाविना १० आठवड्यांच्या (10 Weeks) आत ॲपचे नाव व ब्रँडिंग तत्काळ बदलून सहकार्य केले जाईल.
+            </p>
           </div>
         </div>
       </div>

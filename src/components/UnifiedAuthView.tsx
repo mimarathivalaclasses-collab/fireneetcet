@@ -1029,6 +1029,23 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             </button>
           </form>
         </div>
+
+        {/* Legal Disclaimer & Naming Terms (खूप बारीक अक्षरांमध्ये शैक्षणिक अस्वीकरण व अटी) */}
+        <div className="bg-slate-900/80 backdrop-blur-xs rounded-2xl p-4 border border-white/10 text-slate-400 text-[10px] leading-relaxed space-y-1.5 text-justify">
+          <div className="flex items-center gap-1.5 text-slate-300 font-bold text-[11px]">
+            <ShieldCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <span>शैक्षणिक अस्वीकरण, नाव व अटी (Educational Disclaimer & Terms of Use)</span>
+          </div>
+          <p>
+            १. <strong>उद्देश:</strong> हे ॲप (PLPC Learning App) पूर्णपणे ग्रामीण, होतकरू व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मार्गदर्शनासाठी तयार करण्यात आलेले विना-व्यावसायिक डिजिटल पोर्टल आहे.
+          </p>
+          <p>
+            २. <strong>नावाबाबत स्पष्टीकरण (Naming Coincidence):</strong> या ॲपचे नाव व ॲक्रॉनिम (PLPC) जर इतर कोणत्याही व्यावसायिक क्लासेस, संस्था किंवा नोंदणीकृत ट्रेडमार्कशी जुळत असेल तर तो निव्वळ योगायोग समजावा. कोणत्याही संस्थेचा अधिकृत व्यवसाय किंवा ब्रँड प्रभावित करण्याचा कोणताही हेतू नाही.
+          </p>
+          <p>
+            ३. <strong>बदलाची हमी (10 Weeks Resolution):</strong> या नावावर इतर कोणत्याही अधिकृत संस्थेचा कायदेशीर अधिकार आढळल्यास अथवा आक्षेप/सूचना आल्यास, कोणत्याही वादाविना १० आठवड्यांच्या (10 Weeks) आत ॲपचे नाव व ब्रँडिंग तत्काळ बदलून योग्य सहकार्य केले जाईल.
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import {
   Atom,
   Stethoscope,
   BookOpenCheck,
+  ShieldCheck,
 } from "lucide-react";
 import { ExamType, LanguageMode, NavigationTab, StudentUser } from "../types";
 
@@ -407,6 +408,17 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Footer Disclaimer & Terms (खूप बारीक अक्षरांमधील शैक्षणिक अस्वीकरण) */}
+      <footer className="pt-4 pb-8 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed space-y-1 text-center">
+        <div className="flex items-center justify-center gap-1 text-[11px] font-bold text-slate-600 dark:text-slate-400">
+          <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
+          <span>PLPC Learning App • शैक्षणिक अस्वीकरण व अटी</span>
+        </div>
+        <p className="max-w-2xl mx-auto">
+          हे ॲप गरीब व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मदतीसाठी चालवले जात आहे. या नावाचे इतर कोणत्याही संस्थेशी साधर्म्य आढळल्यास तो निव्वळ योगायोग समजावा. कायदेशीर आक्षेप अथवा नोटीस प्राप्त झाल्यास १० आठवड्यांच्या आत (10 Weeks) ॲपचे नाव व ब्रँडिंग तत्काळ बदलण्यात येईल.
+        </p>
+      </footer>
     </div>
   );
 };

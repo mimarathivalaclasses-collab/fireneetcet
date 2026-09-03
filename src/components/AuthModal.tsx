@@ -587,6 +587,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </button>
             </form>
           )}
+
+          {/* Legal Disclaimer & Naming Terms (खूप बारीक अक्षरांमध्ये अस्वीकरण व अटी) */}
+          <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-500 leading-snug space-y-1 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
+            <p className="font-bold text-slate-700 flex items-center gap-1">
+              <span>⚖️ शैक्षणिक अस्वीकरण व अटी:</span>
+            </p>
+            <p className="text-slate-600 text-[9px] leading-tight">
+              हे ॲप गरजू विद्यार्थ्यांच्या मोफत/सुलभ परीक्षा सरावासाठी आहे. नावाचे इतर कोणत्याही संस्थेशी साधर्म्य आढळल्यास तो निव्वळ योगायोग समजावा. कायदेशीर आक्षेप असल्यास विना-वाद १० आठवड्यांत (10 weeks) नाव बदलले जाईल.
+            </p>
+          </div>
         </div>
       </div>
     </div>
