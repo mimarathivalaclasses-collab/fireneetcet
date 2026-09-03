@@ -12,6 +12,8 @@ import {
   ChevronDown,
   ShieldCheck,
   Award,
+  BookOpen,
+  Sparkles,
 } from "lucide-react";
 import {
   ExamType,
@@ -226,6 +228,22 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* RIGHT SECTION: Controls & Authentication Area */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+
+          {/* Quick Notes (Most MVP Revision Notes) Button */}
+          <button
+            id="header-btn-quick-notes"
+            type="button"
+            onClick={() => handleNavClick("notes")}
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500/15 via-teal-500/15 to-emerald-500/15 hover:from-emerald-500/25 hover:to-teal-500/25 text-emerald-800 dark:text-emerald-300 border border-emerald-400/40 dark:border-emerald-600/40 text-xs font-black shadow-xs cursor-pointer active:scale-95 transition-all"
+            title="100% Guaranteed High-Yield Most MVP Notes (सर्व विषयांच्या नोट्स)"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="hidden xs:inline">MVP नोट्स</span>
+            <span className="xs:hidden">नोट्स</span>
+            <span className="hidden md:inline-flex items-center px-1.5 py-0.2 rounded-full bg-emerald-600 text-white text-[9px] font-black uppercase tracking-tight">
+              100% MVP
+            </span>
+          </button>
           
           {/* Language Switcher (Desktop Full / Mobile Dropdown) */}
           <div className="relative" ref={langDropdownRef}>

@@ -43,6 +43,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
   const [selectedSubject, setSelectedSubject] = useState<SubjectType | "All">("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [viewLanguage, setViewLanguage] = useState<LanguageMode>(initialLanguage || "bilingual");
+  const [onlyMvp, setOnlyMvp] = useState<boolean>(false);
   const [expandedNoteIds, setExpandedNoteIds] = useState<Set<string>>(
     new Set(TOPIC_NOTES_DATA.map((n) => n.id))
   );
@@ -83,6 +84,9 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
       if (selectedSubject !== "All" && note.subject !== selectedSubject) {
         return false;
       }
+      if (onlyMvp && note.highYieldWeightage !== "High") {
+        return false;
+      }
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchTitle = note.title.toLowerCase().includes(q) || note.titleMr.toLowerCase().includes(q);
@@ -97,7 +101,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
       }
       return true;
     });
-  }, [selectedExam, selectedSubject, searchQuery]);
+  }, [selectedExam, selectedSubject, searchQuery, onlyMvp]);
 
   const handleExportAllPdf = () => {
     printTopicNotesReport(filteredNotes, instituteName, viewLanguage);
@@ -222,7 +226,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
           </div>
         </div>
 
-        {/* Subject Filter Tabs */}
+        {/* Subject Filter Tabs & MVP Toggle */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
           <div className="flex flex-wrap items-center gap-1.5">
             {subjectsList.map((sub) => {
@@ -230,7 +234,8 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               const count = TOPIC_NOTES_DATA.filter((n) => {
                 const matchExam = selectedExam === "All" || n.exams.includes(selectedExam);
                 const matchSub = sub.id === "All" || n.subject === sub.id;
-                return matchExam && matchSub;
+                const matchMvp = !onlyMvp || n.highYieldWeightage === "High";
+                return matchExam && matchSub && matchMvp;
               }).length;
 
               return (
@@ -255,6 +260,22 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                 </button>
               );
             })}
+
+            {/* MVP 100% Exam Probability Quick Toggle */}
+            <button
+              id="btn-notes-toggle-mvp"
+              type="button"
+              onClick={() => setOnlyMvp(!onlyMvp)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer border ${
+                onlyMvp
+                  ? "bg-gradient-to-r from-amber-500 to-rose-500 text-white border-transparent shadow-md shadow-amber-500/20 scale-105"
+                  : "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-700 hover:bg-amber-100"
+              }`}
+              title="परीक्षेत १००% येणारे संभाव्य Most MVP चॅप्टर्स"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>🔥 १००% Most MVP चॅप्टर्स</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-2">

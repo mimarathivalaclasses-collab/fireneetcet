@@ -332,7 +332,86 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         </div>
       </div>
 
-      {/* 4. "Quick Actions" (Screen 2: 8 Clean Icons Grid) */}
+      {/* 4. "Most MVP High-Yield Notes" Section (100% Exam Probability) */}
+      <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl shadow-emerald-950/20 border border-emerald-700/40 relative overflow-hidden">
+        <div className="absolute -top-12 -right-12 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="relative z-10 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400/30 text-[11px] font-black uppercase tracking-wider text-emerald-200">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>100% Exam Probability • Most MVP Revision Notes</span>
+              </div>
+              <h2 className="text-lg sm:text-xl font-black text-white mt-1 flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-emerald-400 shrink-0" />
+                <span>सर्व विषयांच्या Most MVP रिव्हिजन नोट्स</span>
+              </h2>
+              <p className="text-xs text-emerald-100/90 font-medium max-w-2xl mt-0.5">
+                NEET, JEE आणि MHT-CET परीक्षेत 100% येण्याची दाट शक्यता असणारे महत्त्वाचे सूत्रे, व्याख्या, रीअ‍ॅक्शन्स, मेमरी ट्रिक्स व चॅप्टरनिहाय 100 पॉइंट्स.
+              </p>
+            </div>
+
+            <button
+              id="btn-home-open-all-notes"
+              onClick={() => onNavigate("notes")}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30 hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
+            >
+              <span>सर्व नोट्स उघडा</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* 4 Subject Fast Access Pills */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-emerald-700/50">
+            <button
+              onClick={() => onNavigate("notes")}
+              className="p-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-emerald-500/30 text-left transition-all group cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-emerald-200 group-hover:text-white">भौतिकशास्त्र</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/40 text-emerald-200 font-bold">Physics</span>
+              </div>
+              <p className="text-[10px] text-emerald-100/70 mt-1">सूत्र व संकल्पना</p>
+            </button>
+
+            <button
+              onClick={() => onNavigate("notes")}
+              className="p-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-emerald-500/30 text-left transition-all group cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-emerald-200 group-hover:text-white">रसायनशास्त्र</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/40 text-emerald-200 font-bold">Chemistry</span>
+              </div>
+              <p className="text-[10px] text-emerald-100/70 mt-1">रिएक्शन्स व चार्ट्स</p>
+            </button>
+
+            <button
+              onClick={() => onNavigate("notes")}
+              className="p-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-emerald-500/30 text-left transition-all group cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-emerald-200 group-hover:text-white">गणित</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/40 text-emerald-200 font-bold">Maths</span>
+              </div>
+              <p className="text-[10px] text-emerald-100/70 mt-1">शॉर्टकट युक्त्या</p>
+            </button>
+
+            <button
+              onClick={() => onNavigate("notes")}
+              className="p-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-emerald-500/30 text-left transition-all group cursor-pointer"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-emerald-200 group-hover:text-white">जीवशास्त्र</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/40 text-emerald-200 font-bold">Biology</span>
+              </div>
+              <p className="text-[10px] text-emerald-100/70 mt-1">डायग्राम्स व मुद्दे</p>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. "Quick Actions" (Screen 2: 8 Clean Icons Grid) */}
       <div className="space-y-3">
         <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-1.5">
           <span>Quick Actions</span>
