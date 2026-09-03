@@ -61,9 +61,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   // Status for pending approval student
   const [pendingStudent, setPendingStudent] = useState<StudentUser | null>(null);
-  const [utrInput, setUtrInput] = useState<string>("");
-  const [utrSubmitted, setUtrSubmitted] = useState<boolean>(false);
   const [isCheckingStatus, setIsCheckingStatus] = useState<boolean>(false);
+
+  // PhonePe / UPI Direct URIs
+  const phonepeUri = `phonepe://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
+    "PLPC Learning App"
+  )}&am=29&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
+
+  const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
+    "PLPC Learning App"
+  )}&am=29&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
+
+  const upiUri = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
+    "PLPC Learning App"
+  )}&am=29&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
 
   if (!isOpen) return null;
 
@@ -137,6 +148,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(newUser));
     saveStudentToCloud(newUser);
 
+    // Direct launch PhonePe deep link
+    try {
+      window.location.href = phonepeUri;
+    } catch (err) {
+      console.error(err);
+    }
+
     setPendingStudent(newUser);
   };
 
@@ -206,50 +224,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     saveStudentToCloud(student);
 
     onLoginSuccess(student);
-  };
-
-  // Submit UTR from Pending screen
-  const handleSubmitUtr = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!utrInput.trim() || utrInput.trim().length < 4) {
-      alert("कृपया योग्य UTR / Transaction ID टाका.");
-      return;
-    }
-
-    if (pendingStudent) {
-      try {
-        const existingRaw = localStorage.getItem("mcq_app_payment_receipts_v1");
-        const existing = existingRaw ? JSON.parse(existingRaw) : [];
-        existing.unshift({
-          id: `pay-${Date.now()}`,
-          studentId: pendingStudent.id,
-          studentName: pendingStudent.name,
-          studentPhone: pendingStudent.mobile,
-          upiId: UPI_ID,
-          amount: 29,
-          planName: "MHT-CET / NEET संपूर्ण सराव पॅक",
-          utr: utrInput.trim(),
-          date: new Date().toISOString(),
-          status: "pending_approval",
-        });
-        localStorage.setItem("mcq_app_payment_receipts_v1", JSON.stringify(existing));
-
-        // Update student record with UTR
-        const savedStudentsRaw = localStorage.getItem("mcq_app_all_students_v1");
-        const students: StudentUser[] = savedStudentsRaw ? JSON.parse(savedStudentsRaw) : [];
-        const idx = students.findIndex((s) => s.id === pendingStudent.id || s.mobile === pendingStudent.mobile);
-        if (idx >= 0) {
-          students[idx].paymentUtr = utrInput.trim();
-          students[idx].paymentStatus = "paid";
-          localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
-          saveStudentToCloud(students[idx]);
-        }
-      } catch (err) {
-        console.error("Failed to store payment receipt", err);
-      }
-
-      setUtrSubmitted(true);
-    }
   };
 
   // Check approval in cloud
@@ -380,43 +354,30 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   </p>
                 </div>
 
-                {/* UTR Submission Box */}
-                {!utrSubmitted ? (
-                  <form onSubmit={handleSubmitUtr} className="pt-2 border-t border-amber-200 space-y-2">
-                    <div className="text-[11px] font-black text-slate-800">
-                      💳 पेमेंट केले असल्यास UTR प्रविष्ट करा:
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-white p-1 rounded-xl border border-amber-300">
-                      <input
-                        type="text"
-                        placeholder="12 अंकी UTR / Ref No"
-                        value={utrInput}
-                        onChange={(e) => setUtrInput(e.target.value)}
-                        className="flex-1 px-3 py-1.5 text-xs font-mono font-bold focus:outline-none"
-                      />
-                      <button
-                        type="submit"
-                        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer"
-                      >
-                        पाठवा
-                      </button>
-                    </div>
-                  </form>
-                ) : (
-                  <div className="p-3 bg-emerald-100 rounded-2xl border border-emerald-300 text-xs text-emerald-950 font-bold flex items-center justify-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
-                    <span>UTR प्राप्त झाले! ॲडमिन पडताळणी करत आहेत.</span>
+                {/* Direct PhonePe / UPI Payment Button */}
+                <div className="p-3 bg-purple-100/70 rounded-2xl border border-purple-300 space-y-2">
+                  <a
+                    href={phonepeUri}
+                    className="w-full py-2.5 px-3 rounded-xl bg-[#5f259f] hover:bg-[#4a1c7d] text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md shadow-purple-900/20 cursor-pointer"
+                  >
+                    <span>📱 PhonePe वर ₹२९ भरा (Open PhonePe)</span>
+                  </a>
+                  <div className="grid grid-cols-2 gap-2">
+                    <a
+                      href={gpayUri}
+                      className="py-1.5 px-2 rounded-lg bg-white border border-slate-300 text-slate-800 font-bold text-[11px] flex items-center justify-center"
+                    >
+                      <span>Google Pay</span>
+                    </a>
+                    <a
+                      href={upiUri}
+                      className="py-1.5 px-2 rounded-lg bg-white border border-slate-300 text-slate-800 font-bold text-[11px] flex items-center justify-center"
+                    >
+                      <span>इतर UPI</span>
+                    </a>
                   </div>
-                )}
-
-                {/* UPI ID Pill */}
-                <div className="p-3 rounded-2xl bg-white border border-amber-200 text-xs text-slate-700 space-y-1">
-                  <div className="font-bold flex items-center justify-center gap-1 text-emerald-800">
-                    <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
-                    <span>अधिकृत UPI ID वर ₹२९ पाठवा:</span>
-                  </div>
-                  <div className="font-mono font-black text-sm text-slate-900 bg-slate-100 py-1 px-3 rounded-lg select-all">
-                    {UPI_ID}
+                  <div className="text-[10px] font-mono font-bold text-purple-950">
+                    UPI ID: {UPI_ID}
                   </div>
                 </div>
 
@@ -424,14 +385,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div className="pt-1 flex flex-col gap-2">
                   <a
                     href={`https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(
-                      `नमस्कार ॲडमिन सर, मी ${pendingStudent.name} (${pendingStudent.mobile}) MHT-CET/NEET ॲपमध्ये नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.`
+                      `नमस्कार ॲडमिन सर, मी ${pendingStudent.name} (${pendingStudent.mobile}) PLPC App मध्ये नोंदणी केली असून ₹२९ भरले आहेत. कृपया माझे खाते मंजूर (Approve) करा.`
                     )}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center justify-center gap-2"
                   >
                     <MessageCircle className="w-4 h-4" />
-                    <span>ॲडमिनशी WhatsApp वर संपर्क करा ({ADMIN_PHONE})</span>
+                    <span>WhatsApp वर ॲडमिनला मेसेज पाठवा ({ADMIN_PHONE})</span>
                   </a>
 
                   <button
@@ -450,7 +411,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       setPendingStudent(null);
                       setMode("login");
                     }}
-                    className="text-xs text-slate-500 hover:text-slate-800 font-bold underline cursor-pointer"
+                    className="text-xs text-slate-500 hover:text-slate-800 underline font-bold mt-1"
                   >
                     लॉगिन स्क्रीनवर परत जा
                   </button>
@@ -580,10 +541,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
+                className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800 hover:brightness-110 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-purple-900/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
               >
-                <UserPlus className="w-4 h-4" />
-                <span>नोंदणी पूर्ण करा (Sign Up) →</span>
+                <span>📱 नोंदणी करा व PhonePe ने ₹२९ भरा →</span>
               </button>
             </form>
           )}

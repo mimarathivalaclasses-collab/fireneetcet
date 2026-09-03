@@ -88,19 +88,40 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
   // Pending Approval State for unapproved students
   const [pendingApprovalStudent, setPendingApprovalStudent] = useState<StudentUser | null>(null);
 
-  // Official UPI Configurations
+  // Official UPI & PhonePe Configurations
   const PRIMARY_UPI_ID = "9307220454@yz";
   const ADMIN_PHONE = "9307220454";
   const AMOUNT_INR = 29;
 
-  // Standard UPI URI for ₹29
+  // Direct Deep Links for ₹29 Payment
+  const phonepeUri = `phonepe://pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
+    "PLPC Learning App"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
+
+  const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
+    "PLPC Learning App"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
+
   const upiUri = `upi://pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
-    "AbhyasMitra"
-  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("MCQ App Access")}`;
+    "PLPC Learning App"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(
     upiUri
   )}`;
+
+  // Direct PhonePe App Launcher
+  const triggerDirectPhonePe = () => {
+    try {
+      window.location.href = phonepeUri;
+    } catch (e) {
+      try {
+        window.location.href = upiUri;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
 
   const handleCaptchaClick = () => {
     if (isCaptchaChecked || isCaptchaVerifying) return;
@@ -372,7 +393,6 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         isApproved: false,
         isFeePaid: true,
         paymentStatus: "paid",
-        paymentUtr: utrNumber.trim() || undefined,
         registeredAt: Date.now(),
         lastLoginAt: Date.now(),
         referralCode: `REF-${cleanIdentifier.slice(-6)}`,
@@ -400,26 +420,11 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         } catch (e) {}
       }
 
-      // Save payment receipt locally
-      if (utrNumber.trim()) {
-        try {
-          const rawPay = localStorage.getItem("mcq_app_payment_receipts_v1");
-          const payList = rawPay ? JSON.parse(rawPay) : [];
-          payList.unshift({
-            id: `pay_${Date.now()}`,
-            studentName: fullName.trim(),
-            mobile: cleanIdentifier,
-            amount: 29,
-            utr: utrNumber.trim(),
-            status: "pending_approval",
-            timestamp: Date.now(),
-          });
-          localStorage.setItem("mcq_app_payment_receipts_v1", JSON.stringify(payList));
-        } catch (e) {}
-      }
-
       // Save to Firebase Firestore Cloud
       saveStudentToCloud(newStudent);
+
+      // DIRECT PHONEPE TRIGGER: Auto launch PhonePe for ₹29
+      triggerDirectPhonePe();
 
       setIsLoading(false);
       setPendingApprovalStudent(newStudent);
@@ -505,7 +510,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
   // DEDICATED SCREEN: PENDING ADMIN APPROVAL
   if (pendingApprovalStudent) {
-    const waText = `नमस्कार ॲडमिन सर, मी ₹२९ पेमेंट केले असून ॲपमध्ये नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.\n\n👤 नाव: ${pendingApprovalStudent.name}\n📱 मोबाईल: ${pendingApprovalStudent.mobile}\n🎯 परीक्षा: ${pendingApprovalStudent.examTarget}\n💰 भरलेले शुल्क: ₹२९`;
+    const waText = `नमस्कार ॲडमिन सर, मी PLPC Learning App मध्ये ₹२९ भरून नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.\n\n👤 नाव: ${pendingApprovalStudent.name}\n📱 मोबाईल: ${pendingApprovalStudent.mobile}\n🎯 परीक्षा: ${pendingApprovalStudent.examTarget}\n💰 भरलेले शुल्क: ₹२९`;
     const waLink = `https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(waText)}`;
 
     return (
@@ -545,8 +550,44 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 नमस्कार, {pendingApprovalStudent.name}
               </h2>
               <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-                आपली नोंदणी प्राप्त झाली आहे! <strong>मुख्य ॲडमिनद्वारे मंजुरी (Approval)</strong> दिल्यानंतर पूर्ण २५,०००+ प्रश्न व मॉक टेस्ट्स अनलॉक होतील.
+                आपली नोंदणी प्राप्त झाली आहे! <strong>मुख्य ॲडमिनद्वारे मंजुरी (Approval)</strong> दिल्यानंतर पूर्ण २५,०००+ प्रश्न व मॉक टेस्ट्स तात्काळ अनलॉक होतील.
               </p>
+            </div>
+
+            {/* Direct PhonePe / UPI Payment Action (If payment was missed) */}
+            <div className="bg-gradient-to-br from-purple-50 via-indigo-50 to-purple-100 rounded-2xl p-4 border-2 border-purple-300 text-center space-y-2.5 shadow-xs">
+              <div className="text-xs font-black text-purple-950 flex items-center justify-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-purple-600" />
+                <span>₹२९ शुल्क भरले नसेल तर खालील PhonePe बटण दाबा:</span>
+              </div>
+
+              {/* Direct PhonePe Launch Button */}
+              <a
+                href={phonepeUri}
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#5f259f] to-[#4a1c7d] hover:brightness-110 text-white font-black text-sm flex items-center justify-center gap-2 shadow-md shadow-purple-900/30 transition-all cursor-pointer"
+              >
+                <span>📱 PhonePe वर ₹२९ भरा (Open PhonePe)</span>
+              </a>
+
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <a
+                  href={gpayUri}
+                  className="py-2 px-3 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <span>Google Pay</span>
+                </a>
+                <a
+                  href={upiUri}
+                  className="py-2 px-3 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
+                >
+                  <span>इतर UPI ॲप</span>
+                </a>
+              </div>
+
+              {/* UPI ID display */}
+              <div className="text-[11px] font-mono text-purple-900 bg-white/80 py-1 px-2.5 rounded-lg border border-purple-200">
+                UPI ID: <strong>{PRIMARY_UPI_ID}</strong>
+              </div>
             </div>
 
             {/* Student Details Card */}
@@ -561,7 +602,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500 font-medium">स्थिती:</span>
-                <span className="font-bold text-amber-700">मंजुरी प्रलंबित</span>
+                <span className="font-bold text-amber-700">मंजुरी प्रलंबित (ॲडमिन पडताळणी)</span>
               </div>
             </div>
 
@@ -584,7 +625,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               className="w-full py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               <RefreshCw className={`w-4 h-4 text-amber-400 ${isCheckingApproval ? "animate-spin" : ""}`} />
-              <span>{isCheckingApproval ? "तपासत आहे..." : "मंजुरी स्थिती तपासा (Check Status)"}</span>
+              <span>{isCheckingApproval ? "तपासत आहे..." : "मंजुरी स्थिती तपासा (Check Approval Status)"}</span>
             </button>
 
             {/* Back to Login */}
@@ -820,44 +861,33 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 </span>
               </div>
 
-              {/* QR Scanner */}
-              <div className="flex flex-col items-center justify-center p-2 bg-white rounded-2xl border border-purple-200 space-y-2">
-                <img
-                  src={qrCodeUrl}
-                  alt="₹29 Payment QR"
-                  className="w-40 h-40 object-contain rounded-xl"
-                />
-                <div className="flex items-center justify-center gap-1.5 font-mono text-[11px] font-bold text-purple-900 bg-purple-100 px-3 py-1 rounded-lg">
-                  <span>UPI ID: {PRIMARY_UPI_ID}</span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(PRIMARY_UPI_ID);
-                      setCopiedUpi(true);
-                      setTimeout(() => setCopiedUpi(false), 2000);
-                    }}
-                    className="text-purple-700 hover:text-purple-950 cursor-pointer ml-1"
-                  >
-                    {copiedUpi ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  </button>
-                </div>
-              </div>
+              {/* Direct 1-Click PhonePe Link */}
+              <a
+                href={phonepeUri}
+                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#5f259f] to-[#4a1c7d] hover:brightness-110 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md shadow-purple-900/20 cursor-pointer"
+              >
+                <span>📱 Direct PhonePe वर ₹२९ भरा</span>
+              </a>
 
               {/* Direct UPI Apps */}
               <div className="grid grid-cols-2 gap-2">
                 <a
-                  href={`phonepe://pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=AbhyasMitra&am=29&cu=INR`}
-                  className="py-2 px-3 rounded-xl bg-[#5f259f] hover:bg-[#4a1c7d] text-white font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <span>PhonePe</span>
-                </a>
-                <a
-                  href={`tez://upi/pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=AbhyasMitra&am=29&cu=INR`}
+                  href={gpayUri}
                   className="py-2 px-3 rounded-xl bg-[#1a73e8] hover:bg-[#1557b0] text-white font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Google Pay</span>
                 </a>
+                <a
+                  href={upiUri}
+                  className="py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <span>इतर Any UPI</span>
+                </a>
               </div>
+
+              <p className="text-[11px] text-purple-950 font-bold bg-purple-100/70 py-1.5 px-3 rounded-xl">
+                ⚡ नोंदणी सबमिट करताच डायरेक्ट PhonePe उघडून ₹२९ पेमेंट सुरू होईल!
+              </p>
             </div>
           )}
 
@@ -960,19 +990,6 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               </div>
             )}
 
-            {/* UTR Input (if registering student) */}
-            {authMode === "register" && selectedRole === "student" && (
-              <div>
-                <input
-                  type="text"
-                  placeholder="12 अंकी UTR / Transaction Ref No (ऐच्छिक)"
-                  value={utrNumber}
-                  onChange={(e) => setUtrNumber(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold text-slate-900 placeholder:text-slate-400 focus:border-teal-500 outline-none"
-                />
-              </div>
-            )}
-
             {/* reCAPTCHA "I'm not a robot" */}
             <div
               onClick={handleCaptchaClick}
@@ -1006,7 +1023,11 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 text-white font-black text-sm tracking-wide shadow-lg cursor-pointer transition-transform active:scale-98 disabled:opacity-50"
+              className={`w-full py-3.5 rounded-2xl text-white font-black text-sm tracking-wide shadow-lg cursor-pointer transition-transform active:scale-98 disabled:opacity-50 ${
+                authMode === "register" && selectedRole === "student"
+                  ? "bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800 hover:brightness-110 shadow-purple-900/30"
+                  : "bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 shadow-teal-500/30"
+              }`}
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -1023,7 +1044,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                       : "एजंट नोंदणी पूर्ण करा"
                     : authMode === "login"
                     ? "Sign In (लॉगिन करा)"
-                    : "नोंदणी सबमिट करा (Sign Up) →"}
+                    : "📱 नोंदणी करा व PhonePe ने ₹२९ भरा →"}
                 </span>
               )}
             </button>
