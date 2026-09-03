@@ -511,6 +511,27 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     return (
       <div className="w-full min-h-screen bg-[#080816] text-slate-100 flex flex-col justify-center items-center py-8 px-4 relative overflow-hidden antialiased">
         <div className="w-full max-w-md mx-auto relative z-10 space-y-4">
+          {/* Brand Banner */}
+          <div className="text-center space-y-1">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-xs shadow-xs">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[10px]">
+                PLPC
+              </div>
+              <span className="text-xs font-black text-amber-300 tracking-wider uppercase">
+                OFFICIAL APP
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+              PLPC Learning App
+            </h1>
+            <p className="text-xs sm:text-sm text-indigo-200 font-bold max-w-sm mx-auto leading-relaxed">
+              Perfect Learning Point for Competitive Exams
+              <span className="block text-[11px] text-amber-300 font-semibold mt-0.5">
+                (NEET | JEE | MHT-CET)
+              </span>
+            </p>
+          </div>
+
           <div className="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/20 text-center space-y-5">
             <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto shadow-inner">
               <Clock className="w-8 h-8 animate-pulse" />
@@ -590,6 +611,27 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="w-full max-w-md mx-auto relative z-10 space-y-4">
+        {/* Brand Banner Above Card */}
+        <div className="text-center space-y-1.5 pt-1">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-xs shadow-xs">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[10px]">
+              PLPC
+            </div>
+            <span className="text-xs font-black text-amber-300 tracking-wider uppercase">
+              OFFICIAL APP
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+            PLPC Learning App
+          </h1>
+          <p className="text-xs sm:text-sm text-indigo-200 font-bold leading-relaxed max-w-sm mx-auto">
+            Perfect Learning Point for Competitive Exams
+            <span className="block text-[11px] sm:text-xs text-amber-300 font-semibold mt-0.5">
+              (NEET | JEE | MHT-CET)
+            </span>
+          </p>
+        </div>
+
         {/* PWA Install Prompt Bar */}
         <PWAInstallPrompt />
 
@@ -617,16 +659,31 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         {/* MAIN AUTHENTICATION CARD */}
         <div className="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/20 space-y-5">
           {/* Top Logo / Title */}
-          <div className="text-center space-y-1">
-            <div className="w-12 h-12 rounded-2xl bg-teal-500 text-white flex items-center justify-center mx-auto shadow-md font-black">
-              <ShieldCheck className="w-7 h-7" />
+          <div className="text-center space-y-2 pb-2 border-b border-slate-100">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-rose-500 text-white flex flex-col items-center justify-center mx-auto shadow-md ring-2 ring-indigo-100">
+              <span className="text-[13px] font-black tracking-tight leading-none">PLPC</span>
+              <span className="text-[8px] text-amber-300 font-bold uppercase leading-none tracking-widest mt-0.5">APP</span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-              {authMode === "login" ? "आपल्या खात्यात लॉगिन करा" : "नवीन विद्यार्थी नोंदणी"}
-            </h1>
-            <p className="text-xs text-slate-500">
-              MHT-CET • NEET • JEE Main सराव ॲप
-            </p>
+
+            <div className="space-y-0.5">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
+                PLPC Learning App
+              </h2>
+              <p className="text-xs sm:text-sm text-indigo-700 font-bold leading-snug">
+                Perfect Learning Point for Competitive Exams
+                <span className="block text-[11px] text-slate-600 font-semibold mt-0.5">
+                  (NEET | JEE | MHT-CET)
+                </span>
+              </p>
+            </div>
+
+            <div className="pt-1">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-black text-slate-800">
+                {authMode === "login"
+                  ? "🔑 विद्यार्थी लॉगिन (Student Login)"
+                  : "📝 नवीन विद्यार्थी नोंदणी (Student Registration)"}
+              </span>
+            </div>
           </div>
 
           {/* Mode Switch (Login vs Sign Up) */}

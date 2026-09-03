@@ -297,18 +297,37 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </button>
           )}
 
-          <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center mx-auto mb-3">
-            <ShieldCheck className="w-6 h-6 text-emerald-400" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex flex-col items-center justify-center mx-auto mb-2.5 shadow-lg ring-2 ring-white/20">
+            <span className="text-[12px] font-black tracking-tight leading-none">PLPC</span>
+            <span className="text-[8px] text-amber-300 font-bold uppercase leading-none tracking-widest mt-0.5">APP</span>
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-            विद्यार्थी लॉगिन व नोंदणी
-          </h2>
-          <p className="text-slate-300 text-xs mt-1.5 max-w-sm mx-auto">
-            {isTrialExpired
-              ? "⏱️ १० मिनिटांची मोफत चाचणी वेळ संपली आहे. पुढे सुरू ठेवण्यासाठी लॉगिन करा किंवा ॲडमिन मंजुरी मिळवा."
-              : "सुरक्षित परीक्षा तयारीसाठी अधिकृत विद्यार्थी खाते"}
+          {/* Big App Name */}
+          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+            PLPC Learning App
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-xs sm:text-sm text-indigo-200 font-bold mt-1 max-w-sm mx-auto leading-relaxed">
+            Perfect Learning Point for Competitive Exams
+            <span className="block text-[11px] sm:text-xs text-amber-300 font-semibold mt-0.5">
+              (NEET | JEE | MHT-CET)
+            </span>
           </p>
+
+          <div className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-bold text-slate-200">
+            <span>
+              {mode === "login"
+                ? "🔑 विद्यार्थी लॉगिन (Student Login)"
+                : "📝 नवीन विद्यार्थी नोंदणी (New Registration)"}
+            </span>
+          </div>
+
+          {isTrialExpired && (
+            <p className="text-rose-300 text-xs mt-2 max-w-sm mx-auto font-semibold bg-rose-950/60 py-1 px-3 rounded-lg border border-rose-800/60">
+              ⏱️ १० मिनिटांची मोफत चाचणी वेळ संपली आहे. पुढे सुरू ठेवण्यासाठी लॉगिन करा किंवा ॲडमिन मंजुरी मिळवा.
+            </p>
+          )}
 
           {/* Mode Switch Tabs */}
           {!pendingStudent && (

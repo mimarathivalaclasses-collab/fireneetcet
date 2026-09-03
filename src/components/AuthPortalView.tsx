@@ -276,21 +276,25 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
           {/* Top Logo */}
           <div className="relative z-10 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 flex items-center justify-center font-black text-xl shadow-lg ring-4 ring-white/10">
-                <GraduationCap className="w-7 h-7" />
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex flex-col items-center justify-center font-black shadow-lg ring-4 ring-white/10">
+                <span className="text-xs font-black leading-none">PLPC</span>
+                <span className="text-[7px] text-amber-300 font-bold uppercase mt-0.5">APP</span>
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white leading-tight">
-                  अभ्यास मित्र MCQ
+                  PLPC Learning App
                 </h1>
-                <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">
-                  MHT-CET • NEET • JEE Main
+                <span className="text-[11px] font-bold text-amber-300 block leading-tight">
+                  Perfect Learning Point for Competitive Exams
+                </span>
+                <span className="text-[10px] text-indigo-200 font-semibold block">
+                  (NEET | JEE | MHT-CET)
                 </span>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed pt-2">
-              महाराष्ट्रातील १ लाख+ विद्यार्थ्यांचे नंबर #1 ऑनलाईन सराव व मुख्य परीक्षा सिम्युलेटर पोर्टल.
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed pt-1">
+              महाराष्ट्रातील विद्यार्थ्यांसाठी #1 ऑनलाईन सराव व मुख्य परीक्षा सिम्युलेटर पोर्टल.
             </p>
 
             {/* Feature Highlights */}
@@ -394,11 +398,18 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
             {/* TAB 1: STUDENT LOGIN */}
             {activeTab === "login" && (
               <form onSubmit={handleStudentLogin} className="space-y-4 animate-in fade-in">
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    विद्यार्थी लॉगिन (Student Login)
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-indigo-50 border border-indigo-200">
+                    <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+                    <span className="font-black text-xs text-indigo-950">PLPC Learning App</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                    PLPC Learning App - विद्यार्थी लॉगिन
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  <p className="text-xs sm:text-sm text-indigo-700 font-bold">
+                    Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
+                  </p>
+                  <p className="text-xs text-slate-500">
                     तुमचा नोंदणीकृत मोबाईल नंबर आणि पासवर्ड टाकून त्वरित सराव सुरू करा.
                   </p>
                 </div>
@@ -474,11 +485,18 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
             {/* TAB 2: STUDENT REGISTRATION */}
             {activeTab === "register" && (
               <form onSubmit={handleStudentRegister} className="space-y-3.5 animate-in fade-in">
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    नवीन विद्यार्थी नोंदणी (Register)
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-indigo-50 border border-indigo-200">
+                    <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
+                    <span className="font-black text-xs text-indigo-950">PLPC Learning App</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                    PLPC Learning App - नवीन विद्यार्थी नोंदणी
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  <p className="text-xs sm:text-sm text-indigo-700 font-bold">
+                    Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
+                  </p>
+                  <p className="text-xs text-slate-500">
                     सर्व १०+ ग्रँड मॉक टेस्ट्स व विश्लेषण मिळवण्यासाठी त्वरित नोंदणी करा.
                   </p>
                 </div>
