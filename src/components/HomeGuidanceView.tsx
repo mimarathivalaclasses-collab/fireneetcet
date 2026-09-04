@@ -171,7 +171,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-xs font-bold hover:bg-indigo-100 transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>PLPC PRO</span>
+            <span>PLPCAPP PRO</span>
           </button>
         </div>
       </div>
@@ -492,10 +492,10 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       <footer className="pt-4 pb-8 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed space-y-1 text-center">
         <div className="flex items-center justify-center gap-1 text-[11px] font-bold text-slate-600 dark:text-slate-400">
           <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-          <span>PLPC Learning App • शैक्षणिक अस्वीकरण व अटी</span>
+          <span>PLPCAPP • By Mi Marathiwala Classes, Ambad • शैक्षणिक अस्वीकरण</span>
         </div>
         <p className="max-w-2xl mx-auto">
-          हे ॲप गरीब व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मदतीसाठी चालवले जात आहे. या नावाचे इतर कोणत्याही संस्थेशी साधर्म्य आढळल्यास तो निव्वळ योगायोग समजावा. कायदेशीर आक्षेप अथवा नोटीस प्राप्त झाल्यास १० आठवड्यांच्या आत (10 Weeks) ॲपचे नाव व ब्रँडिंग तत्काळ बदलण्यात येईल.
+          <strong>PLPCAPP</strong> (<em>Perfect Learning Point for Competitive Exams</em>) हे <strong>मी मराठीवाला क्लासेस, अंबड</strong> द्वारे संचालित सराव पोर्टल आहे. हे ॲप ग्रामीण व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) तयारीसाठी समर्पित असून इतर कोणत्याही खाजगी क्लासेस किंवा ट्रेडमार्कशी याचा संबंध नाही.
         </p>
       </footer>
     </div>

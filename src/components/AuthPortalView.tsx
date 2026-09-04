@@ -276,19 +276,19 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
           {/* Top Logo */}
           <div className="relative z-10 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex flex-col items-center justify-center font-black shadow-lg ring-4 ring-white/10">
-                <span className="text-xs font-black leading-none">PLPC</span>
-                <span className="text-[7px] text-amber-300 font-bold uppercase mt-0.5">APP</span>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex flex-col items-center justify-center font-black shadow-lg ring-4 ring-white/10 shrink-0">
+                <span className="text-[11px] font-black leading-none tracking-tight">PLPC</span>
+                <span className="text-[8px] text-amber-300 font-black uppercase mt-0.5 tracking-widest">APP</span>
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white leading-tight">
-                  PLPC Learning App
+                  PLPCAPP
                 </h1>
                 <span className="text-[11px] font-bold text-amber-300 block leading-tight">
                   Perfect Learning Point for Competitive Exams
                 </span>
-                <span className="text-[10px] text-indigo-200 font-semibold block">
-                  (NEET | JEE | MHT-CET)
+                <span className="text-[10px] text-indigo-200 font-bold block mt-0.5">
+                  By Mi Marathiwala Classes, Ambad
                 </span>
               </div>
             </div>
@@ -401,10 +401,10 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                 <div className="space-y-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-indigo-50 border border-indigo-200">
                     <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
-                    <span className="font-black text-xs text-indigo-950">PLPC Learning App</span>
+                    <span className="font-black text-xs text-indigo-950">PLPCAPP • By Mi Marathiwala Classes Ambad</span>
                   </div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    PLPC Learning App - विद्यार्थी लॉगिन
+                    PLPCAPP - विद्यार्थी लॉगिन
                   </h2>
                   <p className="text-xs sm:text-sm text-indigo-700 font-bold">
                     Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
@@ -488,10 +488,10 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                 <div className="space-y-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-indigo-50 border border-indigo-200">
                     <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
-                    <span className="font-black text-xs text-indigo-950">PLPC Learning App</span>
+                    <span className="font-black text-xs text-indigo-950">PLPCAPP • By Mi Marathiwala Classes Ambad</span>
                   </div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    PLPC Learning App - नवीन विद्यार्थी नोंदणी
+                    PLPCAPP - नवीन विद्यार्थी नोंदणी
                   </h2>
                   <p className="text-xs sm:text-sm text-indigo-700 font-bold">
                     Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
@@ -668,20 +668,20 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
               <span>सपोर्ट हेल्पलाईन: <strong>9307220454</strong></span>
             </div>
             <div className="text-[11px] text-slate-400">
-              © 2026 PLPC Learning App • Secure Educational Portal
+              © 2026 PLPCAPP • By Mi Marathiwala Classes, Ambad
             </div>
           </div>
 
           {/* Legal Disclaimer & Naming Terms (बारीक अक्षरांमध्ये अस्वीकरण व अटी) */}
-          <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed space-y-1 bg-slate-50/80 p-3 rounded-xl border border-slate-200/60">
-            <p className="font-bold text-slate-700 flex items-center gap-1.5">
-              <span>⚖️ शैक्षणिक अस्वीकरण व अटी (Educational Disclaimer & Terms):</span>
+          <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-500 leading-relaxed space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+            <p className="font-bold text-slate-800 flex items-center gap-1.5">
+              <span>⚖️ शैक्षणिक अस्वीकरण व अधिकृत सूचना (Educational Disclaimer & Notice):</span>
             </p>
             <p>
-              हे ॲप गरीब व ग्रामीण भागातील होतकरू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मार्गदर्शनासाठी बिगर-व्यावसायिक तत्त्वावर चालवले जाते. या ॲपच्या नावाचे (PLPC) इतर कोणत्याही व्यावसायिक क्लासेस किंवा ट्रेडमार्कशी साधर्म्य असल्यास तो निव्वळ योगायोग समजावा.
+              <strong>PLPCAPP</strong> हे <em>'Perfect Learning Point for Competitive Exams'</em> या शैक्षणिक संकल्पनेवर आधारित <strong>'मी मराठीवाला क्लासेस, अंबड' (Mi Marathiwala Classes, Ambad)</strong> द्वारे चालवले जाणारे स्वतंत्र अधिकृत शैक्षणिक व सराव पोर्टल आहे. हे ॲप ग्रामीण व होतकरू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) तयारीसाठी समर्पित आहे.
             </p>
             <p>
-              कोणाचेही या नावावर कायदेशीर हक्क असल्यास किंवा अधिकृत आक्षेप असल्यास, योग्य सूचना मिळाल्यास कोणत्याही वादाविना १० आठवड्यांच्या (10 Weeks) आत ॲपचे नाव व ब्रँडिंग तत्काळ बदलून सहकार्य केले जाईल.
+              या ॲपचा किंवा याच्या शीर्षकाचा इतर कोणत्याही खाजगी क्लासेस, कोचिंग संस्था किंवा कोणत्याही तृतीय पक्ष नोंदणीकृत ट्रेडमार्कशी कोणताही व्यावसायिक अथवा कायदेशीर संबंध नाही.
             </p>
           </div>
         </div>

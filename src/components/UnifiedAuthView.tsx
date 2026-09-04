@@ -95,16 +95,16 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
   // Direct Deep Links for ₹29 Payment
   const phonepeUri = `phonepe://pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
-    "PLPC Learning App"
-  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
+    "PLPCAPP - Mi Marathiwala"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
 
   const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
-    "PLPC Learning App"
-  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
+    "PLPCAPP - Mi Marathiwala"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
 
   const upiUri = `upi://pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
-    "PLPC Learning App"
-  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPC App Registration")}`;
+    "PLPCAPP - Mi Marathiwala"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(
     upiUri
@@ -510,7 +510,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
   // DEDICATED SCREEN: PENDING ADMIN APPROVAL
   if (pendingApprovalStudent) {
-    const waText = `नमस्कार ॲडमिन सर, मी PLPC Learning App मध्ये ₹२९ भरून नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.\n\n👤 नाव: ${pendingApprovalStudent.name}\n📱 मोबाईल: ${pendingApprovalStudent.mobile}\n🎯 परीक्षा: ${pendingApprovalStudent.examTarget}\n💰 भरलेले शुल्क: ₹२९`;
+    const waText = `नमस्कार ॲडमिन सर, मी PLPCAPP (By Mi Marathiwala Classes Ambad) मध्ये ₹२९ भरून नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.\n\n👤 नाव: ${pendingApprovalStudent.name}\n📱 मोबाईल: ${pendingApprovalStudent.mobile}\n🎯 परीक्षा: ${pendingApprovalStudent.examTarget}\n💰 भरलेले शुल्क: ₹२९`;
     const waLink = `https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(waText)}`;
 
     return (
@@ -519,21 +519,21 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           {/* Brand Banner */}
           <div className="text-center space-y-1">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-xs shadow-xs">
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[10px]">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[9px]">
                 PLPC
               </div>
               <span className="text-xs font-black text-amber-300 tracking-wider uppercase">
-                OFFICIAL APP
+                PLPCAPP
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-              PLPC Learning App
+              PLPCAPP
             </h1>
-            <p className="text-xs sm:text-sm text-indigo-200 font-bold max-w-sm mx-auto leading-relaxed">
-              Perfect Learning Point for Competitive Exams
-              <span className="block text-[11px] text-amber-300 font-semibold mt-0.5">
-                (NEET | JEE | MHT-CET)
-              </span>
+            <p className="text-xs font-bold text-amber-300 max-w-sm mx-auto">
+              By Mi Marathiwala Classes, Ambad
+            </p>
+            <p className="text-xs text-indigo-200 font-medium max-w-sm mx-auto leading-relaxed">
+              Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
             </p>
           </div>
 
@@ -708,13 +708,16 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
             <div className="space-y-0.5">
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
-                PLPC Learning App
+                PLPCAPP
               </h2>
               <p className="text-xs sm:text-sm text-indigo-700 font-bold leading-snug">
                 Perfect Learning Point for Competitive Exams
-                <span className="block text-[11px] text-slate-600 font-semibold mt-0.5">
-                  (NEET | JEE | MHT-CET)
-                </span>
+              </p>
+              <p className="text-[11px] font-bold text-amber-600">
+                By Mi Marathiwala Classes, Ambad
+              </p>
+              <p className="text-[10px] text-slate-500 font-semibold">
+                (NEET | JEE | MHT-CET)
               </p>
             </div>
 
@@ -1055,16 +1058,16 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         <div className="bg-slate-900/80 backdrop-blur-xs rounded-2xl p-4 border border-white/10 text-slate-400 text-[10px] leading-relaxed space-y-1.5 text-justify">
           <div className="flex items-center gap-1.5 text-slate-300 font-bold text-[11px]">
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>शैक्षणिक अस्वीकरण, नाव व अटी (Educational Disclaimer & Terms of Use)</span>
+            <span>शैक्षणिक अस्वीकरण, अधिकृत मालकी व अटी (Educational Disclaimer & Terms)</span>
           </div>
           <p>
-            १. <strong>उद्देश:</strong> हे ॲप (PLPC Learning App) पूर्णपणे ग्रामीण, होतकरू व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मार्गदर्शनासाठी तयार करण्यात आलेले विना-व्यावसायिक डिजिटल पोर्टल आहे.
+            १. <strong>अधिकृत मालकी व संकल्पना:</strong> हे ॲप (<strong>PLPCAPP</strong> - <em>Perfect Learning Point for Competitive Exams</em>) हे <strong>'मी मराठीवाला क्लासेस, अंबड' (Mi Marathiwala Classes, Ambad)</strong> द्वारे ग्रामीण, होतकरू व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मार्गदर्शनासाठी तयार करण्यात आलेले स्वतंत्र डिजिटल पोर्टल आहे.
           </p>
           <p>
-            २. <strong>नावाबाबत स्पष्टीकरण (Naming Coincidence):</strong> या ॲपचे नाव व ॲक्रॉनिम (PLPC) जर इतर कोणत्याही व्यावसायिक क्लासेस, संस्था किंवा नोंदणीकृत ट्रेडमार्कशी जुळत असेल तर तो निव्वळ योगायोग समजावा. कोणत्याही संस्थेचा अधिकृत व्यवसाय किंवा ब्रँड प्रभावित करण्याचा कोणताही हेतू नाही.
+            २. <strong>नावाबाबत स्पष्टीकरण (Distinct Entity):</strong> या ॲपचे नाव व संक्षिप्त रूप हे 'Perfect Learning Point for Competitive Exams By Mi Marathiwala Classes Ambad' या मूळ संकल्पनेवर आधारित आहे. इतर कोणत्याही व्यावसायिक क्लासेस, संस्था किंवा तत्सम नावाच्या नोंदणीकृत ट्रेडमार्कशी याचा थेट अथवा अप्रत्यक्ष संबंध नाही.
           </p>
           <p>
-            ३. <strong>बदलाची हमी (10 Weeks Resolution):</strong> या नावावर इतर कोणत्याही अधिकृत संस्थेचा कायदेशीर अधिकार आढळल्यास अथवा आक्षेप/सूचना आल्यास, कोणत्याही वादाविना १० आठवड्यांच्या (10 Weeks) आत ॲपचे नाव व ब्रँडिंग तत्काळ बदलून योग्य सहकार्य केले जाईल.
+            ३. <strong>विद्यार्थी पारदर्शकता:</strong> नोंदणी शुल्क केवळ डिजिटल सर्व्हर व चाचणी व्यवस्थापनासाठी आकारले जाते, जेणेकरून विद्यार्थ्यांना गुणवत्तापूर्ण शैक्षणिक सराव उपलब्ध व्हावा.
           </p>
         </div>
       </div>

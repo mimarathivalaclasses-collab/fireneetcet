@@ -1,6 +1,6 @@
 {
-  "name": "PLPC Learning App",
-  "description": "PLPC Learning App - Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET). महाराष्ट्र अधिकृत MHT-CET (PCM/PCB), NEET आणि JEE Main ऑनलाइन सराव, १० ग्रँड मॉक टेस्ट्स, डिजिटल OMR, मराठी व इंग्रजी द्विभाषिक १०० पॉईंट्स नोट्स, PYQ पेपर्स आणि AI स्पष्टीकरण.",
+  "name": "PLPCAPP",
+  "description": "PLPCAPP - Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET) By Mi Marathiwala Classes Ambad. महाराष्ट्र अधिकृत MHT-CET (PCM/PCB), NEET आणि JEE Main ऑनलाइन सराव, १० ग्रँड मॉक टेस्ट्स, डिजिटल OMR, मराठी व इंग्रजी द्विभाषिक १०० पॉईंट्स नोट्स, PYQ पेपर्स आणि AI स्पष्टीकरण.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

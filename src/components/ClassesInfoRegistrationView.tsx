@@ -43,8 +43,8 @@ export const ClassesInfoRegistrationView: React.FC<ClassesInfoRegistrationViewPr
   // Demo Institute: PLPC Classes Ambad
   const PLPC_AMBAD_INSTITUTE: InstituteProfile = {
     id: "inst_plpc_ambad",
-    name: "PLPC Classes, Ambad (Jalna)",
-    nameMr: "पी. एल. पी. सी. क्लासेस, अंबड (जि. जालना)",
+    name: "PLPC Classes (Mi Marathiwala), Ambad (Jalna)",
+    nameMr: "पी. एल. पी. सी. (मी मराठीवाला क्लासेस), अंबड (जि. जालना)",
     instituteCode: "PLPC-AMBAD",
     directorName: "प्रा. डी. के. सर (Director - PLPC Classes)",
     contactNumber: "+91 93072 20454",
@@ -277,7 +277,7 @@ export const ClassesInfoRegistrationView: React.FC<ClassesInfoRegistrationViewPr
               लाईव्ह डेमो इन्स्टिट्यूट
             </span>
             <h3 className="text-lg font-black text-indigo-950">
-              पी. एल. पी. सी. क्लासेस, अंबड (जि. जालना)
+              पी. एल. पी. सी. (मी मराठीवाला क्लासेस), अंबड (जि. जालना)
             </h3>
             <p className="text-xs text-slate-600 font-medium">
               संचालक: प्रा. डी. के. सर · कोड: <strong className="font-mono text-purple-900">PLPC-AMBAD</strong> · पासवर्ड: <strong className="font-mono text-purple-900">plpc123</strong>

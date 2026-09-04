@@ -131,16 +131,19 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           {/* App Brand Banner */}
           <div className="mb-3.5 pr-8 pb-3 border-b border-white/10">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[10px] tracking-tight shrink-0 shadow-xs">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[9px] tracking-tight shrink-0 shadow-xs">
                 PLPC
               </div>
               <div className="min-w-0">
                 <span className="font-black text-sm text-white tracking-tight block truncate">
-                  PLPC Learning App
+                  PLPCAPP
                 </span>
               </div>
             </div>
-            <p className="text-[10px] text-indigo-200/90 font-medium leading-tight mt-1">
+            <p className="text-[10px] text-amber-300 font-bold leading-tight mt-1">
+              By Mi Marathiwala Classes, Ambad
+            </p>
+            <p className="text-[9px] text-indigo-200/90 font-medium leading-tight mt-0.5">
               Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
             </p>
           </div>
