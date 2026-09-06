@@ -112,9 +112,15 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
             🖨️ PDF सेव्ह / प्रिंट करा
           </button>
         </div>
-        <h2 style="margin: 0 0 4px 0;">NEET • JEE MAIN • MHT-CET — महत्त्वाची बुकमार्क रिव्हिजन शीट</h2>
-        <p style="font-size: 12px; color: #64748b; margin: 0 0 16px 0;">तारीख: ${new Date().toLocaleDateString("mr-IN")}</p>
+        <div style="border-bottom: 3px solid #ea580c; padding-bottom: 10px; margin-bottom: 16px;">
+          <div style="font-size: 20px; font-weight: 900; color: #c2410c;">🎓 मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</div>
+          <h2 style="margin: 4px 0 2px 0; color: #0f172a; font-size: 15px;">NEET • JEE MAIN • MHT-CET — महत्त्वाची बुकमार्क रिव्हिजन शीट</h2>
+          <p style="font-size: 12px; color: #64748b; margin: 0;">तारीख: ${new Date().toLocaleDateString("mr-IN")} • एकूण सेव्ह केलेले महत्त्वाचे प्रश्न: <strong>${bookmarkedQuestions.length}</strong></p>
+        </div>
         ${cardsHtml}
+        <div style="margin-top: 24px; padding-top: 10px; border-top: 1px solid #ea580c; text-align: center; font-size: 11px; color: #64748b; font-weight: bold;">
+          🎓 मी मराठीवाला क्लासेस, अंबड • परीक्षेच्या शेवटच्या क्षणी रिव्हिजनसाठी महत्त्वाचे सेव्ह केलेले प्रश्न
+        </div>
       </body>
       </html>
     `);

@@ -47,7 +47,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
   const [docLanguage, setDocLanguage] = useState<LanguageMode>("bilingual");
   
   // Custom Institute branding (defaults to user's class)
-  const [instituteName, setInstituteName] = useState<string>("मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)");
+  const [instituteName, setInstituteName] = useState<string>("मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes, Ambad)");
   const [docTitle, setDocTitle] = useState<string>("MHT-CET / NEET / JEE 10,00,000+ Unlimited MCQ Question Bank");
   const [testTime, setTestTime] = useState<string>("60 Mins");
   const [showWatermark, setShowWatermark] = useState<boolean>(true);
@@ -162,11 +162,14 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
 </head>
 <body>
   <div class="header">
-    <h1>${instituteName} : ${selectedSubject}</h1>
-    <p>${docTitle}</p>
-    <p style="font-size:10pt; color:#666;">${selectedExam} • ${selectedChapter === "All" ? "सर्व चॅप्टर्स (Full Syllabus)" : selectedChapter} • एकूण प्रश्न: ${displayedQuestions.length}</p>
+    <h1 style="color: #ea580c;">🎓 ${instituteName}</h1>
+    <h2 style="font-size: 14pt; margin: 4px 0; color: #1e293b;">${docTitle}</h2>
+    <p style="font-size:10pt; color:#666;">${selectedExam} • विषय: ${selectedSubject} • ${selectedChapter === "All" ? "सर्व चॅप्टर्स (Full Syllabus)" : selectedChapter} • एकूण प्रश्न: ${displayedQuestions.length}</p>
   </div>
   ${itemsHtml}
+  <div style="text-align: center; border-top: 2px solid #ea580c; padding-top: 10px; margin-top: 25px; font-size: 10pt; color: #64748b; font-weight: bold;">
+    🎓 ${instituteName} • NEET · JEE · MHT-CET अधिकृत सराव प्रश्नसंच
+  </div>
 </body>
 </html>`;
   };
@@ -420,11 +423,11 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
         className="bg-white rounded-2xl border-2 border-slate-300 p-6 sm:p-10 shadow-sm space-y-6 print:border-none print:shadow-none print:p-0"
       >
         {/* Document Header (Matching WeasyPrint Python template) */}
-        <div className="text-center border-b-2 border-blue-900 pb-4 space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-blue-950 uppercase tracking-tight">
-            {instituteName}
+        <div className="text-center border-b-3 border-orange-600 pb-4 space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-black text-orange-600 uppercase tracking-tight">
+            🎓 {instituteName}
           </h1>
-          <h2 className="text-base sm:text-lg font-bold text-rose-900">{docTitle}</h2>
+          <h2 className="text-base sm:text-lg font-bold text-slate-900">{docTitle}</h2>
           <p className="text-xs sm:text-sm font-semibold text-slate-600">
             {selectedExam} • {selectedSubject === "All" ? "Physics | Chemistry | Mathematics / Biology" : selectedSubject} • {selectedChapter === "All" ? "Complete Syllabus" : selectedChapter}
           </p>
@@ -536,8 +539,8 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="text-center border-t border-slate-200 pt-4 text-[11px] text-slate-500 font-medium">
-          {instituteName} • NEET · JEE · MHT-CET Complete 25,000 MCQ Bank Platform • Page 1
+        <div className="text-center border-t-2 border-orange-500 pt-4 text-xs text-slate-600 font-bold">
+          🎓 {instituteName} • NEET · JEE · MHT-CET अधिकृत सराव प्रश्नसंच व टेस्ट सिरीज • All Rights Reserved
         </div>
       </div>
     </div>

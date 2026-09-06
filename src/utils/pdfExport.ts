@@ -271,15 +271,16 @@ export const printTestResultReport = (result: TestResultData, language: Language
         </button>
       </div>
 
-      <div class="header-box">
+      <div class="header-box" style="border-bottom: 3px solid #ea580c;">
         <div>
-          <div class="header-title">NEET • JEE MAIN • MHT-CET MCQ PREP MASTER</div>
-          <div class="header-sub">${examLabel} — <strong>${result.title}</strong></div>
+          <div style="font-size: 20px; font-weight: 900; color: #c2410c; letter-spacing: -0.5px; margin-bottom: 3px;">🎓 मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</div>
+          <div class="header-title">${examLabel} — अधिकृत निकाल व सविस्तर विश्लेषण</div>
+          <div class="header-sub">${result.title}</div>
           <div style="font-size: 11px; color: #64748b; margin-top: 3px;">तारीख: ${dateStr} • वेळ: ${formatTimeDisplay(result.timeTakenSeconds)}</div>
         </div>
         <div style="text-align: right;">
           <div style="font-size: 10.5px; font-weight: 700; color: #64748b;">एकूण गुण (Total Score)</div>
-          <div style="font-size: 22px; font-weight: 800; color: #2563eb;">${result.score} <span style="font-size: 13px; color: #64748b; font-weight: normal;">/ ${result.maxMarks}</span></div>
+          <div style="font-size: 22px; font-weight: 800; color: #ea580c;">${result.score} <span style="font-size: 13px; color: #64748b; font-weight: normal;">/ ${result.maxMarks}</span></div>
           <div style="font-size: 10.5px; font-weight: 700; color: #16a34a;">टक्केवारी: ${result.percentage}% • अचूकता: ${result.accuracy}%</div>
         </div>
       </div>
@@ -332,8 +333,8 @@ export const printTestResultReport = (result: TestResultData, language: Language
 
       ${questionCards}
 
-      <div style="margin-top: 24px; padding-top: 8px; border-top: 1px solid #cbd5e1; text-align: center; font-size: 10.5px; color: #94a3b8;">
-        NEET • JEE Main • MHT-CET सराव व मॉक टेस्ट प्लॅटफॉर्म • Generated via MCQ Prep Master
+      <div style="margin-top: 24px; padding-top: 8px; border-top: 1px solid #ea580c; text-align: center; font-size: 11px; color: #64748b; font-weight: bold;">
+        🎓 मी मराठीवाला क्लासेस, अंबड • MHT-CET • NEET • JEE Main सराव व टेस्ट ॲनालिटिक्स • Mi Marathiwala Classes
       </div>
 
       <script>
@@ -574,8 +575,9 @@ export const printQuestionsBankReport = (
       </style>
     </head>
     <body>
-      <div class="header-box">
+      <div class="header-box" style="border-bottom: 3px solid #ea580c; padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
+          <div style="font-size: 20px; font-weight: 900; color: #c2410c; letter-spacing: -0.5px; margin-bottom: 3px;">🎓 मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</div>
           <div class="header-title">📚 ${examTitle} — अधिकृत प्रश्नसंच व सविस्तर स्पष्टीकरणे</div>
           <div class="header-sub">MHT-CET • NEET • JEE Main सराव प्रश्न, अचूक पर्याय व पायरीनुसार स्पष्टीकरण PDF</div>
         </div>
@@ -589,8 +591,8 @@ export const printQuestionsBankReport = (
         ${questionCards}
       </div>
 
-      <div style="margin-top: 24px; padding-top: 8px; border-top: 1px solid #cbd5e1; text-align: center; font-size: 10.5px; color: #94a3b8;">
-        NEET • JEE Main • MHT-CET सराव व मॉक टेस्ट प्लॅटफॉर्म • Generated via MCQ Prep Master
+      <div style="margin-top: 24px; padding-top: 8px; border-top: 1px solid #ea580c; text-align: center; font-size: 11px; color: #64748b; font-weight: bold;">
+        🎓 मी मराठीवाला क्लासेस, अंबड • MHT-CET • NEET • JEE Main अधिकृत अभ्यासक्रम व प्रश्नसंच
       </div>
 
       <script>
@@ -614,7 +616,7 @@ export const printQuestionsBankReport = (
  */
 export const printTopicNotesReport = (
   notes: TopicNote[],
-  instituteName: string = "मी मराठीवाला क्लासेस (Mi Marathiwala Classes)",
+  instituteName: string = "मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes, Ambad)",
   language: LanguageMode = "bilingual"
 ) => {
   const printWindow = window.open("", "_blank");
@@ -858,7 +860,7 @@ export const printTopicNotesReport = (
           print-color-adjust: exact;
         }
         .header-box {
-          border-bottom: 3px solid #4f46e5;
+          border-bottom: 3px solid #ea580c;
           padding-bottom: 12px;
           margin-bottom: 18px;
           display: flex;
@@ -868,7 +870,7 @@ export const printTopicNotesReport = (
         .inst-name {
           font-size: 20px;
           font-weight: 900;
-          color: #4338ca;
+          color: #c2410c;
           letter-spacing: -0.5px;
         }
         .header-title {
@@ -911,8 +913,8 @@ export const printTopicNotesReport = (
         ${notesHtml}
       </div>
 
-      <div style="margin-top: 24px; padding-top: 10px; border-top: 1px solid #cbd5e1; text-align: center; font-size: 11px; color: #64748b;">
-        MHT-CET / NEET / JEE Main Study Material • ${instituteName} • Generated for Student Revision
+      <div style="margin-top: 24px; padding-top: 10px; border-top: 1px solid #ea580c; text-align: center; font-size: 11px; color: #64748b; font-weight: bold;">
+        🎓 ${instituteName} • MHT-CET / NEET / JEE Main अधिकृत अभ्यासक्रम व चॅप्टर नोट्स • सर्व हक्क राखीव
       </div>
 
       <script>

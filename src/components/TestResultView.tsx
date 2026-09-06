@@ -208,6 +208,22 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
       </div>
 
       <div id="printable-test-report" className="space-y-8 bg-white p-2 sm:p-4 rounded-3xl">
+        {/* Institutional Print Header for Mi Marathiwala Classes */}
+        <div className="border-b-2 border-orange-500 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-black text-orange-600 tracking-tight">
+              🎓 मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)
+            </h1>
+            <p className="text-xs sm:text-sm font-bold text-slate-700">
+              अधिकृत मॉक टेस्ट निकाल व विद्यार्थी कामगिरी विश्लेषण (Official Scorecard & Analysis)
+            </p>
+          </div>
+          <div className="text-left sm:text-right text-xs font-semibold text-slate-500">
+            <div>परीक्षा: <strong className="text-slate-900">{result.exam}</strong></div>
+            <div>दिनांक: <strong className="text-slate-900">{new Date(result.completedAt || Date.now()).toLocaleDateString("mr-IN")}</strong></div>
+          </div>
+        </div>
+
         {/* Scorecard Hero Banner matching Rocket App Screen 4 */}
         <div className="bg-gradient-to-r from-[#292bb2] via-[#3a3dc7] to-[#4e51ec] text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden border border-indigo-700/40">
           <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
@@ -676,6 +692,11 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
               );
             })}
           </div>
+        </div>
+
+        {/* Printable Footer */}
+        <div className="pt-4 border-t border-orange-500 text-center text-xs font-bold text-slate-600">
+          🎓 मी मराठीवाला क्लासेस, अंबड • MHT-CET • NEET • JEE Main सराव व टेस्ट ॲनालिटिक्स • Mi Marathiwala Classes
         </div>
       </div>
     </div>

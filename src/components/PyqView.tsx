@@ -171,9 +171,15 @@ export const PyqView: React.FC<PyqViewProps> = ({
             🖨️ PDF सेव्ह / प्रिंट करा
           </button>
         </div>
-        <h2 style="margin: 0 0 4px 0;">${currentExam} — मागील वर्षांचे अधिकृत प्रश्नसंच (PYQ Archive)</h2>
-        <p style="font-size: 12px; color: #64748b; margin: 0 0 16px 0;">वर्ष: ${selectedYear === "all" ? "सर्व वर्षे (2019-2024)" : selectedYear} • विषय: ${selectedSubject} • एकूण प्रश्न: ${filteredPyqs.length}</p>
+        <div style="border-bottom: 3px solid #ea580c; padding-bottom: 10px; margin-bottom: 16px;">
+          <div style="font-size: 20px; font-weight: 900; color: #c2410c;">🎓 मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</div>
+          <h2 style="margin: 4px 0 2px 0; color: #0f172a; font-size: 15px;">${currentExam} — मागील वर्षांचे अधिकृत प्रश्नसंच (PYQ Archive)</h2>
+          <p style="font-size: 12px; color: #64748b; margin: 0;">वर्ष: ${selectedYear === "all" ? "सर्व वर्षे (2019-2024)" : selectedYear} • विषय: ${selectedSubject} • एकूण प्रश्न: <strong>${filteredPyqs.length}</strong></p>
+        </div>
         ${cardsHtml}
+        <div style="margin-top: 24px; padding-top: 10px; border-top: 1px solid #ea580c; text-align: center; font-size: 11px; color: #64748b; font-weight: bold;">
+          🎓 मी मराठीवाला क्लासेस, अंबड • मागील वर्षांच्या प्रश्नांचा परिपूर्ण सराव व प्रश्नपत्रिका संग्रह
+        </div>
       </body>
       </html>
     `);
