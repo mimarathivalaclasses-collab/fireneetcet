@@ -1,45 +1,64 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="50%" stop-color="#090d16" />
-      <stop offset="100%" stop-color="#030712" />
+      <stop offset="0%" stop-color="#1c1917" />
+      <stop offset="50%" stop-color="#292524" />
+      <stop offset="100%" stop-color="#0c0a09" />
     </linearGradient>
-    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0d9488" />
-      <stop offset="50%" stop-color="#4f46e5" />
-      <stop offset="100%" stop-color="#9333ea" />
+
+    <linearGradient id="bhagvaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f97316" />
+      <stop offset="45%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#c2410c" />
     </linearGradient>
-    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2dd4bf" />
-      <stop offset="100%" stop-color="#fbbf24" />
+
+    <linearGradient id="goldRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="16" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+
+    <radialGradient id="sunGlow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="#f97316" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#ea580c" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#431407" flood-opacity="0.6" />
     </filter>
   </defs>
 
   <!-- Background rounded rect -->
   <rect width="512" height="512" rx="128" fill="url(#bgGrad)" />
-  
-  <!-- Outer Glow Ring -->
-  <rect x="16" y="16" width="480" height="480" rx="112" fill="none" stroke="url(#cardGrad)" stroke-width="8" opacity="0.6" />
 
-  <!-- Inner Badge -->
-  <rect x="56" y="56" width="400" height="400" rx="92" fill="url(#cardGrad)" filter="url(#glow)" />
-  
-  <!-- Graduation Cap Icon -->
-  <g transform="translate(136, 120) scale(10)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+  <!-- Outer Gold Border -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="none" stroke="url(#goldRing)" stroke-width="10" opacity="0.9" />
+
+  <!-- Inner Saffron Bhagva Shield -->
+  <rect x="48" y="48" width="416" height="416" rx="96" fill="url(#bhagvaGrad)" filter="url(#shadow)" />
+
+  <!-- Saffron Sun Glow -->
+  <circle cx="256" cy="230" r="160" fill="url(#sunGlow)" />
+
+  <!-- Flame / Mashal Torch Accent at Top -->
+  <g transform="translate(256, 115) scale(2.6)">
+    <path d="M0,-16 L4,-8 L0,-5 L-4,-8 Z" fill="#fef08a" opacity="0.9" />
+    <path d="M-12,-12 L-6,-6 L-8,-5 Z" fill="#fde047" opacity="0.85" />
+    <path d="M12,-12 L8,-5 L6,-6 Z" fill="#fde047" opacity="0.85" />
+    <path d="M0,-10 Q7,-2 4,8 Q0,14 -4,8 Q-7,-2 0,-10 Z" fill="#fef08a" />
   </g>
 
-  <!-- Lightning Sparkle -->
-  <g transform="translate(206, 310) scale(4.2)" fill="#fbbf24" stroke="#f59e0b" stroke-width="1.5">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </g>
+  <!-- Royal Calligraphy 'म' (मी मराठीवाला) -->
+  <text x="256" y="325" text-anchor="middle" fill="#ffffff" font-family="'Noto Sans Devanagari', system-ui, sans-serif" font-weight="900" font-size="210" letter-spacing="-4">
+    म
+  </text>
 
-  <!-- Text "MHT-CET" at bottom -->
-  <text x="256" y="420" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="34" letter-spacing="3">MCQ MASTER</text>
+  <!-- Text "MI MARATHIWALA CLASSES" -->
+  <text x="256" y="415" text-anchor="middle" fill="#fef08a" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="28" letter-spacing="4">
+    MI MARATHIWALA
+  </text>
+  <text x="256" y="445" text-anchor="middle" fill="#fed7aa" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="20" letter-spacing="3">
+    CLASSES • AMBAD
+  </text>
 </svg>

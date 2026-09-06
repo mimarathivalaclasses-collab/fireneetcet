@@ -65,16 +65,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   // PhonePe / UPI Direct URIs
   const phonepeUri = `phonepe://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
-    "PLPCAPP - Mi Marathiwala"
-  )}&am=29&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
+    "Mi Marathiwala Classes"
+  )}&am=29&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Registration")}`;
 
   const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
-    "PLPCAPP - Mi Marathiwala"
-  )}&am=29&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
+    "Mi Marathiwala Classes"
+  )}&am=29&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Registration")}`;
 
   const upiUri = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
-    "PLPCAPP - Mi Marathiwala"
-  )}&am=29&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
+    "Mi Marathiwala Classes"
+  )}&am=29&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Registration")}`;
 
   if (!isOpen) return null;
 
@@ -271,22 +271,22 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </button>
           )}
 
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex flex-col items-center justify-center mx-auto mb-2.5 shadow-lg ring-2 ring-white/20">
-            <span className="text-[12px] font-black tracking-tight leading-none">PLPC</span>
-            <span className="text-[8px] text-amber-300 font-bold uppercase leading-none tracking-widest mt-0.5">APP</span>
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-500 text-white flex flex-col items-center justify-center mx-auto mb-2.5 shadow-lg ring-2 ring-white/20">
+            <span className="text-[13px] font-black tracking-tight leading-none">म</span>
+            <span className="text-[8px] text-amber-200 font-bold uppercase leading-none tracking-widest mt-0.5">MMC</span>
           </div>
 
           {/* Big App Name */}
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-            PLPCAPP
+            मी मराठीवाला क्लासेस
           </h1>
 
           {/* Subtitle */}
           <p className="text-xs font-bold text-amber-300 mt-0.5">
-            By Mi Marathiwala Classes, Ambad
+            अंबड (जि. जालना) • Mi Marathiwala Classes
           </p>
-          <p className="text-xs text-indigo-200 font-medium max-w-sm mx-auto leading-relaxed">
-            Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
+          <p className="text-xs text-orange-200 font-medium max-w-sm mx-auto leading-relaxed">
+            NEET | JEE | MHT-CET ऑनलाईन परीक्षा व सराव पोर्टल
           </p>
 
           <div className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-bold text-slate-200">
@@ -385,7 +385,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div className="pt-1 flex flex-col gap-2">
                   <a
                     href={`https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(
-                      `नमस्कार ॲडमिन सर, मी ${pendingStudent.name} (${pendingStudent.mobile}) PLPCAPP (By Mi Marathiwala Classes Ambad) मध्ये नोंदणी केली असून ₹२९ भरले आहेत. कृपया माझे खाते मंजूर (Approve) करा.`
+                      `नमस्कार ॲडमिन सर, मी ${pendingStudent.name} (${pendingStudent.mobile}) मी मराठीवाला क्लासेस (अंबड) ॲपमध्ये नोंदणी केली असून ₹२९ भरले आहेत. कृपया माझे खाते मंजूर (Approve) करा.`
                     )}`}
                     target="_blank"
                     rel="noreferrer"

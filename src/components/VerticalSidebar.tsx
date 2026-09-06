@@ -347,13 +347,13 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
 
       {/* Subscription / Support Footer Card */}
       <div className="mt-auto p-3 border-t border-slate-100 dark:border-slate-800">
-        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-800/90 dark:to-indigo-950/40 p-3 rounded-2xl border border-indigo-100 dark:border-indigo-900/50 space-y-2">
+        <div className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-stone-900 dark:to-orange-950/40 p-3 rounded-2xl border border-orange-200 dark:border-orange-900/50 space-y-2">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-md bg-indigo-600 text-white flex items-center justify-center font-black text-[9px] shadow-xs">
-              P
+            <div className="w-5 h-5 rounded-md bg-gradient-to-tr from-orange-600 to-amber-600 text-white flex items-center justify-center font-black text-[9px] shadow-xs">
+              म
             </div>
             <span className="text-xs font-black text-slate-900 dark:text-white">
-              PLPC PRO
+              मराठीवाला PRO
             </span>
           </div>
           <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-tight">
@@ -362,7 +362,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
           {onOpenPaymentModal && (
             <button
               onClick={onOpenPaymentModal}
-              className="w-full py-1.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+              className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
             >
               सदस्यत्व घ्या (₹२९)
             </button>

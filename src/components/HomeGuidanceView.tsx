@@ -168,19 +168,19 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => onNavigate("grand_tests")}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 text-xs font-bold hover:bg-indigo-100 transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-50 dark:bg-orange-950 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800 text-xs font-black hover:bg-orange-100 transition-colors shadow-xs"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>PLPCAPP PRO</span>
+            <span>मी मराठीवाला PRO</span>
           </button>
         </div>
       </div>
 
-      {/* 2. Hero Progress Card (Screen 2: "Your Overall Progress - 72%") */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-[#292bb2] via-[#3a3dc7] to-[#4e51ec] text-white rounded-3xl p-5 sm:p-7 shadow-xl shadow-indigo-500/10">
-        {/* Subtle background cosmic glows */}
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-1/4 -mb-8 w-44 h-44 bg-indigo-300/10 rounded-full blur-2xl pointer-events-none"></div>
+      {/* 2. Hero Progress Card (Bhagva Saffron Theme) */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-orange-600 via-amber-600 to-red-600 text-white rounded-3xl p-5 sm:p-7 shadow-xl shadow-orange-500/20">
+        {/* Subtle background glows */}
+        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-44 h-44 bg-white/15 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-1/4 -mb-8 w-44 h-44 bg-amber-300/20 rounded-full blur-2xl pointer-events-none"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           {/* Left Progress Summary */}
@@ -249,7 +249,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         {/* 4-Stat Strip (Tests Taken, Avg. Score, Best Score, Rank) */}
         <div className="mt-5 pt-4 border-t border-white/15 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
           <div className="bg-white/10 rounded-2xl p-2.5 backdrop-blur-xs">
-            <span className="block text-[10px] text-indigo-200 font-bold uppercase tracking-tight">
+            <span className="block text-[10px] text-amber-100 font-bold uppercase tracking-tight">
               Tests Taken
             </span>
             <strong className="text-sm sm:text-base font-black text-white font-mono-numbers">
@@ -257,7 +257,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             </strong>
           </div>
           <div className="bg-white/10 rounded-2xl p-2.5 backdrop-blur-xs">
-            <span className="block text-[10px] text-indigo-200 font-bold uppercase tracking-tight">
+            <span className="block text-[10px] text-amber-100 font-bold uppercase tracking-tight">
               Avg. Score
             </span>
             <strong className="text-sm sm:text-base font-black text-emerald-300 font-mono-numbers">
@@ -265,7 +265,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             </strong>
           </div>
           <div className="bg-white/10 rounded-2xl p-2.5 backdrop-blur-xs">
-            <span className="block text-[10px] text-indigo-200 font-bold uppercase tracking-tight">
+            <span className="block text-[10px] text-amber-100 font-bold uppercase tracking-tight">
               Best Score
             </span>
             <strong className="text-sm sm:text-base font-black text-amber-300 font-mono-numbers">
@@ -273,7 +273,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             </strong>
           </div>
           <div className="bg-white/10 rounded-2xl p-2.5 backdrop-blur-xs">
-            <span className="block text-[10px] text-indigo-200 font-bold uppercase tracking-tight">
+            <span className="block text-[10px] text-amber-100 font-bold uppercase tracking-tight">
               Rank
             </span>
             <strong className="text-sm sm:text-base font-black text-white font-mono-numbers">
@@ -491,11 +491,11 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       {/* Footer Disclaimer & Terms (खूप बारीक अक्षरांमधील शैक्षणिक अस्वीकरण) */}
       <footer className="pt-4 pb-8 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed space-y-1 text-center">
         <div className="flex items-center justify-center gap-1 text-[11px] font-bold text-slate-600 dark:text-slate-400">
-          <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
-          <span>PLPCAPP • By Mi Marathiwala Classes, Ambad • शैक्षणिक अस्वीकरण</span>
+          <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
+          <span>मी मराठीवाला क्लासेस, अंबड • शैक्षणिक सराव पोर्टल व अस्वीकरण</span>
         </div>
         <p className="max-w-2xl mx-auto">
-          <strong>PLPCAPP</strong> (<em>Perfect Learning Point for Competitive Exams</em>) हे <strong>मी मराठीवाला क्लासेस, अंबड</strong> द्वारे संचालित सराव पोर्टल आहे. हे ॲप ग्रामीण व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) तयारीसाठी समर्पित असून इतर कोणत्याही खाजगी क्लासेस किंवा ट्रेडमार्कशी याचा संबंध नाही.
+          <strong>मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</strong> हे स्पर्धा परीक्षा (MHT-CET, NEET, JEE) तयारीसाठीचे अधिकृत ऑनलाईन सराव पोर्टल आहे. हे ॲप ग्रामीण व गरजू विद्यार्थ्यांच्या सराव व यशासाठी समर्पित आहे.
         </p>
       </footer>
     </div>

@@ -23,6 +23,7 @@ import {
   StudentUser,
   InstituteProfile,
 } from "../types";
+import { MiMarathiwalaLogo } from "./MiMarathiwalaLogo";
 
 interface HeaderProps {
   currentExam: ExamType;
@@ -127,7 +128,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="btn-open-navigation-drawer"
               type="button"
               onClick={onOpenDrawer}
-              className="p-2 sm:p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer shrink-0 active:scale-95"
+              className="p-2 sm:p-2.5 rounded-xl bg-orange-50 dark:bg-orange-950/40 hover:bg-orange-100 dark:hover:bg-orange-900/50 text-orange-700 dark:text-orange-300 hover:text-orange-900 dark:hover:text-orange-100 border border-orange-200/80 dark:border-orange-800/80 transition-colors cursor-pointer shrink-0 active:scale-95"
               title="सर्व मेनू (Menu)"
               aria-label="Open Navigation Drawer"
             >
@@ -141,14 +142,14 @@ export const Header: React.FC<HeaderProps> = ({
               className="flex items-center gap-2 cursor-pointer select-none min-w-0"
               onClick={() => handleNavClick("classes_portal")}
             >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-700 text-white flex items-center justify-center shadow-sm shrink-0">
-                <Building2 className="w-5 h-5 text-amber-300" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-600 text-white flex items-center justify-center shadow-sm shrink-0">
+                <Building2 className="w-5 h-5 text-amber-200" />
               </div>
               <div className="min-w-0">
                 <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white truncate block">
                   {activeInstitute.nameMr || activeInstitute.name}
                 </span>
-                <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 font-mono block">
+                <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 font-mono block">
                   {activeInstitute.instituteCode}
                 </span>
               </div>
@@ -159,29 +160,8 @@ export const Header: React.FC<HeaderProps> = ({
               className="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none min-w-0 group"
               onClick={() => handleNavClick("home")}
             >
-              {/* PLPC Logo Badge */}
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-rose-500 text-white flex flex-col items-center justify-center shadow-md shadow-indigo-500/20 shrink-0 ring-1 ring-white/20 group-hover:scale-105 transition-transform font-black">
-                <span className="text-[11px] sm:text-xs font-black tracking-tighter leading-none">PLPC</span>
-                <span className="text-[8px] text-amber-300 font-bold uppercase leading-none tracking-widest mt-0.5">APP</span>
-              </div>
-
-              {/* PLPC Learning App Title & Subtitle */}
-              <div className="min-w-0 flex flex-col justify-center">
-                <div className="flex items-center gap-1.5 leading-none">
-                  <span className="text-sm sm:text-base font-black tracking-tight text-slate-900 dark:text-white truncate">
-                    PLPC Learning App
-                  </span>
-                  <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 shrink-0">
-                    PREP
-                  </span>
-                </div>
-                <p
-                  className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-bold tracking-tight truncate mt-0.5 max-w-[260px] sm:max-w-md"
-                  title="Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)"
-                >
-                  Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
-                </p>
-              </div>
+              {/* Bhagva Logo Badge with Mi Marathiwala Classes Name */}
+              <MiMarathiwalaLogo size="md" showText={true} />
             </div>
           )}
         </div>
@@ -402,7 +382,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="btn-header-login"
               type="button"
               onClick={onOpenAuthModal}
-              className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-xs font-black transition-all cursor-pointer shadow-sm shadow-indigo-500/25 active:scale-95 shrink-0"
+              className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white text-xs font-black transition-all cursor-pointer shadow-md shadow-orange-500/25 active:scale-95 shrink-0"
               title="लॉगिन किंवा मोफत खाते उघडा"
             >
               <LogIn className="w-4 h-4" />

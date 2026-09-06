@@ -62,19 +62,45 @@
 
   /* Custom Geometric Scrollbars */
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #F1F5F9;
+    background: #F8FAFC;
   }
   ::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
+    background: #FDBA74;
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #94A3B8;
+    background: #EA580C;
   }
+}
+
+/* Bhagva Saffron Theme Gradients & Accents */
+.bg-bhagva-gradient {
+  background: linear-gradient(135deg, #c2410c 0%, #ea580c 50%, #f97316 100%);
+}
+
+.bg-bhagva-dark {
+  background: linear-gradient(135deg, #1c1917 0%, #431407 50%, #292524 100%);
+}
+
+.text-bhagva {
+  color: #ea580c;
+}
+
+.border-bhagva {
+  border-color: #f97316;
+}
+
+.shadow-bhagva {
+  box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.25), 0 8px 10px -6px rgba(234, 88, 12, 0.2);
+}
+
+::selection {
+  background-color: #ea580c;
+  color: #ffffff;
 }
 
 /* Subtle Geometric Grid Background Utility */

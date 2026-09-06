@@ -47,7 +47,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
   const [docLanguage, setDocLanguage] = useState<LanguageMode>("bilingual");
   
   // Custom Institute branding (defaults to user's class)
-  const [instituteName, setInstituteName] = useState<string>("PLPC Learning App");
+  const [instituteName, setInstituteName] = useState<string>("मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)");
   const [docTitle, setDocTitle] = useState<string>("MHT-CET / NEET / JEE 10,00,000+ Unlimited MCQ Question Bank");
   const [testTime, setTestTime] = useState<string>("60 Mins");
   const [showWatermark, setShowWatermark] = useState<boolean>(true);

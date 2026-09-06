@@ -614,7 +614,7 @@ export const printQuestionsBankReport = (
  */
 export const printTopicNotesReport = (
   notes: TopicNote[],
-  instituteName: string = "PLPC Learning App",
+  instituteName: string = "मी मराठीवाला क्लासेस (Mi Marathiwala Classes)",
   language: LanguageMode = "bilingual"
 ) => {
   const printWindow = window.open("", "_blank");

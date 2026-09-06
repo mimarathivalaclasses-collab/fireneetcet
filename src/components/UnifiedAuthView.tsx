@@ -95,16 +95,16 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
   // Direct Deep Links for ₹29 Payment
   const phonepeUri = `phonepe://pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
-    "PLPCAPP - Mi Marathiwala"
-  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
+    "Mi Marathiwala Classes"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Registration")}`;
 
   const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
-    "PLPCAPP - Mi Marathiwala"
-  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
+    "Mi Marathiwala Classes"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Registration")}`;
 
   const upiUri = `upi://pay?pa=${encodeURIComponent(PRIMARY_UPI_ID)}&pn=${encodeURIComponent(
-    "PLPCAPP - Mi Marathiwala"
-  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("PLPCAPP Registration")}`;
+    "Mi Marathiwala Classes"
+  )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Registration")}`;
 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(
     upiUri
@@ -510,30 +510,30 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
   // DEDICATED SCREEN: PENDING ADMIN APPROVAL
   if (pendingApprovalStudent) {
-    const waText = `नमस्कार ॲडमिन सर, मी PLPCAPP (By Mi Marathiwala Classes Ambad) मध्ये ₹२९ भरून नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.\n\n👤 नाव: ${pendingApprovalStudent.name}\n📱 मोबाईल: ${pendingApprovalStudent.mobile}\n🎯 परीक्षा: ${pendingApprovalStudent.examTarget}\n💰 भरलेले शुल्क: ₹२९`;
+    const waText = `नमस्कार ॲडमिन सर, मी मी मराठीवाला क्लासेस (अंबड) ॲपमध्ये ₹२९ भरून नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.\n\n👤 नाव: ${pendingApprovalStudent.name}\n📱 मोबाईल: ${pendingApprovalStudent.mobile}\n🎯 परीक्षा: ${pendingApprovalStudent.examTarget}\n💰 भरलेले शुल्क: ₹२९`;
     const waLink = `https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(waText)}`;
 
     return (
-      <div className="w-full min-h-screen bg-[#080816] text-slate-100 flex flex-col justify-center items-center py-8 px-4 relative overflow-hidden antialiased">
+      <div className="w-full min-h-screen bg-[#140a04] text-slate-100 flex flex-col justify-center items-center py-8 px-4 relative overflow-hidden antialiased">
         <div className="w-full max-w-md mx-auto relative z-10 space-y-4">
           {/* Brand Banner */}
           <div className="text-center space-y-1">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-xs shadow-xs">
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[9px]">
-                PLPC
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-orange-500/15 border border-orange-500/25 backdrop-blur-xs shadow-xs">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-500 text-white flex items-center justify-center font-black text-[10px]">
+                म
               </div>
               <span className="text-xs font-black text-amber-300 tracking-wider uppercase">
-                PLPCAPP
+                मी मराठीवाला क्लासेस
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-              PLPCAPP
+              मी मराठीवाला क्लासेस
             </h1>
             <p className="text-xs font-bold text-amber-300 max-w-sm mx-auto">
-              By Mi Marathiwala Classes, Ambad
+              अंबड (जि. जालना) • Mi Marathiwala Classes
             </p>
-            <p className="text-xs text-indigo-200 font-medium max-w-sm mx-auto leading-relaxed">
-              Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
+            <p className="text-xs text-orange-200 font-medium max-w-sm mx-auto leading-relaxed">
+              NEET | JEE | MHT-CET ऑनलाईन परीक्षा व सराव पोर्टल
             </p>
           </div>
 
@@ -654,21 +654,21 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       <div className="w-full max-w-md mx-auto relative z-10 space-y-4">
         {/* Brand Banner Above Card */}
         <div className="text-center space-y-1.5 pt-1">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-xs shadow-xs">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[10px]">
-              PLPC
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-orange-500/15 border border-orange-500/25 backdrop-blur-xs shadow-xs">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-500 text-white flex items-center justify-center font-black text-[10px]">
+              म
             </div>
             <span className="text-xs font-black text-amber-300 tracking-wider uppercase">
-              OFFICIAL APP
+              अंबड (जि. जालना)
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-            PLPC Learning App
+            मी मराठीवाला क्लासेस
           </h1>
-          <p className="text-xs sm:text-sm text-indigo-200 font-bold leading-relaxed max-w-sm mx-auto">
-            Perfect Learning Point for Competitive Exams
+          <p className="text-xs sm:text-sm text-orange-200 font-bold leading-relaxed max-w-sm mx-auto">
+            Mi Marathiwala Classes, Ambad
             <span className="block text-[11px] sm:text-xs text-amber-300 font-semibold mt-0.5">
-              (NEET | JEE | MHT-CET)
+              (MHT-CET | NEET | JEE सराव पोर्टल)
             </span>
           </p>
         </div>
@@ -701,23 +701,23 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         <div className="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/20 space-y-5">
           {/* Top Logo / Title */}
           <div className="text-center space-y-2 pb-2 border-b border-slate-100">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-rose-500 text-white flex flex-col items-center justify-center mx-auto shadow-md ring-2 ring-indigo-100">
-              <span className="text-[13px] font-black tracking-tight leading-none">PLPC</span>
-              <span className="text-[8px] text-amber-300 font-bold uppercase leading-none tracking-widest mt-0.5">APP</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-500 text-white flex flex-col items-center justify-center mx-auto shadow-md ring-2 ring-orange-200">
+              <span className="text-[14px] font-black tracking-tight leading-none">म</span>
+              <span className="text-[8px] text-amber-200 font-bold uppercase leading-none tracking-widest mt-0.5">MMC</span>
             </div>
 
             <div className="space-y-0.5">
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
-                PLPCAPP
+                मी मराठीवाला क्लासेस
               </h2>
-              <p className="text-xs sm:text-sm text-indigo-700 font-bold leading-snug">
-                Perfect Learning Point for Competitive Exams
+              <p className="text-xs sm:text-sm text-orange-700 font-bold leading-snug">
+                Mi Marathiwala Classes, Ambad
               </p>
               <p className="text-[11px] font-bold text-amber-600">
-                By Mi Marathiwala Classes, Ambad
+                अंबड (जि. जालना)
               </p>
               <p className="text-[10px] text-slate-500 font-semibold">
-                (NEET | JEE | MHT-CET)
+                (NEET | JEE | MHT-CET सराव पोर्टल)
               </p>
             </div>
 
@@ -1054,20 +1054,17 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           </form>
         </div>
 
-        {/* Legal Disclaimer & Naming Terms (खूप बारीक अक्षरांमध्ये शैक्षणिक अस्वीकरण व अटी) */}
-        <div className="bg-slate-900/80 backdrop-blur-xs rounded-2xl p-4 border border-white/10 text-slate-400 text-[10px] leading-relaxed space-y-1.5 text-justify">
-          <div className="flex items-center gap-1.5 text-slate-300 font-bold text-[11px]">
+        {/* Legal Disclaimer & Naming Terms */}
+        <div className="bg-stone-900/80 backdrop-blur-xs rounded-2xl p-4 border border-orange-500/20 text-stone-300 text-[10px] leading-relaxed space-y-1.5 text-justify">
+          <div className="flex items-center gap-1.5 text-orange-300 font-bold text-[11px]">
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>शैक्षणिक अस्वीकरण, अधिकृत मालकी व अटी (Educational Disclaimer & Terms)</span>
+            <span>शैक्षणिक अधिकृत सूचना, मालकी व अटी (Official Educational Notice & Terms)</span>
           </div>
           <p>
-            १. <strong>अधिकृत मालकी व संकल्पना:</strong> हे ॲप (<strong>PLPCAPP</strong> - <em>Perfect Learning Point for Competitive Exams</em>) हे <strong>'मी मराठीवाला क्लासेस, अंबड' (Mi Marathiwala Classes, Ambad)</strong> द्वारे ग्रामीण, होतकरू व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मार्गदर्शनासाठी तयार करण्यात आलेले स्वतंत्र डिजिटल पोर्टल आहे.
+            १. <strong>अधिकृत मालकी:</strong> हे ॲप <strong>'मी मराठीवाला क्लासेस, अंबड' (Mi Marathiwala Classes, Ambad)</strong> द्वारे ग्रामीण, होतकरू व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मार्गदर्शनासाठी चालवले जाणारे अधिकृत डिजिटल पोर्टल आहे.
           </p>
           <p>
-            २. <strong>नावाबाबत स्पष्टीकरण (Distinct Entity):</strong> या ॲपचे नाव व संक्षिप्त रूप हे 'Perfect Learning Point for Competitive Exams By Mi Marathiwala Classes Ambad' या मूळ संकल्पनेवर आधारित आहे. इतर कोणत्याही व्यावसायिक क्लासेस, संस्था किंवा तत्सम नावाच्या नोंदणीकृत ट्रेडमार्कशी याचा थेट अथवा अप्रत्यक्ष संबंध नाही.
-          </p>
-          <p>
-            ३. <strong>विद्यार्थी पारदर्शकता:</strong> नोंदणी शुल्क केवळ डिजिटल सर्व्हर व चाचणी व्यवस्थापनासाठी आकारले जाते, जेणेकरून विद्यार्थ्यांना गुणवत्तापूर्ण शैक्षणिक सराव उपलब्ध व्हावा.
+            २. <strong>विद्यार्थी पारदर्शकता:</strong> नाममात्र नोंदणी शुल्क केवळ डिजिटल सर्व्हर व ऑनलाईन चाचणी व्यवस्थापनासाठी आकारले जाते, जेणेकरून विद्यार्थ्यांना गुणवत्तापूर्ण शैक्षणिक सराव अखंड उपलब्ध व्हावा.
           </p>
         </div>
       </div>

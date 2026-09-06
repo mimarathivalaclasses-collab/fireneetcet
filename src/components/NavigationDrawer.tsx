@@ -27,6 +27,7 @@ import {
   Layers,
 } from "lucide-react";
 import { StudentUser, ExamType, NavigationTab, LanguageMode } from "../types";
+import { MiMarathiwalaLogo } from "./MiMarathiwalaLogo";
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -79,16 +80,16 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
   };
 
   const handleShareApp = () => {
-    const shareText = `🎯 MHT-CET, NEET & JEE Main सराव ॲप! \n🔥 फक्त ₹२९ मध्ये २५,०००+ प्रश्न, १० Grand Tests, सराव व नोट्स!\n🎁 १० मित्रांना रेफर करा आणि १००% फी रिफंड मिळवा!\n👉 आत्ताच सुरू करा: ${window.location.origin}`;
+    const shareText = `🎯 मी मराठीवाला क्लासेस (अंबड) - MHT-CET, NEET & JEE Main सराव ॲप!\n🔥 फक्त ₹२९ मध्ये २५,०००+ प्रश्न, १० Grand Tests, सराव व नोट्स!\n🎁 १० मित्रांना रेफर करा आणि १००% फी रिफंड मिळवा!\n👉 आत्ताच सुरू करा: ${window.location.origin}`;
     if (navigator.share) {
       navigator.share({
-        title: "MHT-CET • NEET • JEE सराव ॲप",
+        title: "मी मराठीवाला क्लासेस - MHT-CET • NEET • JEE सराव ॲप",
         text: shareText,
         url: window.location.origin,
       }).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareText);
-      alert("ॲप शेअर लिंक कॉपी केली गेली आहे! आपण WhatsApp वर पाठवू शकता.");
+      alert("मी मराठीवाला क्लासेस ॲपची लिंक कॉपी केली आहे! आपण WhatsApp वर शेअर करू शकता.");
     }
   };
 
@@ -119,32 +120,30 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           isDarkMode ? "bg-slate-900 text-slate-100 border-r border-slate-800" : "bg-white text-slate-900 border-r border-slate-200"
         } shadow-2xl flex flex-col z-10 animate-in slide-in-from-left duration-200`}
       >
-        {/* Header Profile Section */}
-        <div className="p-4 sm:p-5 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative">
+        {/* Header Profile Section - Bhagva Theme */}
+        <div className="p-4 sm:p-5 bg-gradient-to-br from-stone-950 via-orange-950 to-stone-900 text-white relative border-b border-orange-500/20">
           <button
             onClick={onClose}
-            className="absolute top-3.5 right-3.5 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer z-10"
+            className="absolute top-3.5 right-3.5 p-1.5 rounded-full bg-white/10 hover:bg-orange-600/60 text-white transition-colors cursor-pointer z-10"
           >
             <X className="w-4 h-4" />
           </button>
 
           {/* App Brand Banner */}
           <div className="mb-3.5 pr-8 pb-3 border-b border-white/10">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-500 via-purple-500 to-rose-500 text-white flex items-center justify-center font-black text-[9px] tracking-tight shrink-0 shadow-xs">
-                PLPC
-              </div>
+            <div className="flex items-center gap-2.5">
+              <MiMarathiwalaLogo size="sm" showText={false} />
               <div className="min-w-0">
                 <span className="font-black text-sm text-white tracking-tight block truncate">
-                  PLPCAPP
+                  मी मराठीवाला क्लासेस
+                </span>
+                <span className="text-[10px] text-amber-300 font-bold block truncate">
+                  Mi Marathiwala Classes, Ambad
                 </span>
               </div>
             </div>
-            <p className="text-[10px] text-amber-300 font-bold leading-tight mt-1">
-              By Mi Marathiwala Classes, Ambad
-            </p>
-            <p className="text-[9px] text-indigo-200/90 font-medium leading-tight mt-0.5">
-              Perfect Learning Point for Competitive Exams (NEET | JEE | MHT-CET)
+            <p className="text-[9px] text-orange-200/90 font-medium leading-tight mt-1.5">
+              स्पर्धा परीक्षा सराव केंद्र • (MHT-CET | NEET | JEE)
             </p>
           </div>
 

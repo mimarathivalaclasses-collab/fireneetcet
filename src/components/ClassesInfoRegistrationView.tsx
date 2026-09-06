@@ -40,25 +40,25 @@ export const ClassesInfoRegistrationView: React.FC<ClassesInfoRegistrationViewPr
   onOpenPortal,
   onSelectInstitute,
 }) => {
-  // Demo Institute: PLPC Classes Ambad
-  const PLPC_AMBAD_INSTITUTE: InstituteProfile = {
+  // Demo Institute: Mi Marathiwala Classes Ambad
+  const MARATHIWALA_AMBAD_INSTITUTE: InstituteProfile = {
     id: "inst_plpc_ambad",
-    name: "PLPC Classes (Mi Marathiwala), Ambad (Jalna)",
-    nameMr: "पी. एल. पी. सी. (मी मराठीवाला क्लासेस), अंबड (जि. जालना)",
-    instituteCode: "PLPC-AMBAD",
-    directorName: "प्रा. डी. के. सर (Director - PLPC Classes)",
+    name: "Mi Marathiwala Classes, Ambad (Jalna)",
+    nameMr: "मी मराठीवाला क्लासेस, अंबड (जि. जालना)",
+    instituteCode: "MARATHIWALA-AMBAD",
+    directorName: "प्रा. डी. के. सर (Director - Mi Marathiwala Classes)",
     contactNumber: "+91 93072 20454",
     city: "अंबड (जि. जालना, महाराष्ट्र)",
-    adminPasscode: "plpc123",
+    adminPasscode: "marathi123",
     maxStudentsLimit: 2000,
     batches: [
-      "PLPC 12th Toppers Super-50 (PCM)",
-      "PLPC Target NEET 650+ Medico",
-      "PLPC MHT-CET 99+ Percentile",
-      "PLPC 11th Science Foundation Star",
+      "मराठीवाला 12th Toppers Super-50 (PCM)",
+      "मराठीवाला Target NEET 650+ Medico",
+      "मराठीवाला MHT-CET 99+ Percentile",
+      "मराठीवाला 11th Science Foundation Star",
     ],
-    bannerNotice: "PLPC Classes CBT Portal: Weekly Grand Mock Test is LIVE every Sunday 10:00 AM.",
-    bannerNoticeMr: "📢 पी. एल. पी. सी. क्लासेस ऑनलाईन टेस्ट पॅनल: सर्व बॅचेससाठी दर रविवारी सकाळी १०:०० वाजता महा-मॉक टेस्ट सुरू आहे!",
+    bannerNotice: "Mi Marathiwala Classes CBT Portal: Weekly Grand Mock Test is LIVE every Sunday 10:00 AM.",
+    bannerNoticeMr: "📢 मी मराठीवाला क्लासेस ऑनलाईन टेस्ट पॅनल: सर्व बॅचेससाठी दर रविवारी सकाळी १०:०० वाजता महा-मॉक टेस्ट सुरू आहे!",
     createdAt: 1704067200000,
   };
 
@@ -72,7 +72,7 @@ export const ClassesInfoRegistrationView: React.FC<ClassesInfoRegistrationViewPr
   const [registrationSuccess, setRegistrationSuccess] = useState<InstituteProfile | null>(null);
 
   // Referral Link Generator
-  const [refClassCode, setRefClassCode] = useState("PLPC-AMBAD");
+  const [refClassCode, setRefClassCode] = useState("MARATHIWALA-AMBAD");
   const [copiedRefLink, setCopiedRefLink] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
 
@@ -84,16 +84,16 @@ export const ClassesInfoRegistrationView: React.FC<ClassesInfoRegistrationViewPr
     setTimeout(() => setCopiedRefLink(false), 3000);
   };
 
-  const handleLaunchPlpcDemo = () => {
+  const handleLaunchMarathiwalaDemo = () => {
     const all = getAllInstitutes();
-    let plpc = all.find((i) => i.instituteCode === "PLPC-AMBAD");
-    if (!plpc) {
-      plpc = PLPC_AMBAD_INSTITUTE;
-      all.unshift(plpc);
+    let marathiwala = all.find((i) => i.instituteCode === "MARATHIWALA-AMBAD");
+    if (!marathiwala) {
+      marathiwala = MARATHIWALA_AMBAD_INSTITUTE;
+      all.unshift(marathiwala);
       saveAllInstitutes(all);
     }
-    sessionStorage.setItem("mhtcet_active_whitelabel_institute_v1", JSON.stringify(plpc));
-    onSelectInstitute(plpc);
+    sessionStorage.setItem("mhtcet_active_whitelabel_institute_v1", JSON.stringify(marathiwala));
+    onSelectInstitute(marathiwala);
     onOpenPortal();
   };
 
@@ -171,11 +171,11 @@ export const ClassesInfoRegistrationView: React.FC<ClassesInfoRegistrationViewPr
 
           <div className="flex flex-col sm:flex-row gap-2.5">
             <button
-              onClick={handleLaunchPlpcDemo}
+              onClick={handleLaunchMarathiwalaDemo}
               className="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2"
             >
               <Sparkles className="w-4 h-4 fill-slate-950" />
-              <span>PLPC Classes अंबड डेमो पहा</span>
+              <span>मी मराठीवाला क्लासेस अंबड डेमो पहा</span>
             </button>
             <button
               onClick={onOpenPortal}
@@ -269,26 +269,26 @@ export const ClassesInfoRegistrationView: React.FC<ClassesInfoRegistrationViewPr
         </div>
       </div>
 
-      {/* PLPC Classes Ambad Spotlight Card */}
-      <div className="p-6 rounded-3xl bg-gradient-to-br from-indigo-50 via-purple-50 to-white border-2 border-indigo-300 shadow-md space-y-4">
+      {/* Mi Marathiwala Classes Ambad Spotlight Card */}
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-orange-50 via-amber-50 to-white border-2 border-orange-300 shadow-md space-y-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="space-y-1">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-600 text-white">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-orange-600 text-white">
               लाईव्ह डेमो इन्स्टिट्यूट
             </span>
-            <h3 className="text-lg font-black text-indigo-950">
-              पी. एल. पी. सी. (मी मराठीवाला क्लासेस), अंबड (जि. जालना)
+            <h3 className="text-lg font-black text-orange-950">
+              मी मराठीवाला क्लासेस, अंबड (जि. जालना)
             </h3>
             <p className="text-xs text-slate-600 font-medium">
-              संचालक: प्रा. डी. के. सर · कोड: <strong className="font-mono text-purple-900">PLPC-AMBAD</strong> · पासवर्ड: <strong className="font-mono text-purple-900">plpc123</strong>
+              संचालक: प्रा. डी. के. सर · कोड: <strong className="font-mono text-orange-900">MARATHIWALA-AMBAD</strong> · पासवर्ड: <strong className="font-mono text-orange-900">marathi123</strong>
             </p>
           </div>
           <button
-            onClick={handleLaunchPlpcDemo}
-            className="px-4 py-2.5 rounded-2xl bg-indigo-700 hover:bg-indigo-800 text-white font-black text-xs shadow-md transition-all cursor-pointer flex items-center gap-1.5"
+            onClick={handleLaunchMarathiwalaDemo}
+            className="px-4 py-2.5 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-black text-xs shadow-md transition-all cursor-pointer flex items-center gap-1.5"
           >
             <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>PLPC क्लासेस मोडमध्ये ॲप पहा</span>
+            <span>मराठीवाला क्लासेस मोडमध्ये ॲप पहा</span>
           </button>
         </div>
 
