@@ -796,7 +796,7 @@ export default function App() {
   // STRICT AUTH GATEWAY: If no user is logged in, show dedicated Unified Auth View
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans antialiased">
+      <div className="min-h-[100dvh] w-full max-w-[100vw] bg-slate-950 text-slate-100 flex flex-col font-sans antialiased overflow-y-auto">
         <UnifiedAuthView
           currentUser={currentUser}
           onLoginSuccess={handleLoginSuccess}

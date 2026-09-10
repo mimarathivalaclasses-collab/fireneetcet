@@ -627,31 +627,39 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#080816] text-slate-100 flex flex-col justify-center items-center py-6 sm:py-10 px-4 relative overflow-hidden antialiased select-none">
+    <div className="w-full min-h-[100dvh] bg-[#080816] text-slate-100 flex flex-col items-center justify-start sm:justify-center py-4 sm:py-8 px-3 sm:px-4 relative overflow-y-auto antialiased select-none pt-[max(1rem,env(safe-area-inset-top,0px))] pb-[max(2.5rem,env(safe-area-inset-bottom,0px))]">
       {/* Background Nebulas */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div className="w-full max-w-md mx-auto relative z-10 space-y-4">
-        {/* Brand Banner Above Card */}
-        <div className="text-center space-y-1.5 pt-1">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-orange-500/15 border border-orange-500/25 backdrop-blur-xs shadow-xs">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-500 text-white flex items-center justify-center font-black text-[10px]">
-              म
-            </div>
-            <span className="text-xs font-black text-amber-300 tracking-wider uppercase">
-              अंबड (जि. जालना)
-            </span>
+      <div className="w-full max-w-md mx-auto relative z-10 space-y-3.5">
+        {/* Brand Banner Above Card - Compact, High-Impact & Never Clipped */}
+        <div className="text-center space-y-2 pt-1">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl ring-2 ring-amber-400 shadow-xl mx-auto bg-slate-950 flex items-center justify-center overflow-hidden transition-transform duration-200 hover:scale-105">
+            <img
+              src="/ncj-logo.png"
+              alt="NCJ MOCK TEST APP Logo"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover"
+            />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-            मी मराठीवाला क्लासेस
-          </h1>
-          <p className="text-xs sm:text-sm text-orange-200 font-bold leading-relaxed max-w-sm mx-auto">
-            Mi Marathiwala Classes, Ambad
-            <span className="block text-[11px] sm:text-xs text-amber-300 font-semibold mt-0.5">
-              (MHT-CET | NEET | JEE सराव पोर्टल)
-            </span>
-          </p>
+
+          <div className="space-y-0.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-black uppercase tracking-wider">
+              <span>अंबड (जि. जालना)</span>
+              <span>•</span>
+              <span>अधिकृत सराव पोर्टल</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+              NCJ MOCK TEST APP
+            </h1>
+            <p className="text-xs sm:text-sm text-orange-200 font-bold leading-snug">
+              मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)
+            </p>
+            <p className="text-[11px] text-amber-400 font-semibold">
+              MHT-CET (PCM/PCB) • NEET • JEE Main
+            </p>
+          </div>
         </div>
 
         {/* PWA Install Prompt Bar */}
@@ -679,40 +687,19 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         )}
 
         {/* MAIN AUTHENTICATION CARD */}
-        <div className="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/20 space-y-5">
-          {/* Top Logo / Title */}
-          <div className="text-center space-y-2 pb-2 border-b border-slate-100">
-            <div className="w-16 h-16 rounded-2xl ring-2 ring-amber-400/90 overflow-hidden shadow-lg mx-auto bg-slate-950 flex items-center justify-center">
-              <img
-                src="/ncj-logo.png"
-                alt="NCJ MOCK TEST APP Logo"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="space-y-0.5">
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
-                NCJ MOCK TEST APP
-              </h2>
-              <p className="text-xs sm:text-sm text-orange-700 font-bold leading-snug">
-                मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)
-              </p>
-              <p className="text-[11px] font-bold text-amber-600">
-                अंबड (जि. जालना)
-              </p>
-              <p className="text-[10px] text-slate-500 font-semibold">
-                (MHT-CET | NEET | JEE Main सराव पोर्टल)
-              </p>
-            </div>
-
-            <div className="pt-1">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-black text-slate-800">
-                {authMode === "login"
-                  ? "🔑 विद्यार्थी लॉगिन (Student Login)"
-                  : "📝 नवीन विद्यार्थी नोंदणी (Student Registration)"}
-              </span>
-            </div>
+        <div className="bg-white text-slate-900 rounded-3xl p-5 sm:p-7 shadow-2xl border border-white/20 space-y-4">
+          {/* Card Sub-Header with Auth Mode Status */}
+          <div className="text-center pb-2 border-b border-slate-100 space-y-2">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-orange-50 border border-orange-200/70 text-xs font-black text-orange-900">
+              {authMode === "login"
+                ? "🔑 विद्यार्थी लॉगिन (Student Login)"
+                : "📝 नवीन विद्यार्थी नोंदणी (Student Registration)"}
+            </span>
+            <p className="text-[11px] text-slate-500 font-medium">
+              {authMode === "login"
+                ? "आपला नोंदणीकृत मोबाईल नंबर व पासवर्ड टाकून लॉगिन करा."
+                : "आपले नाव, मोबाईल नंबर व परीक्षेचे लक्ष्य निवडून लगेच नोंदणी करा."}
+            </p>
           </div>
 
           {/* Mode Switch (Login vs Sign Up) */}

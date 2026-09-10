@@ -314,7 +314,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
   return (
     <div className="min-h-[calc(100vh-120px)] bg-slate-100 flex flex-col font-sans">
       {/* Top Test Header Bar */}
-      <header className="bg-white text-slate-900 px-4 sm:px-8 py-3.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-30 shadow-xs">
+      <header className="bg-white text-slate-900 px-4 sm:px-8 py-3.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 sticky top-0 z-30 shadow-xs pt-[max(0.875rem,env(safe-area-inset-top,0px))]">
         <div className="flex items-center gap-3">
           <span className="px-3 py-1 rounded-lg text-xs font-black bg-indigo-50 text-indigo-700 border border-indigo-200 tracking-wide uppercase">
             {exam === "MHT_CET" ? "MHT-CET" : exam === "JEE_MAIN" ? "JEE Main" : exam}

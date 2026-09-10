@@ -225,7 +225,7 @@ export const NavigationBreadcrumbBar: React.FC<NavigationBreadcrumbBarProps> = (
   return (
     <>
       {/* Top Universal Back & Breadcrumb Bar */}
-      <div className="sticky top-[57px] z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800 shadow-xs transition-all">
+      <div className="relative z-20 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/90 dark:border-slate-800 shadow-xs transition-all">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-2.5">
           {/* Left Actions: Back Button & Home Button */}
           <div className="flex items-center gap-1.5 sm:gap-2">
