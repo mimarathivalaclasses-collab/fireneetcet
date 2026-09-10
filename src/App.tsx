@@ -49,7 +49,11 @@ import { AdminApprovalDashboard } from "./components/AdminApprovalDashboard";
 import { SecurityWatermark } from "./components/SecurityWatermark";
 import { getOrCreateDeviceId, getDeviceName } from "./utils/deviceSecurity";
 import { findInstituteByCode } from "./data/coachingInstitutesData";
-import { deduplicateQuestionsList } from "./utils/proceduralQuestionEngine";
+import {
+  deduplicateQuestionsList,
+  buildGuaranteedNonRepeatingMock,
+  normalizeQuestionSignature,
+} from "./utils/proceduralQuestionEngine";
 import { saveStudentTestSubmissionToCloud, saveStudentToCloud } from "./services/firebase";
 import {
   getAllStudentsFromVaults,
@@ -510,11 +514,45 @@ export default function App() {
 
   const handleStartMockTest = (config: any) => {
     const rawQuestions = config.selectedQuestions || [];
-    const cleanQuestions = deduplicateQuestionsList(rawQuestions);
+    let cleanQuestions = deduplicateQuestionsList(rawQuestions);
+
+    // If deduplication removed any duplicate questions and we are short of target questionCount,
+    // automatically top up with fresh, unique questions from the pool!
+    const targetCount = config.questionCount || cleanQuestions.length;
+    if (cleanQuestions.length < targetCount) {
+      const seenSigs = new Set<string>(
+        cleanQuestions.map((q) => normalizeQuestionSignature(q.questionText, q.questionTextMr))
+      );
+      const deficit = targetCount - cleanQuestions.length;
+      const topUp = buildGuaranteedNonRepeatingMock(
+        config.exam || currentExam,
+        config.subject || "All",
+        config.chapterFilter || "All",
+        deficit,
+        questions,
+        seenSigs
+      );
+      cleanQuestions = deduplicateQuestionsList([...cleanQuestions, ...topUp]);
+    }
+
+    // Assign strictly unique test question IDs to prevent any React state or option collision
+    const seenIds = new Set<string>();
+    const finalQuestions = cleanQuestions.map((q, idx) => {
+      let uniqueId = q.id;
+      if (!uniqueId || seenIds.has(uniqueId)) {
+        uniqueId = `${q.id || "test_q"}_pos${idx + 1}`;
+      }
+      seenIds.add(uniqueId);
+      return {
+        ...q,
+        id: uniqueId,
+      };
+    });
+
     setActiveTestConfig({
       ...config,
-      selectedQuestions: cleanQuestions,
-      questionCount: cleanQuestions.length,
+      selectedQuestions: finalQuestions,
+      questionCount: finalQuestions.length,
     });
     setCurrentTestResult(null);
   };
@@ -718,7 +756,7 @@ export default function App() {
 
     if (demoIndex === 1) {
       const pAndC = filtered.filter((q) => q.subject === "Physics" || q.subject === "Chemistry");
-      const testQs = pAndC.length >= 25 ? pAndC.slice(0, 25) : filtered.slice(0, 25);
+      const testQs = deduplicateQuestionsList(pAndC.length >= 25 ? pAndC.slice(0, 25) : filtered.slice(0, 25));
       setActiveTestConfig({
         title: "मोफत डेमो टेस्ट १: MHT-CET Physics & Chemistry",
         exam: exam,
@@ -730,7 +768,7 @@ export default function App() {
       });
     } else if (demoIndex === 2) {
       const maths = filtered.filter((q) => q.subject === "Mathematics");
-      const testQs = maths.length >= 25 ? maths.slice(0, 25) : filtered.slice(0, 25);
+      const testQs = deduplicateQuestionsList(maths.length >= 25 ? maths.slice(0, 25) : filtered.slice(0, 25));
       setActiveTestConfig({
         title: "मोफत डेमो टेस्ट २: MHT-CET Mathematics Sprint",
         exam: exam,
@@ -742,7 +780,7 @@ export default function App() {
       });
     } else {
       const bio = filtered.filter((q) => q.subject === "Biology");
-      const testQs = bio.length >= 30 ? bio.slice(0, 30) : filtered.slice(0, 30);
+      const testQs = deduplicateQuestionsList(bio.length >= 30 ? bio.slice(0, 30) : filtered.slice(0, 30));
       setActiveTestConfig({
         title: "मोफत डेमो टेस्ट ३: NEET / CET Biology & Science Master",
         exam: exam,

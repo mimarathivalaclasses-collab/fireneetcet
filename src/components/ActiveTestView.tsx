@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Timer,
   CheckCircle2,
@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Question, ExamType, SubjectType, LanguageMode, TestResultData, SubjectResult } from "../types";
 import { getMarkingScheme } from "../data/chaptersData";
+import { deduplicateQuestionsList } from "../utils/proceduralQuestionEngine";
 
 interface ActiveTestViewProps {
   testConfig: {
@@ -36,7 +37,24 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
   onFinishTest,
   onCancelTest,
 }) => {
-  const { title, exam, durationMinutes, selectedQuestions, perQuestionTimerSeconds, enforcePerQuestionTimer, instituteName } = testConfig;
+  const { title, exam, durationMinutes, selectedQuestions: rawQuestions, perQuestionTimerSeconds, enforcePerQuestionTimer, instituteName } = testConfig;
+
+  // STRICT GUARANTEE: Double-shield deduplication to ensure zero repeated questions within the same paper
+  const selectedQuestions = useMemo(() => {
+    const clean = deduplicateQuestionsList(rawQuestions || []);
+    const seenIds = new Set<string>();
+    return clean.map((q, idx) => {
+      let finalId = q.id;
+      if (!finalId || seenIds.has(finalId)) {
+        finalId = `${q.id || "test_q"}_pos${idx + 1}`;
+      }
+      seenIds.add(finalId);
+      return {
+        ...q,
+        id: finalId,
+      };
+    });
+  }, [rawQuestions]);
 
   // Local language toggle during test
   const [language, setLanguage] = useState<LanguageMode>(initialLanguage);

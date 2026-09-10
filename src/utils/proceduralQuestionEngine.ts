@@ -42,10 +42,10 @@ export function normalizeQuestionSignature(text: string, textMr?: string): strin
   // Strip whitespace, punctuation, math operators, special symbols, but KEEP unicode letters (\p{L}) and numbers (\p{N})
   const cleaned = combined.replace(/[^\p{L}\p{N}]/gu, "");
   if (cleaned.length >= 10) {
-    return cleaned.slice(0, 160);
+    return cleaned.slice(0, 350);
   }
   // Fallback if cleaned is very short
-  return combined.trim().replace(/\s+/g, " ").slice(0, 160);
+  return combined.trim().replace(/\s+/g, " ").slice(0, 350);
 }
 
 export function getQuestionSignature(q: Question): string {
@@ -118,21 +118,37 @@ function buildFinalQuestion(
 }
 
 /**
- * Deduplicates any question array strictly by ID and Normalized Text Signature
+ * Deduplicates any question array strictly by ID, Normalized Text Signature, and raw text
  */
 export function deduplicateQuestionsList(questions: Question[]): Question[] {
   const seenIds = new Set<string>();
   const seenSigs = new Set<string>();
+  const seenEnglishTexts = new Set<string>();
   const clean: Question[] = [];
 
   for (const q of questions) {
-    if (!q || !q.questionText) continue;
+    if (!q || (!q.questionText && !q.questionTextMr)) continue;
+
+    // Direct trimmed lower-case normalized English text
+    const enClean = (q.questionText || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]/gu, "");
+
     const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
-    if (seenIds.has(q.id) || seenSigs.has(sig)) {
+
+    // Duplicate condition: ID already seen, or combined signature seen, or exact normalized English text seen
+    if (
+      (q.id && seenIds.has(q.id)) ||
+      seenSigs.has(sig) ||
+      (enClean.length >= 12 && seenEnglishTexts.has(enClean))
+    ) {
       continue;
     }
-    seenIds.add(q.id);
+
+    if (q.id) seenIds.add(q.id);
     seenSigs.add(sig);
+    if (enClean.length >= 12) seenEnglishTexts.add(enClean);
     clean.push(q);
   }
   return clean;

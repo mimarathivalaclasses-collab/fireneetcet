@@ -32,6 +32,7 @@ import {
 import { Question, ExamType, SubjectType, DifficultyLevel, LanguageMode } from "../types";
 import { CHAPTERS_DATA, getSubjectsForExam, getMarkingScheme } from "../data/chaptersData";
 import { generateProceduralQuestions } from "../utils/proceduralQuestionGenerator";
+import { deduplicateQuestionsList } from "../utils/proceduralQuestionEngine";
 import { recordDailyActivity } from "../utils/achievementSystem";
 import { speakExplanation, stopExplanation } from "../utils/audioSpeechHelper";
 
@@ -145,7 +146,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
   }, [extraGeneratedQuestions, questions]);
 
   const filteredQuestions = useMemo(() => {
-    return allPracticeQuestions.filter((q) => {
+    const rawMatches = allPracticeQuestions.filter((q) => {
       // Exam match
       if (q.exam !== currentExam) return false;
 
@@ -173,6 +174,8 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
 
       return true;
     });
+
+    return deduplicateQuestionsList(rawMatches);
   }, [
     allPracticeQuestions,
     currentExam,
