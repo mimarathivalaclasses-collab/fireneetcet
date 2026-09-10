@@ -135,15 +135,15 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
               <MiMarathiwalaLogo size="sm" showText={false} />
               <div className="min-w-0">
                 <span className="font-black text-sm text-white tracking-tight block truncate">
-                  मी मराठीवाला क्लासेस
+                  NCJ MOCK TEST APP
                 </span>
                 <span className="text-[10px] text-amber-300 font-bold block truncate">
-                  Mi Marathiwala Classes, Ambad
+                  मी मराठीवाला क्लासेस, अंबड
                 </span>
               </div>
             </div>
             <p className="text-[9px] text-orange-200/90 font-medium leading-tight mt-1.5">
-              स्पर्धा परीक्षा सराव केंद्र • (MHT-CET | NEET | JEE)
+              स्पर्धा परीक्षा सराव केंद्र • (MHT-CET | NEET | JEE Main)
             </p>
           </div>
 

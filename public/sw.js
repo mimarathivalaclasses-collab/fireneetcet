@@ -1,12 +1,15 @@
-// Service Worker for MHT-CET MCQ Master PWA
-const CACHE_NAME = 'mcq-master-pwa-v1';
+// Service Worker for NCJ MOCK TEST APP PWA
+const CACHE_NAME = 'ncj-mock-test-pwa-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/ncj-logo.png',
   '/icon.svg',
   '/icon-192.png',
-  '/icon-512.png'
+  '/icon-512.png',
+  '/icon-maskable-512.png',
+  '/apple-touch-icon.png'
 ];
 
 // Install Event - Cache Core Assets

@@ -682,23 +682,27 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         <div className="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/20 space-y-5">
           {/* Top Logo / Title */}
           <div className="text-center space-y-2 pb-2 border-b border-slate-100">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-500 text-white flex flex-col items-center justify-center mx-auto shadow-md ring-2 ring-orange-200">
-              <span className="text-[14px] font-black tracking-tight leading-none">म</span>
-              <span className="text-[8px] text-amber-200 font-bold uppercase leading-none tracking-widest mt-0.5">MMC</span>
+            <div className="w-16 h-16 rounded-2xl ring-2 ring-amber-400/90 overflow-hidden shadow-lg mx-auto bg-slate-950 flex items-center justify-center">
+              <img
+                src="/ncj-logo.png"
+                alt="NCJ MOCK TEST APP Logo"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <div className="space-y-0.5">
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
-                मी मराठीवाला क्लासेस
+                NCJ MOCK TEST APP
               </h2>
               <p className="text-xs sm:text-sm text-orange-700 font-bold leading-snug">
-                Mi Marathiwala Classes, Ambad
+                मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)
               </p>
               <p className="text-[11px] font-bold text-amber-600">
                 अंबड (जि. जालना)
               </p>
               <p className="text-[10px] text-slate-500 font-semibold">
-                (NEET | JEE | MHT-CET सराव पोर्टल)
+                (MHT-CET | NEET | JEE Main सराव पोर्टल)
               </p>
             </div>
 
