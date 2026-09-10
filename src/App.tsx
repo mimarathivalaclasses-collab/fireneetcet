@@ -71,7 +71,9 @@ export default function App() {
   // 1. Student User & Authentication State
   const [currentUser, setCurrentUser] = useState<StudentUser | null>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+      const saved =
+        localStorage.getItem(STORAGE_KEYS.CURRENT_USER) ||
+        localStorage.getItem("mcq_app_current_student_user_v1");
       if (saved) {
         return JSON.parse(saved);
       }
