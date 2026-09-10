@@ -25,6 +25,7 @@ import { ExamType, StudentUser, UserRole, AgentUser } from "../types";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
 import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
 import { recordReferralTransaction } from "../utils/referralSystem";
+import { saveStudentPermanently, getAllStudentsFromVaults } from "../services/dataVault";
 
 interface UnifiedAuthViewProps {
   currentUser?: StudentUser | null;
@@ -342,11 +343,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         return;
       }
 
-      let existingList: StudentUser[] = [];
-      try {
-        const raw = localStorage.getItem("mcq_app_all_students_v1");
-        existingList = raw ? JSON.parse(raw) : [];
-      } catch (e) {}
+      let existingList: StudentUser[] = getAllStudentsFromVaults();
 
       const cleanDigits = cleanIdentifier.replace(/\D/g, "");
       const duplicate = existingList.find((s) => {
@@ -361,9 +358,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           duplicate.lastLoginAt = Date.now();
           duplicate.primaryDeviceId = getOrCreateDeviceId();
           duplicate.primaryDeviceName = getDeviceName();
-          localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(existingList));
-          localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(duplicate));
-          saveStudentToCloud(duplicate);
+          saveStudentPermanently(duplicate);
 
           setSuccessMessage(`स्वागत आहे, ${duplicate.name}! ॲप उघडत आहे...`);
           setTimeout(() => {
@@ -399,9 +394,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         referredBy: referralCode.trim() || undefined,
       };
 
-      existingList.unshift(newStudent);
-      localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(existingList));
-      localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(newStudent));
+      saveStudentPermanently(newStudent);
 
       // Record referral transaction if present
       if (referralCode.trim()) {
@@ -420,9 +413,6 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         } catch (e) {}
       }
 
-      // Save to Firebase Firestore Cloud
-      saveStudentToCloud(newStudent);
-
       // DIRECT PHONEPE TRIGGER: Auto launch PhonePe for ₹29
       triggerDirectPhonePe();
 
@@ -436,8 +426,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       const cleanDigits = cleanIdentifier.replace(/\D/g, "");
 
       try {
-        const raw = localStorage.getItem("mcq_app_all_students_v1");
-        localList = raw ? JSON.parse(raw) : [];
+        localList = getAllStudentsFromVaults();
         foundUser =
           localList.find((s) => {
             const sDigits = (s.mobile || "").replace(/\D/g, "");
@@ -490,15 +479,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       foundUser.primaryDeviceName = getDeviceName();
       foundUser.lastLoginAt = Date.now();
 
-      const idx = localList.findIndex((s) => s.mobile === foundUser!.mobile || s.id === foundUser!.id);
-      if (idx >= 0) {
-        localList[idx] = foundUser;
-      } else {
-        localList.push(foundUser);
-      }
-      localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(localList));
-      localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(foundUser));
-      saveStudentToCloud(foundUser);
+      saveStudentPermanently(foundUser);
 
       setSuccessMessage(`स्वागत आहे, ${foundUser.name}! टेस्ट सिरीज उघडत आहे...`);
       setTimeout(() => {

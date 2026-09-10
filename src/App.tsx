@@ -51,6 +51,13 @@ import { getOrCreateDeviceId, getDeviceName } from "./utils/deviceSecurity";
 import { findInstituteByCode } from "./data/coachingInstitutesData";
 import { deduplicateQuestionsList } from "./utils/proceduralQuestionEngine";
 import { saveStudentTestSubmissionToCloud, saveStudentToCloud } from "./services/firebase";
+import {
+  getAllStudentsFromVaults,
+  saveStudentPermanently,
+  syncAndHealWithCloud,
+  VAULT_KEYS,
+  VAULT_EVENT_NAME,
+} from "./services/dataVault";
 
 const STORAGE_KEYS = {
   QUESTIONS: "mcq_app_questions_v1",
@@ -585,38 +592,33 @@ export default function App() {
       // 2. Backup to Firestore Cloud
       saveStudentTestSubmissionToCloud(studentSubmission);
 
-      // 3. Update student user record in all_students list
+      // 3. Update student user record in all_students list & vaults
       if (currentUser?.mobile) {
-        const allStudentsRaw = localStorage.getItem("mcq_app_all_students_v1");
-        if (allStudentsRaw) {
-          const allStudents: StudentUser[] = JSON.parse(allStudentsRaw);
-          const idx = allStudents.findIndex((s) => s.mobile === currentUser.mobile || s.id === currentUser.id);
-          if (idx !== -1) {
-            const st = allStudents[idx];
-            const testsCount = (st.totalTestsTaken || 0) + 1;
-            const qSolved = (st.totalQuestionsSolved || 0) + result.attempted;
-            const qCorrect = (st.totalCorrect || 0) + result.correct;
-            const qWrong = (st.totalWrong || 0) + result.wrong;
-            const acc = qSolved > 0 ? Math.round((qCorrect / qSolved) * 100) : 0;
-            const best = Math.max(st.highestScore || 0, result.score);
-            const recent = [studentSubmission, ...(st.recentTestResults || [])].slice(0, 15);
+        const allStudents = getAllStudentsFromVaults();
+        const idx = allStudents.findIndex((s) => s.mobile === currentUser.mobile || s.id === currentUser.id);
+        if (idx !== -1) {
+          const st = allStudents[idx];
+          const testsCount = (st.totalTestsTaken || 0) + 1;
+          const qSolved = (st.totalQuestionsSolved || 0) + result.attempted;
+          const qCorrect = (st.totalCorrect || 0) + result.correct;
+          const qWrong = (st.totalWrong || 0) + result.wrong;
+          const acc = qSolved > 0 ? Math.round((qCorrect / qSolved) * 100) : 0;
+          const best = Math.max(st.highestScore || 0, result.score);
+          const recent = [studentSubmission, ...(st.recentTestResults || [])].slice(0, 15);
 
-            const updatedStudent: StudentUser = {
-              ...st,
-              totalTestsTaken: testsCount,
-              totalQuestionsSolved: qSolved,
-              totalCorrect: qCorrect,
-              totalWrong: qWrong,
-              overallAccuracy: acc,
-              highestScore: best,
-              lastActiveTime: Date.now(),
-              recentTestResults: recent,
-            };
-            allStudents[idx] = updatedStudent;
-            localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(allStudents));
-            setCurrentUser(updatedStudent);
-            saveStudentToCloud(updatedStudent);
-          }
+          const updatedStudent: StudentUser = {
+            ...st,
+            totalTestsTaken: testsCount,
+            totalQuestionsSolved: qSolved,
+            totalCorrect: qCorrect,
+            totalWrong: qWrong,
+            overallAccuracy: acc,
+            highestScore: best,
+            lastActiveTime: Date.now(),
+            recentTestResults: recent,
+          };
+          saveStudentPermanently(updatedStudent);
+          setCurrentUser(updatedStudent);
         }
       }
     } catch (err) {
@@ -643,25 +645,42 @@ export default function App() {
 
   const unresolvedMistakesCount = mistakes.filter((m) => !m.resolved).length;
 
-  // Calculate pending approval requests count for badge
+  // Calculate pending approval requests count for badge & background cloud sync
   const [pendingApprovalsCount, setPendingApprovalsCount] = useState<number>(0);
 
+  // Self-healing data sync on startup & listen to vault updates
   useEffect(() => {
     const updatePendingCount = () => {
       try {
-        const saved = localStorage.getItem("mcq_app_all_students_v1");
-        if (saved) {
-          const stds: StudentUser[] = JSON.parse(saved);
-          const count = stds.filter((s) => s.approvalStatus === "pending").length;
-          setPendingApprovalsCount(count);
-        }
+        const stds = getAllStudentsFromVaults();
+        const count = stds.filter((s) => s.approvalStatus === "pending").length;
+        setPendingApprovalsCount(count);
       } catch (e) {
         console.error("Failed to read pending count", e);
       }
     };
+
     updatePendingCount();
-    const interval = setInterval(updatePendingCount, 2000);
-    return () => clearInterval(interval);
+
+    // Auto-heal with Firebase Firestore in the background on launch
+    syncAndHealWithCloud()
+      .then((res) => {
+        if (res.restoredFromCloud > 0 || res.syncedToCloud > 0) {
+          updatePendingCount();
+        }
+      })
+      .catch((err) => console.warn("Background cloud sync note:", err));
+
+    const handleVaultUpdated = () => {
+      updatePendingCount();
+    };
+
+    window.addEventListener(VAULT_EVENT_NAME, handleVaultUpdated);
+    const interval = setInterval(updatePendingCount, 4000);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener(VAULT_EVENT_NAME, handleVaultUpdated);
+    };
   }, []);
 
   const handleLogout = () => {

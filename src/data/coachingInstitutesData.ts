@@ -391,10 +391,18 @@ export function saveStoredInstituteProfile(profile: InstituteProfile) {
 
 export function getStoredInstituteStudents(instituteId?: string): InstituteStudent[] {
   try {
-    const data = localStorage.getItem(STORAGE_INSTITUTE_STUDENTS);
+    const data =
+      localStorage.getItem(STORAGE_INSTITUTE_STUDENTS) ||
+      localStorage.getItem("mhtcet_institute_students_vault_v2") ||
+      localStorage.getItem("mhtcet_institute_students_backup_mirror");
     if (data) {
       const parsed: InstituteStudent[] = JSON.parse(data);
       if (Array.isArray(parsed) && parsed.length > 0) {
+        // Self-heal other keys
+        try {
+          localStorage.setItem(STORAGE_INSTITUTE_STUDENTS, data);
+          localStorage.setItem("mhtcet_institute_students_vault_v2", data);
+        } catch (err) {}
         if (instituteId) {
           return parsed.filter((s) => s.instituteId === instituteId);
         }
@@ -411,7 +419,10 @@ export function getStoredInstituteStudents(instituteId?: string): InstituteStude
 
 export function saveStoredInstituteStudents(students: InstituteStudent[]) {
   try {
-    localStorage.setItem(STORAGE_INSTITUTE_STUDENTS, JSON.stringify(students));
+    const serialized = JSON.stringify(students);
+    localStorage.setItem(STORAGE_INSTITUTE_STUDENTS, serialized);
+    localStorage.setItem("mhtcet_institute_students_vault_v2", serialized);
+    localStorage.setItem("mhtcet_institute_students_backup_mirror", serialized);
   } catch (e) {
     console.error("Error saving institute students", e);
   }

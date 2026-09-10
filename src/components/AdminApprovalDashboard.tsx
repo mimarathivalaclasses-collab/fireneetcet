@@ -39,6 +39,10 @@ import {
   BarChart3,
   TrendingUp,
   Activity,
+  Download,
+  Upload,
+  Database,
+  HardDrive,
 } from "lucide-react";
 import {
   StudentUser,
@@ -62,6 +66,15 @@ import {
   fetchStudentTestSubmissionsFromCloud,
 } from "../services/firebase";
 import { AdminStudentProgressView } from "./AdminStudentProgressView";
+import {
+  getAllStudentsFromVaults,
+  saveStudentPermanently,
+  saveAllStudentsPermanently,
+  syncAndHealWithCloud,
+  exportAllDataAsJsonBackup,
+  restoreAllDataFromJson,
+  VAULT_EVENT_NAME,
+} from "../services/dataVault";
 
 interface AdminApprovalDashboardProps {
   isOpen: boolean;
@@ -135,23 +148,31 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     return () => clearInterval(interval);
   }, [lockoutTimer]);
 
-  // Refresh data from localStorage & Firebase Cloud
+  // Backup & Restore & Cloud Sync State
+  const [isCloudSyncing, setIsCloudSyncing] = useState<boolean>(false);
+  const restoreFileInputRef = React.useRef<HTMLInputElement | null>(null);
+
+  // Refresh data from Multi-Vaults & Firebase Cloud
   const loadAllData = async () => {
     try {
-      const studentsRaw = localStorage.getItem("mcq_app_all_students_v1");
-      let localStudents: StudentUser[] = studentsRaw ? JSON.parse(studentsRaw) : [];
+      // 1. Recover from all redundant vaults (Primary, Permanent Vault, Emergency Mirror, Institute)
+      let localStudents = getAllStudentsFromVaults();
 
-      // Merge with Firebase Cloud Students
-      const cloudStudents = await fetchStudentsFromCloud();
-      if (cloudStudents && cloudStudents.length > 0) {
-        const map = new Map<string, StudentUser>();
-        localStudents.forEach((s) => map.set(s.mobile || s.id, s));
-        cloudStudents.forEach((cs) => {
-          const key = cs.mobile || cs.id;
-          map.set(key, { ...(map.get(key) || {}), ...cs });
-        });
-        localStudents = Array.from(map.values());
-        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(localStudents));
+      // 2. Merge with Firebase Cloud Students
+      try {
+        const cloudStudents = await fetchStudentsFromCloud();
+        if (cloudStudents && cloudStudents.length > 0) {
+          const map = new Map<string, StudentUser>();
+          localStudents.forEach((s) => map.set(s.mobile || s.id, s));
+          cloudStudents.forEach((cs) => {
+            const key = cs.mobile || cs.id;
+            map.set(key, { ...(map.get(key) || {}), ...cs });
+          });
+          localStudents = Array.from(map.values());
+          saveAllStudentsPermanently(localStudents);
+        }
+      } catch (cloudErr) {
+        console.warn("Cloud student sync warning:", cloudErr);
       }
       setStudents(localStudents);
 
@@ -192,6 +213,55 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     } catch (e) {
       console.error("Error loading admin data", e);
     }
+  };
+
+  // 1-Click Manual Cloud Sync & Self-Healing
+  const handleManualCloudSync = async () => {
+    setIsCloudSyncing(true);
+    try {
+      const result = await syncAndHealWithCloud();
+      await loadAllData();
+      showToast(
+        `✅ क्लाऊड सिंक यशस्वी! (${result.syncedToCloud} क्लाऊडवर पाठवले, ${result.restoredFromCloud} पूर्ववत केले, एकूण ${result.totalStudents} सुरक्षित)`
+      );
+    } catch (e) {
+      showToast("क्लाऊड सिंक करताना अडचण आली. स्थानिक व्हॉल्ट सुरक्षित आहे.");
+    } finally {
+      setIsCloudSyncing(false);
+    }
+  };
+
+  // Download complete JSON backup
+  const handleDownloadBackup = () => {
+    try {
+      const res = exportAllDataAsJsonBackup();
+      showToast(`💾 सर्व डेटा सुरक्षित JSON फाईल (${res.filename}) मध्ये डाऊनलोड झाला!`);
+    } catch (err) {
+      showToast("बॅकअप फाईल तयार करताना अडचण आली.");
+    }
+  };
+
+  // Restore from JSON backup file
+  const handleRestoreFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const content = event.target?.result as string;
+        const res = await restoreAllDataFromJson(content);
+        if (res.success) {
+          await loadAllData();
+          showToast(`✅ डेटा पूर्ववत केला! (${res.restoredStudentsCount} विद्यार्थी सुरक्षित रिस्टोअर झाले)`);
+        } else {
+          alert(`रिस्टोअर अयशस्वी: ${res.message}`);
+        }
+      } catch (err: any) {
+        alert("बॅकअप फाईल वाचताना त्रुटी: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
   };
 
   // 1-Click WhatsApp Approval Notification
@@ -274,13 +344,13 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
         : s
     );
     setStudents(updated);
-    localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
+    saveAllStudentsPermanently(updated);
 
-    // Sync in Firebase Cloud
+    // Sync in Firebase Cloud & Vaults
     const targetStudent = updated.find((s) => s.id === studentId);
     if (targetStudent) {
+      saveStudentPermanently(targetStudent);
       updateStudentApprovalInCloud(targetStudent.mobile || targetStudent.id, "approved", true);
-      saveStudentToCloud(targetStudent);
     }
 
     // Sync with current student user in session if matches
@@ -313,13 +383,13 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
         : s
     );
     setStudents(updated);
-    localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
+    saveAllStudentsPermanently(updated);
 
-    // Update in Firebase Cloud
+    // Update in Firebase Cloud & Vaults
     const targetStudent = updated.find((s) => s.id === studentId);
     if (targetStudent) {
+      saveStudentPermanently(targetStudent);
       updateStudentApprovalInCloud(targetStudent.mobile || targetStudent.id, "rejected", false);
-      saveStudentToCloud(targetStudent);
     }
 
     if (onRejectStudent) onRejectStudent(studentId);
@@ -335,7 +405,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 
       const updated = students.filter((s) => s.id !== studentId);
       setStudents(updated);
-      localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
+      saveAllStudentsPermanently(updated);
       showToast(`'${name}' हा विद्यार्थी पूर्णपणे हटवला गेला.`);
     }
   };
@@ -346,10 +416,8 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 
     const updated = students.map((s) => (s.id === editingStudent.id ? editingStudent : s));
     setStudents(updated);
-    localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
-
-    // Sync to Cloud
-    saveStudentToCloud(editingStudent);
+    saveAllStudentsPermanently(updated);
+    saveStudentPermanently(editingStudent);
 
     // Update current active user if matching
     const currentRaw = localStorage.getItem("mcq_app_current_student_user_v1");
@@ -391,10 +459,8 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 
     const updated = [newStudent, ...students];
     setStudents(updated);
-    localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(updated));
-
-    // Save to Cloud
-    saveStudentToCloud(newStudent);
+    saveAllStudentsPermanently(updated);
+    saveStudentPermanently(newStudent);
 
     setIsAddingStudent(false);
     setNewStudentName("");
@@ -765,6 +831,56 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 </button>
               </div>
             </header>
+
+            {/* Zero Data Loss Security Banner & Multi-Vault Backup Hub */}
+            <div className="bg-slate-900 text-white px-3 py-2 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  डेटा व्हॉल्ट सुरक्षित: {students.length} विद्यार्थी नोंदी सुरक्षित आहेत
+                </span>
+                <span className="hidden lg:inline text-slate-400 text-[11px]">
+                  (३ स्थानिक व्हॉल्ट्स + क्लाऊड स्वयं-सुरक्षा)
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <input
+                  type="file"
+                  accept=".json"
+                  ref={restoreFileInputRef}
+                  onChange={handleRestoreFileSelected}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={handleDownloadBackup}
+                  className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-[11px] flex items-center gap-1.5 border border-slate-700 cursor-pointer transition-all shadow-xs"
+                  title="सर्व विद्यार्थी आणि सबमिशन्सचा संपूर्ण JSON बॅकअप डाऊनलोड करा"
+                >
+                  <Download className="w-3.5 h-3.5 text-amber-400" />
+                  <span>💾 बॅकअप फाईल डाऊनलोड</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => restoreFileInputRef.current?.click()}
+                  className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-[11px] flex items-center gap-1.5 border border-slate-700 cursor-pointer transition-all shadow-xs"
+                  title="अगोदर सेव्ह केलेल्या JSON बॅकअप फाईलमधून डेटा पूर्ववत करा"
+                >
+                  <Upload className="w-3.5 h-3.5 text-blue-400" />
+                  <span>📥 फाईल रिस्टोअर</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleManualCloudSync}
+                  disabled={isCloudSyncing}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1.5 cursor-pointer transition-all shadow-xs disabled:opacity-50"
+                  title="क्लाऊड आणि स्थानिक व्हॉल्ट त्वरित सिंक करा"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isCloudSyncing ? "animate-spin" : ""}`} />
+                  <span>{isCloudSyncing ? "सिंक होत आहे..." : "☁️ क्लाऊड सिंक"}</span>
+                </button>
+              </div>
+            </div>
 
             {/* Mobile Tab Scroller */}
             <div className="md:hidden bg-slate-900 text-white flex items-center gap-1 p-1.5 overflow-x-auto text-xs font-bold shrink-0">

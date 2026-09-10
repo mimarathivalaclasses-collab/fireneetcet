@@ -344,6 +344,7 @@ export interface StudentUser {
   registeredAt: number;
   lastLoginAt: number;
   approvedAt?: number;
+  updatedAt?: number;
   trialStartedAt?: number;
   instituteId?: string; // If registered under a coaching class
   instituteCode?: string;

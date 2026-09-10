@@ -813,10 +813,24 @@ export function buildGuaranteedNonRepeatingMock(
   if (subject === "All") {
     const subjectsForExam: SubjectType[] =
       exam === "NEET"
-        ? ["Physics", "Chemistry", "Biology"]
+        ? ["Biology", "Physics", "Chemistry"]
         : exam === "JEE_MAIN"
         ? ["Physics", "Chemistry", "Mathematics"]
         : ["Physics", "Chemistry", "Mathematics", "Biology"];
+
+    // For NEET: 50% Biology (90 Q), 25% Physics (45 Q), 25% Chemistry (45 Q)
+    if (exam === "NEET") {
+      const bioCount = Math.round(targetCount * 0.5);
+      const phyCount = Math.round(targetCount * 0.25);
+      const chemCount = targetCount - bioCount - phyCount;
+
+      const bioQs = buildGuaranteedNonRepeatingMock(exam, "Biology", chapterFilter, bioCount, cleanStatic, seen);
+      const phyQs = buildGuaranteedNonRepeatingMock(exam, "Physics", chapterFilter, phyCount, cleanStatic, seen);
+      const chemQs = buildGuaranteedNonRepeatingMock(exam, "Chemistry", chapterFilter, chemCount, cleanStatic, seen);
+
+      result.push(...bioQs, ...phyQs, ...chemQs);
+      return shuffleArray(result);
+    }
 
     const perSubjectCount = Math.floor(targetCount / subjectsForExam.length);
     const remainder = targetCount % subjectsForExam.length;
@@ -839,14 +853,36 @@ export function buildGuaranteedNonRepeatingMock(
     return shuffleArray(result);
   }
 
-  // 1. Tier 1: Exact Match (Subject + Chapter)
+  // Safety check: NEET never has Mathematics
+  if (exam === "NEET" && subject === "Mathematics") {
+    return [];
+  }
+
+  // Helper to score how well a question matches the target exam
+  const scoreExamRelevance = (q: Question): number => {
+    let score = 0;
+    if (q.exam === exam) score += 10;
+    if (exam === "NEET") {
+      if (q.pyqYear && q.pyqYear.toLowerCase().includes("neet")) score += 20;
+      if (q.id && q.id.toLowerCase().includes("neet")) score += 15;
+    } else if (exam === "MHT_CET") {
+      if (q.pyqYear && q.pyqYear.toLowerCase().includes("cet")) score += 20;
+      if (q.id && q.id.toLowerCase().includes("cet")) score += 15;
+    } else if (exam === "JEE_MAIN") {
+      if (q.pyqYear && q.pyqYear.toLowerCase().includes("jee")) score += 20;
+      if (q.id && q.id.toLowerCase().includes("jee")) score += 15;
+    }
+    return score;
+  };
+
+  // 1. Tier 1: Exact Match (Subject + Chapter), prioritized by exact Exam match
   const tier1Pool = cleanStatic.filter((q) => {
     if (q.subject !== subject) return false;
     if (chapterFilter !== "All" && q.chapter.toLowerCase() !== chapterFilter.toLowerCase()) return false;
     return true;
-  });
+  }).sort((a, b) => scoreExamRelevance(b) - scoreExamRelevance(a));
 
-  for (const q of shuffleArray(tier1Pool)) {
+  for (const q of tier1Pool) {
     if (result.length >= targetCount) break;
     const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
     if (!seen.has(sig)) {
@@ -855,11 +891,13 @@ export function buildGuaranteedNonRepeatingMock(
     }
   }
 
-  // 2. Tier 2: If chapterFilter was specific but pool was exhausted, pull related questions from the SAME subject
+  // 2. Tier 2: If chapterFilter was specific but pool was exhausted, pull related questions from the SAME subject prioritized by Exam
   if (result.length < targetCount && chapterFilter !== "All") {
-    const tier2SubjectPool = cleanStatic.filter((q) => q.subject === subject);
+    const tier2SubjectPool = cleanStatic
+      .filter((q) => q.subject === subject)
+      .sort((a, b) => scoreExamRelevance(b) - scoreExamRelevance(a));
 
-    for (const q of shuffleArray(tier2SubjectPool)) {
+    for (const q of tier2SubjectPool) {
       if (result.length >= targetCount) break;
       const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
       if (!seen.has(sig)) {

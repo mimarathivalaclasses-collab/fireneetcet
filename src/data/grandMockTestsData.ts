@@ -717,6 +717,23 @@ export function buildGrandMockQuestionSet(
     }));
   }
 
+  // If this is NEET Grand Mock 02, deliver high-yield authentic NEET questions with a different ordering
+  if (testItem.id === "grand-test-04") {
+    const cleanList = deduplicateQuestionsList(NEET_180_FULL_QUESTIONS);
+    // Group by subjects: Physics 45, Chemistry 45, Biology 90
+    const phy = cleanList.filter((q) => q.subject === "Physics");
+    const chem = cleanList.filter((q) => q.subject === "Chemistry");
+    const bio = cleanList.filter((q) => q.subject === "Biology");
+
+    // Invert/interleave to give a distinct 180-Q real NEET exam experience
+    const mock2Set = [...phy.reverse(), ...chem.reverse(), ...bio.reverse()];
+    return mock2Set.map((q, idx) => ({
+      ...q,
+      id: `grand-test-04-neet-q-${idx + 1}`,
+      pyqYear: q.pyqYear || "NEET 2026 High-Yield",
+    }));
+  }
+
   const resultQuestions: Question[] = [];
   const globalSeenSignatures = new Set<string>();
 
@@ -731,12 +748,21 @@ export function buildGrandMockQuestionSet(
   const pool = deduplicateQuestionsList(rawPool);
 
   testItem.subjectDistribution.forEach((dist) => {
-    // 1. Gather all questions matching subject from pool that haven't been picked yet
-    const matchingSubjectQuestions = pool.filter((q) => q.subject === dist.subject);
-    const shuffledPool = [...matchingSubjectQuestions].sort(() => Math.random() - 0.5);
+    // 1. Gather all questions matching subject from pool, prioritizing exam-specific questions
+    const isNeet = testItem.exam === "NEET";
+    const matchingSubjectQuestions = pool
+      .filter((q) => q.subject === dist.subject)
+      .sort((a, b) => {
+        if (isNeet) {
+          const aIsNeet = (a.exam === "NEET" || (a.pyqYear && a.pyqYear.toLowerCase().includes("neet")) || (a.id && a.id.toLowerCase().includes("neet"))) ? 1 : 0;
+          const bIsNeet = (b.exam === "NEET" || (b.pyqYear && b.pyqYear.toLowerCase().includes("neet")) || (b.id && b.id.toLowerCase().includes("neet"))) ? 1 : 0;
+          return bIsNeet - aIsNeet;
+        }
+        return Math.random() - 0.5;
+      });
 
     const subjectChosen: Question[] = [];
-    for (const q of shuffledPool) {
+    for (const q of matchingSubjectQuestions) {
       if (subjectChosen.length >= dist.questionCount) break;
       const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
       if (!globalSeenSignatures.has(sig)) {
