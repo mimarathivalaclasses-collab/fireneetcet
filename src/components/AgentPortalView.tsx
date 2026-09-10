@@ -158,7 +158,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
         password: regPassword.trim(),
         city: regCity.trim() || "Maharashtra",
         upiId: regUpiId.trim() || `${regMobile.trim()}@upi`,
-        commissionRate: REFERRAL_CONFIG.COMMISSION_PERCENT, // 20%
+        commissionRate: REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT, // ₹10 per referral
         totalEarnings: 0,
         totalPaidOut: 0,
         walletBalance: 0,
@@ -312,7 +312,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
   const walletBal = currentAgent?.walletBalance || 0;
   const canWithdraw = walletBal >= minWithdrawal;
   const remainingForWithdraw = Math.max(0, minWithdrawal - walletBal);
-  const referralsNeeded = Math.ceil(remainingForWithdraw / REFERRAL_CONFIG.COMMISSION_PER_STUDENT);
+  const referralsNeeded = Math.ceil(remainingForWithdraw / REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT);
 
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
     agentReferralUrl
@@ -336,7 +336,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
           )}
           <span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-950 font-black text-xs border border-indigo-300 flex items-center gap-1">
             <Sparkles className="w-3.5 h-3.5 text-indigo-700" />
-            <span>अधिकृत एजंट व पार्टनर प्रोग्राम (२०% कमिशन)</span>
+            <span>अधिकृत एजंट व पार्टनर प्रोग्राम (प्रति रेफर ₹१० कमिशन)</span>
           </span>
         </div>
 
@@ -372,7 +372,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                   <span>अधिकृत एजंट पार्टनर (Official Certified Agent)</span>
                 </div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-white">
-                  विद्यार्थी जोडा · प्रति रेफर ₹२९ च्या २०% (₹५.८०) थेट कमिशन!
+                  विद्यार्थी जोडा · प्रति रेफर थेट ₹१० कमिशन!
                 </h1>
               </div>
 
@@ -381,7 +381,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                   तुमचा कमिशन दर
                 </div>
                 <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono-numbers">
-                  ₹५.८० <span className="text-xs text-white font-normal">(२०%)</span>
+                  ₹१० <span className="text-xs text-white font-normal">(प्रति विद्यार्थी)</span>
                 </div>
               </div>
             </div>
@@ -461,7 +461,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 <div>
                   <h3 className="font-black text-sm text-white">१-क्लिक WhatsApp शेअर</h3>
                   <p className="text-[11px] text-indigo-200 mt-0.5">
-                    ग्रुप्स व मित्रांना पाठवून प्रति ॲडमिशन ₹५.८० मिळवा
+                    ग्रुप्स व मित्रांना पाठवून प्रति ॲडमिशन ₹१० कमिशन मिळवा
                   </p>
                 </div>
                 <a
@@ -492,7 +492,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               {authMode === "login" ? "एजंट पार्टनर लॉगिन" : "नवीन एजंट नोंदणी"}
             </h2>
             <p className="text-xs text-slate-500">
-              प्रत्येक विद्यार्थी सबस्क्रिप्शनवर (₹२९) थेट <strong>२०% (₹५.८०) कमिशन</strong> मिळवा
+              प्रत्येक विद्यार्थी सबस्क्रिप्शनवर (₹२९) थेट <strong>₹१० कमिशन</strong> मिळवा
             </p>
           </div>
 
@@ -683,7 +683,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 {totalStudentsCount} <span className="text-sm font-normal text-slate-500">विद्यार्थी</span>
               </div>
               <div className="text-[11px] text-slate-600 pt-1 border-t border-slate-100 font-medium">
-                प्रति विद्यार्थी <strong>₹५.८०</strong> कमिशन
+                प्रति विद्यार्थी <strong>₹१०</strong> कमिशन
               </div>
             </div>
 
@@ -698,10 +698,10 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 </div>
               </div>
               <div className="text-3xl font-black text-amber-950 font-mono-numbers">
-                ₹{formatInr(currentAgent.totalEarnings || totalStudentsCount * 5.8)}
+                ₹{formatInr(currentAgent.totalEarnings || totalStudentsCount * 10)}
               </div>
               <div className="text-[11px] text-slate-600 pt-1 border-t border-slate-100 font-medium">
-                २०% थेट नफा दर
+                प्रति विद्यार्थी ₹१० थेट नफा दर
               </div>
             </div>
 

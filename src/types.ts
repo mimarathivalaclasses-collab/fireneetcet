@@ -395,7 +395,7 @@ export interface AgentUser {
     bankName: string;
     holderName?: string;
   };
-  commissionRate: number; // 20% by default (₹5.80 of ₹29)
+  commissionRate: number; // ₹10 per referral for Agent
   totalEarnings: number;
   totalPaidOut: number;
   walletBalance: number;
@@ -441,7 +441,7 @@ export interface StudentReferralRecord {
   referredStudentMobile: string;
   referredStudentExam: ExamType | string;
   planAmount: number; // ₹29
-  commissionEarned: number; // ₹5.80 (20%)
+  commissionEarned: number; // ₹10 (Agent) / ₹5.80 (Student)
   status: "joined" | "subscribed" | "verified";
   timestamp: number;
 }

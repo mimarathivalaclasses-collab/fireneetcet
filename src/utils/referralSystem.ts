@@ -1,11 +1,12 @@
 import { AgentUser, StudentUser, StudentReferralRecord, AgentPayoutRequest, ExamType } from "../types";
 
 export const REFERRAL_CONFIG = {
-  COMMISSION_PERCENT: 20, // 20%
+  AGENT_COMMISSION_PER_STUDENT: 10, // ₹10 flat commission per referral for official Agent
+  COMMISSION_PERCENT: 20, // 20% for student referral
   STUDENT_PLAN_PRICE: 29, // ₹29
-  COMMISSION_PER_STUDENT: 5.8, // 20% of ₹29 = ₹5.80
-  MINIMUM_WITHDRAWAL_INR: 100, // Minimum ₹100 required for withdrawal
-  FREE_REFUND_MILESTONE: 10, // 10 referrals = 100% refund milestone
+  COMMISSION_PER_STUDENT: 5.8, // 20% of ₹29 = ₹5.80 for student referral
+  MINIMUM_WITHDRAWAL_INR: 100, // Minimum ₹100 required for withdrawal (10 Agent referrals = ₹100)
+  FREE_REFUND_MILESTONE: 10, // 10 referrals milestone
   ADMIN_CONTACT_PHONE: "9307220454",
   ADMIN_UPI_ID: "9307220454@yz",
 };
@@ -104,10 +105,13 @@ export function recordReferralTransaction(params: {
   if (!cleanCode) return { success: false, commissionEarned: 0 };
 
   const price = params.planPrice || REFERRAL_CONFIG.STUDENT_PLAN_PRICE;
-  // 20% of 29 = 5.80
-  const commission = Number(((price * REFERRAL_CONFIG.COMMISSION_PERCENT) / 100).toFixed(2));
-
   let referrerType: "agent" | "student" = cleanCode.startsWith("AGT") ? "agent" : "student";
+  // Agent gets ₹10 flat commission, Student gets 20% (₹5.80)
+  const defaultCommission = referrerType === "agent"
+    ? REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT
+    : Number(((price * REFERRAL_CONFIG.COMMISSION_PERCENT) / 100).toFixed(2));
+  let effectiveCommission = defaultCommission;
+
   let referrerName = "";
   let referrerMobile = "";
   let referrerId = "";
@@ -125,15 +129,17 @@ export function recordReferralTransaction(params: {
       referrerId = agents[agentIndex].id;
       referrerName = agents[agentIndex].name;
       referrerMobile = agents[agentIndex].mobile;
+      effectiveCommission = REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT; // ₹10
 
       // Update agent earnings and balance
       agents[agentIndex].totalStudentsReferred = (agents[agentIndex].totalStudentsReferred || 0) + 1;
       agents[agentIndex].totalEarnings = Number(
-        ((agents[agentIndex].totalEarnings || 0) + commission).toFixed(2)
+        ((agents[agentIndex].totalEarnings || 0) + effectiveCommission).toFixed(2)
       );
       agents[agentIndex].walletBalance = Number(
-        ((agents[agentIndex].walletBalance || 0) + commission).toFixed(2)
+        ((agents[agentIndex].walletBalance || 0) + effectiveCommission).toFixed(2)
       );
+      agents[agentIndex].commissionRate = REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT;
 
       localStorage.setItem(ALL_AGENTS_KEY, JSON.stringify(agents));
 
@@ -206,7 +212,7 @@ export function recordReferralTransaction(params: {
     referredStudentMobile: params.referredStudent.mobile,
     referredStudentExam: params.referredStudent.examTarget || "MHT_CET",
     planAmount: price,
-    commissionEarned: commission,
+    commissionEarned: effectiveCommission,
     status: params.referredStudent.paymentStatus === "paid" ? "verified" : "subscribed",
     timestamp: Date.now(),
   };
@@ -228,7 +234,7 @@ export function recordReferralTransaction(params: {
   return {
     success: true,
     referrerType,
-    commissionEarned: commission,
+    commissionEarned: effectiveCommission,
   };
 }
 
@@ -238,11 +244,17 @@ export function recordReferralTransaction(params: {
 export function getReferredStudentsList(referrerCode: string): StudentReferralRecord[] {
   if (!referrerCode) return [];
   const cleanCode = referrerCode.trim().toUpperCase();
+  const isAgent = cleanCode.startsWith("AGT");
   const allLogs = getAllReferralsLog();
 
-  const filtered = allLogs.filter(
-    (log) => log.referrerCode.toUpperCase() === cleanCode || (log.referrerId && log.referrerId === referrerCode)
-  );
+  const filtered = allLogs
+    .filter(
+      (log) => log.referrerCode.toUpperCase() === cleanCode || (log.referrerId && log.referrerId === referrerCode)
+    )
+    .map((log) => ({
+      ...log,
+      commissionEarned: isAgent ? REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT : log.commissionEarned,
+    }));
 
   // If no transactions logged yet, check all_students storage directly
   if (filtered.length === 0) {
@@ -256,13 +268,15 @@ export function getReferredStudentsList(referrerCode: string): StudentReferralRe
       return directMatches.map((s, idx) => ({
         id: `synth_ref_${s.id}_${idx}`,
         referrerCode: cleanCode,
-        referrerType: cleanCode.startsWith("AGT") ? "agent" : "student",
+        referrerType: isAgent ? "agent" : "student",
         referredStudentId: s.id,
         referredStudentName: s.name,
         referredStudentMobile: s.mobile,
         referredStudentExam: s.examTarget,
         planAmount: 29,
-        commissionEarned: REFERRAL_CONFIG.COMMISSION_PER_STUDENT,
+        commissionEarned: isAgent
+          ? REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT
+          : REFERRAL_CONFIG.COMMISSION_PER_STUDENT,
         status: s.approvalStatus === "approved" || s.paymentStatus === "paid" ? "verified" : "subscribed",
         timestamp: s.registeredAt || Date.now() - (idx + 1) * 86400000,
       }));

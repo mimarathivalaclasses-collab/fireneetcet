@@ -800,7 +800,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               <div className="flex items-center justify-between text-indigo-950 font-black">
                 <span>एजंट पार्टनर रेफरल मॉडेल:</span>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 font-mono text-[10px]">
-                  २०% कमिशन (₹५.८०)
+                  प्रति रेफर ₹१० कमिशन
                 </span>
               </div>
               <p className="text-[11px] text-indigo-800 leading-tight">

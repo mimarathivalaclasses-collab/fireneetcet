@@ -1326,7 +1326,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                         एजंट पार्टनर व कमिशन व्यवस्थापन
                       </h3>
                       <p className="text-xs text-slate-500">
-                        प्रत्येक रेफरलवर २०% (₹५.८०) कमिशन व पेआउट विनंत्या.
+                        प्रत्येक रेफरलवर थेट ₹१० कमिशन व पेआउट विनंत्या.
                       </p>
                     </div>
                     <span className="px-3 py-1 bg-teal-100 text-teal-900 rounded-xl text-xs font-black">
