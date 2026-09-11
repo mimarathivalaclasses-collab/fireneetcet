@@ -14,7 +14,7 @@ import {
   onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
-import { StudentUser, UserFeedbackReport, TestResultData, StudentTestSubmission } from "../types";
+import { StudentUser, UserFeedbackReport, TestResultData, StudentTestSubmission, AgentUser } from "../types";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyDsjW4JPyQLljXq8wotHBV1G25aiFYzXlo",
@@ -33,6 +33,7 @@ export const db = getFirestore(app);
 // Firestore Collections
 export const COLLECTIONS = {
   STUDENTS: "students",
+  AGENTS: "agents",
   FEEDBACK_REPORTS: "feedback_reports",
   TEST_RESULTS: "test_results",
   TEST_SUBMISSIONS: "student_test_submissions",
@@ -223,3 +224,42 @@ export async function fetchStudentTestSubmissionsFromCloud(): Promise<StudentTes
     return [];
   }
 }
+
+// ==========================================
+// 4. OFFICIAL AGENT PARTNERS CLOUD SYNC
+// ==========================================
+
+export async function saveAgentToCloud(agent: AgentUser): Promise<boolean> {
+  try {
+    const docId = agent.mobile || agent.agentCode || agent.id;
+    const docRef = doc(db, COLLECTIONS.AGENTS, docId);
+    await setDoc(
+      docRef,
+      {
+        ...agent,
+        updatedAt: Date.now(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (error) {
+    console.warn("Firestore saveAgentToCloud offline/error, saved to localStorage:", error);
+    return false;
+  }
+}
+
+export async function fetchAgentsFromCloud(): Promise<AgentUser[]> {
+  try {
+    const colRef = collection(db, COLLECTIONS.AGENTS);
+    const snap = await getDocs(colRef);
+    const cloudAgents: AgentUser[] = [];
+    snap.forEach((docSnap) => {
+      cloudAgents.push(docSnap.data() as AgentUser);
+    });
+    return cloudAgents;
+  } catch (error) {
+    console.warn("Firestore fetchAgentsFromCloud error:", error);
+    return [];
+  }
+}
+

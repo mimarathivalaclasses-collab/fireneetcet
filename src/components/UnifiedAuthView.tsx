@@ -19,13 +19,15 @@ import {
   Copy,
   AlertTriangle,
   RefreshCw,
+  ArrowLeft,
 } from "lucide-react";
 import { PWAInstallPrompt } from "./PWAInstallPrompt";
 import { ExamType, StudentUser, UserRole, AgentUser } from "../types";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
-import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
-import { recordReferralTransaction } from "../utils/referralSystem";
+import { saveStudentToCloud, fetchStudentsFromCloud, saveAgentToCloud, fetchAgentsFromCloud } from "../services/firebase";
+import { recordReferralTransaction, REFERRAL_CONFIG } from "../utils/referralSystem";
 import { saveStudentPermanently, getAllStudentsFromVaults } from "../services/dataVault";
+import { saveUserSession } from "../utils/authSession";
 
 interface UnifiedAuthViewProps {
   currentUser?: StudentUser | null;
@@ -59,6 +61,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
   // Student Fields
   const [fullName, setFullName] = useState<string>("");
   const [targetExam, setTargetExam] = useState<ExamType>("MHT_CET");
+  const [className, setClassName] = useState<string>("");
   const [referralCode, setReferralCode] = useState<string>(() => {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -220,7 +223,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           registeredAt: Date.now() - 86400000 * 30,
           lastLoginAt: Date.now(),
         };
-        localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(adminUser));
+        saveUserSession(adminUser);
         setSuccessMessage("🔐 मास्टर ॲडमिन कन्सोल उघडत आहे...");
         setTimeout(() => {
           setIsLoading(false);
@@ -257,7 +260,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           email: `${cleanIdentifier}@partner.com`,
           city: agentCity.trim() || "महाराष्ट्र",
           upiId: agentUpi.trim() || `${cleanIdentifier}@upi`,
-          commissionRate: 20,
+          commissionRate: REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT,
           totalEarnings: 0,
           totalPaidOut: 0,
           walletBalance: 0,
@@ -271,6 +274,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
         existingAgents.push(newAgent);
         localStorage.setItem("mcq_app_all_agents_v1", JSON.stringify(existingAgents));
+        saveAgentToCloud(newAgent).catch((e) => console.warn("Agent cloud save deferred", e));
 
         const agentUser: StudentUser = {
           id: newAgent.id,
@@ -288,7 +292,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           lastLoginAt: Date.now(),
         };
 
-        localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(agentUser));
+        saveUserSession(agentUser);
         setSuccessMessage(`अभिनंदन! तुमचा एजंट कोड: ${newAgent.agentCode}`);
         setTimeout(() => {
           setIsLoading(false);
@@ -296,12 +300,31 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         }, 400);
         return;
       } else {
-        // Agent Login
-        const matched = existingAgents.find(
+        // Agent Login - check local list first
+        let matched = existingAgents.find(
           (a) =>
             (a.mobile === cleanIdentifier || a.agentCode.toLowerCase() === cleanIdentifier.toLowerCase()) &&
             a.password === cleanPassword
         );
+
+        // If not found locally, check cloud Firestore
+        if (!matched) {
+          try {
+            const cloudAgents = await fetchAgentsFromCloud();
+            const cloudMatch = cloudAgents.find(
+              (a) =>
+                (a.mobile === cleanIdentifier || a.agentCode.toLowerCase() === cleanIdentifier.toLowerCase()) &&
+                a.password === cleanPassword
+            );
+            if (cloudMatch) {
+              matched = cloudMatch;
+              existingAgents.push(cloudMatch);
+              localStorage.setItem("mcq_app_all_agents_v1", JSON.stringify(existingAgents));
+            }
+          } catch (cloudErr) {
+            console.warn("Cloud agent check error", cloudErr);
+          }
+        }
 
         if (matched) {
           const agentUser: StudentUser = {
@@ -320,7 +343,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             lastLoginAt: Date.now(),
           };
 
-          localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(agentUser));
+          saveUserSession(agentUser);
           setSuccessMessage(`स्वागत आहे, ${matched.name}!`);
           setTimeout(() => {
             setIsLoading(false);
@@ -356,9 +379,14 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         if (duplicate.approvalStatus === "approved" && duplicate.isApproved) {
           duplicate.password = cleanPassword;
           duplicate.lastLoginAt = Date.now();
+          if (className.trim()) {
+            duplicate.className = className.trim();
+            duplicate.coachingClass = className.trim();
+          }
           duplicate.primaryDeviceId = getOrCreateDeviceId();
           duplicate.primaryDeviceName = getDeviceName();
           saveStudentPermanently(duplicate);
+          saveUserSession(duplicate);
 
           setSuccessMessage(`स्वागत आहे, ${duplicate.name}! ॲप उघडत आहे...`);
           setTimeout(() => {
@@ -368,6 +396,11 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           return;
         } else {
           // If registered but pending approval
+          if (className.trim()) {
+            duplicate.className = className.trim();
+            duplicate.coachingClass = className.trim();
+            saveStudentPermanently(duplicate);
+          }
           setIsLoading(false);
           setPendingApprovalStudent(duplicate);
           return;
@@ -382,6 +415,8 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         password: cleanPassword,
         role: "student",
         examTarget: targetExam,
+        className: className.trim() || undefined,
+        coachingClass: className.trim() || undefined,
         primaryDeviceId: getOrCreateDeviceId(),
         primaryDeviceName: getDeviceName(),
         approvalStatus: "pending",
@@ -480,6 +515,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       foundUser.lastLoginAt = Date.now();
 
       saveStudentPermanently(foundUser);
+      saveUserSession(foundUser);
 
       setSuccessMessage(`स्वागत आहे, ${foundUser.name}! टेस्ट सिरीज उघडत आहे...`);
       setTimeout(() => {
@@ -609,6 +645,25 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               <span>{isCheckingApproval ? "तपासत आहे..." : "मंजुरी स्थिती तपासा (Check Approval Status)"}</span>
             </button>
 
+            {/* Quick Demo Access so student is not locked out */}
+            <button
+              type="button"
+              onClick={() => {
+                const guestUser: StudentUser = {
+                  ...pendingApprovalStudent,
+                  role: "student",
+                  approvalStatus: "pending",
+                  isApproved: false,
+                };
+                saveUserSession(guestUser);
+                onLoginSuccess(guestUser);
+              }}
+              className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-teal-700 to-emerald-700 hover:from-teal-600 hover:to-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all active:scale-95"
+            >
+              <Sparkles className="w-4 h-4 text-amber-300" />
+              <span>मोफत सराव चाचण्या सुरू करा (Start Free Practice) →</span>
+            </button>
+
             {/* Back to Login */}
             <button
               type="button"
@@ -633,6 +688,19 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-teal-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="w-full max-w-md mx-auto relative z-10 space-y-3.5">
+        {/* Back to Main App Button */}
+        {onBack && (
+          <div className="flex justify-start">
+            <button
+              type="button"
+              onClick={onBack}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-md"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>← मुख्य ॲप पहा / मोफत सराव (Back to Main App)</span>
+            </button>
+          </div>
+        )}
         {/* Brand Banner Above Card - Compact, High-Impact & Never Clipped */}
         <div className="text-center space-y-2 pt-1">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl ring-2 ring-amber-400 shadow-xl mx-auto bg-slate-950 flex items-center justify-center overflow-hidden transition-transform duration-200 hover:scale-105">
@@ -945,24 +1013,37 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
             {/* Target Exam (if registering student) */}
             {authMode === "register" && selectedRole === "student" && (
-              <div className="grid grid-cols-2 gap-2">
-                <select
-                  value={targetExam}
-                  onChange={(e) => setTargetExam(e.target.value as ExamType)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-800 bg-white focus:border-teal-500 outline-none"
-                >
-                  <option value="MHT_CET">MHT-CET (PCM/PCB)</option>
-                  <option value="NEET">NEET-UG (Medical)</option>
-                  <option value="JEE_MAIN">JEE Main (Engg)</option>
-                </select>
-                <input
-                  type="text"
-                  placeholder="रेफरल कोड (ऐच्छिक)"
-                  value={referralCode}
-                  onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs uppercase font-bold text-slate-800 outline-none"
-                />
-              </div>
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <select
+                    value={targetExam}
+                    onChange={(e) => setTargetExam(e.target.value as ExamType)}
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-800 bg-white focus:border-teal-500 outline-none"
+                  >
+                    <option value="MHT_CET">MHT-CET (PCM/PCB)</option>
+                    <option value="NEET">NEET-UG (Medical)</option>
+                    <option value="JEE_MAIN">JEE Main (Engg)</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="रेफरल कोड (ऐच्छिक)"
+                    value={referralCode}
+                    onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs uppercase font-bold text-slate-800 outline-none"
+                  />
+                </div>
+
+                {/* Coaching Class or College Name Input */}
+                <div>
+                  <input
+                    type="text"
+                    placeholder="🏫 क्लासचे नाव / कॉलेजचे नाव (Class / College Name)"
+                    value={className}
+                    onChange={(e) => setClassName(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-teal-500 outline-none"
+                  />
+                </div>
+              </>
             )}
 
             {/* reCAPTCHA "I'm not a robot" */}

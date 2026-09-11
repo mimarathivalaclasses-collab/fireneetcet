@@ -213,7 +213,7 @@ export const StudentReferEarnView: React.FC<StudentReferEarnViewProps> = ({
             className="px-4 py-2 rounded-2xl bg-gradient-to-r from-indigo-900 to-slate-900 text-white font-black text-xs flex items-center gap-2 shadow-md hover:shadow-lg transition-all cursor-pointer border border-indigo-700/50"
           >
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>एजंट पार्टनर पोर्टल वर जा (Agent Portal) →</span>
+            <span>एजंट पार्टनर पोर्टल (प्रति रेफर ₹१० कमिशन) →</span>
           </button>
         )}
       </div>

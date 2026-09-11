@@ -1,0 +1,109 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for validating data integrity and preventing malicious payloads
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // 1. STUDENTS COLLECTION (विद्यार्थी नोंदणी व सराव डेटा - डेटा कधीही डिलीट होणार नाही)
+    match /students/{studentId} {
+      // वाचन परवानगी: विद्यार्थी लॉगिन, मंजुरी तपासणी व ॲडमिन डॅशबोर्ड
+      allow read: if isValidId(studentId);
+
+      // नवीन नोंदणी परवानगी (नाव, मोबाईल, परीक्षा व क्लासचे नाव असणे बंधनकारक)
+      allow create: if isValidId(studentId)
+        && incoming().name is string
+        && incoming().name.size() > 0
+        && incoming().name.size() <= 150
+        && incoming().mobile is string
+        && incoming().mobile.size() >= 10
+        && incoming().mobile.size() <= 20;
+
+      // माहिती अपडेट: पासवर्ड, लॉगिन वेळ, डिव्हाइस, अचूकता, फी किंवा ॲडमिन मंजुरी
+      allow update: if isValidId(studentId)
+        && incoming().name is string
+        && incoming().mobile is string;
+
+      // ZERO DATA LOSS: कोणतीही विद्यार्थी नोंद कधीही डिलीट होऊ नये
+      allow delete: if false;
+    }
+
+    // 2. AGENTS COLLECTION (अधिकृत एजंट भागीदार - प्रति रेफर ₹१० कमिशन)
+    match /agents/{agentId} {
+      // एजंट लॉगिन, डॅशबोर्ड व कमिशन पडताळणी
+      allow read: if isValidId(agentId);
+
+      // नवीन एजंट नोंदणी
+      allow create: if isValidId(agentId)
+        && incoming().agentCode is string
+        && incoming().agentCode.size() > 0
+        && incoming().name is string
+        && incoming().mobile is string;
+
+      // एजंट कमिशन, वॉलेट बॅलन्स, लॉगिन वेळ अपडेट
+      allow update: if isValidId(agentId)
+        && incoming().agentCode is string
+        && incoming().name is string;
+
+      // डेटा सुरक्षितता: एजंट कधीही डिलीट होणार नाही
+      allow delete: if false;
+    }
+
+    // 3. STUDENT TEST SUBMISSIONS & RESULTS (सराव चाचण्या आणि गुण)
+    match /student_test_submissions/{submissionId} {
+      allow read: if isValidId(submissionId);
+      allow create: if isValidId(submissionId)
+        && incoming().studentName is string
+        && incoming().score is number;
+      allow update: if isValidId(submissionId);
+      // सबमिशन इतिहास कधीही डिलीट होऊ नये
+      allow delete: if false;
+    }
+
+    match /test_results/{resultId} {
+      allow read: if isValidId(resultId);
+      allow create: if isValidId(resultId);
+      allow update: if isValidId(resultId);
+      allow delete: if false;
+    }
+
+    // 4. FEEDBACK & MISTAKE REPORTS (विद्यार्थी तक्रार व शंका निवारण)
+    match /feedback_reports/{reportId} {
+      allow read: if isValidId(reportId);
+      allow create: if isValidId(reportId)
+        && incoming().description is string
+        && incoming().description.size() > 0
+        && incoming().description.size() <= 2000;
+      allow update: if isValidId(reportId);
+      allow delete: if false;
+    }
+
+    // 5. COACHING INSTITUTES (संलग्न कोचिंग क्लासेस आणि कॉलेजेस)
+    match /institutes/{instituteId} {
+      allow read: if isValidId(instituteId);
+      allow create: if isValidId(instituteId)
+        && incoming().name is string
+        && incoming().code is string;
+      allow update: if isValidId(instituteId);
+      allow delete: if false;
+    }
+
+    // 6. SYSTEM CONFIG & ANNOUNCEMENTS (अ‍ॅप सूचना आणि आवृत्ती)
+    match /system_config/{configId} {
+      allow read: if isValidId(configId);
+      allow create, update: if isValidId(configId);
+      allow delete: if false;
+    }
+
+    // DEFAULT SAFETY NET: इतर कोणत्याही अनधिकृत पाथला थेट नकार
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

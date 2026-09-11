@@ -62,6 +62,12 @@ import {
   VAULT_KEYS,
   VAULT_EVENT_NAME,
 } from "./services/dataVault";
+import {
+  getUserSession,
+  saveUserSession,
+  clearUserSession,
+  AUTH_EVENT_NAME,
+} from "./utils/authSession";
 
 const STORAGE_KEYS = {
   QUESTIONS: "mcq_app_questions_v1",
@@ -79,20 +85,20 @@ const STORAGE_KEYS = {
 export default function App() {
   const currentDeviceId = getOrCreateDeviceId();
 
-  // 1. Student User & Authentication State
+  // 1. Student User & Authentication State (Multi-layer persistent session)
   const [currentUser, setCurrentUser] = useState<StudentUser | null>(() => {
-    try {
-      const saved =
-        localStorage.getItem(STORAGE_KEYS.CURRENT_USER) ||
-        localStorage.getItem("mcq_app_current_student_user_v1");
-      if (saved) {
-        return JSON.parse(saved);
-      }
-    } catch (e) {
-      console.error("Error loading user", e);
-    }
-    return null;
+    return getUserSession();
   });
+
+  // Listen to cross-component session change events
+  useEffect(() => {
+    const handleAuthChange = (e: Event) => {
+      const customEvent = e as CustomEvent<StudentUser | null>;
+      setCurrentUser(customEvent.detail ?? getUserSession());
+    };
+    window.addEventListener(AUTH_EVENT_NAME, handleAuthChange);
+    return () => window.removeEventListener(AUTH_EVENT_NAME, handleAuthChange);
+  }, []);
 
   // 2. 10 Minutes Free Trial State (600 seconds)
   const [trialSecondsRemaining, setTrialSecondsRemaining] = useState<number>(() => {
@@ -161,13 +167,31 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<NavigationTab>("home");
   const [historyStack, setHistoryStack] = useState<NavigationTab[]>([]);
 
-  // Check URL query parameters for class branding, agent referral or student referral
+  // Active Referral Banner State (when someone opens a shared link)
+  const [activeReferralBanner, setActiveReferralBanner] = useState<{ type: "agent" | "student"; code: string } | null>(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const agentCode = params.get("agent");
+      const refCode = params.get("ref");
+      if (agentCode) return { type: "agent", code: agentCode.trim().toUpperCase() };
+      if (refCode) return { type: "student", code: refCode.trim().toUpperCase() };
+      const savedAgent = localStorage.getItem("referred_by_agent_code");
+      if (savedAgent) return { type: "agent", code: savedAgent };
+      const savedRef = localStorage.getItem("referred_by_student_code");
+      if (savedRef) return { type: "student", code: savedRef };
+    } catch {}
+    return null;
+  });
+
+  // Check URL query parameters for class branding, agent referral, student referral, or specific tabs
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
       const classCode = params.get("class");
       const agentCode = params.get("agent");
       const refCode = params.get("ref");
+      const tabParam = params.get("tab");
+      const authParam = params.get("auth");
 
       if (classCode) {
         const found = findInstituteByCode(classCode);
@@ -178,11 +202,21 @@ export default function App() {
       }
 
       if (agentCode) {
-        localStorage.setItem("referred_by_agent_code", agentCode.trim().toUpperCase());
+        const cleanAgent = agentCode.trim().toUpperCase();
+        localStorage.setItem("referred_by_agent_code", cleanAgent);
+        setActiveReferralBanner({ type: "agent", code: cleanAgent });
       }
 
       if (refCode) {
-        localStorage.setItem("referred_by_student_code", refCode.trim().toUpperCase());
+        const cleanRef = refCode.trim().toUpperCase();
+        localStorage.setItem("referred_by_student_code", cleanRef);
+        setActiveReferralBanner({ type: "student", code: cleanRef });
+      }
+
+      if (tabParam) {
+        setActiveTab(tabParam as NavigationTab);
+      } else if (authParam === "true") {
+        setActiveTab("auth_portal");
       }
     } catch (e) {
       console.error("URL params processing error", e);
@@ -192,8 +226,18 @@ export default function App() {
   const handleNavigateTab = (nextTab: NavigationTab) => {
     if (nextTab === activeTab) return;
 
-    // Strict Auth Guard: If trial is expired and user is not logged in, block protected study areas and prompt Login Modal
-    const publicTabs: NavigationTab[] = ["home", "classes_portal", "classes_info", "agent_portal", "refer_earn"];
+    // Public tabs accessible for exploring features
+    const publicTabs: NavigationTab[] = [
+      "home",
+      "classes_portal",
+      "classes_info",
+      "agent_portal",
+      "refer_earn",
+      "auth_portal",
+      "notes",
+      "formulas",
+      "leaderboard",
+    ];
     if (!currentUser && trialSecondsRemaining <= 0 && !publicTabs.includes(nextTab)) {
       setIsAuthModalOpen(true);
       return;
@@ -394,7 +438,7 @@ export default function App() {
   // User Login Success Handler
   const handleLoginSuccess = (user: StudentUser) => {
     setCurrentUser(user);
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
+    saveUserSession(user);
     setIsAuthModalOpen(false);
 
     // Role-based destination routing
@@ -723,9 +767,8 @@ export default function App() {
 
   const handleLogout = () => {
     if (window.confirm("तुम्हाला खात्यातून लॉग आऊट करायचे आहे का?")) {
+      clearUserSession();
       setCurrentUser(null);
-      localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-      sessionStorage.removeItem("mcq_admin_logged_in");
       setActiveTab("home");
     }
   };
@@ -748,7 +791,7 @@ export default function App() {
     };
 
     setCurrentUser(demoStudent);
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(demoStudent));
+    saveUserSession(demoStudent);
 
     // Pick questions according to demoIndex
     let filtered = questions.filter((q) => q.exam === exam);
@@ -792,30 +835,6 @@ export default function App() {
       });
     }
   };
-
-  // STRICT AUTH GATEWAY: If no user is logged in, show dedicated Unified Auth View
-  if (!currentUser) {
-    return (
-      <div className="min-h-[100dvh] w-full max-w-[100vw] bg-slate-950 text-slate-100 flex flex-col font-sans antialiased overflow-y-auto">
-        <UnifiedAuthView
-          currentUser={currentUser}
-          onLoginSuccess={handleLoginSuccess}
-          onOpenAdmin={() => setIsAdminDashboardOpen(true)}
-          onStartDemoTest={handleStartDemoTest}
-        />
-        {isAdminDashboardOpen && (
-          <AdminApprovalDashboard
-            isOpen={isAdminDashboardOpen}
-            onClose={() => setIsAdminDashboardOpen(false)}
-            currentUser={currentUser}
-            onApproveStudent={(studentId) => {
-              // Update state
-            }}
-          />
-        )}
-      </div>
-    );
-  }
 
   return (
     <div className={`min-h-screen w-full max-w-[100vw] overflow-x-hidden ${isDarkMode ? "dark bg-slate-950 text-slate-100" : "bg-[#F8FAFC] text-slate-900"} flex flex-col font-sans selection:bg-indigo-600 selection:text-white antialiased transition-colors duration-200`}>
@@ -1005,12 +1024,51 @@ export default function App() {
               />
             ) : (
               <>
+                {/* Active Referral Welcome Banner for Shared Link Recipients */}
+                {activeReferralBanner && activeTab !== "auth_portal" && (
+                  <div className="mx-3 sm:mx-6 my-3 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-orange-600/15 via-amber-500/15 to-orange-600/15 border border-orange-500/30 flex flex-wrap items-center justify-between gap-3 shadow-sm backdrop-blur-xs">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 text-white flex items-center justify-center font-black text-lg shadow-xs shrink-0">
+                        🎁
+                      </div>
+                      <div>
+                        <div className="text-xs sm:text-sm font-black text-orange-950 dark:text-orange-200">
+                          {activeReferralBanner.type === "agent" ? "अधिकृत एजंट भागीदार आमंत्रण:" : "मित्राकडून विशेष आमंत्रण:"} कोड <span className="font-mono bg-orange-200/60 dark:bg-orange-900/60 px-2 py-0.5 rounded text-orange-900 dark:text-orange-100 font-bold">{activeReferralBanner.code}</span>
+                        </div>
+                        <div className="text-[11px] text-slate-600 dark:text-slate-300">
+                          MHT-CET, NEET & JEE Main २५,०००+ प्रश्न, १० Grand Tests आणि मोफत डेमो चाचण्या उपलब्ध आहेत!
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {!currentUser && (
+                        <button
+                          type="button"
+                          onClick={() => handleNavigateTab("auth_portal")}
+                          className="px-3.5 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-black text-xs shadow-sm cursor-pointer transition-all active:scale-95"
+                        >
+                          लॉगिन / नोंदणी करा →
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setActiveReferralBanner(null)}
+                        className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-2 py-1 cursor-pointer font-bold"
+                        title="बंद करा"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {/* 0. Dedicated Login & Registration Portal (Unified Modern Design) */}
                 {activeTab === "auth_portal" && (
                   <UnifiedAuthView
                     currentUser={currentUser}
                     onLoginSuccess={handleLoginSuccess}
                     onOpenAdmin={() => setIsAdminDashboardOpen(true)}
+                    onStartDemoTest={handleStartDemoTest}
                     onBack={handleBackNavigation}
                   />
                 )}
@@ -1257,7 +1315,7 @@ export default function App() {
                   />
                 )}
 
-                {/* 12. Agent Commission Portal (30% Lifetime) */}
+                {/* 12. Agent Commission Portal (₹10 Per Referral) */}
                 {activeTab === "agent_portal" && (
                   <RoleBasedAccessWrapper
                     currentUser={currentUser}

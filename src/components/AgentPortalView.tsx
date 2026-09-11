@@ -806,10 +806,10 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                   <div className="p-3.5 bg-indigo-50 rounded-2xl border border-indigo-200 space-y-1">
                     <div className="font-black text-indigo-950 flex items-center gap-1.5">
                       <Zap className="w-4 h-4 text-indigo-600" />
-                      <span>₹२९ च्या प्रत्येक सबस्क्रिप्शनवर २०% (₹५.८०) कमिशन</span>
+                      <span>₹२९ च्या प्रत्येक सबस्क्रिप्शनवर थेट ₹१० कमिशन</span>
                     </div>
                     <p className="text-indigo-900 leading-relaxed">
-                      तुमच्या लिंकने किंवा कोडने कोणत्याही विद्यार्थ्याने ₹२९ भरून नोंदणी केल्यास ₹५.८० थेट तुमच्या एजंट वॉलेटमध्ये जमा होतात.
+                      तुमच्या लिंकने किंवा कोडने कोणत्याही विद्यार्थ्याने ₹२९ भरून नोंदणी केल्यास ₹१० थेट तुमच्या एजंट वॉलेटमध्ये जमा होतात.
                     </p>
                   </div>
 
@@ -819,7 +819,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                       <span>किमान विड्रॉल मर्यादा: ₹१०० (Minimum ₹100 Withdrawal)</span>
                     </div>
                     <p className="text-emerald-900 leading-relaxed">
-                      वॉलेट शिल्लक किमान ₹१०० झाल्यावर तुम्ही थेट PhonePe, GPay, Paytm UPI किंवा बँक खात्यावर रक्कम काढू शकता.
+                      वॉलेट शिल्लक किमान ₹१०० झाल्यावर (फक्त १० विद्यार्थी जोडल्यावर) तुम्ही थेट PhonePe, GPay, Paytm UPI किंवा बँक खात्यावर रक्कम काढू शकता.
                     </p>
                   </div>
 
@@ -843,17 +843,17 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                     <span>कमिशन अंदाजपत्रक (Target Earnings)</span>
                   </h3>
                   <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
-                    २०% दर
+                    ₹१० / विद्यार्थी
                   </span>
                 </div>
 
                 <div className="space-y-2.5">
                   {[
-                    { count: 18, label: "१८ विद्यार्थी (किमान विड्रॉल)", earn: "₹१०४.४०", note: "✓ लगेच UPI विड्रॉल" },
-                    { count: 50, label: "५० विद्यार्थी", earn: "₹२९०.००", note: "✓ खात्यात जमा" },
-                    { count: 100, label: "१०० विद्यार्थी", earn: "₹५८०.००", note: "✓ खात्यात जमा" },
-                    { count: 500, label: "५०० विद्यार्थी", earn: "₹२,९००.००", note: "🌟 टॉप परफॉर्मर" },
-                    { count: 1000, label: "१००० विद्यार्थी", earn: "₹५,८००.००", note: "🏆 मुख्य एजंट" },
+                    { count: 10, label: "१० विद्यार्थी (किमान विड्रॉल)", earn: "₹१००.००", note: "✓ लगेच UPI विड्रॉल" },
+                    { count: 25, label: "२५ विद्यार्थी", earn: "₹२५०.००", note: "✓ खात्यात जमा" },
+                    { count: 50, label: "५० विद्यार्थी", earn: "₹५००.००", note: "✓ खात्यात जमा" },
+                    { count: 100, label: "१०० विद्यार्थी", earn: "₹१,०००.००", note: "🌟 टॉप परफॉर्मर" },
+                    { count: 500, label: "५०० विद्यार्थी", earn: "₹५,०००.००", note: "🏆 मुख्य एजंट" },
                   ].map((tier, idx) => (
                     <div
                       key={idx}
@@ -885,7 +885,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                     <span>रेफर केलेले विद्यार्थी (Referred Students List)</span>
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    खालील विद्यार्थ्यांनी तुमच्या एजंट कोडने नोंदणी केली असून प्रत्येकाचे ₹५.८० जमा झाले आहेत.
+                    खालील विद्यार्थ्यांनी तुमच्या एजंट कोडने नोंदणी केली असून प्रत्येकाचे ₹१० थेट जमा झाले आहेत.
                   </p>
                 </div>
 
@@ -924,7 +924,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                         <th className="py-2.5 px-3">लक्ष्य परीक्षा</th>
                         <th className="py-2.5 px-3">नोंदणी तारीख</th>
                         <th className="py-2.5 px-3">स्थिती</th>
-                        <th className="py-2.5 px-3 text-right rounded-r-xl">कमिशन (२०%)</th>
+                        <th className="py-2.5 px-3 text-right rounded-r-xl">कमिशन (प्रति रेफर ₹१०)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
@@ -954,7 +954,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                             </span>
                           </td>
                           <td className="py-3 px-3 text-right font-black text-emerald-700 font-mono-numbers">
-                            +₹{formatInr(rec.commissionEarned || 5.8)}
+                            +₹{formatInr(rec.commissionEarned || 10)}
                           </td>
                         </tr>
                       ))}
@@ -1206,14 +1206,14 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-200">
                   <div className="text-xs text-indigo-900 font-semibold">कमिशन दर</div>
-                  <div className="text-2xl font-black text-indigo-950 mt-1">२०%</div>
-                  <div className="text-[10px] text-indigo-700 mt-0.5">₹५.८० / विद्यार्थी</div>
+                  <div className="text-2xl font-black text-indigo-950 mt-1">₹१०</div>
+                  <div className="text-[10px] text-indigo-700 mt-0.5">₹१० / विद्यार्थी</div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
                   <div className="text-xs text-emerald-900 font-semibold">एकूण संभाव्य कमाई</div>
                   <div className="text-2xl font-black text-emerald-950 mt-1 font-mono-numbers">
-                    ₹{formatInr(calcStudents * 5.8)}
+                    ₹{formatInr(calcStudents * 10)}
                   </div>
                   <div className="text-[10px] text-emerald-700 mt-0.5">थेट तुमच्या बँक खात्यात</div>
                 </div>

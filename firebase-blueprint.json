@@ -1,0 +1,140 @@
+{
+  "entities": {
+    "StudentUser": {
+      "title": "StudentUser",
+      "description": "Student profile, target exam, approval status, and performance metrics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 120 },
+        "mobile": { "type": "string", "maxLength": 20 },
+        "password": { "type": "string", "maxLength": 128 },
+        "examTarget": { "type": "string", "enum": ["MHT_CET", "NEET", "JEE_MAIN"] },
+        "className": { "type": "string", "maxLength": 150, "description": "Coaching class, college or school name" },
+        "coachingClass": { "type": "string", "maxLength": 150 },
+        "primaryDeviceId": { "type": "string", "maxLength": 128 },
+        "primaryDeviceName": { "type": "string", "maxLength": 128 },
+        "isApproved": { "type": "boolean" },
+        "approvalStatus": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "paymentStatus": { "type": "string", "enum": ["unpaid", "submitted", "paid", "verified"] },
+        "registeredAt": { "type": "number" },
+        "lastLoginAt": { "type": "number" },
+        "updatedAt": { "type": "number" },
+        "referralCode": { "type": "string", "maxLength": 64 },
+        "referredBy": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["name", "mobile", "examTarget"]
+    },
+    "AgentUser": {
+      "title": "AgentUser",
+      "description": "Official partner agents earning referral commission",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "agentCode": { "type": "string", "maxLength": 32 },
+        "name": { "type": "string", "maxLength": 120 },
+        "mobile": { "type": "string", "maxLength": 20 },
+        "city": { "type": "string", "maxLength": 80 },
+        "upiId": { "type": "string", "maxLength": 80 },
+        "commissionRate": { "type": "number" },
+        "totalEarnings": { "type": "number" },
+        "walletBalance": { "type": "number" },
+        "totalStudentsReferred": { "type": "number" },
+        "isApproved": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["active", "suspended"] },
+        "createdAt": { "type": "number" },
+        "lastLoginAt": { "type": "number" }
+      },
+      "required": ["agentCode", "name", "mobile"]
+    },
+    "StudentTestSubmission": {
+      "title": "StudentTestSubmission",
+      "description": "Record of a submitted mock test by a student",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "studentId": { "type": "string", "maxLength": 128 },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "studentMobile": { "type": "string", "maxLength": 20 },
+        "exam": { "type": "string", "maxLength": 32 },
+        "testTitle": { "type": "string", "maxLength": 200 },
+        "score": { "type": "number" },
+        "totalMarks": { "type": "number" },
+        "percentage": { "type": "number" },
+        "accuracy": { "type": "number" },
+        "submittedAt": { "type": "number" }
+      },
+      "required": ["studentName", "studentMobile", "exam", "score"]
+    },
+    "FeedbackReport": {
+      "title": "FeedbackReport",
+      "description": "Student feedback or mistake report",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "studentMobile": { "type": "string", "maxLength": 20 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["pending", "resolved"] },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["description"]
+    },
+    "CoachingInstitute": {
+      "title": "CoachingInstitute",
+      "description": "Affiliated coaching classes and tuition centers",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 150 },
+        "code": { "type": "string", "maxLength": 32 },
+        "city": { "type": "string", "maxLength": 80 },
+        "directorName": { "type": "string", "maxLength": 120 },
+        "contactMobile": { "type": "string", "maxLength": 20 },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["name", "code", "contactMobile"]
+    },
+    "SystemConfig": {
+      "title": "SystemConfig",
+      "description": "App settings, announcements, and version metadata",
+      "type": "object",
+      "properties": {
+        "version": { "type": "string", "maxLength": 32 },
+        "announcement": { "type": "string", "maxLength": 500 },
+        "isMaintenance": { "type": "boolean" },
+        "updatedAt": { "type": "number" }
+      }
+    }
+  },
+  "firestore": {
+    "/students/{studentId}": {
+      "schema": { "$ref": "#/entities/StudentUser" },
+      "description": "Registered students database - never deleted"
+    },
+    "/agents/{agentId}": {
+      "schema": { "$ref": "#/entities/AgentUser" },
+      "description": "Authorized partner agents with Rs 10 referral commission tracking"
+    },
+    "/student_test_submissions/{submissionId}": {
+      "schema": { "$ref": "#/entities/StudentTestSubmission" },
+      "description": "Historical mock test submissions and leaderboard scores"
+    },
+    "/test_results/{resultId}": {
+      "schema": { "$ref": "#/entities/StudentTestSubmission" },
+      "description": "Test result analytics for students"
+    },
+    "/feedback_reports/{reportId}": {
+      "schema": { "$ref": "#/entities/FeedbackReport" },
+      "description": "Student bug reports, question doubt submissions"
+    },
+    "/institutes/{instituteId}": {
+      "schema": { "$ref": "#/entities/CoachingInstitute" },
+      "description": "Affiliated coaching institutes"
+    },
+    "/system_config/{configId}": {
+      "schema": { "$ref": "#/entities/SystemConfig" },
+      "description": "System operational config"
+    }
+  }
+}

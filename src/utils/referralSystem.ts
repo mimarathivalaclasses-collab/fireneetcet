@@ -177,7 +177,7 @@ export function recordReferralTransaction(params: {
 
       students[studentIndex].totalReferredCount = (students[studentIndex].totalReferredCount || 0) + 1;
       students[studentIndex].referralEarnings = Number(
-        ((students[studentIndex].referralEarnings || 0) + commission).toFixed(2)
+        ((students[studentIndex].referralEarnings || 0) + effectiveCommission).toFixed(2)
       );
 
       localStorage.setItem(ALL_STUDENTS_KEY, JSON.stringify(students));

@@ -27,6 +27,7 @@ import {
 import { StudentUser, ExamType, DeviceApprovalRequest } from "../types";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
 import { saveStudentToCloud, fetchStudentsFromCloud } from "../services/firebase";
+import { saveUserSession } from "../utils/authSession";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -58,6 +59,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [examTarget, setExamTarget] = useState<ExamType>("MHT_CET");
+  const [className, setClassName] = useState<string>("");
 
   // Status for pending approval student
   const [pendingStudent, setPendingStudent] = useState<StudentUser | null>(null);
@@ -134,6 +136,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       mobile: mobile.trim(),
       password: password.trim(),
       examTarget,
+      className: className.trim() || undefined,
+      coachingClass: className.trim() || undefined,
       primaryDeviceId: currentDeviceId,
       primaryDeviceName: currentDeviceName,
       isApproved: false,
@@ -222,6 +226,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
     localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(student));
     saveStudentToCloud(student);
+    saveUserSession(student);
 
     onLoginSuccess(student);
   };
@@ -245,6 +250,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(match));
         saveStudentToCloud(match);
+        saveUserSession(match);
         alert("🎉 अभिनंदन! आपले खाते मंजूर झाले आहे!");
         onLoginSuccess(match);
       } else {
@@ -537,6 +543,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <option value="NEET">NEET-UG (Medical MBBS/BDS/BAMS)</option>
                   <option value="JEE_MAIN">JEE Main (IIT/NIT Engineering)</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  कोचिंग क्लास किंवा कॉलेज/शाळेचे नाव (ऐच्छिक):
+                </label>
+                <input
+                  type="text"
+                  placeholder="उदा. मी मराठीवाला क्लासेस / कॉलेजचे नाव"
+                  value={className}
+                  onChange={(e) => setClassName(e.target.value)}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
+                />
               </div>
 
               <button

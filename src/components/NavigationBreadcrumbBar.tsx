@@ -165,11 +165,11 @@ const TAB_METADATA: Record<NavigationTab, TabMeta> = {
     color: "from-indigo-600 to-purple-700",
   },
   agent_portal: {
-    titleMr: "एजंट पोर्टल व ३०% कमिशन",
-    titleEn: "Agent 30% Commission Portal",
+    titleMr: "एजंट पोर्टल (प्रति रेफर ₹१० कमिशन)",
+    titleEn: "Agent ₹10 Commission Portal",
     icon: TrendingUp,
     color: "from-teal-600 to-emerald-700",
-    badge: "30% Commission",
+    badge: "₹10 Commission",
   },
   refer_earn: {
     titleMr: "विद्यार्थी रेफर व १००% फी रिफंड",

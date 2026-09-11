@@ -348,6 +348,8 @@ export interface StudentUser {
   trialStartedAt?: number;
   instituteId?: string; // If registered under a coaching class
   instituteCode?: string;
+  className?: string; // Coaching Class, College, or School name (कोचिंग क्लास / कॉलेजचे नाव)
+  coachingClass?: string;
   referralCode?: string; // Student's own referral code e.g. "REF-930722"
   referredBy?: string; // Code of agent or friend who referred them
   referralEarnings?: number; // Total ₹ earned from referrals

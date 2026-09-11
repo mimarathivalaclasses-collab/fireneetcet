@@ -126,6 +126,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
   const [newStudentMobile, setNewStudentMobile] = useState<string>("");
   const [newStudentPassword, setNewStudentPassword] = useState<string>("123456");
   const [newStudentExam, setNewStudentExam] = useState<ExamType>("MHT_CET");
+  const [newStudentClassName, setNewStudentClassName] = useState<string>("");
 
   const [editingStudent, setEditingStudent] = useState<StudentUser | null>(null);
   const [editingAgent, setEditingAgent] = useState<AgentUser | null>(null);
@@ -447,6 +448,8 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
       password: newStudentPassword.trim() || "123456",
       role: "student",
       examTarget: newStudentExam,
+      className: newStudentClassName.trim() || undefined,
+      coachingClass: newStudentClassName.trim() || undefined,
       primaryDeviceId: getOrCreateDeviceId(),
       primaryDeviceName: getDeviceName(),
       approvalStatus: "approved",
@@ -466,6 +469,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     setNewStudentName("");
     setNewStudentMobile("");
     setNewStudentPassword("123456");
+    setNewStudentClassName("");
     showToast("नवीन विद्यार्थी जोडला व मंजूर केला गेला!");
   };
 
@@ -979,6 +983,12 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                               <h4 className="text-sm font-black text-slate-900">{std.name}</h4>
                               <p className="text-xs text-slate-600 font-mono">📱 {std.mobile}</p>
                               <p className="text-xs text-teal-700 font-bold mt-0.5">🎯 {std.examTarget}</p>
+                              {(std.className || std.coachingClass) && (
+                                <p className="text-xs text-indigo-700 font-bold mt-0.5 flex items-center gap-1">
+                                  <span>🏫</span>
+                                  <span className="truncate">{std.className || std.coachingClass}</span>
+                                </p>
+                              )}
                             </div>
                             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">
                               ⏳ मंजुरी प्रलंबित
@@ -1101,6 +1111,13 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                             <div>🎯 <strong>{std.examTarget}</strong></div>
                             <div>🔑 <strong>{std.password || "123456"}</strong></div>
                           </div>
+
+                          {(std.className || std.coachingClass) && (
+                            <div className="bg-purple-50/70 p-2 rounded-xl text-[11px] text-purple-900 border border-purple-100 flex items-center gap-1.5 font-bold">
+                              <span>🏫 क्लास:</span>
+                              <span className="truncate">{std.className || std.coachingClass}</span>
+                            </div>
+                          )}
 
                           {/* Performance Mini Status */}
                           <div className="bg-indigo-50/70 p-2 rounded-xl text-[11px] flex items-center justify-between text-indigo-900 border border-indigo-100">
@@ -1454,6 +1471,16 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   <option value="JEE_MAIN">JEE Main (Engineering)</option>
                 </select>
               </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">कोचिंग क्लास / कॉलेजचे नाव (ऐच्छिक):</label>
+                <input
+                  type="text"
+                  placeholder="उदा. मी मराठीवाला क्लासेस"
+                  value={newStudentClassName}
+                  onChange={(e) => setNewStudentClassName(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:border-indigo-600"
+                />
+              </div>
               <div className="flex gap-2 pt-2">
                 <button
                   type="submit"
@@ -1526,6 +1553,22 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   <option value="NEET">NEET</option>
                   <option value="JEE_MAIN">JEE Main</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">कोचिंग क्लास / कॉलेजचे नाव:</label>
+                <input
+                  type="text"
+                  placeholder="उदा. मी मराठीवाला क्लासेस"
+                  value={editingStudent.className || editingStudent.coachingClass || ""}
+                  onChange={(e) =>
+                    setEditingStudent({
+                      ...editingStudent,
+                      className: e.target.value,
+                      coachingClass: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:border-indigo-600"
+                />
               </div>
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">मंजुरी स्थिती (Approval Status):</label>
