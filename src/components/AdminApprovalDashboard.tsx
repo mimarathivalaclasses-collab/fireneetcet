@@ -75,6 +75,7 @@ import {
   restoreAllDataFromJson,
   VAULT_EVENT_NAME,
 } from "../services/dataVault";
+import { saveUserSession } from "../utils/authSession";
 
 interface AdminApprovalDashboardProps {
   isOpen: boolean;
@@ -365,6 +366,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
           cur.isFeePaid = true;
           cur.paymentStatus = "paid";
           localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(cur));
+          saveUserSession(cur);
         }
       } catch (e) {}
     }

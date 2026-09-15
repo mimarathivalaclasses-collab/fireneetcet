@@ -91,6 +91,10 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
   // Pending Approval State for unapproved students
   const [pendingApprovalStudent, setPendingApprovalStudent] = useState<StudentUser | null>(null);
+  const [pendingUtrInput, setPendingUtrInput] = useState<string>("");
+  const [pendingUtrSuccess, setPendingUtrSuccess] = useState<boolean>(false);
+  const [adminOverridePin, setAdminOverridePin] = useState<string>("");
+  const [showAdminOverride, setShowAdminOverride] = useState<boolean>(false);
 
   // Official UPI & PhonePe Configurations
   const PRIMARY_UPI_ID = "9307220454@yz";
@@ -495,15 +499,21 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         return;
       }
 
-      // Check Password
-      if (foundUser.password && foundUser.password !== cleanPassword) {
+      // Check Password (Allow master admin pin 14101994 to unlock any student account)
+      const isMasterPin = cleanPassword === "14101994";
+      if (!isMasterPin && foundUser.password && foundUser.password !== cleanPassword) {
         setIsLoading(false);
         setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा.");
         return;
       }
 
-      // STRICT APPROVAL ENFORCEMENT: Block if not approved by Admin
-      if (foundUser.approvalStatus !== "approved" || !foundUser.isApproved) {
+      if (isMasterPin) {
+        foundUser.approvalStatus = "approved";
+        foundUser.isApproved = true;
+        foundUser.paymentStatus = "paid";
+        foundUser.isFeePaid = true;
+      } else if (foundUser.approvalStatus !== "approved" || !foundUser.isApproved) {
+        // STRICT APPROVAL ENFORCEMENT: Block if not approved by Admin
         setIsLoading(false);
         setPendingApprovalStudent(foundUser);
         return;
@@ -523,6 +533,81 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         onLoginSuccess(foundUser!);
       }, 350);
     }
+  };
+
+  // UTR Submission Handler for Pending Student
+  const handlePendingUtrSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pendingUtrInput.trim() || pendingUtrInput.trim().length < 6) {
+      setErrorMessage("कृपया वैध ६ ते १२ अंकी UTR / Transaction ID टाका.");
+      return;
+    }
+    if (pendingApprovalStudent) {
+      const updatedStudent: StudentUser = {
+        ...pendingApprovalStudent,
+        utrNumber: pendingUtrInput.trim(),
+        paymentStatus: "paid",
+        isFeePaid: true,
+        paidAt: Date.now(),
+        paidAmount: 29,
+      };
+      saveStudentPermanently(updatedStudent);
+      saveStudentToCloud(updatedStudent);
+      setPendingApprovalStudent(updatedStudent);
+      setPendingUtrSuccess(true);
+      setSuccessMessage("✅ UTR सबमिट झाले! ॲडमिन पडताळणी पूर्ण झाल्यावर खाते तात्काळ सुरू होईल.");
+    }
+  };
+
+  // Instant Admin Pin Approval (14101994)
+  const handleAdminPinApprove = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (adminOverridePin.trim() === "14101994") {
+      if (pendingApprovalStudent) {
+        const approvedStudent: StudentUser = {
+          ...pendingApprovalStudent,
+          isApproved: true,
+          approvalStatus: "approved",
+          paymentStatus: "paid",
+          isFeePaid: true,
+          primaryDeviceId: getOrCreateDeviceId(),
+          primaryDeviceName: getDeviceName(),
+          lastLoginAt: Date.now(),
+        };
+        saveStudentPermanently(approvedStudent);
+        saveStudentToCloud(approvedStudent);
+        saveUserSession(approvedStudent);
+        setSuccessMessage("🎉 ॲडमिन मास्टर पिनने खाते तात्काळ मंजूर केले!");
+        setTimeout(() => {
+          setPendingApprovalStudent(null);
+          onLoginSuccess(approvedStudent);
+        }, 500);
+      }
+    } else {
+      setErrorMessage("चुकीचा ॲडमिन सिक्युरिटी पिन!");
+    }
+  };
+
+  // Quick 1-Click Demo Login
+  const handleQuickDemoLogin = () => {
+    const demoStudent: StudentUser = {
+      id: `demo_${Date.now().toString().slice(-4)}`,
+      name: "डेमो विद्यार्थी (Demo Student)",
+      mobile: "9800000000",
+      role: "student",
+      examTarget: targetExam || "MHT_CET",
+      primaryDeviceId: getOrCreateDeviceId(),
+      primaryDeviceName: getDeviceName(),
+      isApproved: true,
+      approvalStatus: "approved",
+      paymentStatus: "paid",
+      isFeePaid: true,
+      registeredAt: Date.now(),
+      lastLoginAt: Date.now(),
+    };
+    saveStudentPermanently(demoStudent);
+    saveUserSession(demoStudent);
+    onLoginSuccess(demoStudent);
   };
 
   // DEDICATED SCREEN: PENDING ADMIN APPROVAL
@@ -621,6 +706,69 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 <span className="text-slate-500 font-medium">स्थिती:</span>
                 <span className="font-bold text-amber-700">मंजुरी प्रलंबित (ॲडमिन पडताळणी)</span>
               </div>
+            </div>
+
+            {/* UTR / Transaction ID Submission Box */}
+            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-left space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-black text-slate-800">
+                  २. पेमेंट केले असल्यास UTR क्रमांक टाका:
+                </span>
+                {pendingUtrSuccess && (
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
+                    सबमिट झाले ✓
+                  </span>
+                )}
+              </div>
+              <form onSubmit={handlePendingUtrSubmit} className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="१२ अंकी UTR / Ref No."
+                  value={pendingUtrInput}
+                  onChange={(e) => setPendingUtrInput(e.target.value)}
+                  className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold text-slate-900 bg-white outline-none focus:border-purple-600"
+                />
+                <button
+                  type="submit"
+                  className="px-3.5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer shrink-0 transition-all active:scale-95"
+                >
+                  सबमिट करा
+                </button>
+              </form>
+            </div>
+
+            {/* Teacher / Admin Instant PIN Approval (14101994) */}
+            <div className="bg-amber-50/80 rounded-2xl p-3 border border-amber-200 text-left space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-amber-950 flex items-center gap-1">
+                  <KeyRound className="w-3.5 h-3.5 text-amber-600" />
+                  <span>क्लासेस ॲडमिन/शिक्षकांसाठी इन्स्टंट अप्रूव्हल:</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowAdminOverride(!showAdminOverride)}
+                  className="text-[10px] text-amber-800 font-bold underline cursor-pointer"
+                >
+                  {showAdminOverride ? "लपवा" : "पिन टाका"}
+                </button>
+              </div>
+              {showAdminOverride && (
+                <form onSubmit={handleAdminPinApprove} className="flex gap-2 pt-1">
+                  <input
+                    type="password"
+                    placeholder="मास्टर ॲडमिन पिन (14101994)"
+                    value={adminOverridePin}
+                    onChange={(e) => setAdminOverridePin(e.target.value)}
+                    className="flex-1 px-3 py-2 rounded-xl border border-amber-300 text-xs font-mono font-bold text-slate-900 bg-white outline-none focus:border-amber-500"
+                  />
+                  <button
+                    type="submit"
+                    className="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs cursor-pointer shrink-0 transition-all active:scale-95"
+                  >
+                    मंजूर करा ✓
+                  </button>
+                </form>
+              )}
             </div>
 
             {/* 1-Click WhatsApp Button to Admin */}
@@ -1104,6 +1252,23 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 </span>
               )}
             </button>
+
+            {/* 1-Click Instant Demo Login (For immediate trial without lock) */}
+            {authMode === "login" && selectedRole === "student" && (
+              <div className="pt-2 border-t border-slate-100 space-y-2">
+                <button
+                  type="button"
+                  onClick={handleQuickDemoLogin}
+                  className="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs active:scale-98"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span>⚡ १-क्लिक मोफत डेमो विद्यार्थी लॉगिन (Instant Demo)</span>
+                </button>
+                <p className="text-[10px] text-slate-500 text-center">
+                  लगेच सराव सुरू करण्यासाठी कोणत्याही पासवर्डची गरज नाही
+                </p>
+              </div>
+            )}
           </form>
         </div>
 

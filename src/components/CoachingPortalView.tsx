@@ -73,6 +73,7 @@ import {
   getNonRepeatingRandomQuestions,
   ParsedQuestionResult,
 } from "../utils/fileQuestionParser";
+import { getAllStudentsFromVaults, saveStudentPermanently } from "../services/dataVault";
 
 interface CoachingPortalViewProps {
   language: LanguageMode;
@@ -170,9 +171,7 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
   // Pending students from global app registered with this institute code
   const pendingInstituteStudents = useMemo(() => {
     try {
-      const allRaw = localStorage.getItem("mcq_app_all_students_v1");
-      if (!allRaw) return [];
-      const all: StudentUser[] = JSON.parse(allRaw);
+      const all: StudentUser[] = getAllStudentsFromVaults();
       return all.filter(
         (s) =>
           s.instituteCode?.toUpperCase() === profile.instituteCode.toUpperCase() ||
@@ -478,18 +477,16 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
     setStudents(updated);
     saveStoredInstituteStudents(updated);
 
-    // Also mark approved in global students list
+    // Also mark approved in global students list across all vaults
     try {
-      const allRaw = localStorage.getItem("mcq_app_all_students_v1");
-      if (allRaw) {
-        const all: StudentUser[] = JSON.parse(allRaw);
-        const up = all.map((u) =>
-          u.id === st.id
-            ? { ...u, isApproved: true, approvalStatus: "approved" as const, instituteId: profile.id }
-            : u
-        );
-        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(up));
-      }
+      const approvedStudent: StudentUser = {
+        ...st,
+        isApproved: true,
+        approvalStatus: "approved" as const,
+        instituteId: profile.id,
+        instituteCode: profile.instituteCode,
+      };
+      saveStudentPermanently(approvedStudent);
     } catch (e) {
       console.error(e);
     }

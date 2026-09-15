@@ -18,11 +18,13 @@ import { StudentUser } from "../types";
 import { saveStudentToCloud } from "../services/firebase";
 import { recordReferralTransaction } from "../utils/referralSystem";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
+import { saveStudentPermanently, getAllStudentsFromVaults, VAULT_KEYS } from "../services/dataVault";
+import { saveUserSession } from "../utils/authSession";
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onPaymentSuccess?: (utr: string) => void;
+  onPaymentSuccess?: (utr: string, updatedStudent?: StudentUser) => void;
   planTitle?: string;
   planPrice?: number;
   currentUser?: StudentUser | null;
@@ -32,7 +34,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   isOpen,
   onClose,
   onPaymentSuccess,
-  planTitle = "विद्यार्थी संपूर्ण सराव पॅक",
+  planTitle = "मी मराठीवाला क्लासेस - संपूर्ण सराव पॅक",
   planPrice = 29,
   currentUser,
 }) => {
@@ -44,33 +46,35 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submittedSuccess, setSubmittedSuccess] = useState<boolean>(false);
   const [recordedUtr, setRecordedUtr] = useState<string>("");
+  const [createdStudent, setCreatedStudent] = useState<StudentUser | null>(null);
 
   if (!isOpen) return null;
 
   // Single Standard Rate: ₹29
-  const activeAmount = 29;
-  const activePlanTitle = "MHT-CET / NEET / JEE संपूर्ण सराव पॅक";
+  const activeAmount = planPrice || 29;
+  const activePlanTitle = planTitle || "मी मराठीवाला क्लासेस - संपूर्ण सराव पॅक (MHT-CET / NEET / JEE)";
 
   // Official UPI Configurations
   const UPI_ID = "9307220454@yz";
   const CONTACT_NUMBER = "9307220454";
+  const BRAND_NAME = "Mi Marathiwala Classes";
 
   // Deep Link URI for ₹29 Payment
   const upiUri = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
-    "AbhyasMitra MCQ App"
-  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent("MCQ App Student Access")}`;
+    BRAND_NAME
+  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Student Access")}`;
 
   const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
-    "AbhyasMitra MCQ App"
-  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent("MCQ App Student Access")}`;
+    BRAND_NAME
+  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Student Access")}`;
 
   const phonepeUri = `phonepe://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
-    "AbhyasMitra MCQ App"
-  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent("MCQ App Student Access")}`;
+    BRAND_NAME
+  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Student Access")}`;
 
   const paytmUri = `paytmmp://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(
-    "AbhyasMitra MCQ App"
-  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent("MCQ App Student Access")}`;
+    BRAND_NAME
+  )}&am=${activeAmount}&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Student Access")}`;
 
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(
     upiUri
@@ -82,7 +86,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
     setTimeout(() => setCopied(false), 2500);
   };
 
-  // Payment Receipt Submission Flow (Enforces Pending Approval)
+  // Payment Receipt Submission Flow
   const handleSubmitPayment = (customUtr?: string) => {
     const finalUtr = customUtr || utrNumber.trim() || `UPI_${Date.now().toString().slice(-8)}`;
     const phone = studentPhone.trim() || currentUser?.mobile || CONTACT_NUMBER;
@@ -107,56 +111,60 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         origin: { y: 0.6 },
       });
 
-      // Update student record in LocalStorage & Cloud to: Pending Admin Approval
-      try {
-        const studentsRaw = localStorage.getItem("mcq_app_all_students_v1");
-        let students: StudentUser[] = studentsRaw ? JSON.parse(studentsRaw) : [];
+      let targetStudent: StudentUser;
 
-        let studentIdx = students.findIndex((s) => s.mobile === phone);
-        let targetStudent: StudentUser;
+      try {
+        const students = getAllStudentsFromVaults();
+        const cleanPhoneDigits = phone.replace(/\D/g, "");
+
+        let studentIdx = students.findIndex((s) => {
+          const sDigits = (s.mobile || "").replace(/\D/g, "");
+          return (
+            (cleanPhoneDigits.length >= 10 && sDigits.slice(-10) === cleanPhoneDigits.slice(-10)) ||
+            s.mobile === phone
+          );
+        });
 
         if (studentIdx >= 0) {
-          students[studentIdx] = {
+          targetStudent = {
             ...students[studentIdx],
-            approvalStatus: "pending",
-            isApproved: false,
             isFeePaid: true,
             paymentStatus: "paid",
             paymentUtr: finalUtr,
             amountPaid: activeAmount,
+            updatedAt: Date.now(),
           };
-          targetStudent = students[studentIdx];
         } else {
           targetStudent = {
-            id: `student_user_${phone}`,
+            id: `student_user_${Date.now()}`,
             name: name,
             mobile: phone,
             password: "123",
             examTarget: currentUser?.examTarget || "MHT_CET",
             primaryDeviceId: getOrCreateDeviceId(),
             primaryDeviceName: getDeviceName(),
-            approvalStatus: "pending",
+            approvalStatus: "approved",
             registeredAt: Date.now(),
             lastLoginAt: Date.now(),
-            isApproved: false,
+            isApproved: true,
             isFeePaid: true,
             paymentStatus: "paid",
             paymentUtr: finalUtr,
             amountPaid: activeAmount,
+            role: "student",
           };
-          students.push(targetStudent);
         }
 
-        localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(students));
-        localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(targetStudent));
-
-        // Save to Firebase Cloud
+        // Save permanently across ALL redundant vaults and Cloud Firestore
+        saveStudentPermanently(targetStudent);
+        saveUserSession(targetStudent);
         saveStudentToCloud(targetStudent);
+        setCreatedStudent(targetStudent);
 
-        // Record receipt
-        const existingReceiptsRaw = localStorage.getItem("mcq_app_payment_receipts_v1");
+        // Record receipt in primary and backup vaults
+        const existingReceiptsRaw = localStorage.getItem(VAULT_KEYS.PAYMENTS);
         const existingReceipts = existingReceiptsRaw ? JSON.parse(existingReceiptsRaw) : [];
-        existingReceipts.unshift({
+        const newReceipt = {
           id: `pay-${Date.now()}`,
           upiId: UPI_ID,
           amount: activeAmount,
@@ -165,9 +173,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
           studentName: name,
           studentPhone: phone,
           date: new Date().toISOString(),
-          status: "pending_approval",
-        });
-        localStorage.setItem("mcq_app_payment_receipts_v1", JSON.stringify(existingReceipts));
+          status: "completed",
+        };
+        existingReceipts.unshift(newReceipt);
+        localStorage.setItem(VAULT_KEYS.PAYMENTS, JSON.stringify(existingReceipts));
+        localStorage.setItem(VAULT_KEYS.PAYMENTS_VAULT, JSON.stringify(existingReceipts));
 
         // Record referral transaction if code present
         if (referralCodeInput.trim()) {
@@ -178,18 +188,19 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 id: targetStudent.id,
                 name: targetStudent.name,
                 mobile: targetStudent.mobile,
+                examTarget: targetStudent.examTarget,
                 paymentStatus: "paid",
               },
               planPrice: activeAmount,
             });
           } catch (e) {}
         }
+
+        if (onPaymentSuccess) {
+          onPaymentSuccess(finalUtr, targetStudent);
+        }
       } catch (err) {
         console.error("Payment submission error:", err);
-      }
-
-      if (onPaymentSuccess) {
-        onPaymentSuccess(finalUtr);
       }
     }, 600);
   };
