@@ -756,7 +756,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 <form onSubmit={handleAdminPinApprove} className="flex gap-2 pt-1">
                   <input
                     type="password"
-                    placeholder="मास्टर ॲडमिन पिन (14101994)"
+                    placeholder="मास्टर ॲडमिन सिक्युरिटी पिन"
                     value={adminOverridePin}
                     onChange={(e) => setAdminOverridePin(e.target.value)}
                     className="flex-1 px-3 py-2 rounded-xl border border-amber-300 text-xs font-mono font-bold text-slate-900 bg-white outline-none focus:border-amber-500"

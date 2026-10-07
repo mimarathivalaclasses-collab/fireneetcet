@@ -109,71 +109,71 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({
     accuracy: t.accuracy,
   }));
 
-  // Chapters Strength / Weakness Diagnostic List
+  // Chapters Strength / Weakness Diagnostic List dynamically calculated from actual practice stats
   const CHAPTER_DIAGNOSTICS = [
     {
       subject: "Physics",
       chapter: "Rotational Dynamics",
       chapterMr: "परिवलन गतीशास्त्र",
-      accuracy: practiceStats.subjectWise["Physics"]?.correct > 0 ? 82 : 45,
-      status: "Strong" as const,
-      recommendation: "Revision Mastered · Focus on PYQ 2024 variation",
-    },
-    {
-      subject: "Physics",
-      chapter: "Oscillations & Wave Optics",
-      chapterMr: "दोलने व तरंग प्रकाशशास्त्र",
-      accuracy: 38,
-      status: "Weak" as const,
-      recommendation: "कमी अचूकता (38%) · फॉर्म्युला शीट आणि किमान २५ प्रश्न सोडवा",
+      accuracy: practiceStats.subjectWise["Physics"]?.attempted > 0
+        ? Math.round((practiceStats.subjectWise["Physics"].correct / practiceStats.subjectWise["Physics"].attempted) * 100)
+        : 0,
+      status: (practiceStats.subjectWise["Physics"]?.attempted > 0 && (practiceStats.subjectWise["Physics"].correct / practiceStats.subjectWise["Physics"].attempted) >= 0.7)
+        ? ("Strong" as const)
+        : practiceStats.subjectWise["Physics"]?.attempted > 0
+        ? ("Weak" as const)
+        : ("Moderate" as const),
+      recommendation: practiceStats.subjectWise["Physics"]?.attempted > 0
+        ? "सराव अचूकतेनुसार: PYQs व सूत्रांचे सातत्य ठेवा"
+        : "अद्याप सराव सुरू केलेला नाही · सराव सुरू करा",
     },
     {
       subject: "Chemistry",
       chapter: "Chemical Thermodynamics",
       chapterMr: "रासायनिक उष्मागतिकी",
-      accuracy: 74,
-      status: "Moderate" as const,
-      recommendation: "State Functions आणि Enthalpy सूत्रांचा सराव आवश्यक",
-    },
-    {
-      subject: "Chemistry",
-      chapter: "Aldehydes, Ketones & Carboxylic Acids",
-      chapterMr: "अल्डीहाइड्स, केटोन्स व कार्बोक्झिलिक ॲसिड",
-      accuracy: 42,
-      status: "Weak" as const,
-      recommendation: "Named Reactions आणि Mechanism पुन्हा रिव्हाइज करा",
-    },
-    {
-      subject: "Mathematics",
-      chapter: "Integration & Definite Integrals",
-      chapterMr: "समाकलन (Integration)",
-      accuracy: 48,
-      status: "Weak" as const,
-      recommendation: "Properties of Definite Integrals ट्रिक्सचा सराव करा",
+      accuracy: practiceStats.subjectWise["Chemistry"]?.attempted > 0
+        ? Math.round((practiceStats.subjectWise["Chemistry"].correct / practiceStats.subjectWise["Chemistry"].attempted) * 100)
+        : 0,
+      status: (practiceStats.subjectWise["Chemistry"]?.attempted > 0 && (practiceStats.subjectWise["Chemistry"].correct / practiceStats.subjectWise["Chemistry"].attempted) >= 0.7)
+        ? ("Strong" as const)
+        : practiceStats.subjectWise["Chemistry"]?.attempted > 0
+        ? ("Weak" as const)
+        : ("Moderate" as const),
+      recommendation: practiceStats.subjectWise["Chemistry"]?.attempted > 0
+        ? "Enthalpy व State Functions सूत्रांचा नियमित सराव ठेवा"
+        : "अद्याप सराव सुरू केलेला नाही · सराव सुरू करा",
     },
     {
       subject: "Mathematics",
       chapter: "Vectors & 3D Geometry",
       chapterMr: "सदिश व त्रिमितीय भूमिती",
-      accuracy: 88,
-      status: "Strong" as const,
-      recommendation: "उत्कृष्ट पकड! थेट 100% गुण मिळवण्याची संधी",
+      accuracy: practiceStats.subjectWise["Mathematics"]?.attempted > 0
+        ? Math.round((practiceStats.subjectWise["Mathematics"].correct / practiceStats.subjectWise["Mathematics"].attempted) * 100)
+        : 0,
+      status: (practiceStats.subjectWise["Mathematics"]?.attempted > 0 && (practiceStats.subjectWise["Mathematics"].correct / practiceStats.subjectWise["Mathematics"].attempted) >= 0.7)
+        ? ("Strong" as const)
+        : practiceStats.subjectWise["Mathematics"]?.attempted > 0
+        ? ("Weak" as const)
+        : ("Moderate" as const),
+      recommendation: practiceStats.subjectWise["Mathematics"]?.attempted > 0
+        ? "Dot & Cross Product सूत्रांचा सराव आणि वेळ व्यवस्थापन सुधारा"
+        : "अद्याप सराव सुरू केलेला नाही · सराव सुरू करा",
     },
     {
       subject: "Biology",
-      chapter: "Human Reproduction & Health",
-      chapterMr: "मानवी प्रजनन आणि आरोग्य",
-      accuracy: 91,
-      status: "Strong" as const,
-      recommendation: "NCERT ओळींवर आधारित प्रश्न अचूक सोडवले आहेत",
-    },
-    {
-      subject: "Biology",
-      chapter: "Genetics & Molecular Basis of Inheritance",
+      chapter: "Genetics & Molecular Basis",
       chapterMr: "आनुवंशिकी आणि रेण्वीय आधार",
-      accuracy: 52,
-      status: "Moderate" as const,
-      recommendation: "Transcription व Translation Steps आकृत्यांसह सराव करा",
+      accuracy: practiceStats.subjectWise["Biology"]?.attempted > 0
+        ? Math.round((practiceStats.subjectWise["Biology"].correct / practiceStats.subjectWise["Biology"].attempted) * 100)
+        : 0,
+      status: (practiceStats.subjectWise["Biology"]?.attempted > 0 && (practiceStats.subjectWise["Biology"].correct / practiceStats.subjectWise["Biology"].attempted) >= 0.7)
+        ? ("Strong" as const)
+        : practiceStats.subjectWise["Biology"]?.attempted > 0
+        ? ("Weak" as const)
+        : ("Moderate" as const),
+      recommendation: practiceStats.subjectWise["Biology"]?.attempted > 0
+        ? "NCERT आकृत्या, DNA Replication आणि Translation steps रिव्हाइज करा"
+        : "अद्याप सराव सुरू केलेला नाही · सराव सुरू करा",
     },
   ];
 

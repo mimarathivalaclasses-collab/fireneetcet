@@ -4,6 +4,7 @@ import {
   fetchStudentsFromCloud,
   saveStudentTestSubmissionToCloud,
   fetchStudentTestSubmissionsFromCloud,
+  deleteStudentFromCloud,
 } from "./firebase";
 
 /**
@@ -140,10 +141,16 @@ export async function saveStudentPermanently(student: StudentUser): Promise<bool
       }
     });
 
-    // 2. If this is the current active student, keep current user updated
+    // 2. Only if this is the CURRENT active logged in student, keep current user session updated
     try {
-      localStorage.setItem(VAULT_KEYS.CURRENT_STUDENT, JSON.stringify(updatedStudent));
-      localStorage.setItem(VAULT_KEYS.CURRENT_USER_LEGACY, JSON.stringify(updatedStudent));
+      const activeRaw = localStorage.getItem(VAULT_KEYS.CURRENT_STUDENT) || localStorage.getItem(VAULT_KEYS.CURRENT_USER_LEGACY);
+      if (activeRaw) {
+        const activeUser = JSON.parse(activeRaw);
+        if (activeUser && (activeUser.id === updatedStudent.id || normalizeStudentKey(activeUser) === normKey)) {
+          localStorage.setItem(VAULT_KEYS.CURRENT_STUDENT, JSON.stringify(updatedStudent));
+          localStorage.setItem(VAULT_KEYS.CURRENT_USER_LEGACY, JSON.stringify(updatedStudent));
+        }
+      }
     } catch (err) {
       // ignore
     }
@@ -167,13 +174,14 @@ export async function saveStudentPermanently(student: StudentUser): Promise<bool
 
 /**
  * Permanently saves a list of students across all local vaults and Cloud.
+ * Replaces the stored student set with the updated list without resurrecting deleted students.
  */
 export async function saveAllStudentsPermanently(students: StudentUser[]): Promise<boolean> {
   try {
-    const existing = getAllStudentsFromVaults();
     const map = new Map<string, StudentUser>();
-    existing.forEach((s) => map.set(normalizeStudentKey(s), s));
-    students.forEach((s) => map.set(normalizeStudentKey(s), { ...s, updatedAt: Date.now() }));
+    students.forEach((s) => {
+      if (s) map.set(normalizeStudentKey(s), { ...s, updatedAt: s.updatedAt || Date.now() });
+    });
 
     const unified = Array.from(map.values());
     const serialized = JSON.stringify(unified);
@@ -191,7 +199,7 @@ export async function saveAllStudentsPermanently(students: StudentUser[]): Promi
     });
 
     // Cloud batch sync
-    students.forEach((s) => {
+    unified.forEach((s) => {
       saveStudentToCloud(s).catch(() => {});
     });
 
@@ -202,6 +210,56 @@ export async function saveAllStudentsPermanently(students: StudentUser[]): Promi
     return true;
   } catch (e) {
     console.error("[DataVault] saveAllStudentsPermanently error:", e);
+    return false;
+  }
+}
+
+/**
+ * Permanently deletes a student across ALL local vaults AND Cloud database.
+ * Guarantees zero zombie resurrection.
+ */
+export async function deleteStudentPermanently(studentIdentifier: string): Promise<boolean> {
+  try {
+    const targetKey = studentIdentifier.replace(/\D/g, "").slice(-10) || studentIdentifier;
+    const currentList = getAllStudentsFromVaults();
+    const updatedList = currentList.filter((s) => {
+      const sKey = normalizeStudentKey(s);
+      return s.id !== studentIdentifier && sKey !== targetKey && s.mobile !== studentIdentifier;
+    });
+
+    const serialized = JSON.stringify(updatedList);
+    [
+      VAULT_KEYS.PRIMARY_STUDENTS,
+      VAULT_KEYS.PERMANENT_VAULT_STUDENTS,
+      VAULT_KEYS.EMERGENCY_MIRROR_STUDENTS,
+    ].forEach((k) => {
+      try {
+        localStorage.setItem(k, serialized);
+      } catch (err) {}
+    });
+
+    // If deleted student was current active user, log out cleanly
+    try {
+      const curRaw = localStorage.getItem(VAULT_KEYS.CURRENT_STUDENT);
+      if (curRaw) {
+        const cur = JSON.parse(curRaw);
+        if (cur.id === studentIdentifier || normalizeStudentKey(cur) === targetKey) {
+          localStorage.removeItem(VAULT_KEYS.CURRENT_STUDENT);
+          localStorage.removeItem(VAULT_KEYS.CURRENT_USER_LEGACY);
+        }
+      }
+    } catch {}
+
+    // Delete from Firestore Cloud
+    deleteStudentFromCloud(studentIdentifier).catch(() => {});
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(VAULT_EVENT_NAME));
+    }
+
+    return true;
+  } catch (err) {
+    console.error("[DataVault] deleteStudentPermanently error:", err);
     return false;
   }
 }

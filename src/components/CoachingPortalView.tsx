@@ -73,7 +73,8 @@ import {
   getNonRepeatingRandomQuestions,
   ParsedQuestionResult,
 } from "../utils/fileQuestionParser";
-import { getAllStudentsFromVaults, saveStudentPermanently } from "../services/dataVault";
+import { getAllStudentsFromVaults, saveStudentPermanently, deleteStudentPermanently } from "../services/dataVault";
+import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
 
 interface CoachingPortalViewProps {
   language: LanguageMode;
@@ -316,12 +317,14 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
       showToast("कृपया नाव आणि रोल नंबर भरा.");
       return;
     }
+    const cleanPhone = newStudentMobile.trim() || `98${Math.floor(10000000 + Math.random() * 90000000)}`;
+    const studentId = `stud_${Date.now()}`;
     const newSt: InstituteStudent = {
-      id: `stud_${Date.now()}`,
+      id: studentId,
       instituteId: profile.id,
       rollNo: newStudentRoll.trim(),
       name: newStudentName.trim(),
-      mobile: newStudentMobile.trim() || "9800000000",
+      mobile: cleanPhone,
       batchName: newStudentBatch,
       examTarget: newStudentExam,
       addedAt: Date.now(),
@@ -332,11 +335,35 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
     const updated = [newSt, ...students];
     setStudents(updated);
     saveStoredInstituteStudents(updated);
+
+    // Also permanently save to global student vault & cloud database
+    const studentUser: StudentUser = {
+      id: studentId,
+      name: newStudentName.trim(),
+      mobile: cleanPhone,
+      password: "123",
+      role: "student",
+      examTarget: newStudentExam,
+      className: profile.nameMr || profile.name,
+      coachingClass: profile.nameMr || profile.name,
+      instituteId: profile.id,
+      instituteCode: profile.instituteCode,
+      primaryDeviceId: getOrCreateDeviceId(),
+      primaryDeviceName: getDeviceName(),
+      isApproved: true,
+      approvalStatus: "approved",
+      paymentStatus: "paid",
+      isFeePaid: true,
+      registeredAt: Date.now(),
+      lastLoginAt: Date.now(),
+    };
+    saveStudentPermanently(studentUser);
+
     setShowAddStudentModal(false);
     setNewStudentName("");
     setNewStudentRoll("");
     setNewStudentMobile("");
-    showToast(`विद्यार्थी ${newSt.name} (${newSt.rollNo}) ॲड झाला!`);
+    showToast(`विद्यार्थी ${newSt.name} (${newSt.rollNo}) ॲड झाला व लॉगिन सुरक्षित झाले! (डिफॉल्ट पासवर्ड: 123)`);
   };
 
   // Helper to open Add Student modal with auto-suggested roll number
@@ -349,9 +376,16 @@ export const CoachingPortalView: React.FC<CoachingPortalViewProps> = ({
 
   // Delete Student
   const handleDeleteStudent = (id: string) => {
+    const targetStudent = students.find((s) => s.id === id);
     const updated = students.filter((s) => s.id !== id);
     setStudents(updated);
     saveStoredInstituteStudents(updated);
+
+    if (targetStudent) {
+      deleteStudentPermanently(targetStudent.mobile || targetStudent.id);
+    } else {
+      deleteStudentPermanently(id);
+    }
     showToast("विद्यार्थी हटवला गेला.");
   };
 

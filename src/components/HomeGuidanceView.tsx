@@ -23,7 +23,8 @@ import {
   BookOpenCheck,
   ShieldCheck,
 } from "lucide-react";
-import { ExamType, LanguageMode, NavigationTab, StudentUser } from "../types";
+import { ExamType, LanguageMode, NavigationTab, StudentUser, TestResultData } from "../types";
+import { PWAInstallPrompt } from "./PWAInstallPrompt";
 
 interface HomeGuidanceViewProps {
   currentExam: ExamType;
@@ -33,6 +34,13 @@ interface HomeGuidanceViewProps {
   currentUser?: StudentUser | null;
   trialSecondsRemaining?: number;
   onOpenAdminDashboard?: () => void;
+  practiceStats?: {
+    totalAttempted: number;
+    totalCorrect: number;
+    totalWrong: number;
+    subjectWise: Record<string, { attempted: number; correct: number }>;
+  };
+  testHistory?: TestResultData[];
 }
 
 export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
@@ -40,14 +48,49 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
   onSelectExam,
   onNavigate,
   currentUser,
+  practiceStats,
+  testHistory = [],
 }) => {
   const isDemoUser = currentUser?.id?.startsWith("demo_user_");
-  const studentName = currentUser?.name?.split(" ")[0] || "Arjun";
-  const overallAccuracy = currentUser?.overallAccuracy || 72;
-  const testsTaken = currentUser?.totalTestsTaken || 28;
-  const avgScore = currentUser?.totalQuestionsSolved ? `${Math.round((currentUser.totalQuestionsSolved * 4) / Math.max(1, testsTaken))}/720` : "156/720";
-  const bestScore = "612/720";
-  const rank = "12,458";
+  const studentName = currentUser?.name ? currentUser.name.trim().split(" ")[0] : "विद्यार्थी";
+
+  // Dynamic Real Calculations based on actual tests and questions solved
+  const testsTaken = testHistory.length > 0 
+    ? testHistory.length 
+    : (currentUser?.totalTestsTaken || 0);
+
+  const totalAttempted = (practiceStats?.totalAttempted || 0) + (currentUser?.totalQuestionsSolved || 0);
+  const totalCorrect = (practiceStats?.totalCorrect || 0) + (currentUser?.totalCorrect || 0);
+
+  const overallAccuracy = totalAttempted > 0 
+    ? Math.round((totalCorrect / totalAttempted) * 100) 
+    : testHistory.length > 0
+    ? Math.round(testHistory.reduce((acc, t) => acc + (t.accuracy || 0), 0) / testHistory.length)
+    : (currentUser?.overallAccuracy || 0);
+
+  const maxExamMarks = currentExam === "NEET" ? 720 : currentExam === "JEE_MAIN" ? 300 : 200;
+
+  const avgScore = testHistory.length > 0
+    ? `${Math.round(testHistory.reduce((acc, t) => acc + (t.score || 0), 0) / testHistory.length)}/${maxExamMarks}`
+    : totalAttempted > 0
+    ? `${totalCorrect * (currentExam === "NEET" ? 4 : 1)}/${maxExamMarks}`
+    : `0/${maxExamMarks}`;
+
+  const bestScoreVal = testHistory.length > 0
+    ? Math.max(...testHistory.map((t) => t.score || 0))
+    : (currentUser?.highestScore || (totalCorrect * (currentExam === "NEET" ? 4 : 1)));
+
+  const bestScore = `${bestScoreVal}/${maxExamMarks}`;
+
+  const rank = totalAttempted === 0 && testsTaken === 0
+    ? "नवीन"
+    : overallAccuracy >= 85
+    ? "Top 500"
+    : overallAccuracy >= 70
+    ? "Top 2,500"
+    : overallAccuracy >= 50
+    ? "Top 8,000"
+    : "सराव वाढवा";
 
   // 3 Exam Selection Cards (Screen 2: "Choose Your Exam")
   const examCards = [
@@ -152,8 +195,11 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 space-y-6 pb-24 select-none">
-      {/* 1. Header Greeting (Hi, Arjun! 👋 Let's crack your dream exam.) */}
+    <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 space-y-5 pb-24 select-none">
+      {/* 0. Mobile PWA Install Card (Prompt for Android / iOS) */}
+      <PWAInstallPrompt />
+
+      {/* 1. Header Greeting */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
@@ -195,7 +241,9 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
                 {overallAccuracy}%
               </div>
               <p className="text-xs text-indigo-100/90 font-medium mt-0.5">
-                Great going! Keep it up. (उत्तम प्रगती! सराव चालू ठेवा.)
+                {overallAccuracy > 0
+                  ? "Great going! Keep it up. (उत्तम प्रगती! सराव चालू ठेवा.)"
+                  : "सराव सुरू करा आणि लाईव्ह प्रगती बघा. (Start practicing to see live progress.)"}
               </p>
             </div>
 

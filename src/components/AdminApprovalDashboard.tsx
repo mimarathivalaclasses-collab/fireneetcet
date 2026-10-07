@@ -70,6 +70,7 @@ import {
   getAllStudentsFromVaults,
   saveStudentPermanently,
   saveAllStudentsPermanently,
+  deleteStudentPermanently,
   syncAndHealWithCloud,
   exportAllDataAsJsonBackup,
   restoreAllDataFromJson,
@@ -399,16 +400,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     showToast("विद्यार्थी ब्लॉक / रिजेक्ट करण्यात आला.");
   };
 
-  const handleDeleteStudent = (studentId: string, name: string) => {
+  const handleDeleteStudent = async (studentId: string, name: string) => {
     if (window.confirm(`तुम्हाला खात्री आहे का की '${name}' या विद्यार्थ्याला कायमचे डेटाबेसमधून हटवायचे आहे?`)) {
       const targetStudent = students.find((s) => s.id === studentId);
-      if (targetStudent) {
-        deleteStudentFromCloud(targetStudent.mobile || targetStudent.id);
-      }
+      const identifier = targetStudent?.mobile || studentId;
+      await deleteStudentPermanently(identifier);
 
-      const updated = students.filter((s) => s.id !== studentId);
+      const updated = students.filter((s) => s.id !== studentId && s.mobile !== targetStudent?.mobile);
       setStudents(updated);
-      saveAllStudentsPermanently(updated);
       showToast(`'${name}' हा विद्यार्थी पूर्णपणे हटवला गेला.`);
     }
   };

@@ -412,10 +412,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative my-auto text-slate-900">
         {/* Header */}
         <div className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 p-6 text-white text-center relative">
-          {onClose && !isTrialExpired && (
+          {onClose && (
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+              title="बंद करा (Close)"
             >
               <X className="w-5 h-5" />
             </button>
@@ -577,7 +578,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="12 अंकी UTR नंबर (उदा. 423819028341)"
+                      placeholder="12 अंकी UTR / Ref No."
                       value={utrInput}
                       onChange={(e) => setUtrInput(e.target.value)}
                       className="flex-1 px-3 py-2 rounded-xl border border-emerald-300 bg-white text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-emerald-600"
@@ -626,24 +627,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
                     <button
                       type="button"
-                      onClick={handleQuickDemoLogin}
-                      className="py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                      onClick={() => {
+                        setPendingStudent(null);
+                        setMode("login");
+                      }}
+                      className="py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <Zap className="w-3.5 h-3.5 fill-white" />
-                      <span>मोफत डेमो सुरू करा</span>
+                      <span>दुसऱ्या नंबरने लॉगिन</span>
                     </button>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPendingStudent(null);
-                      setMode("login");
-                    }}
-                    className="text-xs text-slate-500 hover:text-slate-800 underline font-bold mt-1"
-                  >
-                    लॉगिन स्क्रीनवर परत जा
-                  </button>
                 </div>
               </div>
             </div>
@@ -652,14 +644,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  नोंदणीकृत मोबाईल नंबर किंवा युजर आयडी:
+                  नोंदणीकृत मोबाईल नंबर:
                 </label>
                 <div className="relative">
                   <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="tel"
                     required
-                    placeholder="उदा. 9881063427"
+                    placeholder="आपला १० अंकी मोबाईल नंबर टाका"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-300 text-slate-900 text-sm font-bold focus:border-indigo-600 outline-none"
@@ -672,9 +664,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <label className="block text-xs font-bold text-slate-700">
                     पासवर्ड / सिक्युरिटी पिन:
                   </label>
-                  <span className="text-[10px] text-indigo-600 font-bold">
-                    ॲडमिन पिन: 14101994
-                  </span>
                 </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -703,18 +692,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <LogIn className="w-4 h-4" />
                 <span>लॉगिन करा (Sign In)</span>
               </button>
-
-              {/* 1-Click Demo Option */}
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={handleQuickDemoLogin}
-                  className="w-full py-2.5 rounded-2xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all"
-                >
-                  <Zap className="w-4 h-4 text-amber-600 fill-amber-600" />
-                  <span>⚡ १-क्लिक मोफत डेमो विद्यार्थी लॉगिन (Instant Free Demo)</span>
-                </button>
-              </div>
             </form>
           ) : (
             /* REGISTER FORM */
@@ -726,7 +703,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <input
                   type="text"
                   required
-                  placeholder="उदा. राहुल सचिन पाटील"
+                  placeholder="आपले पूर्ण नाव प्रविष्ट करा"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
@@ -740,7 +717,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <input
                   type="tel"
                   required
-                  placeholder="उदा. 9881063427"
+                  placeholder="१० अंकी मोबाईल नंबर"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
@@ -791,7 +768,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </label>
                 <input
                   type="text"
-                  placeholder="उदा. मी मराठीवाला क्लासेस, अंबड"
+                  placeholder="क्लास किंवा कॉलेजचे नाव (ऐच्छिक)"
                   value={className}
                   onChange={(e) => setClassName(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"

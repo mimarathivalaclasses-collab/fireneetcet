@@ -768,6 +768,12 @@ export default function App() {
   const handleLogout = () => {
     if (window.confirm("तुम्हाला खात्यातून लॉग आऊट करायचे आहे का?")) {
       clearUserSession();
+      try {
+        localStorage.removeItem(VAULT_KEYS.CURRENT_STUDENT);
+        localStorage.removeItem(VAULT_KEYS.CURRENT_USER_LEGACY);
+        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+        sessionStorage.clear();
+      } catch (e) {}
       setCurrentUser(null);
       setActiveTab("home");
     }
@@ -1085,8 +1091,8 @@ export default function App() {
                     onOpenAuthModal={() => setIsAuthModalOpen(true)}
                     onOpenPaymentModal={() => setIsPaymentModalOpen(true)}
                     onOpenAdminDashboard={() => setIsAdminDashboardOpen(true)}
-                    onLogout={handleLogout}
-                    onStartDemoTest={handleStartDemoTest}
+                    practiceStats={practiceStats}
+                    testHistory={testHistory}
                   />
                 )}
 
