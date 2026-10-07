@@ -1253,20 +1253,22 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               )}
             </button>
 
-            {/* 1-Click Instant Demo Login (For immediate trial without lock) */}
+            {/* Clean Help Links */}
             {authMode === "login" && selectedRole === "student" && (
-              <div className="pt-2 border-t border-slate-100 space-y-2">
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-bold px-1">
                 <button
                   type="button"
-                  onClick={handleQuickDemoLogin}
-                  className="w-full py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800 font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs active:scale-98"
+                  onClick={() => {
+                    setAuthMode("register");
+                    setErrorMessage("");
+                  }}
+                  className="text-indigo-600 hover:text-indigo-800 underline cursor-pointer"
                 >
-                  <Sparkles className="w-4 h-4 text-amber-500" />
-                  <span>⚡ १-क्लिक मोफत डेमो विद्यार्थी लॉगिन (Instant Demo)</span>
+                  नवीन विद्यार्थी नोंदणी (Sign Up)
                 </button>
-                <p className="text-[10px] text-slate-500 text-center">
-                  लगेच सराव सुरू करण्यासाठी कोणत्याही पासवर्डची गरज नाही
-                </p>
+                <span className="text-[11px] text-slate-400">
+                  🔐 सुरक्षित SSL कूटबद्ध लॉगिन
+                </span>
               </div>
             )}
           </form>

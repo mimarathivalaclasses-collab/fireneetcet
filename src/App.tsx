@@ -273,25 +273,31 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // 3. Question Bank State (Initial + User added + AI generated)
-  const [questions, setQuestions] = useState<Question[]>(() => {
+  // 3. Question Bank State: User-added questions are persisted, base curated questions loaded from code
+  const [userAddedQuestions, setUserAddedQuestions] = useState<Question[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.QUESTIONS);
+      const saved = localStorage.getItem("mcq_user_added_questions_v1");
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // Merge with initial questions so user always gets the curated set
-          const idMap = new Map<string, Question>();
-          INITIAL_QUESTIONS.forEach((q) => idMap.set(q.id, q));
-          parsed.forEach((q: Question) => idMap.set(q.id, q));
-          return deduplicateQuestionsList(Array.from(idMap.values()));
-        }
+        if (Array.isArray(parsed)) return parsed;
       }
     } catch (e) {
-      console.error("Error reading saved questions", e);
+      console.error("Error reading user added questions", e);
     }
-    return deduplicateQuestionsList(INITIAL_QUESTIONS);
+    return [];
   });
+
+  const questions = useMemo(() => {
+    if (userAddedQuestions.length === 0) return INITIAL_QUESTIONS;
+    return deduplicateQuestionsList([...userAddedQuestions, ...INITIAL_QUESTIONS]);
+  }, [userAddedQuestions]);
+
+  // Clean up legacy bloated storage key if it existed to free up device memory
+  useEffect(() => {
+    try {
+      localStorage.removeItem(STORAGE_KEYS.QUESTIONS);
+    } catch {}
+  }, []);
 
   // 4. Bookmarks State
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(() => {
@@ -542,15 +548,33 @@ export default function App() {
   };
 
   const handleAddSingleQuestion = (newQuestion: Question) => {
-    setQuestions((prev) => [newQuestion, ...prev]);
+    setUserAddedQuestions((prev) => {
+      const updated = [newQuestion, ...prev];
+      try {
+        localStorage.setItem("mcq_user_added_questions_v1", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
   };
 
   const handleBulkImportQuestions = (newQuestions: Question[]) => {
-    setQuestions((prev) => [...newQuestions, ...prev]);
+    setUserAddedQuestions((prev) => {
+      const updated = [...newQuestions, ...prev];
+      try {
+        localStorage.setItem("mcq_user_added_questions_v1", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
   };
 
   const handleAddAiQuestions = (newQuestions: Question[], startPracticeNow?: boolean) => {
-    setQuestions((prev) => [...newQuestions, ...prev]);
+    setUserAddedQuestions((prev) => {
+      const updated = [...newQuestions, ...prev];
+      try {
+        localStorage.setItem("mcq_user_added_questions_v1", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
     if (startPracticeNow) {
       setActiveTab("practice");
     }
@@ -606,7 +630,19 @@ export default function App() {
     setCurrentTestResult(result);
     setActiveTestConfig(null);
 
-    // Auto-record wrong questions into Mistakes Bank
+    // Auto-record wrong questions into Mistakes Bank & record recently attempted IDs to avoid repetition
+    try {
+      const recRaw = localStorage.getItem("mcq_recently_attempted_qids_v1");
+      const recList: string[] = recRaw ? JSON.parse(recRaw) : [];
+      result.questions.forEach((q) => {
+        if (q.id && !recList.includes(q.id)) {
+          recList.unshift(q.id);
+        }
+      });
+      if (recList.length > 500) recList.splice(500);
+      localStorage.setItem("mcq_recently_attempted_qids_v1", JSON.stringify(recList));
+    } catch {}
+
     result.questions.forEach((q) => {
       const userAns = result.userAnswers[q.id];
       if (userAns !== undefined && userAns !== q.correctOption) {
@@ -758,9 +794,9 @@ export default function App() {
     };
 
     window.addEventListener(VAULT_EVENT_NAME, handleVaultUpdated);
-    const interval = setInterval(updatePendingCount, 4000);
+    window.addEventListener("focus", updatePendingCount);
     return () => {
-      clearInterval(interval);
+      window.removeEventListener("focus", updatePendingCount);
       window.removeEventListener(VAULT_EVENT_NAME, handleVaultUpdated);
     };
   }, []);

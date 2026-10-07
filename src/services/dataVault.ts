@@ -46,10 +46,23 @@ export function normalizeStudentKey(student: Partial<StudentUser>): string {
   return student.id || `unknown_${Date.now()}`;
 }
 
+let cachedStudents: StudentUser[] | null = null;
+let lastCacheTime = 0;
+
+export function invalidateStudentsVaultCache(): void {
+  cachedStudents = null;
+  lastCacheTime = 0;
+}
+
 /**
  * Read and merge students from ALL redundant local vaults
  */
 export function getAllStudentsFromVaults(): StudentUser[] {
+  const now = Date.now();
+  if (cachedStudents && now - lastCacheTime < 2000) {
+    return cachedStudents;
+  }
+
   const mergedMap = new Map<string, StudentUser>();
 
   const vaultKeys = [
@@ -57,6 +70,8 @@ export function getAllStudentsFromVaults(): StudentUser[] {
     VAULT_KEYS.PERMANENT_VAULT_STUDENTS,
     VAULT_KEYS.EMERGENCY_MIRROR_STUDENTS,
   ];
+
+  let anyDeficient = false;
 
   vaultKeys.forEach((key) => {
     try {
@@ -81,27 +96,71 @@ export function getAllStudentsFromVaults(): StudentUser[] {
               }
             }
           });
+        } else {
+          anyDeficient = true;
         }
+      } else {
+        anyDeficient = true;
       }
     } catch (e) {
+      anyDeficient = true;
       console.warn(`[DataVault] Error reading vault key ${key}:`, e);
     }
   });
 
+  // Also include students from institute registered list so coaching additions are never lost
+  try {
+    const instRaw = localStorage.getItem("institute_registered_students_list_v1");
+    if (instRaw) {
+      const instStudents = JSON.parse(instRaw);
+      if (Array.isArray(instStudents)) {
+        instStudents.forEach((st: any) => {
+          if (!st) return;
+          const normKey = (st.mobile || "").replace(/\D/g, "").slice(-10) || st.id;
+          if (normKey && !mergedMap.has(normKey)) {
+            const studentUser: StudentUser = {
+              id: st.id || `stud_${Date.now()}`,
+              name: st.name,
+              mobile: st.mobile,
+              password: "123",
+              role: "student",
+              examTarget: st.examTarget || "MHT_CET",
+              className: st.batchName || "Coaching Batch",
+              coachingClass: st.batchName || "Coaching Batch",
+              primaryDeviceId: "device_local",
+              primaryDeviceName: "Android Phone",
+              isApproved: true,
+              approvalStatus: "approved",
+              paymentStatus: "paid",
+              isFeePaid: true,
+              registeredAt: st.addedAt || Date.now(),
+              lastLoginAt: Date.now(),
+            };
+            mergedMap.set(normKey, studentUser);
+          }
+        });
+      }
+    }
+  } catch {}
+
   const allStudents = Array.from(mergedMap.values());
 
-  // Self-heal: Write unified set back to ALL vaults if any vault was deficient
-  if (allStudents.length > 0) {
+  // Self-heal: ONLY write back to deficient vaults if any vault was missing or empty
+  if (anyDeficient && allStudents.length > 0) {
     const serialized = JSON.stringify(allStudents);
     vaultKeys.forEach((key) => {
       try {
-        localStorage.setItem(key, serialized);
+        if (!localStorage.getItem(key)) {
+          localStorage.setItem(key, serialized);
+        }
       } catch (e) {
         console.warn(`[DataVault] Could not write to ${key}:`, e);
       }
     });
   }
 
+  cachedStudents = allStudents;
+  lastCacheTime = now;
   return allStudents;
 }
 
@@ -160,6 +219,7 @@ export async function saveStudentPermanently(student: StudentUser): Promise<bool
       console.warn("[DataVault] Background cloud sync deferred:", cloudErr);
     });
 
+    invalidateStudentsVaultCache();
     // 4. Dispatch update event so any active component refreshes immediately
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent(VAULT_EVENT_NAME, { detail: updatedStudent }));
@@ -203,6 +263,7 @@ export async function saveAllStudentsPermanently(students: StudentUser[]): Promi
       saveStudentToCloud(s).catch(() => {});
     });
 
+    invalidateStudentsVaultCache();
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent(VAULT_EVENT_NAME));
     }
@@ -250,9 +311,27 @@ export async function deleteStudentPermanently(studentIdentifier: string): Promi
       }
     } catch {}
 
-    // Delete from Firestore Cloud
+    // Delete from Firestore Cloud (both by ID and by mobile if available)
     deleteStudentFromCloud(studentIdentifier).catch(() => {});
+    if (targetKey && targetKey !== studentIdentifier) {
+      deleteStudentFromCloud(targetKey).catch(() => {});
+    }
 
+    // Also remove from institute registered students list
+    try {
+      const instRaw = localStorage.getItem("institute_registered_students_list_v1");
+      if (instRaw) {
+        const instList = JSON.parse(instRaw);
+        if (Array.isArray(instList)) {
+          const filtered = instList.filter(
+            (s: any) => s.id !== studentIdentifier && s.mobile !== studentIdentifier && s.mobile !== targetKey
+          );
+          localStorage.setItem("institute_registered_students_list_v1", JSON.stringify(filtered));
+        }
+      }
+    } catch {}
+
+    invalidateStudentsVaultCache();
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent(VAULT_EVENT_NAME));
     }

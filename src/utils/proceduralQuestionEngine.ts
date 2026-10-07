@@ -874,29 +874,56 @@ export function buildGuaranteedNonRepeatingMock(
     return [];
   }
 
-  // Helper to score how well a question matches the target exam
+  // Retrieve recently attempted question IDs to deprioritize them and show fresh unseen questions first
+  let recentAttemptedIds = new Set<string>();
+  try {
+    const rawHistory = localStorage.getItem("mcq_test_history_v1");
+    if (rawHistory) {
+      const parsed = JSON.parse(rawHistory);
+      if (Array.isArray(parsed)) {
+        // Collect question IDs from last 5 tests
+        parsed.slice(0, 5).forEach((t: any) => {
+          if (t && Array.isArray(t.questions)) {
+            t.questions.forEach((q: any) => {
+              if (q?.id) recentAttemptedIds.add(q.id);
+            });
+          }
+        });
+      }
+    }
+  } catch {}
+
+  // Helper to score how well a question matches the target exam, prioritizing unseen questions
   const scoreExamRelevance = (q: Question): number => {
     let score = 0;
-    if (q.exam === exam) score += 10;
-    if (exam === "NEET") {
-      if (q.pyqYear && q.pyqYear.toLowerCase().includes("neet")) score += 20;
-      if (q.id && q.id.toLowerCase().includes("neet")) score += 15;
-    } else if (exam === "MHT_CET") {
-      if (q.pyqYear && q.pyqYear.toLowerCase().includes("cet")) score += 20;
-      if (q.id && q.id.toLowerCase().includes("cet")) score += 15;
-    } else if (exam === "JEE_MAIN") {
-      if (q.pyqYear && q.pyqYear.toLowerCase().includes("jee")) score += 20;
-      if (q.id && q.id.toLowerCase().includes("jee")) score += 15;
+    // Massive bonus for fresh questions student hasn't seen recently
+    if (!recentAttemptedIds.has(q.id)) {
+      score += 50;
     }
+    if (q.exam === exam) score += 20;
+    if (exam === "NEET") {
+      if (q.pyqYear && q.pyqYear.toLowerCase().includes("neet")) score += 15;
+      if (q.id && q.id.toLowerCase().includes("neet")) score += 10;
+    } else if (exam === "MHT_CET") {
+      if (q.pyqYear && q.pyqYear.toLowerCase().includes("cet")) score += 15;
+      if (q.id && q.id.toLowerCase().includes("cet")) score += 10;
+    } else if (exam === "JEE_MAIN") {
+      if (q.pyqYear && q.pyqYear.toLowerCase().includes("jee")) score += 15;
+      if (q.id && q.id.toLowerCase().includes("jee")) score += 10;
+    }
+    // Random jitter so identical score questions are shuffled freshly every time
+    score += Math.random() * 5;
     return score;
   };
 
-  // 1. Tier 1: Exact Match (Subject + Chapter), prioritized by exact Exam match
-  const tier1Pool = cleanStatic.filter((q) => {
-    if (q.subject !== subject) return false;
-    if (chapterFilter !== "All" && q.chapter.toLowerCase() !== chapterFilter.toLowerCase()) return false;
-    return true;
-  }).sort((a, b) => scoreExamRelevance(b) - scoreExamRelevance(a));
+  // 1. Tier 1: Exact Match (Subject + Chapter), randomized and prioritized by fresh questions
+  const tier1Pool = shuffleArray(
+    cleanStatic.filter((q) => {
+      if (q.subject !== subject) return false;
+      if (chapterFilter !== "All" && q.chapter.toLowerCase() !== chapterFilter.toLowerCase()) return false;
+      return true;
+    })
+  ).sort((a, b) => scoreExamRelevance(b) - scoreExamRelevance(a));
 
   for (const q of tier1Pool) {
     if (result.length >= targetCount) break;
@@ -907,11 +934,11 @@ export function buildGuaranteedNonRepeatingMock(
     }
   }
 
-  // 2. Tier 2: If chapterFilter was specific but pool was exhausted, pull related questions from the SAME subject prioritized by Exam
+  // 2. Tier 2: If chapterFilter was specific but pool was exhausted, pull related questions from the SAME subject randomized
   if (result.length < targetCount && chapterFilter !== "All") {
-    const tier2SubjectPool = cleanStatic
-      .filter((q) => q.subject === subject)
-      .sort((a, b) => scoreExamRelevance(b) - scoreExamRelevance(a));
+    const tier2SubjectPool = shuffleArray(
+      cleanStatic.filter((q) => q.subject === subject)
+    ).sort((a, b) => scoreExamRelevance(b) - scoreExamRelevance(a));
 
     for (const q of tier2SubjectPool) {
       if (result.length >= targetCount) break;

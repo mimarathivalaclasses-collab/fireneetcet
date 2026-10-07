@@ -67,6 +67,8 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel | "All">("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [onlyBookmarks, setOnlyBookmarks] = useState<boolean>(false);
+  const [onlyUnattempted, setOnlyUnattempted] = useState<boolean>(false);
+  const [shuffleSeed, setShuffleSeed] = useState<number>(0);
 
   // Active question index in filtered list
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -146,7 +148,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
   }, [extraGeneratedQuestions, questions]);
 
   const filteredQuestions = useMemo(() => {
-    const rawMatches = allPracticeQuestions.filter((q) => {
+    let rawMatches = allPracticeQuestions.filter((q) => {
       // Exam match
       if (q.exam !== currentExam) return false;
 
@@ -162,6 +164,9 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
       // Bookmarks only
       if (onlyBookmarks && !bookmarkedIds.has(q.id)) return false;
 
+      // Unattempted only
+      if (onlyUnattempted && selectedAnswers[q.id] !== undefined) return false;
+
       // Search query
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
@@ -175,7 +180,19 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
       return true;
     });
 
-    return deduplicateQuestionsList(rawMatches);
+    let deduplicated = deduplicateQuestionsList(rawMatches);
+
+    // If student requested shuffling, apply randomized order
+    if (shuffleSeed > 0) {
+      const copy = [...deduplicated];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    return deduplicated;
   }, [
     allPracticeQuestions,
     currentExam,
@@ -183,8 +200,11 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     selectedChapter,
     selectedDifficulty,
     onlyBookmarks,
+    onlyUnattempted,
+    selectedAnswers,
     bookmarkedIds,
     searchQuery,
+    shuffleSeed,
   ]);
 
   // Reset index if out of bounds
@@ -237,6 +257,16 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     
     // Record daily activity streak
     recordDailyActivity();
+
+    try {
+      const recRaw = localStorage.getItem("mcq_recently_attempted_qids_v1");
+      const recList: string[] = recRaw ? JSON.parse(recRaw) : [];
+      if (!recList.includes(qId)) {
+        recList.unshift(qId);
+        if (recList.length > 500) recList.pop();
+        localStorage.setItem("mcq_recently_attempted_qids_v1", JSON.stringify(recList));
+      }
+    } catch {}
 
     if (onRecordAnswer) onRecordAnswer(qId, isCorrect);
     if (onRecordAttempt) onRecordAttempt(currentQuestion.subject, isCorrect);
@@ -519,28 +549,61 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   setSearchQuery(e.target.value);
                   setCurrentIndex(0);
                 }}
-                placeholder="उदा. Rotational, Carnot, XeF4..."
+                placeholder="धडा, विषय, कीवर्ड शोधा..."
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
-          {/* Bookmarks Toggle & Stats */}
-          <div className="flex items-end justify-between gap-2">
+          {/* Quick Filter Actions: Unattempted, Shuffle, Bookmarks */}
+          <div className="flex items-end gap-1.5 flex-wrap">
+            <button
+              id="filter-unattempted-only"
+              type="button"
+              onClick={() => {
+                setOnlyUnattempted(!onlyUnattempted);
+                setCurrentIndex(0);
+              }}
+              className={`py-2 px-2.5 rounded-lg border font-bold text-[11px] flex items-center justify-center gap-1 transition-all cursor-pointer ${
+                onlyUnattempted
+                  ? "bg-emerald-600 text-white border-emerald-700 shadow-xs"
+                  : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+              }`}
+              title="केवळ न सोडवलेले प्रश्न दाखवा"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span>न सोडवलेले</span>
+            </button>
+
+            <button
+              id="btn-shuffle-questions"
+              type="button"
+              onClick={() => {
+                setShuffleSeed((prev) => prev + 1);
+                setCurrentIndex(0);
+              }}
+              className="py-2 px-2.5 rounded-lg border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-[11px] flex items-center justify-center gap-1 transition-all cursor-pointer shadow-xs"
+              title="प्रश्नांचा क्रम शफल करा व नवीन प्रश्न मिळवा"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>शफल</span>
+            </button>
+
             <button
               id="filter-bookmarks-only"
+              type="button"
               onClick={() => {
                 setOnlyBookmarks(!onlyBookmarks);
                 setCurrentIndex(0);
               }}
-              className={`flex-1 py-2 px-3 rounded-lg border font-semibold flex items-center justify-center gap-1.5 transition-all ${
+              className={`py-2 px-2.5 rounded-lg border font-semibold text-[11px] flex items-center justify-center gap-1 transition-all cursor-pointer ${
                 onlyBookmarks
                   ? "bg-amber-500 text-white border-amber-600 shadow-xs"
                   : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
               }`}
             >
               <Bookmark className="w-3.5 h-3.5" />
-              <span>केवळ सेव्ह केलेले ({bookmarkedIds.size})</span>
+              <span>सेव्ह ({bookmarkedIds.size})</span>
             </button>
           </div>
         </div>

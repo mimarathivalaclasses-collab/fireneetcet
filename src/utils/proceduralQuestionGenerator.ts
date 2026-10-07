@@ -151,12 +151,25 @@ export function generateProceduralQuestions(
       : bioTemplates;
 
   for (let i = 0; i < count; i++) {
-    const tIndex = i % templates.length;
+    const tIndex = (i + Math.floor(Math.random() * templates.length)) % templates.length;
     const t = templates[tIndex];
-    const data = t.gen(i + 1);
+    // Pass randomized index seed
+    const randomSeed = Math.floor(Math.random() * 50) + i * 3 + 1;
+    const data = t.gen(randomSeed);
+
+    // Shuffle options so correct answer is randomly distributed between 0, 1, 2, 3
+    const indices = [0, 1, 2, 3];
+    for (let s = indices.length - 1; s > 0; s--) {
+      const j = Math.floor(Math.random() * (s + 1));
+      [indices[s], indices[j]] = [indices[j], indices[s]];
+    }
+
+    const shuffledEn = indices.map((idx) => data.options[idx]) as [string, string, string, string];
+    const shuffledMr = indices.map((idx) => data.optionsMr[idx]) as [string, string, string, string];
+    const correctOptionIdx = indices.indexOf(data.correct);
 
     generated.push({
-      id: `auto_${subject.toLowerCase()}_${now}_${i + 1}`,
+      id: `auto_${subject.toLowerCase()}_${now}_${i + 1}_${Math.random().toString(36).substring(2, 6)}`,
       exam,
       subject,
       chapter: t.chapter,
@@ -164,9 +177,9 @@ export function generateProceduralQuestions(
       difficulty,
       questionText: data.textEn,
       questionTextMr: data.textMr,
-      options: [data.options[0], data.options[1], data.options[2], data.options[3]] as [string, string, string, string],
-      optionsMr: [data.optionsMr[0], data.optionsMr[1], data.optionsMr[2], data.optionsMr[3]] as [string, string, string, string],
-      correctOption: data.correct,
+      options: shuffledEn,
+      optionsMr: shuffledMr,
+      correctOption: correctOptionIdx,
       explanation: data.explanationEn,
       explanationMr: data.explanationMr,
       formula: data.formula,

@@ -59,8 +59,17 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
     ? testHistory.length 
     : (currentUser?.totalTestsTaken || 0);
 
-  const totalAttempted = (practiceStats?.totalAttempted || 0) + (currentUser?.totalQuestionsSolved || 0);
-  const totalCorrect = (practiceStats?.totalCorrect || 0) + (currentUser?.totalCorrect || 0);
+  const testQuestionsAttempted = testHistory.reduce((sum, t) => sum + (t.attempted || t.questions?.length || 0), 0);
+  const testQuestionsCorrect = testHistory.reduce((sum, t) => sum + (t.correct || 0), 0);
+
+  const totalAttempted = Math.max(
+    (practiceStats?.totalAttempted || 0) + (currentUser?.totalQuestionsSolved || 0),
+    testQuestionsAttempted
+  );
+  const totalCorrect = Math.max(
+    (practiceStats?.totalCorrect || 0) + (currentUser?.totalCorrect || 0),
+    testQuestionsCorrect
+  );
 
   const overallAccuracy = totalAttempted > 0 
     ? Math.round((totalCorrect / totalAttempted) * 100) 

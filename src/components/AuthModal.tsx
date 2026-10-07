@@ -636,6 +636,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <span>दुसऱ्या नंबरने लॉगिन</span>
                     </button>
                   </div>
+
+                  {/* Immediate Practice Access */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (pendingStudent) {
+                        saveUserSession(pendingStudent);
+                        onLoginSuccess(pendingStudent);
+                      }
+                      onClose();
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-teal-700 to-indigo-700 hover:from-teal-600 hover:to-indigo-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer transition-all active:scale-95"
+                  >
+                    <span>⚡ मोफत सराव सुरू करा (Start Free Practice) →</span>
+                  </button>
                 </div>
               </div>
             </div>
