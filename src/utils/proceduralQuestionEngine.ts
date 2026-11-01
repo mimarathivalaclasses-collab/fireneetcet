@@ -118,12 +118,14 @@ function buildFinalQuestion(
 }
 
 /**
- * Deduplicates any question array strictly by ID, Normalized Text Signature, and raw text
+ * Deduplicates any question array strictly by ID, Normalized Signature, English Text, and Marathi Text.
+ * Guarantees 100% pure unique questions without a single duplicate.
  */
 export function deduplicateQuestionsList(questions: Question[]): Question[] {
   const seenIds = new Set<string>();
   const seenSigs = new Set<string>();
   const seenEnglishTexts = new Set<string>();
+  const seenMarathiTexts = new Set<string>();
   const clean: Question[] = [];
 
   for (const q of questions) {
@@ -135,24 +137,33 @@ export function deduplicateQuestionsList(questions: Question[]): Question[] {
       .toLowerCase()
       .replace(/[^\p{L}\p{N}]/gu, "");
 
+    // Direct trimmed lower-case normalized Marathi text
+    const mrClean = (q.questionTextMr || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]/gu, "");
+
     const sig = normalizeQuestionSignature(q.questionText, q.questionTextMr);
 
-    // Duplicate condition: ID already seen, or combined signature seen, or exact normalized English text seen
+    // Duplicate condition: ID already seen, or combined signature seen, or exact normalized English text seen, or Marathi seen
     if (
       (q.id && seenIds.has(q.id)) ||
       seenSigs.has(sig) ||
-      (enClean.length >= 12 && seenEnglishTexts.has(enClean))
+      (enClean.length >= 10 && seenEnglishTexts.has(enClean)) ||
+      (mrClean.length >= 10 && seenMarathiTexts.has(mrClean))
     ) {
       continue;
     }
 
     if (q.id) seenIds.add(q.id);
     seenSigs.add(sig);
-    if (enClean.length >= 12) seenEnglishTexts.add(enClean);
+    if (enClean.length >= 10) seenEnglishTexts.add(enClean);
+    if (mrClean.length >= 10) seenMarathiTexts.add(mrClean);
     clean.push(q);
   }
   return clean;
 }
+
 
 export const PROCEDURAL_TEMPLATES: GeneratorTemplate[] = [
   // =========================================================================

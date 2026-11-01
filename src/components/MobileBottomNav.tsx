@@ -3,114 +3,115 @@ import {
   Home,
   FileCheck2,
   BarChart3,
-  Bookmark,
-  User,
   BookOpen,
   Zap,
 } from "lucide-react";
 import { NavigationTab, StudentUser } from "../types";
+import { triggerHaptic } from "../utils/haptics";
 
 interface MobileBottomNavProps {
   activeTab: NavigationTab;
   onNavigate?: (tab: NavigationTab) => void;
   onSelectTab?: (tab: NavigationTab) => void;
-  currentUser: StudentUser | null;
-  onOpenAuthModal: () => void;
+  currentUser?: StudentUser | null;
+  onOpenAuthModal?: () => void;
 }
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   activeTab,
   onNavigate,
   onSelectTab,
-  currentUser,
-  onOpenAuthModal,
 }) => {
   const handleNav = (tab: NavigationTab) => {
+    triggerHaptic("selection");
     if (onNavigate) onNavigate(tab);
     else if (onSelectTab) onSelectTab(tab);
   };
 
+  const navItems: {
+    id: NavigationTab;
+    label: string;
+    labelEn: string;
+    icon: React.ComponentType<{ className?: string }>;
+    matches: (tab: NavigationTab) => boolean;
+  }[] = [
+    {
+      id: "home",
+      label: "होम",
+      labelEn: "Home",
+      icon: Home,
+      matches: (t) => t === "home",
+    },
+    {
+      id: "practice",
+      label: "सराव",
+      labelEn: "Practice",
+      icon: Zap,
+      matches: (t) => t === "practice" || t === "all_questions" || t === "pyq",
+    },
+    {
+      id: "grand_tests",
+      label: "मॉक टेस्ट",
+      labelEn: "Tests",
+      icon: FileCheck2,
+      matches: (t) => t === "grand_tests" || t === "mock_test",
+    },
+    {
+      id: "notes",
+      label: "नोट्स",
+      labelEn: "Notes",
+      icon: BookOpen,
+      matches: (t) => t === "notes" || t === "formulas",
+    },
+    {
+      id: "analytics",
+      label: "प्रगती",
+      labelEn: "Stats",
+      icon: BarChart3,
+      matches: (t) => t === "analytics" || t === "leaderboard",
+    },
+  ];
+
   return (
     <nav
       aria-label="Mobile Navigation"
-      className="fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border-t border-slate-200/90 dark:border-slate-800 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] px-2 sm:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.06)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.3)] transition-colors select-none"
+      className="fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-200/80 dark:border-slate-800/80 pt-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom,0px))] px-3 sm:hidden shadow-[0_-4px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_-4px_24px_rgba(0,0,0,0.4)] transition-all select-none"
     >
       <div className="flex items-center justify-around max-w-md mx-auto">
-        {/* 1. Home */}
-        <button
-          type="button"
-          onClick={() => handleNav("home")}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all active:scale-95 cursor-pointer ${
-            activeTab === "home"
-              ? "text-indigo-600 dark:text-indigo-400 font-black"
-              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-          }`}
-        >
-          <Home className={`w-5 h-5 ${activeTab === "home" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[10px] mt-0.5 font-bold tracking-tight">Home</span>
-        </button>
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = item.matches(activeTab);
 
-        {/* 2. Most MVP Notes (New Direct Option) */}
-        <button
-          type="button"
-          onClick={() => handleNav("notes")}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all active:scale-95 cursor-pointer relative ${
-            activeTab === "notes"
-              ? "text-emerald-600 dark:text-emerald-400 font-black"
-              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-          }`}
-        >
-          <span className="absolute -top-1 right-0 px-1 py-0.2 rounded-full bg-emerald-500 text-[8px] font-black text-white leading-none">
-            MVP
-          </span>
-          <BookOpen className={`w-5 h-5 ${activeTab === "notes" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[10px] mt-0.5 font-bold tracking-tight">Notes</span>
-        </button>
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => handleNav(item.id)}
+              className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl transition-all duration-200 active:scale-95 cursor-pointer relative ${
+                isActive
+                  ? "text-orange-600 dark:text-orange-400 font-black scale-105"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              }`}
+            >
+              <div className="relative">
+                <Icon
+                  className={`w-5 h-5 transition-transform duration-200 ${
+                    isActive ? "stroke-[2.5] scale-110" : "stroke-2"
+                  }`}
+                />
+              </div>
 
-        {/* 3. Tests (Grand Tests & Topic Mocks) */}
-        <button
-          type="button"
-          onClick={() => handleNav("grand_tests")}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all active:scale-95 cursor-pointer ${
-            activeTab === "grand_tests" || activeTab === "mock_test"
-              ? "text-amber-500 dark:text-amber-400 font-black"
-              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-          }`}
-        >
-          <FileCheck2 className={`w-5 h-5 ${activeTab === "grand_tests" || activeTab === "mock_test" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[10px] mt-0.5 font-bold tracking-tight">Tests</span>
-        </button>
+              <span className="text-[10.5px] mt-0.5 font-bold tracking-tight">
+                {item.label}
+              </span>
 
-        {/* 4. Practice Mode */}
-        <button
-          type="button"
-          onClick={() => handleNav("practice")}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all active:scale-95 cursor-pointer ${
-            activeTab === "practice" || activeTab === "pyq"
-              ? "text-indigo-600 dark:text-indigo-400 font-black"
-              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-          }`}
-        >
-          <Zap className={`w-5 h-5 ${activeTab === "practice" || activeTab === "pyq" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[10px] mt-0.5 font-bold tracking-tight">सराव</span>
-        </button>
-
-        {/* 5. Performance / Analytics */}
-        <button
-          type="button"
-          onClick={() => handleNav("analytics")}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all active:scale-95 cursor-pointer ${
-            activeTab === "analytics"
-              ? "text-cyan-600 dark:text-cyan-400 font-black"
-              : "text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
-          }`}
-        >
-          <BarChart3 className={`w-5 h-5 ${activeTab === "analytics" ? "stroke-[2.5]" : "stroke-2"}`} />
-          <span className="text-[10px] mt-0.5 font-bold tracking-tight">प्रगती</span>
-        </button>
+              {isActive && (
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-600 dark:bg-orange-400 mt-0.5 animate-in fade-in zoom-in" />
+              )}
+            </button>
+          );
+        })}
       </div>
     </nav>
   );
 };
-
-

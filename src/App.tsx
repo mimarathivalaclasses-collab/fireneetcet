@@ -43,6 +43,9 @@ import { NavigationBreadcrumbBar } from "./components/NavigationBreadcrumbBar";
 import { NavigationDrawer } from "./components/NavigationDrawer";
 import { VerticalSidebar } from "./components/VerticalSidebar";
 import { MobileBottomNav } from "./components/MobileBottomNav";
+import { AppQuickActionSheet } from "./components/AppQuickActionSheet";
+import { ComplianceRulesView } from "./components/ComplianceRulesView";
+import { NetworkStatusPill } from "./components/NetworkStatusPill";
 import { AuthModal } from "./components/AuthModal";
 import { PaymentModal } from "./components/PaymentModal";
 import { AdminApprovalDashboard } from "./components/AdminApprovalDashboard";
@@ -288,7 +291,6 @@ export default function App() {
   });
 
   const questions = useMemo(() => {
-    if (userAddedQuestions.length === 0) return INITIAL_QUESTIONS;
     return deduplicateQuestionsList([...userAddedQuestions, ...INITIAL_QUESTIONS]);
   }, [userAddedQuestions]);
 
@@ -974,6 +976,9 @@ export default function App() {
             pendingApprovalsCount={pendingApprovalsCount}
           />
 
+          {/* Real-time Network Offline/Online Pill */}
+          <NetworkStatusPill />
+
           {/* Main Navigation & App Header */}
           <Header
             currentExam={currentExam}
@@ -1016,15 +1021,17 @@ export default function App() {
 
             {/* Right Main Content & Breadcrumbs Panel */}
             <div className="flex-1 flex flex-col min-w-0 w-full overflow-hidden">
-              {/* Universal Sticky Back & Breadcrumb Navigation Bar */}
-              <NavigationBreadcrumbBar
-                activeTab={activeTab}
-                currentExam={currentExam}
-                historyStack={historyStack}
-                onBack={handleBackNavigation}
-                onNavigateHome={handleNavigateHome}
-                onNavigateTab={handleNavigateTab}
-              />
+              {/* Universal Sticky Back & Breadcrumb Navigation Bar (shown on internal screens) */}
+              {activeTab !== "home" && activeTab !== "auth_portal" && (
+                <NavigationBreadcrumbBar
+                  activeTab={activeTab}
+                  currentExam={currentExam}
+                  historyStack={historyStack}
+                  onBack={handleBackNavigation}
+                  onNavigateHome={handleNavigateHome}
+                  onNavigateTab={handleNavigateTab}
+                />
+              )}
 
               {/* Top Global Live Status & Question Counter Dashboard - displayed cleanly in Analytics */}
               {activeTab === "analytics" && (
@@ -1387,19 +1394,36 @@ export default function App() {
                     onBack={handleBackNavigation}
                   />
                 )}
+
+                {/* 15. Rules, Regulations & Compliance Center */}
+                {activeTab === "compliance_rules" && (
+                  <ComplianceRulesView onBack={handleBackNavigation} />
+                )}
               </>
             )}
           </main>
         </div>
       </div>
 
+      {/* Mobile Floating Quick Action Speed Dial Sheet */}
+      {!activeTestConfig && (
+        <AppQuickActionSheet
+          onNavigate={handleNavigateTab}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={handleToggleDarkMode}
+          onOpenInstallModal={() => {}}
+          bookmarkCount={bookmarkedIds.size}
+          mistakesCount={unresolvedMistakesCount}
+        />
+      )}
+
       {/* Mobile Bottom Navigation Bar (PWA Style) */}
-          <MobileBottomNav
-            activeTab={activeTab}
-            onNavigate={handleNavigateTab}
-            currentUser={currentUser}
-            onOpenAuthModal={() => setIsAuthModalOpen(true)}
-          />
+      <MobileBottomNav
+        activeTab={activeTab}
+        onNavigate={handleNavigateTab}
+        currentUser={currentUser}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+      />
 
           {/* Geometric Balanced Footer */}
           <footer className="border-t border-slate-200 bg-white/90 backdrop-blur-xs py-5 pb-16 sm:pb-5 text-xs text-slate-500">

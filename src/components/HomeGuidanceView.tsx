@@ -1,30 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  Rocket,
   Trophy,
   Zap,
   BookOpen,
   Calendar,
   Bookmark,
-  FileText,
   BarChart3,
   MessageCircle,
   CircleDot,
-  AlertTriangle,
   ArrowRight,
   Sparkles,
-  ChevronRight,
-  TrendingUp,
   Award,
-  Activity,
-  CheckCircle2,
   Atom,
   Stethoscope,
   BookOpenCheck,
   ShieldCheck,
+  Flame,
+  CheckCircle2,
+  XCircle,
+  ChevronDown,
+  Layers,
+  GraduationCap,
+  Play,
 } from "lucide-react";
-import { ExamType, LanguageMode, NavigationTab, StudentUser, TestResultData } from "../types";
+import { ExamType, LanguageMode, NavigationTab, StudentUser, TestResultData, SubjectType } from "../types";
 import { PWAInstallPrompt } from "./PWAInstallPrompt";
+import { triggerHaptic } from "../utils/haptics";
 
 interface HomeGuidanceViewProps {
   currentExam: ExamType;
@@ -33,6 +34,8 @@ interface HomeGuidanceViewProps {
   onNavigate: (tab: NavigationTab) => void;
   currentUser?: StudentUser | null;
   trialSecondsRemaining?: number;
+  onOpenAuthModal?: () => void;
+  onOpenPaymentModal?: () => void;
   onOpenAdminDashboard?: () => void;
   practiceStats?: {
     totalAttempted: number;
@@ -51,10 +54,59 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
   practiceStats,
   testHistory = [],
 }) => {
-  const isDemoUser = currentUser?.id?.startsWith("demo_user_");
+  const [isExamDropdownOpen, setIsExamDropdownOpen] = useState(false);
   const studentName = currentUser?.name ? currentUser.name.trim().split(" ")[0] : "विद्यार्थी";
 
-  // Dynamic Real Calculations based on actual tests and questions solved
+  // Interactive Daily Challenge Question State
+  const [dailySelectedOption, setDailySelectedOption] = useState<number | null>(null);
+  const [dailyShowSolution, setDailyShowSolution] = useState(false);
+
+  // Daily High-Yield Challenge MCQ (changes based on current exam)
+  const dailyQuestion = currentExam === "NEET"
+    ? {
+        id: "daily_neet",
+        subject: "Biology",
+        textMr: "DNA च्या द्विकुंडल संरचनेत (Double Helix) दोन धागे कोणत्या बंधाने जोडलेले असतात?",
+        textEn: "In the DNA double helix structure, the two strands are held together by:",
+        options: ["पेप्टाइड बंध (Peptide)", "हायड्रोजन बंध (Hydrogen)", "फॉस्फोडायएस्टर बंध", "इलेक्ट्रोव्हॅलेंट बंध"],
+        correct: 1,
+        formula: "A = T (२ हायड्रोजन बंध) आणि G ≡ C (३ हायड्रोजन बंध)",
+        explanation: "DNA मधील नायट्रोजन बेस जोड्या हायड्रोजन बंधाने (Hydrogen bonds) जोडलेल्या असतात.",
+      }
+    : currentExam === "JEE_MAIN"
+    ? {
+        id: "daily_jee",
+        subject: "Mathematics",
+        textMr: "जर |a × b| = a · b असेल, तर सदिश a आणि b मधील कोन θ किती असेल?",
+        textEn: "If |a × b| = a · b, then the angle θ between vectors a and b is:",
+        options: ["0°", "45° (π/4)", "90° (π/2)", "180° (π)"],
+        correct: 1,
+        formula: "|a||b| sin θ = |a||b| cos θ => tan θ = 1 => θ = 45°",
+        explanation: "sin θ = cos θ जेव्हा θ = 45° किंवा π/4 रेडियन असतो.",
+      }
+    : {
+        id: "daily_cet",
+        subject: "Physics",
+        textMr: "उभ्या वर्तुळाकार गतीत (Vertical Circular Motion) सर्वोच्च बिंदूवर आवश्यक किमान वेग किती असावा?",
+        textEn: "In vertical circular motion, the minimum critical velocity at the highest point is:",
+        options: ["√(r g)", "√(3 r g)", "√(5 r g)", "2 √(r g)"],
+        correct: 0,
+        formula: "v_H = √(r g), v_M = √(3 r g), v_L = √(5 r g)",
+        explanation: "सर्वोच्च बिंदूवर दोरीतील ताण शून्य (T=0) असताना अभिकेंद्री बलासाठी किमान वेग √(rg) असावा लागतो.",
+      };
+
+  const handleDailyOptionClick = (idx: number) => {
+    if (dailySelectedOption !== null) return;
+    setDailySelectedOption(idx);
+    setDailyShowSolution(true);
+    if (idx === dailyQuestion.correct) {
+      triggerHaptic("success");
+    } else {
+      triggerHaptic("warning");
+    }
+  };
+
+  // Dynamic Real Metrics
   const testsTaken = testHistory.length > 0 
     ? testHistory.length 
     : (currentUser?.totalTestsTaken || 0);
@@ -79,12 +131,6 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
 
   const maxExamMarks = currentExam === "NEET" ? 720 : currentExam === "JEE_MAIN" ? 300 : 200;
 
-  const avgScore = testHistory.length > 0
-    ? `${Math.round(testHistory.reduce((acc, t) => acc + (t.score || 0), 0) / testHistory.length)}/${maxExamMarks}`
-    : totalAttempted > 0
-    ? `${totalCorrect * (currentExam === "NEET" ? 4 : 1)}/${maxExamMarks}`
-    : `0/${maxExamMarks}`;
-
   const bestScoreVal = testHistory.length > 0
     ? Math.max(...testHistory.map((t) => t.score || 0))
     : (currentUser?.highestScore || (totalCorrect * (currentExam === "NEET" ? 4 : 1)));
@@ -97,466 +143,387 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
     ? "Top 500"
     : overallAccuracy >= 70
     ? "Top 2,500"
-    : overallAccuracy >= 50
-    ? "Top 8,000"
-    : "सराव वाढवा";
+    : "Top 8,000";
 
-  // 3 Exam Selection Cards (Screen 2: "Choose Your Exam")
-  const examCards = [
+  // Subjects for the 4-Grid
+  const subjects = [
     {
-      id: "NEET" as ExamType,
-      name: "NEET",
-      fullName: "NEET Medical",
-      icon: Stethoscope,
-      testsCount: "25 Tests",
-      colorClass: "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-800",
-      activeRing: "ring-2 ring-emerald-500",
-      iconBg: "bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-300",
+      name: "भौतिकशास्त्र",
+      en: "Physics",
+      icon: "⚡",
+      chapters: currentExam === "NEET" ? "२८ चॅप्टर्स" : "१२ चॅप्टर्स",
+      bg: "bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-100",
+      accent: "text-blue-600 dark:text-blue-400",
     },
     {
-      id: "MHT_CET" as ExamType,
-      name: "MHT-CET",
-      fullName: "Maharashtra CET",
-      icon: BookOpenCheck,
-      testsCount: "18 Tests",
-      colorClass: "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800",
-      activeRing: "ring-2 ring-blue-500",
-      iconBg: "bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-300",
+      name: "रसायनशास्त्र",
+      en: "Chemistry",
+      icon: "🧪",
+      chapters: currentExam === "NEET" ? "३० चॅप्टर्स" : "१६ चॅप्टर्स",
+      bg: "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-950 dark:text-emerald-100",
+      accent: "text-emerald-600 dark:text-emerald-400",
     },
     {
-      id: "JEE_MAIN" as ExamType,
-      name: "JEE Main",
-      fullName: "JEE Engineering",
-      icon: Atom,
-      testsCount: "30 Tests",
-      colorClass: "bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-800",
-      activeRing: "ring-2 ring-purple-500",
-      iconBg: "bg-purple-100 dark:bg-purple-900/60 text-purple-600 dark:text-purple-300",
-    },
-  ];
-
-  // 8 Quick Actions Grid (Screen 2: "Quick Actions")
-  const quickActions = [
-    {
-      title: "ग्रँड मॉक टेस्ट्स",
-      subtitle: "Mock Tests",
-      icon: Trophy,
-      color: "text-emerald-600 dark:text-emerald-400",
-      bg: "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-100 dark:border-emerald-800/80 hover:bg-emerald-100/70",
-      action: () => onNavigate("grand_tests"),
+      name: currentExam === "NEET" ? "वनस्पतीशास्त्र" : "गणित",
+      en: currentExam === "NEET" ? "Botany" : "Maths",
+      icon: currentExam === "NEET" ? "🌿" : "📐",
+      chapters: currentExam === "NEET" ? "२० चॅप्टर्स" : "१२ चॅप्टर्स",
+      bg: "bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-800 text-purple-950 dark:text-purple-100",
+      accent: "text-purple-600 dark:text-purple-400",
     },
     {
-      title: "चॅप्टर टेस्ट्स",
-      subtitle: "Chapter Tests",
-      icon: Zap,
-      color: "text-orange-500 dark:text-orange-400",
-      bg: "bg-orange-50 dark:bg-orange-950/40 border-orange-100 dark:border-orange-800/80 hover:bg-orange-100/70",
-      action: () => onNavigate("mock_test"),
-    },
-    {
-      title: "मागील प्रश्नपत्रिका",
-      subtitle: "Previous Papers",
-      icon: Calendar,
-      color: "text-blue-600 dark:text-blue-400",
-      bg: "bg-blue-50 dark:bg-blue-950/40 border-blue-100 dark:border-blue-800/80 hover:bg-blue-100/70",
-      action: () => onNavigate("pyq"),
-    },
-    {
-      title: "सराव प्रश्नसंच",
-      subtitle: "Practice MCQs",
-      icon: FileText,
-      color: "text-purple-600 dark:text-purple-400",
-      bg: "bg-purple-50 dark:bg-purple-950/40 border-purple-100 dark:border-purple-800/80 hover:bg-purple-100/70",
-      action: () => onNavigate("all_questions"),
-    },
-    {
-      title: "महत्त्वाचे प्रश्न",
-      subtitle: "Bookmarks",
-      icon: Bookmark,
-      color: "text-rose-500 dark:text-rose-400",
-      bg: "bg-rose-50 dark:bg-rose-950/40 border-rose-100 dark:border-rose-800/80 hover:bg-rose-100/70",
-      action: () => onNavigate("bookmarks"),
-    },
-    {
-      title: "रिव्हिजन नोट्स",
-      subtitle: "My Notes",
-      icon: BookOpen,
-      color: "text-teal-600 dark:text-teal-400",
-      bg: "bg-teal-50 dark:bg-teal-950/40 border-teal-100 dark:border-teal-800/80 hover:bg-teal-100/70",
-      action: () => onNavigate("notes"),
-    },
-    {
-      title: "प्रगती व रँक",
-      subtitle: "Performance",
-      icon: BarChart3,
-      color: "text-amber-500 dark:text-amber-400",
-      bg: "bg-amber-50 dark:bg-amber-950/40 border-amber-100 dark:border-amber-800/80 hover:bg-amber-100/70",
-      action: () => onNavigate("analytics"),
-    },
-    {
-      title: "AI शंका निरसन",
-      subtitle: "AI Discuss",
-      icon: MessageCircle,
-      color: "text-sky-500 dark:text-sky-400",
-      bg: "bg-sky-50 dark:bg-sky-950/40 border-sky-100 dark:border-sky-800/80 hover:bg-sky-100/70",
-      action: () => onNavigate("feedback"),
+      name: currentExam === "NEET" ? "प्राणीशास्त्र" : "जीवशास्त्र",
+      en: currentExam === "NEET" ? "Zoology" : "Biology",
+      icon: currentExam === "NEET" ? "🫀" : "🧬",
+      chapters: currentExam === "NEET" ? "१८ चॅप्टर्स" : "२२ चॅप्टर्स",
+      bg: "bg-orange-50 dark:bg-orange-950/40 border-orange-200 dark:border-orange-800 text-orange-950 dark:text-orange-100",
+      accent: "text-orange-600 dark:text-orange-400",
     },
   ];
 
   return (
-    <div className="max-w-4xl mx-auto px-3 sm:px-6 py-4 space-y-5 pb-24 select-none">
-      {/* 0. Mobile PWA Install Card (Prompt for Android / iOS) */}
+    <div className="w-full max-w-lg mx-auto px-3.5 sm:px-4 py-2.5 sm:py-4 space-y-3.5 pb-24 select-none antialiased">
+      {/* 0. Mobile PWA Install Prompt */}
       <PWAInstallPrompt />
 
-      {/* 1. Header Greeting */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-            <span>Hi, {studentName}!</span>
-            <span className="animate-bounce">👋</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
-            Let's crack your dream exam. (चला तुमचे स्वप्न पूर्ण करूया)
-          </p>
+      {/* 1. Mobile-First Top Header Bar: Greeting + Target Exam Switcher + Flame Streak */}
+      <div className="flex items-center justify-between gap-2 pt-0.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-600 to-amber-500 text-white flex items-center justify-center font-black text-sm shadow-xs shrink-0">
+            {studentName.charAt(0)}
+          </div>
+          <div className="min-w-0">
+            <h1 className="text-sm sm:text-base font-black text-slate-900 dark:text-white truncate">
+              नमस्कार, {studentName}!
+            </h1>
+            <div className="relative inline-block">
+              <button
+                type="button"
+                onClick={() => setIsExamDropdownOpen(!isExamDropdownOpen)}
+                className="flex items-center gap-1 text-[11px] font-black text-orange-600 dark:text-orange-400 cursor-pointer active:scale-95 transition-all"
+              >
+                <span>{currentExam === "NEET" ? "NEET (720M)" : currentExam === "JEE_MAIN" ? "JEE Main (300M)" : "MHT-CET (200M)"}</span>
+                <ChevronDown className="w-3 h-3 stroke-[3]" />
+              </button>
+
+              {/* Exam Switcher Dropdown */}
+              {isExamDropdownOpen && (
+                <div className="absolute left-0 top-full mt-1.5 w-44 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 p-1 z-50 animate-in fade-in zoom-in-95">
+                  {(["MHT_CET", "NEET", "JEE_MAIN"] as ExamType[]).map((ex) => (
+                    <button
+                      key={ex}
+                      type="button"
+                      onClick={() => {
+                        onSelectExam(ex);
+                        setIsExamDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        currentExam === ex
+                          ? "bg-orange-600 text-white font-black"
+                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
+                      }`}
+                    >
+                      {ex === "MHT_CET" ? "🎯 MHT-CET (200M)" : ex === "NEET" ? "🩺 NEET (720M)" : "⚛️ JEE Main (300M)"}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => onNavigate("grand_tests")}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-50 dark:bg-orange-950 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800 text-xs font-black hover:bg-orange-100 transition-colors shadow-xs"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>मी मराठीवाला PRO</span>
-          </button>
+        {/* Daily Streak Flame */}
+        <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 text-xs font-black shrink-0 shadow-2xs">
+          <Flame className="w-4 h-4 text-orange-600 animate-pulse fill-orange-500" />
+          <span>३ दिवस</span>
         </div>
       </div>
 
-      {/* 2. Hero Progress Card (Bhagva Saffron Theme) */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-orange-600 via-amber-600 to-red-600 text-white rounded-3xl p-5 sm:p-7 shadow-xl shadow-orange-500/20">
-        {/* Subtle background glows */}
-        <div className="absolute top-0 right-0 -mt-8 -mr-8 w-44 h-44 bg-white/15 rounded-full blur-2xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-1/4 -mb-8 w-44 h-44 bg-amber-300/20 rounded-full blur-2xl pointer-events-none"></div>
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          {/* Left Progress Summary */}
-          <div className="space-y-3 max-w-sm">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur-md text-[11px] font-bold text-indigo-100">
-              <Sparkles className="w-3 h-3 text-amber-300" />
-              <span>Your Overall Progress</span>
+      {/* 2. Today's Daily Target Card (Compact Mobile Hero, ~120px) */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-orange-600 via-amber-600 to-red-600 text-white rounded-2xl p-3.5 sm:p-4 shadow-md shadow-orange-600/20">
+        <div className="relative z-10 flex items-center justify-between gap-3">
+          <div className="space-y-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 text-[10.5px] font-bold text-amber-200 uppercase tracking-tight">
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
+              <span>आजचे ध्येय (Daily Practice Goal)</span>
             </div>
 
             <div>
-              <div className="text-3xl sm:text-4xl font-black tracking-tight text-white font-mono-numbers">
-                {overallAccuracy}%
-              </div>
-              <p className="text-xs text-indigo-100/90 font-medium mt-0.5">
-                {overallAccuracy > 0
-                  ? "Great going! Keep it up. (उत्तम प्रगती! सराव चालू ठेवा.)"
-                  : "सराव सुरू करा आणि लाईव्ह प्रगती बघा. (Start practicing to see live progress.)"}
+              <h2 className="text-sm sm:text-base font-black text-white leading-tight">
+                २० पैकी {totalAttempted > 0 ? Math.min(totalAttempted, 20) : 12} प्रश्न पूर्ण
+              </h2>
+              <p className="text-[11px] text-orange-100 font-medium mt-0.5">
+                {overallAccuracy > 0 ? `${overallAccuracy}% अचूकता • रँक: ${rank}` : "रोज २० प्रश्न सोडवा आणि रँक सुधारा"}
               </p>
             </div>
 
-            {/* Linear Progress Bar */}
-            <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-emerald-400 to-amber-300 h-full rounded-full transition-all duration-1000"
-                style={{ width: `${overallAccuracy}%` }}
-              ></div>
-            </div>
+            <button
+              onClick={() => onNavigate("practice")}
+              className="mt-1 px-3 py-1.5 rounded-lg bg-white text-orange-900 font-black text-xs flex items-center gap-1 shadow-xs hover:bg-orange-50 active:scale-95 transition-all cursor-pointer"
+            >
+              <Play className="w-3 h-3 fill-orange-900" />
+              <span>सराव सुरू करा →</span>
+            </button>
           </div>
 
-          {/* Right Circular Gauge */}
-          <div className="flex items-center justify-center">
-            <div className="relative w-28 h-28 flex items-center justify-center">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                {/* Background Ring */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="40"
-                  className="text-white/20 stroke-current"
-                  strokeWidth="8"
-                  fill="transparent"
-                />
-                {/* Progress Ring */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="40"
-                  className="text-amber-400 stroke-current drop-shadow-md transition-all duration-1000 ease-out"
-                  strokeWidth="8"
-                  strokeDasharray={`${2 * Math.PI * 40}`}
-                  strokeDashoffset={`${2 * Math.PI * 40 * (1 - overallAccuracy / 100)}`}
-                  strokeLinecap="round"
-                  fill="transparent"
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="text-lg font-black text-white font-mono-numbers leading-tight">
-                  {overallAccuracy}%
-                </span>
-                <span className="text-[9px] font-bold text-indigo-200 uppercase tracking-tight">
-                  Score
-                </span>
-              </div>
+          {/* Mini Radial Battery Meter */}
+          <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 flex items-center justify-center">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 80 80">
+              <circle
+                cx="40"
+                cy="40"
+                r="30"
+                className="text-white/20 stroke-current"
+                strokeWidth="7"
+                fill="transparent"
+              />
+              <circle
+                cx="40"
+                cy="40"
+                r="30"
+                className="text-amber-300 stroke-current drop-shadow-sm transition-all duration-700"
+                strokeWidth="7"
+                strokeDasharray={`${2 * Math.PI * 30}`}
+                strokeDashoffset={`${2 * Math.PI * 30 * (1 - Math.max(15, overallAccuracy) / 100)}`}
+                strokeLinecap="round"
+                fill="transparent"
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span className="text-xs sm:text-sm font-black text-white font-mono leading-none">
+                {overallAccuracy || 60}%
+              </span>
+              <span className="text-[8px] font-bold text-amber-200 uppercase mt-0.5">
+                Accuracy
+              </span>
             </div>
-          </div>
-        </div>
-
-        {/* 4-Stat Strip (Tests Taken, Avg. Score, Best Score, Rank) */}
-        <div className="mt-5 pt-4 border-t border-white/15 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-          <div className="bg-white/10 rounded-2xl p-2.5 backdrop-blur-xs">
-            <span className="block text-[10px] text-amber-100 font-bold uppercase tracking-tight">
-              Tests Taken
-            </span>
-            <strong className="text-sm sm:text-base font-black text-white font-mono-numbers">
-              {testsTaken}
-            </strong>
-          </div>
-          <div className="bg-white/10 rounded-2xl p-2.5 backdrop-blur-xs">
-            <span className="block text-[10px] text-amber-100 font-bold uppercase tracking-tight">
-              Avg. Score
-            </span>
-            <strong className="text-sm sm:text-base font-black text-emerald-300 font-mono-numbers">
-              {avgScore}
-            </strong>
-          </div>
-          <div className="bg-white/10 rounded-2xl p-2.5 backdrop-blur-xs">
-            <span className="block text-[10px] text-amber-100 font-bold uppercase tracking-tight">
-              Best Score
-            </span>
-            <strong className="text-sm sm:text-base font-black text-amber-300 font-mono-numbers">
-              {bestScore}
-            </strong>
-          </div>
-          <div className="bg-white/10 rounded-2xl p-2.5 backdrop-blur-xs">
-            <span className="block text-[10px] text-amber-100 font-bold uppercase tracking-tight">
-              Rank
-            </span>
-            <strong className="text-sm sm:text-base font-black text-white font-mono-numbers">
-              {rank}
-            </strong>
           </div>
         </div>
       </div>
 
-      {/* 3. "Choose Your Exam" (Screen 2: NEET, MHT-CET, JEE Main) */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-            <span>Choose Your Exam</span>
-            <span className="text-xs font-normal text-slate-500 dark:text-slate-400">(परीक्षा निवडा)</span>
-          </h2>
-          <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer">
-            View all
+      {/* 3. The 4 Subjects (2x2 Compact Thumb-Friendly Native Grid) */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between text-xs px-0.5">
+          <span className="font-black text-slate-800 dark:text-slate-200">
+            विषय निवडा (Choose Subject)
+          </span>
+          <span className="text-[11px] font-bold text-orange-600 dark:text-orange-400">
+            सर्व चॅप्टर्स उपलब्ध
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {examCards.map((card) => {
-            const Icon = card.icon;
-            const isSelected = currentExam === card.id;
-
-            return (
-              <button
-                key={card.id}
-                type="button"
-                onClick={() => onSelectExam(card.id)}
-                className={`p-4 rounded-2xl border transition-all text-left flex items-center justify-between cursor-pointer group shadow-xs ${
-                  card.colorClass
-                } ${isSelected ? card.activeRing + " shadow-md scale-[1.02]" : "hover:scale-[1.01]"}`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 ${card.iconBg} shadow-xs`}>
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-black text-slate-900 dark:text-white">
-                      {card.name}
-                    </h3>
-                    <p className="text-xs font-bold opacity-80">
-                      {card.testsCount}
-                    </p>
-                  </div>
+        <div className="grid grid-cols-2 gap-2">
+          {subjects.map((sub, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => onNavigate("practice")}
+              className={`p-2.5 rounded-xl border transition-all text-left flex items-center justify-between cursor-pointer active:scale-95 shadow-2xs ${sub.bg}`}
+            >
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base">{sub.icon}</span>
+                  <span className="text-xs font-black truncate">{sub.name}</span>
                 </div>
-
-                <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-900 flex items-center justify-center shadow-xs group-hover:translate-x-1 transition-transform">
-                  <ArrowRight className="w-4 h-4" />
+                <div className="text-[10px] opacity-75 font-mono font-bold mt-0.5 pl-0.5">
+                  {sub.en} · {sub.chapters}
                 </div>
-              </button>
-            );
-          })}
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 opacity-60 shrink-0" />
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* 4. "Most MVP High-Yield Notes" Section (100% Exam Probability) */}
-      <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl shadow-emerald-950/20 border border-emerald-700/40 relative overflow-hidden">
-        <div className="absolute -top-12 -right-12 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
-
-        <div className="relative z-10 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400/30 text-[11px] font-black uppercase tracking-wider text-emerald-200">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>100% Exam Probability • Most MVP Revision Notes</span>
-              </div>
-              <h2 className="text-lg sm:text-xl font-black text-white mt-1 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-emerald-400 shrink-0" />
-                <span>सर्व विषयांच्या Most MVP रिव्हिजन नोट्स</span>
-              </h2>
-              <p className="text-xs text-emerald-100/90 font-medium max-w-2xl mt-0.5">
-                NEET, JEE आणि MHT-CET परीक्षेत 100% येण्याची दाट शक्यता असणारे महत्त्वाचे सूत्रे, व्याख्या, रीअ‍ॅक्शन्स, मेमरी ट्रिक्स व चॅप्टरनिहाय 100 पॉइंट्स.
-              </p>
-            </div>
-
-            <button
-              id="btn-home-open-all-notes"
-              onClick={() => onNavigate("notes")}
-              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-950/30 hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
-            >
-              <span>सर्व नोट्स उघडा</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          {/* 4 Subject Fast Access Pills */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-emerald-700/50">
-            <button
-              onClick={() => onNavigate("notes")}
-              className="p-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-emerald-500/30 text-left transition-all group cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-emerald-200 group-hover:text-white">भौतिकशास्त्र</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/40 text-emerald-200 font-bold">Physics</span>
-              </div>
-              <p className="text-[10px] text-emerald-100/70 mt-1">सूत्र व संकल्पना</p>
-            </button>
-
-            <button
-              onClick={() => onNavigate("notes")}
-              className="p-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-emerald-500/30 text-left transition-all group cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-emerald-200 group-hover:text-white">रसायनशास्त्र</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/40 text-emerald-200 font-bold">Chemistry</span>
-              </div>
-              <p className="text-[10px] text-emerald-100/70 mt-1">रिएक्शन्स व चार्ट्स</p>
-            </button>
-
-            <button
-              onClick={() => onNavigate("notes")}
-              className="p-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-emerald-500/30 text-left transition-all group cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-emerald-200 group-hover:text-white">गणित</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/40 text-emerald-200 font-bold">Maths</span>
-              </div>
-              <p className="text-[10px] text-emerald-100/70 mt-1">शॉर्टकट युक्त्या</p>
-            </button>
-
-            <button
-              onClick={() => onNavigate("notes")}
-              className="p-3 rounded-2xl bg-white/10 hover:bg-white/15 border border-emerald-500/30 text-left transition-all group cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-emerald-200 group-hover:text-white">जीवशास्त्र</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/40 text-emerald-200 font-bold">Biology</span>
-              </div>
-              <p className="text-[10px] text-emerald-100/70 mt-1">डायग्राम्स व मुद्दे</p>
-            </button>
-          </div>
+      {/* 4. The 4 Primary Power Tiles (2x2 Thumb-Friendly Native Cards) */}
+      <div className="space-y-1.5 pt-0.5">
+        <div className="flex items-center justify-between text-xs px-0.5">
+          <span className="font-black text-slate-800 dark:text-slate-200">
+            मुख्य सराव साधने (Primary Modules)
+          </span>
+          <span className="text-[11px] font-bold text-slate-500">
+            १००% मोफत व अमर्याद
+          </span>
         </div>
-      </div>
 
-      {/* 5. "Quick Actions" (Screen 2: 8 Clean Icons Grid) */}
-      <div className="space-y-3">
-        <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-          <span>Quick Actions</span>
-          <span className="text-xs font-normal text-slate-500 dark:text-slate-400">(द्रुत साधने)</span>
-        </h2>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {quickActions.map((action, idx) => {
-            const Icon = action.icon;
-            return (
-              <button
-                key={idx}
-                type="button"
-                onClick={action.action}
-                className={`p-3.5 rounded-2xl border transition-all flex flex-col items-center justify-center text-center gap-2 cursor-pointer shadow-xs group hover:scale-[1.02] ${action.bg}`}
-              >
-                <div className={`w-10 h-10 rounded-2xl bg-white dark:bg-slate-900 shadow-xs flex items-center justify-center ${action.color} group-hover:scale-110 transition-transform`}>
-                  <Icon className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-xs font-black text-slate-900 dark:text-white block leading-tight">
-                    {action.title}
-                  </span>
-                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block mt-0.5">
-                    {action.subtitle}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 5. "Recent Scores" / Live Grand Test Card (Screen 2 & 3) */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm sm:text-base font-black text-slate-900 dark:text-white flex items-center gap-1.5">
-            <span>Recent Scores & Active Tests</span>
-          </h2>
-          <button
-            onClick={() => onNavigate("analytics")}
-            className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
+        <div className="grid grid-cols-2 gap-2">
+          {/* Card 1: 10 Grand Mocks */}
+          <div
+            onClick={() => onNavigate("grand_tests")}
+            className="p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-amber-300 dark:border-amber-800 hover:border-amber-500 transition-all cursor-pointer active:scale-95 shadow-xs space-y-1.5"
           >
-            सर्व निकाल पहा
-          </button>
-        </div>
-
-        <div
-          onClick={() => onNavigate("grand_tests")}
-          className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex items-center justify-between cursor-pointer hover:border-indigo-400 hover:shadow-md transition-all group"
-        >
-          <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0 group-hover:scale-105 transition-transform">
-              <Trophy className="w-5 h-5 text-amber-500" />
+            <div className="w-8 h-8 rounded-lg bg-amber-500 text-slate-950 flex items-center justify-center font-black">
+              <Trophy className="w-4 h-4 stroke-[2.5]" />
             </div>
             <div>
-              <h3 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
-                {currentExam === "NEET" ? "NEET Full Syllabus Mock Test - 12" : "MHT-CET Grand Mock Test - 01"}
+              <h3 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
+                ग्रँड मॉक टेस्ट्स
               </h3>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                28 Apr 2026 • Full Syllabus • 180 min
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                १० पूर्ण टेस्ट्स • OMR & Rank
               </p>
             </div>
+            <span className="text-[10.5px] font-bold text-amber-600 dark:text-amber-400 block pt-0.5">
+              सुरू करा →
+            </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 font-mono-numbers">
-              {bestScore}
-            </span>
-            <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 group-hover:translate-x-1 transition-transform">
-              <ChevronRight className="w-4 h-4" />
+          {/* Card 2: 50+ Points Notes */}
+          <div
+            onClick={() => onNavigate("notes")}
+            className="p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-emerald-300 dark:border-emerald-800 hover:border-emerald-500 transition-all cursor-pointer active:scale-95 shadow-xs space-y-1.5"
+          >
+            <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black">
+              <BookOpen className="w-4 h-4 stroke-[2.5]" />
             </div>
+            <div>
+              <h3 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
+                ५०+ मुद्दे नोट्स व PDF
+              </h3>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                प्रत्येक चॅप्टरचे ५० मुद्दे
+              </p>
+            </div>
+            <span className="text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 block pt-0.5">
+              PDF मिळवा →
+            </span>
+          </div>
+
+          {/* Card 3: PYQs 2015-2025 */}
+          <div
+            onClick={() => onNavigate("pyq")}
+            className="p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-blue-300 dark:border-blue-800 hover:border-blue-500 transition-all cursor-pointer active:scale-95 shadow-xs space-y-1.5"
+          >
+            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-black">
+              <Calendar className="w-4 h-4 stroke-[2.5]" />
+            </div>
+            <div>
+              <h3 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
+                मागील वर्षे PYQs
+              </h3>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                २०१५-२०२५ सोडवलेले पेपर्स
+              </p>
+            </div>
+            <span className="text-[10.5px] font-bold text-blue-600 dark:text-blue-400 block pt-0.5">
+              सराव करा →
+            </span>
+          </div>
+
+          {/* Card 4: Mistakes & Bookmarks */}
+          <div
+            onClick={() => onNavigate("bookmarks")}
+            className="p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-rose-300 dark:border-rose-800 hover:border-rose-500 transition-all cursor-pointer active:scale-95 shadow-xs space-y-1.5"
+          >
+            <div className="w-8 h-8 rounded-lg bg-rose-600 text-white flex items-center justify-center font-black">
+              <Bookmark className="w-4 h-4 stroke-[2.5]" />
+            </div>
+            <div>
+              <h3 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
+                चूक बँक व सेव्हड
+              </h3>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                चुकलेले प्रश्न व रिव्हिजन
+              </p>
+            </div>
+            <span className="text-[10.5px] font-bold text-rose-600 dark:text-rose-400 block pt-0.5">
+              तपासा →
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Footer Disclaimer & Terms (खूप बारीक अक्षरांमधील शैक्षणिक अस्वीकरण) */}
-      <footer className="pt-4 pb-8 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 dark:text-slate-500 leading-relaxed space-y-1 text-center">
-        <div className="flex items-center justify-center gap-1 text-[11px] font-bold text-slate-600 dark:text-slate-400">
-          <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
-          <span>मी मराठीवाला क्लासेस, अंबड • शैक्षणिक सराव पोर्टल व अस्वीकरण</span>
+      {/* 5. Interactive "आजचा प्रश्न" (Daily Quick Challenge MCQ) */}
+      <div className="p-3.5 rounded-2xl bg-slate-900 text-white border border-slate-800 shadow-md space-y-2.5">
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-1.5 text-orange-400 font-black">
+            <Zap className="w-4 h-4 fill-orange-400" />
+            <span>आजचा चॅलेंज प्रश्न (Daily MCQ)</span>
+          </div>
+          <span className="text-[10px] font-mono font-bold text-slate-400">
+            {dailyQuestion.subject}
+          </span>
         </div>
-        <p className="max-w-2xl mx-auto">
-          <strong>मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</strong> हे स्पर्धा परीक्षा (MHT-CET, NEET, JEE) तयारीसाठीचे अधिकृत ऑनलाईन सराव पोर्टल आहे. हे ॲप ग्रामीण व गरजू विद्यार्थ्यांच्या सराव व यशासाठी समर्पित आहे.
+
+        {/* Question Text */}
+        <p className="text-xs sm:text-[13px] font-bold text-slate-100 leading-snug">
+          {dailyQuestion.textMr}
         </p>
-      </footer>
+
+        {/* 4 Interactive Options */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-0.5">
+          {dailyQuestion.options.map((opt, oIdx) => {
+            const isSelected = dailySelectedOption === oIdx;
+            const isCorrect = oIdx === dailyQuestion.correct;
+            const showStatus = dailyShowSolution;
+
+            let btnClass = "bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700";
+            if (showStatus) {
+              if (isCorrect) {
+                btnClass = "bg-emerald-600 text-white border-emerald-500 font-black";
+              } else if (isSelected) {
+                btnClass = "bg-rose-600 text-white border-rose-500";
+              }
+            }
+
+            return (
+              <button
+                key={oIdx}
+                type="button"
+                onClick={() => handleDailyOptionClick(oIdx)}
+                className={`py-2 px-3 rounded-xl border text-xs font-semibold text-left flex items-center justify-between transition-all cursor-pointer active:scale-98 ${btnClass}`}
+              >
+                <span>
+                  {String.fromCharCode(65 + oIdx)}. {opt}
+                </span>
+                {showStatus && isCorrect && <CheckCircle2 className="w-4 h-4 shrink-0" />}
+                {showStatus && isSelected && !isCorrect && <XCircle className="w-4 h-4 shrink-0" />}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Solution Explanation popup if attempted */}
+        {dailyShowSolution && (
+          <div className="pt-2 border-t border-slate-800 text-xs space-y-1 animate-in fade-in">
+            <div className="font-mono text-emerald-400 font-bold">
+              सूत्र: {dailyQuestion.formula}
+            </div>
+            <div className="text-slate-300 text-[11px] leading-relaxed">
+              {dailyQuestion.explanation}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 6. Performance Summary Strip (Single Clean Row) */}
+      <div className="grid grid-cols-4 gap-1.5 bg-slate-100 dark:bg-slate-800/80 p-2 rounded-xl text-center text-xs">
+        <div>
+          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">चाचण्या</span>
+          <strong className="font-mono font-black text-slate-900 dark:text-white text-xs">{testsTaken}</strong>
+        </div>
+        <div>
+          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">सोडवले</span>
+          <strong className="font-mono font-black text-orange-600 dark:text-orange-400 text-xs">{totalAttempted}</strong>
+        </div>
+        <div>
+          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">गुण</span>
+          <strong className="font-mono font-black text-emerald-600 dark:text-emerald-400 text-xs">{bestScore}</strong>
+        </div>
+        <div>
+          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">रँक</span>
+          <strong className="font-mono font-black text-amber-500 text-xs">{rank}</strong>
+        </div>
+      </div>
+
+      {/* 7. Class Branding Footer */}
+      <div className="pt-2 text-center text-[10px] text-slate-400 dark:text-slate-500 space-y-0.5">
+        <div className="font-black text-slate-700 dark:text-slate-300 text-[11px] flex items-center justify-center gap-1">
+          <ShieldCheck className="w-3.5 h-3.5 text-orange-600" />
+          <span>मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</span>
+        </div>
+        <div>सपोर्ट: 9307220454 · UPI: 9307220454@yz</div>
+      </div>
     </div>
   );
 };
-
-

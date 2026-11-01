@@ -230,7 +230,8 @@ export type NavigationTab =
   | "bookmarks"
   | "add_question"
   | "analytics"
-  | "feedback";
+  | "feedback"
+  | "compliance_rules";
 
 export type AppView =
   | "home"
@@ -259,7 +260,8 @@ export type AppView =
   | "bookmarks"
   | "add_question"
   | "analytics"
-  | "feedback";
+  | "feedback"
+  | "compliance_rules";
 
 export interface GrandMockTestItem {
   id: string;

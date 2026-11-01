@@ -154,6 +154,14 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
       color: "text-slate-400",
       activeBg: "bg-slate-700 text-white shadow-sm",
     },
+    {
+      id: "compliance_rules" as NavigationTab,
+      label: "कायदे व नियमावली",
+      sublabel: "AdSense, Firebase, UPI",
+      icon: ShieldCheck,
+      color: "text-rose-500",
+      activeBg: "bg-rose-600 text-white shadow-sm",
+    },
   ];
 
   return (

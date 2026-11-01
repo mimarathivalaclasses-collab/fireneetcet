@@ -14,6 +14,7 @@ import {
 import { Question, ExamType, SubjectType, LanguageMode, TestResultData, SubjectResult } from "../types";
 import { getMarkingScheme } from "../data/chaptersData";
 import { deduplicateQuestionsList } from "../utils/proceduralQuestionEngine";
+import { triggerHaptic } from "../utils/haptics";
 
 interface ActiveTestViewProps {
   testConfig: {
@@ -156,6 +157,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
   // Handle Option selection in current question
   const handleSelectOption = (optionIndex: number) => {
     if (!currentQ) return;
+    triggerHaptic("selection");
     setUserAnswers((prev) => ({ ...prev, [currentQ.id]: optionIndex }));
   };
 

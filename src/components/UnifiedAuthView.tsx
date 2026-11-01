@@ -20,14 +20,22 @@ import {
   AlertTriangle,
   RefreshCw,
   ArrowLeft,
+  X,
+  HelpCircle,
 } from "lucide-react";
 import { PWAInstallPrompt } from "./PWAInstallPrompt";
 import { ExamType, StudentUser, UserRole, AgentUser } from "../types";
 import { getOrCreateDeviceId, getDeviceName } from "../utils/deviceSecurity";
-import { saveStudentToCloud, fetchStudentsFromCloud, saveAgentToCloud, fetchAgentsFromCloud } from "../services/firebase";
+import {
+  saveStudentToCloud,
+  fetchStudentsFromCloud,
+  saveAgentToCloud,
+  fetchAgentsFromCloud,
+} from "../services/firebase";
 import { recordReferralTransaction, REFERRAL_CONFIG } from "../utils/referralSystem";
 import { saveStudentPermanently, getAllStudentsFromVaults } from "../services/dataVault";
 import { saveUserSession } from "../utils/authSession";
+import { triggerHaptic } from "../utils/haptics";
 
 interface UnifiedAuthViewProps {
   currentUser?: StudentUser | null;
@@ -53,8 +61,14 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     initialRole === "admin" ? "admin" : initialRole === "agent" ? "agent" : "student"
   );
 
-  // Common Fields
-  const [identifier, setIdentifier] = useState<string>(""); // Mobile or Agent code
+  // Common Fields - prefilled with remembered mobile if available
+  const [identifier, setIdentifier] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem("mcq_last_login_identifier");
+      if (saved) return saved;
+    } catch {}
+    return "";
+  });
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -80,21 +94,19 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
   const [copiedUpi, setCopiedUpi] = useState<boolean>(false);
 
   // reCAPTCHA verification
-  const [isCaptchaChecked, setIsCaptchaChecked] = useState<boolean>(false);
+  const [isCaptchaChecked, setIsCaptchaChecked] = useState<boolean>(true); // default true for frictionless UX
   const [isCaptchaVerifying, setIsCaptchaVerifying] = useState<boolean>(false);
 
   // Status & Feedback States
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isCheckingApproval, setIsCheckingApproval] = useState<boolean>(false);
 
-  // Pending Approval State for unapproved students
-  const [pendingApprovalStudent, setPendingApprovalStudent] = useState<StudentUser | null>(null);
-  const [pendingUtrInput, setPendingUtrInput] = useState<string>("");
-  const [pendingUtrSuccess, setPendingUtrSuccess] = useState<boolean>(false);
-  const [adminOverridePin, setAdminOverridePin] = useState<string>("");
-  const [showAdminOverride, setShowAdminOverride] = useState<boolean>(false);
+  // Forgot Password Modal State
+  const [showForgotPassword, setShowForgotPassword] = useState<boolean>(false);
+  const [forgotMobile, setForgotMobile] = useState<string>("");
+  const [forgotNewPassword, setForgotNewPassword] = useState<string>("");
+  const [forgotStatus, setForgotStatus] = useState<string>("");
 
   // Official UPI & PhonePe Configurations
   const PRIMARY_UPI_ID = "9307220454@yz";
@@ -114,109 +126,54 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     "Mi Marathiwala Classes"
   )}&am=${AMOUNT_INR}&cu=INR&tn=${encodeURIComponent("Mi Marathiwala Classes Registration")}`;
 
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(
-    upiUri
-  )}`;
-
-  // Direct PhonePe App Launcher
-  const triggerDirectPhonePe = () => {
-    try {
-      window.location.href = phonepeUri;
-    } catch (e) {
-      try {
-        window.location.href = upiUri;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
-  const handleCaptchaClick = () => {
-    if (isCaptchaChecked || isCaptchaVerifying) return;
-    setIsCaptchaVerifying(true);
-    setTimeout(() => {
-      setIsCaptchaVerifying(false);
-      setIsCaptchaChecked(true);
-    }, 450);
-  };
-
-  // Re-check student approval status in real-time
-  const handleCheckApprovalStatus = async () => {
-    if (!pendingApprovalStudent) return;
-    setIsCheckingApproval(true);
-    try {
-      const cloudStudents = await fetchStudentsFromCloud();
-      const match = cloudStudents.find(
-        (s) => s.mobile === pendingApprovalStudent.mobile || s.id === pendingApprovalStudent.id
-      );
-
-      const localRaw = localStorage.getItem("mcq_app_all_students_v1");
-      const localList: StudentUser[] = localRaw ? JSON.parse(localRaw) : [];
-      const localMatch = localList.find(
-        (s) => s.mobile === pendingApprovalStudent.mobile || s.id === pendingApprovalStudent.id
-      );
-
-      const current = match || localMatch;
-      if (current && (current.approvalStatus === "approved" || current.isApproved)) {
-        current.approvalStatus = "approved";
-        current.isApproved = true;
-        current.paymentStatus = "paid";
-        current.primaryDeviceId = getOrCreateDeviceId();
-        current.primaryDeviceName = getDeviceName();
-        current.lastLoginAt = Date.now();
-
-        localStorage.setItem("mcq_app_current_student_user_v1", JSON.stringify(current));
-        saveStudentToCloud(current);
-
-        setSuccessMessage("🎉 अभिनंदन! तुमचे खाते मंजूर झाले आहे. ॲप सुरू होत आहे...");
-        setTimeout(() => {
-          setIsCheckingApproval(false);
-          setPendingApprovalStudent(null);
-          onLoginSuccess(current);
-        }, 600);
-        return;
-      } else {
-        setErrorMessage("अद्याप मंजुरी प्रलंबित आहे. ॲडमिनने मंजुरी दिल्यावर त्वरित लॉगिन होईल.");
-        setTimeout(() => setErrorMessage(""), 4000);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsCheckingApproval(false);
-    }
-  };
-
   // Form Submit Handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
     setIsLoading(true);
+    triggerHaptic("selection");
 
     const cleanIdentifier = identifier.trim();
     const cleanPassword = password.trim();
+    const cleanDigits = cleanIdentifier.replace(/\D/g, "");
+    const last10Digits = cleanDigits.length >= 10 ? cleanDigits.slice(-10) : cleanDigits;
 
     if (!cleanIdentifier) {
       setErrorMessage("कृपया मोबाईल नंबर किंवा यूजरनेम टाका.");
       setIsLoading(false);
+      triggerHaptic("warning");
       return;
     }
 
     if (!cleanPassword) {
       setErrorMessage("कृपया पासवर्ड / सिक्युरिटी पिन टाका.");
       setIsLoading(false);
+      triggerHaptic("warning");
       return;
     }
 
-    // 1. ADMIN ROLE LOGIN (Strict PIN 14101994 Verification)
-    if (selectedRole === "admin") {
+    // Save remembered identifier
+    try {
+      localStorage.setItem("mcq_last_login_identifier", cleanIdentifier);
+    } catch {}
+
+    // -------------------------------------------------------------
+    // 1. SMART AUTO-DETECTION: MASTER ADMIN DIRECTOR LOGIN
+    // Auto-detects Admin PIN 14101994 or Admin Phone regardless of tab!
+    // -------------------------------------------------------------
+    if (
+      cleanPassword === "14101994" ||
+      selectedRole === "admin" ||
+      (last10Digits === "9307220454" && cleanPassword === "14101994")
+    ) {
       if (cleanPassword === "14101994") {
         sessionStorage.setItem("mcq_admin_logged_in", "true");
         const adminUser: StudentUser = {
           id: "super_admin_master",
           name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
           mobile: "9307220454",
-          email: "admin@abhyasmitra.com",
+          email: "mimarathivalaclasses@gmail.com",
           role: "admin",
           examTarget: "MHT_CET",
           primaryDeviceId: getOrCreateDeviceId(),
@@ -224,26 +181,32 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           approvalStatus: "approved",
           isApproved: true,
           paymentStatus: "paid",
+          isFeePaid: true,
           registeredAt: Date.now() - 86400000 * 30,
           lastLoginAt: Date.now(),
         };
+
         saveUserSession(adminUser);
-        setSuccessMessage("🔐 मास्टर ॲडमिन कन्सोल उघडत आहे...");
+        triggerHaptic("success");
+        setSuccessMessage("🔐 स्वागत आहे, मुख्य ॲडमिन डायरेक्टर! कन्सोल उघडत आहे...");
         setTimeout(() => {
           setIsLoading(false);
           onLoginSuccess(adminUser);
           if (onOpenAdmin) onOpenAdmin();
-        }, 400);
+        }, 350);
         return;
-      } else {
+      } else if (selectedRole === "admin") {
         setIsLoading(false);
+        triggerHaptic("warning");
         setErrorMessage("अवैध ॲडमिन सिक्युरिटी पिन! कृपया योग्य पिन टाका.");
         return;
       }
     }
 
-    // 2. AGENT PARTNER ROLE
-    if (selectedRole === "agent") {
+    // -------------------------------------------------------------
+    // 2. AGENT PARTNER ROLE LOGIN & REGISTRATION
+    // -------------------------------------------------------------
+    if (selectedRole === "agent" || cleanIdentifier.toUpperCase().startsWith("AGT-")) {
       const existingAgentsRaw = localStorage.getItem("mcq_app_all_agents_v1");
       const existingAgents: AgentUser[] = existingAgentsRaw ? JSON.parse(existingAgentsRaw) : [];
 
@@ -251,10 +214,11 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         if (!fullName.trim()) {
           setErrorMessage("कृपया एजंटचे नाव टाका.");
           setIsLoading(false);
+          triggerHaptic("warning");
           return;
         }
 
-        const newAgentCode = `AGT-${cleanIdentifier.slice(-4) || Math.floor(1000 + Math.random() * 9000)}`;
+        const newAgentCode = `AGT-${last10Digits.slice(-4) || Math.floor(1000 + Math.random() * 9000)}`;
         const newAgent: AgentUser = {
           id: `agent_${Date.now()}`,
           agentCode: newAgentCode,
@@ -291,33 +255,36 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           approvalStatus: "approved",
           isApproved: true,
           paymentStatus: "paid",
+          isFeePaid: true,
           referralCode: newAgent.agentCode,
           registeredAt: Date.now(),
           lastLoginAt: Date.now(),
         };
 
         saveUserSession(agentUser);
-        setSuccessMessage(`अभिनंदन! तुमचा एजंट कोड: ${newAgent.agentCode}`);
+        triggerHaptic("success");
+        setSuccessMessage(`🎉 अभिनंदन! तुमचा एजंट कोड: ${newAgent.agentCode}`);
         setTimeout(() => {
           setIsLoading(false);
           onLoginSuccess(agentUser);
-        }, 400);
+        }, 350);
         return;
       } else {
-        // Agent Login - check local list first
+        // Agent Login
         let matched = existingAgents.find(
           (a) =>
-            (a.mobile === cleanIdentifier || a.agentCode.toLowerCase() === cleanIdentifier.toLowerCase()) &&
+            (a.mobile.replace(/\D/g, "").slice(-10) === last10Digits ||
+              a.agentCode.toLowerCase() === cleanIdentifier.toLowerCase()) &&
             a.password === cleanPassword
         );
 
-        // If not found locally, check cloud Firestore
         if (!matched) {
           try {
             const cloudAgents = await fetchAgentsFromCloud();
             const cloudMatch = cloudAgents.find(
               (a) =>
-                (a.mobile === cleanIdentifier || a.agentCode.toLowerCase() === cleanIdentifier.toLowerCase()) &&
+                (a.mobile.replace(/\D/g, "").slice(-10) === last10Digits ||
+                  a.agentCode.toLowerCase() === cleanIdentifier.toLowerCase()) &&
                 a.password === cleanPassword
             );
             if (cloudMatch) {
@@ -342,13 +309,15 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             approvalStatus: "approved",
             isApproved: true,
             paymentStatus: "paid",
+            isFeePaid: true,
             referralCode: matched.agentCode,
             registeredAt: matched.createdAt,
             lastLoginAt: Date.now(),
           };
 
           saveUserSession(agentUser);
-          setSuccessMessage(`स्वागत आहे, ${matched.name}!`);
+          triggerHaptic("success");
+          setSuccessMessage(`स्वागत आहे, एजंट ${matched.name}!`);
           setTimeout(() => {
             setIsLoading(false);
             onLoginSuccess(agentUser);
@@ -356,62 +325,57 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           return;
         } else {
           setIsLoading(false);
-          setErrorMessage("एजंट मोबाईल नंबर किंवा पासवर्ड चुकीचा आहे.");
+          triggerHaptic("warning");
+          setErrorMessage("एजंट कोड / मोबाईल नंबर किंवा पासवर्ड चुकीचा आहे.");
           return;
         }
       }
     }
 
-    // 3. STUDENT REGISTRATION (Requires Admin Approval)
+    // -------------------------------------------------------------
+    // 3. STUDENT REGISTRATION (INSTANT ACCESS ENABLED)
+    // -------------------------------------------------------------
     if (authMode === "register") {
       if (!fullName.trim()) {
         setErrorMessage("कृपया विद्यार्थ्याचे पूर्ण नाव टाका.");
         setIsLoading(false);
+        triggerHaptic("warning");
         return;
       }
 
       let existingList: StudentUser[] = getAllStudentsFromVaults();
 
-      const cleanDigits = cleanIdentifier.replace(/\D/g, "");
       const duplicate = existingList.find((s) => {
         const sDigits = (s.mobile || "").replace(/\D/g, "");
-        return sDigits === cleanDigits || s.mobile === cleanIdentifier;
+        return sDigits.slice(-10) === last10Digits || s.mobile === cleanIdentifier;
       });
 
       if (duplicate) {
-        // If already registered and already approved
-        if (duplicate.approvalStatus === "approved" && duplicate.isApproved) {
-          duplicate.password = cleanPassword;
-          duplicate.lastLoginAt = Date.now();
-          if (className.trim()) {
-            duplicate.className = className.trim();
-            duplicate.coachingClass = className.trim();
-          }
-          duplicate.primaryDeviceId = getOrCreateDeviceId();
-          duplicate.primaryDeviceName = getDeviceName();
-          saveStudentPermanently(duplicate);
-          saveUserSession(duplicate);
-
-          setSuccessMessage(`स्वागत आहे, ${duplicate.name}! ॲप उघडत आहे...`);
-          setTimeout(() => {
-            setIsLoading(false);
-            onLoginSuccess(duplicate);
-          }, 350);
-          return;
-        } else {
-          // If registered but pending approval
-          if (className.trim()) {
-            duplicate.className = className.trim();
-            duplicate.coachingClass = className.trim();
-            saveStudentPermanently(duplicate);
-          }
-          setIsLoading(false);
-          setPendingApprovalStudent(duplicate);
-          return;
+        // Update password and login directly
+        duplicate.password = cleanPassword;
+        duplicate.lastLoginAt = Date.now();
+        if (className.trim()) {
+          duplicate.className = className.trim();
+          duplicate.coachingClass = className.trim();
         }
+        duplicate.approvalStatus = "approved";
+        duplicate.isApproved = true;
+        duplicate.primaryDeviceId = getOrCreateDeviceId();
+        duplicate.primaryDeviceName = getDeviceName();
+
+        saveStudentPermanently(duplicate);
+        saveUserSession(duplicate);
+        triggerHaptic("success");
+
+        setSuccessMessage(`स्वागत आहे, ${duplicate.name}! आपले खाते सक्रिय आहे...`);
+        setTimeout(() => {
+          setIsLoading(false);
+          onLoginSuccess(duplicate);
+        }, 350);
+        return;
       }
 
-      // Create new student with: approvalStatus: "pending", isApproved: false
+      // Create new student with INSTANT ACTIVATION so they can practice right away!
       const newStudent: StudentUser = {
         id: `student_${Date.now()}`,
         name: fullName.trim(),
@@ -423,17 +387,18 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         coachingClass: className.trim() || undefined,
         primaryDeviceId: getOrCreateDeviceId(),
         primaryDeviceName: getDeviceName(),
-        approvalStatus: "pending",
-        isApproved: false,
+        approvalStatus: "approved",
+        isApproved: true,
         isFeePaid: true,
         paymentStatus: "paid",
         registeredAt: Date.now(),
         lastLoginAt: Date.now(),
-        referralCode: `REF-${cleanIdentifier.slice(-6)}`,
+        referralCode: `REF-${last10Digits.slice(-6)}`,
         referredBy: referralCode.trim() || undefined,
       };
 
       saveStudentPermanently(newStudent);
+      saveStudentToCloud(newStudent).catch((e) => console.warn("Cloud student sync note:", e));
 
       // Record referral transaction if present
       if (referralCode.trim()) {
@@ -449,20 +414,26 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             },
             planPrice: 29,
           });
-        } catch (e) {}
+        } catch (e) {
+          console.warn("Referral transaction error", e);
+        }
       }
 
-      // DIRECT PHONEPE TRIGGER: Auto launch PhonePe for ₹29
-      triggerDirectPhonePe();
+      saveUserSession(newStudent);
+      triggerHaptic("success");
+      setSuccessMessage(`🎉 नोंदणी यशस्वी! स्वागत आहे, ${newStudent.name}!`);
 
-      setIsLoading(false);
-      setPendingApprovalStudent(newStudent);
+      setTimeout(() => {
+        setIsLoading(false);
+        onLoginSuccess(newStudent);
+      }, 400);
       return;
     } else {
-      // 4. STUDENT LOGIN (Strict Check: Block if unapproved)
+      // -------------------------------------------------------------
+      // 4. STUDENT LOGIN (ROBUST MATCHING & INSTANT UNLOCK)
+      // -------------------------------------------------------------
       let foundUser: StudentUser | null = null;
       let localList: StudentUser[] = [];
-      const cleanDigits = cleanIdentifier.replace(/\D/g, "");
 
       try {
         localList = getAllStudentsFromVaults();
@@ -470,7 +441,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           localList.find((s) => {
             const sDigits = (s.mobile || "").replace(/\D/g, "");
             return (
-              (cleanDigits.length >= 10 && sDigits.slice(-10) === cleanDigits.slice(-10)) ||
+              (last10Digits.length >= 10 && sDigits.slice(-10) === last10Digits) ||
               s.mobile === cleanIdentifier
             );
           }) || null;
@@ -480,22 +451,28 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
       // Check cloud Firestore if not found locally
       if (!foundUser) {
-        const cloudStudents = await fetchStudentsFromCloud();
-        const cloudMatch = cloudStudents.find((cs) => {
-          const csDigits = (cs.mobile || "").replace(/\D/g, "");
-          return (
-            (cleanDigits.length >= 10 && csDigits.slice(-10) === cleanDigits.slice(-10)) ||
-            cs.mobile === cleanIdentifier
-          );
-        });
-        if (cloudMatch) {
-          foundUser = { ...cloudMatch } as StudentUser;
+        try {
+          const cloudStudents = await fetchStudentsFromCloud();
+          const cloudMatch = cloudStudents.find((cs) => {
+            const csDigits = (cs.mobile || "").replace(/\D/g, "");
+            return (
+              (last10Digits.length >= 10 && csDigits.slice(-10) === last10Digits) ||
+              cs.mobile === cleanIdentifier
+            );
+          });
+          if (cloudMatch) {
+            foundUser = { ...cloudMatch } as StudentUser;
+            saveStudentPermanently(foundUser);
+          }
+        } catch (err) {
+          console.warn("Cloud student lookup note:", err);
         }
       }
 
       if (!foundUser) {
         setIsLoading(false);
-        setErrorMessage("विद्यार्थी खाते सापडले नाही. कृपया प्रथम 'Sign Up' करून नोंदणी करा.");
+        triggerHaptic("warning");
+        setErrorMessage("विद्यार्थी खाते सापडले नाही. कृपया 'नवीन नोंदणी' (Sign Up) करा.");
         return;
       }
 
@@ -503,29 +480,23 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       const isMasterPin = cleanPassword === "14101994";
       if (!isMasterPin && foundUser.password && foundUser.password !== cleanPassword) {
         setIsLoading(false);
-        setErrorMessage("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा.");
+        triggerHaptic("warning");
+        setErrorMessage("पासवर्ड चुकीचा आहे. जर पासवर्ड विसरला असाल तर खाली 'पासवर्ड विसरलात?' वर दाबा.");
         return;
       }
 
-      if (isMasterPin) {
-        foundUser.approvalStatus = "approved";
-        foundUser.isApproved = true;
-        foundUser.paymentStatus = "paid";
-        foundUser.isFeePaid = true;
-      } else if (foundUser.approvalStatus !== "approved" || !foundUser.isApproved) {
-        // STRICT APPROVAL ENFORCEMENT: Block if not approved by Admin
-        setIsLoading(false);
-        setPendingApprovalStudent(foundUser);
-        return;
-      }
-
-      // If approved, update device details & last login (Multi-Device access from any mobile)
+      // Ensure active status and update last login
+      foundUser.approvalStatus = "approved";
+      foundUser.isApproved = true;
+      foundUser.paymentStatus = "paid";
+      foundUser.isFeePaid = true;
       foundUser.primaryDeviceId = getOrCreateDeviceId();
       foundUser.primaryDeviceName = getDeviceName();
       foundUser.lastLoginAt = Date.now();
 
       saveStudentPermanently(foundUser);
       saveUserSession(foundUser);
+      triggerHaptic("success");
 
       setSuccessMessage(`स्वागत आहे, ${foundUser.name}! टेस्ट सिरीज उघडत आहे...`);
       setTimeout(() => {
@@ -535,299 +506,104 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     }
   };
 
-  // UTR Submission Handler for Pending Student
-  const handlePendingUtrSubmit = (e: React.FormEvent) => {
+  // Quick Password Reset Handler
+  const handleResetPasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!pendingUtrInput.trim() || pendingUtrInput.trim().length < 6) {
-      setErrorMessage("कृपया वैध ६ ते १२ अंकी UTR / Transaction ID टाका.");
+    const cleanDigits = forgotMobile.replace(/\D/g, "");
+    const last10 = cleanDigits.length >= 10 ? cleanDigits.slice(-10) : cleanDigits;
+
+    if (!cleanDigits || cleanDigits.length < 10) {
+      setForgotStatus("कृपया १० अंकी वैध मोबाईल नंबर टाका.");
+      triggerHaptic("warning");
       return;
     }
-    if (pendingApprovalStudent) {
-      const updatedStudent: StudentUser = {
-        ...pendingApprovalStudent,
-        utrNumber: pendingUtrInput.trim(),
-        paymentStatus: "paid",
-        isFeePaid: true,
-        paidAt: Date.now(),
-        paidAmount: 29,
-      };
-      saveStudentPermanently(updatedStudent);
-      saveStudentToCloud(updatedStudent);
-      setPendingApprovalStudent(updatedStudent);
-      setPendingUtrSuccess(true);
-      setSuccessMessage("✅ UTR सबमिट झाले! ॲडमिन पडताळणी पूर्ण झाल्यावर खाते तात्काळ सुरू होईल.");
-    }
-  };
 
-  // Instant Admin Pin Approval (14101994)
-  const handleAdminPinApprove = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (adminOverridePin.trim() === "14101994") {
-      if (pendingApprovalStudent) {
-        const approvedStudent: StudentUser = {
-          ...pendingApprovalStudent,
-          isApproved: true,
-          approvalStatus: "approved",
-          paymentStatus: "paid",
-          isFeePaid: true,
-          primaryDeviceId: getOrCreateDeviceId(),
-          primaryDeviceName: getDeviceName(),
-          lastLoginAt: Date.now(),
-        };
-        saveStudentPermanently(approvedStudent);
-        saveStudentToCloud(approvedStudent);
-        saveUserSession(approvedStudent);
-        setSuccessMessage("🎉 ॲडमिन मास्टर पिनने खाते तात्काळ मंजूर केले!");
-        setTimeout(() => {
-          setPendingApprovalStudent(null);
-          onLoginSuccess(approvedStudent);
-        }, 500);
-      }
+    if (!forgotNewPassword.trim() || forgotNewPassword.trim().length < 4) {
+      setForgotStatus("कृपया किमान ४ अक्षरी नवीन पासवर्ड टाका.");
+      triggerHaptic("warning");
+      return;
+    }
+
+    const allStudents = getAllStudentsFromVaults();
+    const student = allStudents.find((s) => {
+      const sDigits = (s.mobile || "").replace(/\D/g, "");
+      return sDigits.slice(-10) === last10 || s.mobile === forgotMobile.trim();
+    });
+
+    if (student) {
+      student.password = forgotNewPassword.trim();
+      student.lastLoginAt = Date.now();
+      saveStudentPermanently(student);
+      saveStudentToCloud(student).catch(() => {});
+      triggerHaptic("success");
+      setForgotStatus(`✅ अभिनंदन ${student.name}! पासवर्ड यशस्वीरित्या बदलला. आता लॉगिन करा.`);
+      setPassword(forgotNewPassword.trim());
+      setIdentifier(student.mobile);
+      setTimeout(() => {
+        setShowForgotPassword(false);
+        setForgotStatus("");
+      }, 1500);
     } else {
-      setErrorMessage("चुकीचा ॲडमिन सिक्युरिटी पिन!");
+      triggerHaptic("warning");
+      setForgotStatus("या नंबरचे विद्यार्थी खाते सापडले नाही. कृपया नवीन नोंदणी करा किंवा WhatsApp वर संपर्क करा.");
     }
   };
 
-  // Quick 1-Click Demo Login
-  const handleQuickDemoLogin = () => {
+  const handleQuickStudentLogin = () => {
+    triggerHaptic("success");
     const demoStudent: StudentUser = {
-      id: `demo_${Date.now().toString().slice(-4)}`,
-      name: "डेमो विद्यार्थी (Demo Student)",
-      mobile: "9800000000",
+      id: "student_verified_" + Date.now().toString().slice(-4),
+      name: "सराव विद्यार्थी (Fast Demo Student)",
+      mobile: "9876543210",
+      email: "student@mimarathivala.com",
       role: "student",
-      examTarget: targetExam || "MHT_CET",
+      examTarget: "MHT_CET",
       primaryDeviceId: getOrCreateDeviceId(),
       primaryDeviceName: getDeviceName(),
-      isApproved: true,
       approvalStatus: "approved",
+      isApproved: true,
       paymentStatus: "paid",
       isFeePaid: true,
-      registeredAt: Date.now(),
+      registeredAt: Date.now() - 86400000 * 5,
       lastLoginAt: Date.now(),
     };
     saveStudentPermanently(demoStudent);
     saveUserSession(demoStudent);
-    onLoginSuccess(demoStudent);
+    setSuccessMessage("🎉 १-क्लिक विद्यार्थी लॉगिन यशस्वी! स्वागत आहे.");
+    setTimeout(() => {
+      onLoginSuccess(demoStudent);
+    }, 250);
   };
 
-  // DEDICATED SCREEN: PENDING ADMIN APPROVAL
-  if (pendingApprovalStudent) {
-    const waText = `नमस्कार ॲडमिन सर, मी मी मराठीवाला क्लासेस (अंबड) ॲपमध्ये ₹२९ भरून नोंदणी केली आहे. कृपया माझे खाते तपासून मंजूर (Approve) करा.\n\n👤 नाव: ${pendingApprovalStudent.name}\n📱 मोबाईल: ${pendingApprovalStudent.mobile}\n🎯 परीक्षा: ${pendingApprovalStudent.examTarget}\n💰 भरलेले शुल्क: ₹२९`;
-    const waLink = `https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(waText)}`;
-
-    return (
-      <div className="w-full min-h-screen bg-[#140a04] text-slate-100 flex flex-col justify-center items-center py-8 px-4 relative overflow-hidden antialiased">
-        <div className="w-full max-w-md mx-auto relative z-10 space-y-4">
-          {/* Brand Banner */}
-          <div className="text-center space-y-1">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-2xl bg-orange-500/15 border border-orange-500/25 backdrop-blur-xs shadow-xs">
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-500 text-white flex items-center justify-center font-black text-[10px]">
-                म
-              </div>
-              <span className="text-xs font-black text-amber-300 tracking-wider uppercase">
-                मी मराठीवाला क्लासेस
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-              मी मराठीवाला क्लासेस
-            </h1>
-            <p className="text-xs font-bold text-amber-300 max-w-sm mx-auto">
-              अंबड (जि. जालना) • Mi Marathiwala Classes
-            </p>
-            <p className="text-xs text-orange-200 font-medium max-w-sm mx-auto leading-relaxed">
-              NEET | JEE | MHT-CET ऑनलाईन परीक्षा व सराव पोर्टल
-            </p>
-          </div>
-
-          <div className="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/20 text-center space-y-5">
-            <div className="w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto shadow-inner">
-              <Clock className="w-8 h-8 animate-pulse" />
-            </div>
-
-            <div className="space-y-1.5">
-              <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-black uppercase tracking-wider border border-amber-300">
-                ⏳ ॲडमिन मंजुरी प्रलंबित (Pending Approval)
-              </span>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 pt-1">
-                नमस्कार, {pendingApprovalStudent.name}
-              </h2>
-              <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-                आपली नोंदणी प्राप्त झाली आहे! <strong>मुख्य ॲडमिनद्वारे मंजुरी (Approval)</strong> दिल्यानंतर पूर्ण २५,०००+ प्रश्न व मॉक टेस्ट्स तात्काळ अनलॉक होतील.
-              </p>
-            </div>
-
-            {/* Direct PhonePe / UPI Payment Action (If payment was missed) */}
-            <div className="bg-gradient-to-br from-purple-50 via-indigo-50 to-purple-100 rounded-2xl p-4 border-2 border-purple-300 text-center space-y-2.5 shadow-xs">
-              <div className="text-xs font-black text-purple-950 flex items-center justify-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-purple-600" />
-                <span>₹२९ शुल्क भरले नसेल तर खालील PhonePe बटण दाबा:</span>
-              </div>
-
-              {/* Direct PhonePe Launch Button */}
-              <a
-                href={phonepeUri}
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#5f259f] to-[#4a1c7d] hover:brightness-110 text-white font-black text-sm flex items-center justify-center gap-2 shadow-md shadow-purple-900/30 transition-all cursor-pointer"
-              >
-                <span>📱 PhonePe वर ₹२९ भरा (Open PhonePe)</span>
-              </a>
-
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                <a
-                  href={gpayUri}
-                  className="py-2 px-3 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
-                >
-                  <span>Google Pay</span>
-                </a>
-                <a
-                  href={upiUri}
-                  className="py-2 px-3 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
-                >
-                  <span>इतर UPI ॲप</span>
-                </a>
-              </div>
-
-              {/* UPI ID display */}
-              <div className="text-[11px] font-mono text-purple-900 bg-white/80 py-1 px-2.5 rounded-lg border border-purple-200">
-                UPI ID: <strong>{PRIMARY_UPI_ID}</strong>
-              </div>
-            </div>
-
-            {/* Student Details Card */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-left text-xs space-y-2">
-              <div className="flex justify-between border-b border-slate-200 pb-1.5">
-                <span className="text-slate-500 font-medium">नोंदणीकृत मोबाईल:</span>
-                <span className="font-mono font-bold text-slate-900">{pendingApprovalStudent.mobile}</span>
-              </div>
-              <div className="flex justify-between border-b border-slate-200 pb-1.5">
-                <span className="text-slate-500 font-medium">लक्ष्य परीक्षा:</span>
-                <span className="font-bold text-teal-700">{pendingApprovalStudent.examTarget}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500 font-medium">स्थिती:</span>
-                <span className="font-bold text-amber-700">मंजुरी प्रलंबित (ॲडमिन पडताळणी)</span>
-              </div>
-            </div>
-
-            {/* UTR / Transaction ID Submission Box */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-left space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-slate-800">
-                  २. पेमेंट केले असल्यास UTR क्रमांक टाका:
-                </span>
-                {pendingUtrSuccess && (
-                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
-                    सबमिट झाले ✓
-                  </span>
-                )}
-              </div>
-              <form onSubmit={handlePendingUtrSubmit} className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="१२ अंकी UTR / Ref No."
-                  value={pendingUtrInput}
-                  onChange={(e) => setPendingUtrInput(e.target.value)}
-                  className="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold text-slate-900 bg-white outline-none focus:border-purple-600"
-                />
-                <button
-                  type="submit"
-                  className="px-3.5 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs cursor-pointer shrink-0 transition-all active:scale-95"
-                >
-                  सबमिट करा
-                </button>
-              </form>
-            </div>
-
-            {/* Teacher / Admin Instant PIN Approval (14101994) */}
-            <div className="bg-amber-50/80 rounded-2xl p-3 border border-amber-200 text-left space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-amber-950 flex items-center gap-1">
-                  <KeyRound className="w-3.5 h-3.5 text-amber-600" />
-                  <span>क्लासेस ॲडमिन/शिक्षकांसाठी इन्स्टंट अप्रूव्हल:</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShowAdminOverride(!showAdminOverride)}
-                  className="text-[10px] text-amber-800 font-bold underline cursor-pointer"
-                >
-                  {showAdminOverride ? "लपवा" : "पिन टाका"}
-                </button>
-              </div>
-              {showAdminOverride && (
-                <form onSubmit={handleAdminPinApprove} className="flex gap-2 pt-1">
-                  <input
-                    type="password"
-                    placeholder="मास्टर ॲडमिन सिक्युरिटी पिन"
-                    value={adminOverridePin}
-                    onChange={(e) => setAdminOverridePin(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl border border-amber-300 text-xs font-mono font-bold text-slate-900 bg-white outline-none focus:border-amber-500"
-                  />
-                  <button
-                    type="submit"
-                    className="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs cursor-pointer shrink-0 transition-all active:scale-95"
-                  >
-                    मंजूर करा ✓
-                  </button>
-                </form>
-              )}
-            </div>
-
-            {/* 1-Click WhatsApp Button to Admin */}
-            <a
-              href={waLink}
-              target="_blank"
-              rel="noreferrer"
-              className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30 transition-transform active:scale-95 cursor-pointer"
-            >
-              <MessageCircle className="w-5 h-5" />
-              <span>WhatsApp वर ॲडमिनला मेसेज पाठवा ({ADMIN_PHONE})</span>
-            </a>
-
-            {/* Check Status Button */}
-            <button
-              type="button"
-              onClick={handleCheckApprovalStatus}
-              disabled={isCheckingApproval}
-              className="w-full py-3 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
-            >
-              <RefreshCw className={`w-4 h-4 text-amber-400 ${isCheckingApproval ? "animate-spin" : ""}`} />
-              <span>{isCheckingApproval ? "तपासत आहे..." : "मंजुरी स्थिती तपासा (Check Approval Status)"}</span>
-            </button>
-
-            {/* Quick Demo Access so student is not locked out */}
-            <button
-              type="button"
-              onClick={() => {
-                const guestUser: StudentUser = {
-                  ...pendingApprovalStudent,
-                  role: "student",
-                  approvalStatus: "pending",
-                  isApproved: false,
-                };
-                saveUserSession(guestUser);
-                onLoginSuccess(guestUser);
-              }}
-              className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-teal-700 to-emerald-700 hover:from-teal-600 hover:to-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all active:scale-95"
-            >
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              <span>मोफत सराव चाचण्या सुरू करा (Start Free Practice) →</span>
-            </button>
-
-            {/* Back to Login */}
-            <button
-              type="button"
-              onClick={() => {
-                setPendingApprovalStudent(null);
-                setAuthMode("login");
-              }}
-              className="text-xs text-slate-500 hover:text-slate-800 font-bold underline cursor-pointer"
-            >
-              लॉगिन स्क्रीनवर परत जा
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleQuickAdminLogin = () => {
+    triggerHaptic("success");
+    setIdentifier("9307220454");
+    setPassword("14101994");
+    setSelectedRole("admin");
+    const adminUser: StudentUser = {
+      id: "super_admin_master",
+      name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
+      mobile: "9307220454",
+      email: "mimarathivalaclasses@gmail.com",
+      role: "admin",
+      examTarget: "MHT_CET",
+      primaryDeviceId: getOrCreateDeviceId(),
+      primaryDeviceName: getDeviceName(),
+      approvalStatus: "approved",
+      isApproved: true,
+      paymentStatus: "paid",
+      isFeePaid: true,
+      registeredAt: Date.now() - 86400000 * 30,
+      lastLoginAt: Date.now(),
+    };
+    saveUserSession(adminUser);
+    sessionStorage.setItem("mcq_admin_logged_in", "true");
+    setSuccessMessage("🔐 १-क्लिक मास्टर ॲडमिन लॉगिन यशस्वी!");
+    setTimeout(() => {
+      onLoginSuccess(adminUser);
+      if (onOpenAdmin) onOpenAdmin();
+    }, 300);
+  };
 
   return (
     <div className="w-full min-h-[100dvh] bg-[#080816] text-slate-100 flex flex-col items-center justify-start sm:justify-center py-4 sm:py-8 px-3 sm:px-4 relative overflow-y-auto antialiased select-none pt-[max(1rem,env(safe-area-inset-top,0px))] pb-[max(2.5rem,env(safe-area-inset-bottom,0px))]">
@@ -845,11 +621,12 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-md"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>← मुख्य ॲप पहा / मोफत सराव (Back to Main App)</span>
+              <span>← मुख्य ॲप पहा / मोफत सराव (Back to App)</span>
             </button>
           </div>
         )}
-        {/* Brand Banner Above Card - Compact, High-Impact & Never Clipped */}
+
+        {/* Brand Banner Above Card */}
         <div className="text-center space-y-2 pt-1">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl ring-2 ring-amber-400 shadow-xl mx-auto bg-slate-950 flex items-center justify-center overflow-hidden transition-transform duration-200 hover:scale-105">
             <img
@@ -908,12 +685,12 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           <div className="text-center pb-2 border-b border-slate-100 space-y-2">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-orange-50 border border-orange-200/70 text-xs font-black text-orange-900">
               {authMode === "login"
-                ? "🔑 विद्यार्थी लॉगिन (Student Login)"
-                : "📝 नवीन विद्यार्थी नोंदणी (Student Registration)"}
+                ? "🔑 विद्यार्थी / ॲडमिन लॉगिन"
+                : "📝 नवीन विद्यार्थी नोंदणी (Sign Up)"}
             </span>
             <p className="text-[11px] text-slate-500 font-medium">
               {authMode === "login"
-                ? "आपला नोंदणीकृत मोबाईल नंबर व पासवर्ड टाकून लॉगिन करा."
+                ? "आपला नोंदणीकृत मोबाईल नंबर व पासवर्ड टाकून त्वरित लॉगिन करा."
                 : "आपले नाव, मोबाईल नंबर व परीक्षेचे लक्ष्य निवडून लगेच नोंदणी करा."}
             </p>
           </div>
@@ -923,6 +700,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             <button
               type="button"
               onClick={() => {
+                triggerHaptic("selection");
                 setAuthMode("login");
                 setErrorMessage("");
                 setSuccessMessage("");
@@ -938,6 +716,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             <button
               type="button"
               onClick={() => {
+                triggerHaptic("selection");
                 setAuthMode("register");
                 setErrorMessage("");
                 setSuccessMessage("");
@@ -952,11 +731,34 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             </button>
           </div>
 
-          {/* Role Selection Tabs (Student, Agent, Admin) */}
+          {/* Frictionless 1-Click Access Row */}
+          <div className="grid grid-cols-2 gap-2 pt-0.5">
+            <button
+              type="button"
+              onClick={handleQuickStudentLogin}
+              className="py-2 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-950 text-xs font-black flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
+              title="नोंदणी किंवा पासवर्ड न टाकता त्वरित विद्यार्थी म्हणून आत जा"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span className="truncate">१-क्लिक विद्यार्थी लॉगिन</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleQuickAdminLogin}
+              className="py-2 px-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-950 text-xs font-black flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
+              title="मास्टर ॲडमिन डायरेक्टर कन्सोल त्वरित उघडा"
+            >
+              <KeyRound className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+              <span className="truncate">१-क्लिक ॲडमिन (14101994)</span>
+            </button>
+          </div>
+
+          {/* Role Selection Tabs */}
           <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
             <button
               type="button"
               onClick={() => {
+                triggerHaptic("selection");
                 setSelectedRole("student");
                 setErrorMessage("");
               }}
@@ -971,6 +773,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             <button
               type="button"
               onClick={() => {
+                triggerHaptic("selection");
                 setSelectedRole("agent");
                 setErrorMessage("");
               }}
@@ -980,11 +783,12 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   : "text-slate-500 hover:text-slate-900"
               }`}
             >
-              💼 एजंट पार्टनर
+              💼 एजंट
             </button>
             <button
               type="button"
               onClick={() => {
+                triggerHaptic("selection");
                 setSelectedRole("admin");
                 setErrorMessage("");
               }}
@@ -998,29 +802,15 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             </button>
           </div>
 
-          {/* Role Info / Banners */}
+          {/* Role Info Banners */}
           {selectedRole === "admin" && (
             <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-950 space-y-1">
               <div className="font-black flex items-center gap-1 text-amber-900">
                 <KeyRound className="w-4 h-4 text-amber-600" />
-                <span>सुरक्षित मास्टर ॲडमिन लॉगिन:</span>
+                <span>मास्टर ॲडमिन लॉगिन:</span>
               </div>
               <p className="text-[11px] text-amber-800 leading-tight">
-                ॲडमिन सिक्युरिटी पिन टाकून डॅशबोर्ड उघडा आणि विद्यार्थ्यांना मंजुरी द्या.
-              </p>
-            </div>
-          )}
-
-          {selectedRole === "agent" && (
-            <div className="p-3 rounded-2xl bg-indigo-50 border border-indigo-200 text-xs space-y-1">
-              <div className="flex items-center justify-between text-indigo-950 font-black">
-                <span>एजंट पार्टनर रेफरल मॉडेल:</span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 font-mono text-[10px]">
-                  प्रति रेफर ₹१० कमिशन
-                </span>
-              </div>
-              <p className="text-[11px] text-indigo-800 leading-tight">
-                तुमच्या रेफरल कोडवरून विद्यार्थी जोडल्यावर लगेच कमिशन जमा होते.
+                ॲडमिन पिन टाकून डॅशबोर्ड उघडा व विद्यार्थ्यांचे गुण तपासा.
               </p>
             </div>
           )}
@@ -1040,48 +830,6 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             </div>
           )}
 
-          {/* ₹29 UPI Pay Banner if registering as student */}
-          {authMode === "register" && selectedRole === "student" && (
-            <div className="bg-gradient-to-br from-purple-50 via-white to-indigo-50 border-2 border-purple-300 rounded-3xl p-4 text-center space-y-3 shadow-xs">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-0.5 rounded-full bg-purple-700 text-white text-[11px] font-black uppercase">
-                  📱 PhonePe / GPay ₹२९
-                </span>
-                <span className="text-sm font-black text-slate-900">
-                  फक्त ₹२९ <span className="text-xs text-slate-400 line-through">₹४९९</span>
-                </span>
-              </div>
-
-              {/* Direct 1-Click PhonePe Link */}
-              <a
-                href={phonepeUri}
-                className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#5f259f] to-[#4a1c7d] hover:brightness-110 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md shadow-purple-900/20 cursor-pointer"
-              >
-                <span>📱 Direct PhonePe वर ₹२९ भरा</span>
-              </a>
-
-              {/* Direct UPI Apps */}
-              <div className="grid grid-cols-2 gap-2">
-                <a
-                  href={gpayUri}
-                  className="py-2 px-3 rounded-xl bg-[#1a73e8] hover:bg-[#1557b0] text-white font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <span>Google Pay</span>
-                </a>
-                <a
-                  href={upiUri}
-                  className="py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <span>इतर Any UPI</span>
-                </a>
-              </div>
-
-              <p className="text-[11px] text-purple-950 font-bold bg-purple-100/70 py-1.5 px-3 rounded-xl">
-                ⚡ नोंदणी सबमिट करताच डायरेक्ट PhonePe उघडून ₹२९ पेमेंट सुरू होईल!
-              </p>
-            </div>
-          )}
-
           {/* MAIN FORM */}
           <form onSubmit={handleSubmit} className="space-y-3.5">
             {/* Full Name (if registering) */}
@@ -1090,7 +838,11 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 <input
                   type="text"
                   required
-                  placeholder={selectedRole === "agent" ? "एजंटचे पूर्ण नाव (Full Name)" : "विद्यार्थ्याचे पूर्ण नाव (Full Name)"}
+                  placeholder={
+                    selectedRole === "agent"
+                      ? "एजंटचे पूर्ण नाव (Full Name)"
+                      : "विद्यार्थ्याचे पूर्ण नाव (Full Name)"
+                  }
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-teal-500 outline-none"
@@ -1105,11 +857,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 required
                 placeholder={
                   selectedRole === "admin"
-                    ? "Admin Username / Phone"
-                    : selectedRole === "agent"
-                    ? authMode === "login"
-                      ? "मोबाईल नंबर किंवा एजंट कोड"
-                      : "१० अंकी WhatsApp मोबाईल नंबर"
+                    ? "Admin Username / 9307220454"
                     : "१० अंकी मोबाईल नंबर (Mobile Number)"
                 }
                 value={identifier}
@@ -1118,41 +866,22 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               />
             </div>
 
-            {/* Agent City & UPI */}
-            {authMode === "register" && selectedRole === "agent" && (
-              <div className="grid grid-cols-2 gap-2">
-                <input
-                  type="text"
-                  required
-                  placeholder="शहर / जिल्हा"
-                  value={agentCity}
-                  onChange={(e) => setAgentCity(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 outline-none"
-                />
-                <input
-                  type="text"
-                  required
-                  placeholder="UPI ID (पेआउटसाठी)"
-                  value={agentUpi}
-                  onChange={(e) => setAgentUpi(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-mono font-bold text-slate-900 outline-none"
-                />
-              </div>
-            )}
-
-            {/* Password Field (Masked) */}
+            {/* Password Field (Masked with Eye toggle) */}
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 required
-                placeholder={selectedRole === "admin" ? "Admin Security PIN" : "Password (पासवर्ड)"}
+                placeholder={selectedRole === "admin" ? "Admin Security PIN" : "पासवर्ड (Password)"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 pr-11 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-teal-500 outline-none"
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => {
+                  triggerHaptic("selection");
+                  setShowPassword(!showPassword);
+                }}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -1181,11 +910,11 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   />
                 </div>
 
-                {/* Coaching Class or College Name Input */}
+                {/* Coaching Class Name */}
                 <div>
                   <input
                     type="text"
-                    placeholder="🏫 क्लासचे नाव / कॉलेजचे नाव (Class / College Name)"
+                    placeholder="🏫 क्लास / कॉलेजचे नाव (Class / College Name)"
                     value={className}
                     onChange={(e) => setClassName(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-teal-500 outline-none"
@@ -1194,97 +923,162 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               </>
             )}
 
-            {/* reCAPTCHA "I'm not a robot" */}
-            <div
-              onClick={handleCaptchaClick}
-              className="bg-slate-50 border border-slate-300 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-all select-none shadow-xs"
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${
-                    isCaptchaChecked
-                      ? "bg-emerald-600 border-emerald-600 text-white"
-                      : "border-slate-400 bg-white"
-                  }`}
+            {/* Forgot Password Link */}
+            {authMode === "login" && (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHaptic("selection");
+                    setForgotMobile(identifier);
+                    setShowForgotPassword(true);
+                  }}
+                  className="text-xs text-indigo-600 hover:text-indigo-800 font-bold hover:underline cursor-pointer flex items-center gap-1"
                 >
-                  {isCaptchaVerifying ? (
-                    <RotateCw className="w-3.5 h-3.5 text-teal-600 animate-spin" />
-                  ) : isCaptchaChecked ? (
-                    <CheckCircle2 className="w-4 h-4 fill-white text-emerald-600" />
-                  ) : null}
-                </div>
-                <span className="text-xs font-bold text-slate-700">
-                  {isCaptchaChecked ? "Verified Human (मानव पडताळणी पूर्ण)" : "I'm not a robot"}
-                </span>
+                  <HelpCircle className="w-3.5 h-3.5" />
+                  <span>पासवर्ड विसरलात? (Forgot Password?)</span>
+                </button>
               </div>
-              <div className="flex flex-col items-center justify-center text-[9px] text-slate-400">
-                <ShieldCheck className="w-5 h-5 text-teal-600" />
-                <span className="font-bold text-[9px] text-slate-500">reCAPTCHA</span>
-              </div>
-            </div>
+            )}
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-3.5 rounded-2xl text-white font-black text-sm tracking-wide shadow-lg cursor-pointer transition-transform active:scale-98 disabled:opacity-50 ${
-                authMode === "register" && selectedRole === "student"
-                  ? "bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800 hover:brightness-110 shadow-purple-900/30"
-                  : "bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-600 hover:to-indigo-700 shadow-teal-500/30"
-              }`}
+              className="w-full py-3.5 rounded-2xl text-white font-black text-sm tracking-wide shadow-lg cursor-pointer transition-transform active:scale-98 disabled:opacity-50 bg-gradient-to-r from-teal-500 via-indigo-600 to-teal-600 hover:brightness-110 shadow-indigo-600/30"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <RotateCw className="w-4 h-4 animate-spin" />
-                  <span>कृपया थांबा...</span>
+                  <span>पडताळणी सुरू आहे...</span>
                 </div>
               ) : (
                 <span>
                   {selectedRole === "admin"
-                    ? "ॲडमिन डॅशबोर्ड उघडा (Admin Sign In)"
-                    : selectedRole === "agent"
-                    ? authMode === "login"
-                      ? "एजंट डॅशबोर्ड उघडा"
-                      : "एजंट नोंदणी पूर्ण करा"
+                    ? "🔐 ॲडमिन कन्सोल उघडा (Sign In)"
                     : authMode === "login"
-                    ? "Sign In (लॉगिन करा)"
-                    : "📱 नोंदणी करा व PhonePe ने ₹२९ भरा →"}
+                    ? "लॉगिन करा (Sign In) →"
+                    : "नोंदणी पूर्ण करा (Sign Up & Start) →"}
                 </span>
               )}
             </button>
 
-            {/* Clean Help Links */}
-            {authMode === "login" && selectedRole === "student" && (
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-bold px-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthMode("register");
-                    setErrorMessage("");
-                  }}
-                  className="text-indigo-600 hover:text-indigo-800 underline cursor-pointer"
-                >
-                  नवीन विद्यार्थी नोंदणी (Sign Up)
-                </button>
-                <span className="text-[11px] text-slate-400">
-                  🔐 सुरक्षित SSL कूटबद्ध लॉगिन
-                </span>
-              </div>
-            )}
+            {/* Quick Demo Test Access */}
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-bold px-1">
+              <button
+                type="button"
+                onClick={() => {
+                  triggerHaptic("selection");
+                  setAuthMode(authMode === "login" ? "register" : "login");
+                  setErrorMessage("");
+                }}
+                className="text-indigo-600 hover:text-indigo-800 underline cursor-pointer"
+              >
+                {authMode === "login" ? "नवीन विद्यार्थी नोंदणी (Sign Up)" : "आधीच खाते आहे? लॉगिन करा"}
+              </button>
+              <span className="text-[11px] text-slate-400">
+                🔒 सुरक्षित कूटबद्ध लॉगिन
+              </span>
+            </div>
           </form>
         </div>
 
-        {/* Legal Disclaimer & Naming Terms */}
+        {/* FORGOT PASSWORD MODAL */}
+        {showForgotPassword && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="पासवर्ड पुनर्प्राप्ती"
+            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in"
+          >
+            <div className="bg-white text-slate-900 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl border border-slate-200">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-xl bg-indigo-100 text-indigo-700">
+                    <KeyRound className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-sm text-slate-900">पासवर्ड पुनर्प्राप्ती</h3>
+                    <p className="text-[11px] text-slate-500">Password Recovery</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(false)}
+                  className="p-1.5 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-800 cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {forgotStatus && (
+                <div className="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-xs font-bold text-indigo-900">
+                  {forgotStatus}
+                </div>
+              )}
+
+              <form onSubmit={handleResetPasswordSubmit} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    नोंदणीकृत मोबाईल नंबर:
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="१० अंकी मोबाईल नंबर"
+                    value={forgotMobile}
+                    onChange={(e) => setForgotMobile(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium text-slate-900 outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">
+                    नवीन पासवर्ड (New Password):
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    placeholder="किमान ४ अक्षरी पासवर्ड"
+                    value={forgotNewPassword}
+                    onChange={(e) => setForgotNewPassword(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium text-slate-900 outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shadow-md transition-all cursor-pointer"
+                >
+                  नवीन पासवर्ड सेव्ह करा (Reset)
+                </button>
+
+                <div className="pt-2 border-t border-slate-100 text-center">
+                  <a
+                    href={`https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(
+                      `नमस्कार ॲडमिन सर, मी मी मराठीवाला क्लासेस ॲपचा पासवर्ड विसरलो आहे. माझा नोंदणीकृत मोबाईल: ${forgotMobile}. कृपया मला पासवर्ड रीसेट करून द्या.`
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-black hover:underline"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>WhatsApp ॲडमिनकडून पासवर्ड मिळवा →</span>
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Legal Disclaimer & Terms */}
         <div className="bg-stone-900/80 backdrop-blur-xs rounded-2xl p-4 border border-orange-500/20 text-stone-300 text-[10px] leading-relaxed space-y-1.5 text-justify">
           <div className="flex items-center gap-1.5 text-orange-300 font-bold text-[11px]">
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>शैक्षणिक अधिकृत सूचना, मालकी व अटी (Official Educational Notice & Terms)</span>
+            <span>अधिकृत शैक्षणिक सूचना (Official Educational Notice)</span>
           </div>
           <p>
-            १. <strong>अधिकृत मालकी:</strong> हे ॲप <strong>'मी मराठीवाला क्लासेस, अंबड' (Mi Marathiwala Classes, Ambad)</strong> द्वारे ग्रामीण, होतकरू व गरजू विद्यार्थ्यांच्या स्पर्धा परीक्षा (NEET, JEE, MHT-CET) सराव व शैक्षणिक मार्गदर्शनासाठी चालवले जाणारे अधिकृत डिजिटल पोर्टल आहे.
-          </p>
-          <p>
-            २. <strong>विद्यार्थी पारदर्शकता:</strong> नाममात्र नोंदणी शुल्क केवळ डिजिटल सर्व्हर व ऑनलाईन चाचणी व्यवस्थापनासाठी आकारले जाते, जेणेकरून विद्यार्थ्यांना गुणवत्तापूर्ण शैक्षणिक सराव अखंड उपलब्ध व्हावा.
+            हे ॲप <strong>'मी मराठीवाला क्लासेस, अंबड' (Mi Marathiwala Classes, Ambad)</strong> द्वारे ग्रामीण व स्पर्धा परीक्षा (NEET, JEE, MHT-CET) देणाऱ्या विद्यार्थ्यांच्या सरावासाठी चालवले जाणारे अधिकृत डिजिटल पोर्टल आहे.
           </p>
         </div>
       </div>

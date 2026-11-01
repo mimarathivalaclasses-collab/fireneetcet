@@ -21,6 +21,7 @@ import {
   ChevronRight,
   User,
   AlertCircle,
+  Scale,
 } from "lucide-react";
 import { NavigationTab, ExamType } from "../types";
 
@@ -198,6 +199,13 @@ const TAB_METADATA: Record<NavigationTab, TabMeta> = {
     icon: AlertCircle,
     color: "from-rose-600 to-orange-600",
     badge: "Feedback",
+  },
+  compliance_rules: {
+    titleMr: "कायदे, नियम व तांत्रिक नियमावली केंद्र",
+    titleEn: "Rules & Regulations (AdSense, Firebase, UPI)",
+    icon: Scale,
+    color: "from-indigo-600 to-slate-900",
+    badge: "Policies",
   },
 };
 

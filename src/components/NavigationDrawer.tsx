@@ -469,22 +469,25 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
             </div>
           </button>
 
-          {/* Privacy Policy */}
-          <div
-            onClick={() => {
-              alert(
-                "🔒 गोपनीयता व सुरक्षा धोरण (Privacy Policy):\n\n१. सिंगल डिव्हाइस सिक्युरिटी: एका खात्यावरून फक्त एकाच मोबाईलवर लॉगिन शक्य.\n२. स्क्रीनशॉट व कॉपी संरक्षण: सर्व प्रश्न व नोट्स सुरक्षित आहेत.\n३. १००% सुरक्षित UPI पेमेंट व डेटा एन्क्रिप्शन.\n४. कोणत्याही मदतीसाठी: 9307220454"
-              );
-            }}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors text-xs font-bold cursor-pointer ${
-              isDarkMode ? "text-slate-200 hover:bg-slate-800" : "text-slate-800 hover:bg-slate-100"
+          {/* Rules, Regulations & Compliance Center */}
+          <button
+            onClick={() => handleItemClick("compliance_rules")}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-colors text-xs font-bold ${
+              activeTab === "compliance_rules"
+                ? "bg-indigo-600 text-white"
+                : isDarkMode
+                ? "text-slate-200 hover:bg-slate-800"
+                : "text-slate-800 hover:bg-slate-100"
             }`}
           >
             <div className="flex items-center gap-3">
-              <Shield className="w-4 h-4 text-slate-500" />
-              <span>🔒 गोपनीयता धोरण (Privacy Policy)</span>
+              <Shield className="w-4 h-4 text-indigo-500" />
+              <span>📜 कायदे व नियमावली (AdSense, Firebase, UPI)</span>
             </div>
-          </div>
+            <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+              Rules
+            </span>
+          </button>
 
           {/* Master Admin Portal */}
           <button

@@ -35,6 +35,7 @@ import { generateProceduralQuestions } from "../utils/proceduralQuestionGenerato
 import { deduplicateQuestionsList } from "../utils/proceduralQuestionEngine";
 import { recordDailyActivity } from "../utils/achievementSystem";
 import { speakExplanation, stopExplanation } from "../utils/audioSpeechHelper";
+import { triggerHaptic } from "../utils/haptics";
 
 interface PracticeModeProps {
   questions: Question[];
@@ -147,6 +148,17 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     return [...extraGeneratedQuestions, ...questions];
   }, [extraGeneratedQuestions, questions]);
 
+  const recentAttemptedSet = useMemo(() => {
+    try {
+      const raw = localStorage.getItem("mcq_recently_attempted_qids_v1");
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) return new Set<string>(arr);
+      }
+    } catch {}
+    return new Set<string>();
+  }, [selectedAnswers]);
+
   const filteredQuestions = useMemo(() => {
     let rawMatches = allPracticeQuestions.filter((q) => {
       // Exam match
@@ -164,8 +176,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
       // Bookmarks only
       if (onlyBookmarks && !bookmarkedIds.has(q.id)) return false;
 
-      // Unattempted only
-      if (onlyUnattempted && selectedAnswers[q.id] !== undefined) return false;
+      // Unattempted only (checks active session answers AND past attempts for zero repetition)
+      if (onlyUnattempted && (selectedAnswers[q.id] !== undefined || recentAttemptedSet.has(q.id))) {
+        return false;
+      }
 
       // Search query
       if (searchQuery.trim()) {
@@ -205,6 +219,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     bookmarkedIds,
     searchQuery,
     shuffleSeed,
+    recentAttemptedSet,
   ]);
 
   // Reset index if out of bounds
@@ -252,6 +267,11 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
     if (selectedAnswers[qId] !== undefined) return; // already answered
 
     const isCorrect = optionIndex === currentQuestion.correctOption;
+    if (isCorrect) {
+      triggerHaptic("success");
+    } else {
+      triggerHaptic("warning");
+    }
     setSelectedAnswers((prev) => ({ ...prev, [qId]: optionIndex }));
     setShowExplanations((prev) => ({ ...prev, [qId]: true }));
     
@@ -691,6 +711,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   <button
                     id="btn-bookmark-question"
                     onClick={() => {
+                      triggerHaptic("selection");
                       onToggleBookmark(currentQuestion);
                     }}
                     className={`p-2 rounded-lg border text-xs font-medium flex items-center gap-1.5 transition-colors ${

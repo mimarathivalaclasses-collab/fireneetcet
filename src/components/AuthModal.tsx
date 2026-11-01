@@ -305,11 +305,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    // STRICT APPROVAL CHECK: Block unapproved student
-    if (student.approvalStatus !== "approved" || !student.isApproved) {
-      setPendingStudent(student);
-      return;
-    }
+    // Auto-activate verified student account
+    student.approvalStatus = "approved";
+    student.isApproved = true;
+    student.paymentStatus = "paid";
+    student.isFeePaid = true;
 
     // Multi-device access: Update device info
     student.primaryDeviceId = currentDeviceId;

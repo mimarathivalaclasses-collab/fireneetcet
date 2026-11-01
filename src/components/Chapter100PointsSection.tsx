@@ -1,18 +1,15 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Check,
   Copy,
   Search,
-  Filter,
-  Flame,
-  Award,
   Sparkles,
   Zap,
-  Bookmark,
-  CheckCircle2,
-  ListOrdered,
+  Award,
   Layers,
-  FileText
+  CheckCircle2,
+  BookmarkCheck,
+  RotateCcw,
 } from "lucide-react";
 import { ChapterPointItem, LanguageMode } from "../types";
 
@@ -34,9 +31,10 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
   language,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRange, setSelectedRange] = useState<"all" | "1-25" | "26-50" | "51-75" | "76-100">("all");
+  const [selectedRange, setSelectedRange] = useState<"all" | "1-25" | "26-50" | "51-100">("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [copied, setCopied] = useState(false);
+  const [copiedAll, setCopiedAll] = useState(false);
+  const [copiedPointId, setCopiedPointId] = useState<number | null>(null);
 
   // Mastered points tracker in localStorage
   const storageKey = `mastered_points_${noteId}`;
@@ -99,8 +97,7 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
       // Range filter
       if (selectedRange === "1-25" && (p.id < 1 || p.id > 25)) return false;
       if (selectedRange === "26-50" && (p.id < 26 || p.id > 50)) return false;
-      if (selectedRange === "51-75" && (p.id < 51 || p.id > 75)) return false;
-      if (selectedRange === "76-100" && (p.id < 76 || p.id > 100)) return false;
+      if (selectedRange === "51-100" && p.id < 51) return false;
 
       // Category filter
       if (selectedCategory !== "all" && p.category !== selectedCategory) return false;
@@ -119,134 +116,171 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
     });
   }, [points, selectedRange, selectedCategory, searchQuery]);
 
-  const progressPercent = Math.round((masteredIds.size / (points.length || 100)) * 100);
+  const totalPoints = points.length || 50;
+  const progressPercent = Math.min(100, Math.round((masteredIds.size / totalPoints) * 100));
 
   const handleCopyAll = () => {
     const text = points
-      .map((p) => `${p.id}. ${p.pointMr} (${p.point})${p.formula ? ` [सूत्र: ${p.formula}]` : ""}`)
+      .map((p) => `${p.id}. ${p.pointMr}\n   ${p.point}${p.formula ? `\n   [Formula: ${p.formula}]` : ""}`)
       .join("\n\n");
     navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedAll(true);
+    setTimeout(() => setCopiedAll(false), 2000);
   };
 
+  const handleCopyPoint = (p: ChapterPointItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const text = `${p.id}. ${p.pointMr}\n${p.point}${p.formula ? `\nFormula: ${p.formula}` : ""}`;
+    navigator.clipboard.writeText(text);
+    setCopiedPointId(p.id);
+    setTimeout(() => setCopiedPointId(null), 1800);
+  };
+
+  const hasMoreThan50 = points.length > 50;
+
   return (
-    <div className="space-y-4 bg-purple-50/40 border-2 border-purple-200/80 rounded-2xl p-4 sm:p-5">
-      {/* Header of 100 points block */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-purple-200">
+    <div className="space-y-4 bg-slate-50/60 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5">
+      {/* Header of 50+ Points Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
         <div>
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-lg bg-purple-600 text-white font-black text-xs flex items-center gap-1 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>१०० महत्त्वाचे पॉईंट्स (100 High-Yield Points)</span>
-            </span>
-            <span className="text-xs font-bold text-purple-950">
-              {points.length} पॉईंट्स उपलब्ध
-            </span>
+            <span className="w-2 h-2 rounded-full bg-orange-600 animate-pulse" />
+            <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight">
+              {chapterTitleMr || chapterTitle} : महत्त्वाचे ५०+ सराव मुद्दे (High-Yield 50+ Revision Points)
+            </h4>
           </div>
-          <p className="text-xs text-purple-800/80 mt-1">
-            या चॅप्टरमधील सर्व १०० अत्यंत महत्त्वाचे नियम, व्याख्या, सूत्रे, शॉर्टकट्स व वारंवार विचारले जाणारे प्रश्न.
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+            प्रत्येक मुद्द्यामध्ये परीक्षेचे अचूक नियम, गणितीय सूत्रे, शॉर्टकट्स व प्रत्यक्ष MHT-CET/NEET/JEE प्रश्न विचारण्याची पद्धत समाविष्ट आहे.
           </p>
         </div>
 
-        {/* Copy All Action */}
+        {/* Action: Copy All */}
         <button
           onClick={handleCopyAll}
-          className="px-3 py-1.5 rounded-xl bg-white border border-purple-300 text-purple-900 hover:bg-purple-100 text-xs font-bold transition-all flex items-center gap-1.5 self-start sm:self-center cursor-pointer shadow-2xs"
-          title="सर्व १०० पॉईंट्स क्लिपबोर्डवर कॉपी करा"
+          className="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 self-start sm:self-center cursor-pointer shadow-xs active:scale-95"
+          title="सर्व मुद्दे क्लिपबोर्डवर कॉपी करा"
         >
-          {copied ? (
+          {copiedAll ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-600" />
-              <span className="text-emerald-700">कॉपी झाले!</span>
+              <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-emerald-700 dark:text-emerald-300 font-bold">सर्व कॉपी झाले!</span>
             </>
           ) : (
             <>
-              <Copy className="w-3.5 h-3.5 text-purple-600" />
-              <span>सर्व १०० पॉईंट्स कॉपी करा</span>
+              <Copy className="w-3.5 h-3.5 text-slate-500" />
+              <span>सर्व {points.length} मुद्दे कॉपी करा</span>
             </>
           )}
         </button>
       </div>
 
-      {/* Mastery Progress Tracker */}
-      <div className="bg-white rounded-xl p-3.5 border border-purple-200/80 space-y-2 shadow-2xs">
+      {/* Progress & Stats Bar */}
+      <div className="bg-white dark:bg-slate-800/90 rounded-xl p-3 border border-slate-200 dark:border-slate-700/80 space-y-2 shadow-xs">
         <div className="flex items-center justify-between text-xs">
-          <span className="font-extrabold text-slate-800 flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <Award className="w-4 h-4 text-amber-500" />
-            <span>तुमची तयारी (Points Mastered Tracker):</span>
-            <strong className="text-purple-700 font-black">{masteredIds.size} / {points.length} पूर्ण</strong>
-          </span>
-          <span className="font-black text-purple-800 font-mono-numbers">{progressPercent}%</span>
+            <span className="font-bold text-slate-700 dark:text-slate-300">
+              अभ्यास प्रगती (Points Mastered):
+            </span>
+            <span className="font-mono text-xs font-black text-orange-600 dark:text-orange-400">
+              {masteredIds.size} / {totalPoints} पूर्ण
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-black text-slate-900 dark:text-white">
+              {progressPercent}%
+            </span>
+          </div>
         </div>
 
-        <div className="w-full bg-purple-100 h-2.5 rounded-full overflow-hidden">
+        <div className="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
           <div
-            className="bg-gradient-to-r from-purple-600 to-indigo-600 h-full rounded-full transition-all duration-300"
-            style={{ width: `${Math.min(progressPercent, 100)}%` }}
+            className="bg-gradient-to-r from-orange-500 to-amber-500 h-full rounded-full transition-all duration-300"
+            style={{ width: `${progressPercent}%` }}
           />
         </div>
       </div>
 
-      {/* Filter & Range Bar */}
-      <div className="space-y-2.5 pt-1">
+      {/* Filters: Search & Range Selector */}
+      <div className="space-y-2 pt-1">
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
-          {/* Point Search */}
-          <div className="sm:col-span-6 relative">
+          {/* Search Field */}
+          <div className="sm:col-span-5 relative">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="पॉईंट्समध्ये शोधा (उदा. Formula, Torque, MI, #45)..."
-              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white border border-purple-200 text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-purple-500 font-medium"
+              placeholder="मुद्द्यांमध्ये शोधा (उदा. Formula, Torque, MI, #15)..."
+              className="w-full pl-8 pr-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-orange-500 font-medium"
             />
           </div>
 
-          {/* Range filter buttons */}
-          <div className="sm:col-span-6 flex flex-wrap items-center gap-1">
-            {(
-              [
-                { id: "all", label: "सर्व 100" },
-                { id: "1-25", label: "1-25" },
-                { id: "26-50", label: "26-50" },
-                { id: "51-75", label: "51-75" },
-                { id: "76-100", label: "76-100" },
-              ] as const
-            ).map((rng) => (
+          {/* Range Buttons (50-point structure) */}
+          <div className="sm:col-span-7 flex flex-wrap items-center gap-1.5">
+            <button
+              onClick={() => setSelectedRange("all")}
+              className={`px-2.5 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                selectedRange === "all"
+                  ? "bg-orange-600 text-white shadow-xs"
+                  : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
+              }`}
+            >
+              सर्व {points.length} मुद्दे
+            </button>
+            <button
+              onClick={() => setSelectedRange("1-25")}
+              className={`px-2.5 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                selectedRange === "1-25"
+                  ? "bg-orange-600 text-white shadow-xs"
+                  : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
+              }`}
+            >
+              १ ते २५ (मूलभूत संकल्पना)
+            </button>
+            <button
+              onClick={() => setSelectedRange("26-50")}
+              className={`px-2.5 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                selectedRange === "26-50"
+                  ? "bg-orange-600 text-white shadow-xs"
+                  : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
+              }`}
+            >
+              २६ ते ५० (सूत्रे व शॉर्टकट्स)
+            </button>
+            {hasMoreThan50 && (
               <button
-                key={rng.id}
-                onClick={() => setSelectedRange(rng.id)}
+                onClick={() => setSelectedRange("51-100")}
                 className={`px-2.5 py-1 rounded-lg text-xs font-black transition-all cursor-pointer ${
-                  selectedRange === rng.id
-                    ? "bg-purple-700 text-white shadow-xs"
-                    : "bg-white text-purple-900 border border-purple-200 hover:bg-purple-100"
+                  selectedRange === "51-100"
+                    ? "bg-orange-600 text-white shadow-xs"
+                    : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
                 }`}
               >
-                {rng.label}
+                ५१ ते {points.length} (PYQ सराव)
               </button>
-            ))}
+            )}
           </div>
         </div>
 
-        {/* Category Filters */}
+        {/* Category Filters (Clean Segmented) */}
         <div className="flex flex-wrap items-center gap-1.5 pt-1">
           {[
-            { id: "all", label: "सर्व प्रकार (All)" },
+            { id: "all", label: "सर्व प्रकार" },
             { id: "Formula", label: "⚡ सूत्रे (Formulas)" },
             { id: "Concept", label: "💡 संकल्पना (Concepts)" },
-            { id: "Rule", label: "📜 नियम (Rules)" },
-            { id: "Shortcut", label: "🎯 शॉर्टकट्स (Shortcuts)" },
-            { id: "PYQ_Trend", label: "🔥 CET/NEET PYQs" },
-            { id: "Definition", label: "📖 व्याख्या (Definitions)" },
+            { id: "Shortcut", label: "🎯 शॉर्टकट्स" },
+            { id: "Rule", label: "📜 नियम" },
+            { id: "PYQ_Trend", label: "🔥 CET/NEET ट्रेंड" },
+            { id: "Definition", label: "📖 व्याख्या" },
           ].map((cat) => (
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`px-2 py-0.5 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+              className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-all cursor-pointer ${
                 selectedCategory === cat.id
-                  ? "bg-indigo-600 text-white shadow-2xs"
-                  : "bg-white/80 text-slate-700 border border-purple-100 hover:bg-white"
+                  ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xs"
+                  : "bg-white/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
               }`}
             >
               {cat.label}
@@ -255,58 +289,81 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
         </div>
       </div>
 
-      {/* Points Grid / List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-[600px] overflow-y-auto pr-1">
+      {/* Points Grid / Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[640px] overflow-y-auto pr-1">
         {filteredPoints.length === 0 ? (
-          <div className="col-span-full py-8 text-center bg-white rounded-xl border border-purple-200 p-4">
-            <p className="text-xs text-slate-500 font-bold">दिलेल्या फिल्टरनुसार एकही पॉईंट सापडला नाही.</p>
+          <div className="col-span-full py-10 text-center bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+            <p className="text-xs text-slate-500 font-bold">दिलेल्या फिल्टरनुसार एकही मुद्दा सापडला नाही.</p>
           </div>
         ) : (
           filteredPoints.map((pt) => {
             const isMastered = masteredIds.has(pt.id);
+            const isPointCopied = copiedPointId === pt.id;
+
             return (
               <div
                 key={pt.id}
                 onClick={() => toggleMastered(pt.id)}
-                className={`p-3 rounded-xl border transition-all cursor-pointer select-none space-y-1.5 relative ${
+                className={`p-3.5 rounded-xl border transition-all cursor-pointer select-none space-y-2 relative group ${
                   isMastered
-                    ? "bg-emerald-50/70 border-emerald-300 text-emerald-950 shadow-2xs"
-                    : "bg-white border-purple-200 hover:border-purple-300 hover:shadow-xs"
+                    ? "bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800 text-emerald-950 dark:text-emerald-100 shadow-2xs"
+                    : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-orange-300 dark:hover:border-orange-500/50 hover:shadow-xs"
                 }`}
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <span
-                      className={`px-2 py-0.5 rounded-md text-[10.5px] font-black font-mono-numbers ${
-                        isMastered
-                          ? "bg-emerald-200 text-emerald-900"
-                          : "bg-purple-100 text-purple-900"
-                      }`}
-                    >
-                      #{pt.id}
+                {/* Meta line: Clean unboxed typography */}
+                <div className="flex items-center justify-between gap-2 text-xs">
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-slate-500 dark:text-slate-400">
+                    <span className="text-orange-600 dark:text-orange-400 font-black">
+                      #{pt.id.toString().padStart(2, "0")}
                     </span>
                     {pt.category && (
-                      <span className="px-1.5 py-0.5 rounded-sm bg-slate-100 text-slate-600 text-[9.5px] font-extrabold uppercase">
-                        {pt.category}
-                      </span>
+                      <>
+                        <span>·</span>
+                        <span className="uppercase text-[10px] tracking-wide text-slate-600 dark:text-slate-300">
+                          {pt.category}
+                        </span>
+                      </>
+                    )}
+                    {pt.badge && (
+                      <>
+                        <span>·</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                          {pt.badge}
+                        </span>
+                      </>
                     )}
                   </div>
 
-                  {/* Checkbox button */}
-                  <div
-                    className={`w-5 h-5 rounded-md flex items-center justify-center border transition-all ${
-                      isMastered
-                        ? "bg-emerald-600 border-emerald-600 text-white"
-                        : "border-slate-300 bg-white"
-                    }`}
-                  >
-                    {isMastered && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  {/* Actions: Copy & Mastered Checkbox */}
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={(e) => handleCopyPoint(pt, e)}
+                      className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all"
+                      title="हा मुद्दा कॉपी करा"
+                    >
+                      {isPointCopied ? (
+                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+
+                    <div
+                      className={`w-5 h-5 rounded-md flex items-center justify-center border transition-all ${
+                        isMastered
+                          ? "bg-emerald-600 border-emerald-600 text-white"
+                          : "border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700"
+                      }`}
+                      title={isMastered ? "तयारी पूर्ण झाली आहे (Mastered)" : "तयारी पूर्ण म्हणून मार्क करा"}
+                    >
+                      {isMastered && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                    </div>
                   </div>
                 </div>
 
                 {/* Point Marathi Text */}
                 {(isBilingual || isMr) && (
-                  <div className="text-xs font-bold text-slate-900 leading-snug">
+                  <div className="text-xs sm:text-[13px] font-semibold text-slate-900 dark:text-white leading-relaxed">
                     {pt.pointMr}
                   </div>
                 )}
@@ -314,8 +371,10 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
                 {/* Point English Text */}
                 {(isBilingual || isEn) && pt.point !== pt.pointMr && (
                   <div
-                    className={`text-[11px] leading-snug ${
-                      isBilingual ? "text-slate-600 italic" : "font-bold text-slate-900"
+                    className={`text-[11.5px] leading-relaxed ${
+                      isBilingual
+                        ? "text-slate-600 dark:text-slate-400 font-normal"
+                        : "text-slate-900 dark:text-white font-semibold"
                     }`}
                   >
                     {pt.point}
@@ -324,9 +383,11 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
 
                 {/* Formula Highlight */}
                 {pt.formula && (
-                  <div className="pt-0.5 flex items-center gap-1 text-[11px] font-mono font-bold text-blue-700 bg-blue-50/90 px-2 py-0.5 rounded-md border border-blue-200/60">
-                    <Zap className="w-3 h-3 text-amber-500 shrink-0" />
-                    <span>{pt.formula}</span>
+                  <div className="pt-1">
+                    <div className="flex items-center gap-2 text-xs font-mono font-bold text-blue-900 dark:text-blue-200 bg-blue-50/80 dark:bg-blue-950/40 px-2.5 py-1 rounded-lg border-l-2 border-blue-600 dark:border-blue-400">
+                      <Zap className="w-3 h-3 text-amber-500 shrink-0" />
+                      <span className="tracking-tight">{pt.formula}</span>
+                    </div>
                   </div>
                 )}
               </div>
@@ -335,22 +396,22 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
         )}
       </div>
 
-      {/* Batch Actions Footer */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-purple-200 text-xs">
-        <span className="text-purple-900 font-semibold">
-          दाखवलेले पॉईंट्स: <strong>{filteredPoints.length}</strong> / {points.length}
+      {/* Footer Summary & Batch Actions */}
+      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
+        <span className="text-slate-600 dark:text-slate-400 font-medium">
+          दाखवलेले मुद्दे: <strong className="text-slate-900 dark:text-white font-bold">{filteredPoints.length}</strong> / {points.length} (किमान ५० मुद्दे हमी)
         </span>
         <div className="flex items-center gap-2">
           <button
             onClick={() => markAllRangeMastered(filteredPoints)}
-            className="text-[11px] font-bold text-purple-700 hover:text-purple-900 px-2 py-1 rounded-md hover:bg-purple-100 cursor-pointer"
+            className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:text-orange-700 px-2 py-1 rounded hover:bg-orange-50 dark:hover:bg-slate-800 cursor-pointer transition-all"
           >
             सर्व Mastered करा
           </button>
-          <span className="text-purple-300">•</span>
+          <span className="text-slate-300 dark:text-slate-700">·</span>
           <button
             onClick={() => clearRangeMastered(filteredPoints)}
-            className="text-[11px] font-bold text-slate-500 hover:text-slate-700 px-2 py-1 rounded-md hover:bg-slate-100 cursor-pointer"
+            className="text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer transition-all"
           >
             Reset करा
           </button>
