@@ -102,7 +102,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               </div>
 
               <span className="text-[10.5px] mt-0.5 font-bold tracking-tight">
-                {item.label}
+                {item.labelEn || item.label}
               </span>
 
               {isActive && (

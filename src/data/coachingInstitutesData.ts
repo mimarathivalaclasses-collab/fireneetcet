@@ -394,7 +394,8 @@ export function getStoredInstituteStudents(instituteId?: string): InstituteStude
     const data =
       localStorage.getItem(STORAGE_INSTITUTE_STUDENTS) ||
       localStorage.getItem("mhtcet_institute_students_vault_v2") ||
-      localStorage.getItem("mhtcet_institute_students_backup_mirror");
+      localStorage.getItem("mhtcet_institute_students_backup_mirror") ||
+      localStorage.getItem("institute_registered_students_list_v1");
     if (data) {
       const parsed: InstituteStudent[] = JSON.parse(data);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -402,9 +403,11 @@ export function getStoredInstituteStudents(instituteId?: string): InstituteStude
         try {
           localStorage.setItem(STORAGE_INSTITUTE_STUDENTS, data);
           localStorage.setItem("mhtcet_institute_students_vault_v2", data);
+          localStorage.setItem("mhtcet_institute_students_backup_mirror", data);
         } catch (err) {}
         if (instituteId) {
-          return parsed.filter((s) => s.instituteId === instituteId);
+          const matching = parsed.filter((s) => s.instituteId === instituteId);
+          if (matching.length > 0) return matching;
         }
         return parsed;
       }

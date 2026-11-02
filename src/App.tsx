@@ -139,7 +139,7 @@ export default function App() {
 
   const [language, setLanguage] = useState<LanguageMode>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.LANGUAGE);
-    return (saved as LanguageMode) || "bilingual";
+    return (saved as LanguageMode) || "en";
   });
 
   // Dark Mode Theme State
@@ -224,6 +224,13 @@ export default function App() {
     } catch (e) {
       console.error("URL params processing error", e);
     }
+  }, []);
+
+  // Startup self-healing & automatic student recovery across all vaults & cloud
+  useEffect(() => {
+    syncAndHealWithCloud().catch((err) => {
+      console.warn("[App] Startup data recovery notice:", err);
+    });
   }, []);
 
   const handleNavigateTab = (nextTab: NavigationTab) => {

@@ -55,7 +55,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
   testHistory = [],
 }) => {
   const [isExamDropdownOpen, setIsExamDropdownOpen] = useState(false);
-  const studentName = currentUser?.name ? currentUser.name.trim().split(" ")[0] : "विद्यार्थी";
+  const studentName = currentUser?.name ? currentUser.name.trim().split(" ")[0] : "Student";
 
   // Interactive Daily Challenge Question State
   const [dailySelectedOption, setDailySelectedOption] = useState<number | null>(null);
@@ -68,10 +68,10 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         subject: "Biology",
         textMr: "DNA च्या द्विकुंडल संरचनेत (Double Helix) दोन धागे कोणत्या बंधाने जोडलेले असतात?",
         textEn: "In the DNA double helix structure, the two strands are held together by:",
-        options: ["पेप्टाइड बंध (Peptide)", "हायड्रोजन बंध (Hydrogen)", "फॉस्फोडायएस्टर बंध", "इलेक्ट्रोव्हॅलेंट बंध"],
+        options: ["Peptide bonds", "Hydrogen bonds", "Phosphodiester bonds", "Electrovalent bonds"],
         correct: 1,
-        formula: "A = T (२ हायड्रोजन बंध) आणि G ≡ C (३ हायड्रोजन बंध)",
-        explanation: "DNA मधील नायट्रोजन बेस जोड्या हायड्रोजन बंधाने (Hydrogen bonds) जोडलेल्या असतात.",
+        formula: "A = T (2 Hydrogen bonds) and G ≡ C (3 Hydrogen bonds)",
+        explanation: "Nitrogenous base pairs in DNA are held together by complementary hydrogen bonds.",
       }
     : currentExam === "JEE_MAIN"
     ? {
@@ -82,7 +82,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         options: ["0°", "45° (π/4)", "90° (π/2)", "180° (π)"],
         correct: 1,
         formula: "|a||b| sin θ = |a||b| cos θ => tan θ = 1 => θ = 45°",
-        explanation: "sin θ = cos θ जेव्हा θ = 45° किंवा π/4 रेडियन असतो.",
+        explanation: "sin θ = cos θ when θ = 45° or π/4 radians.",
       }
     : {
         id: "daily_cet",
@@ -92,7 +92,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         options: ["√(r g)", "√(3 r g)", "√(5 r g)", "2 √(r g)"],
         correct: 0,
         formula: "v_H = √(r g), v_M = √(3 r g), v_L = √(5 r g)",
-        explanation: "सर्वोच्च बिंदूवर दोरीतील ताण शून्य (T=0) असताना अभिकेंद्री बलासाठी किमान वेग √(rg) असावा लागतो.",
+        explanation: "At the highest point, when tension in string T=0, minimum centripetal velocity is √(rg).",
       };
 
   const handleDailyOptionClick = (idx: number) => {
@@ -138,7 +138,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
   const bestScore = `${bestScoreVal}/${maxExamMarks}`;
 
   const rank = totalAttempted === 0 && testsTaken === 0
-    ? "नवीन"
+    ? "New"
     : overallAccuracy >= 85
     ? "Top 500"
     : overallAccuracy >= 70
@@ -148,34 +148,34 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
   // Subjects for the 4-Grid
   const subjects = [
     {
-      name: "भौतिकशास्त्र",
+      name: "Physics",
       en: "Physics",
       icon: "⚡",
-      chapters: currentExam === "NEET" ? "२८ चॅप्टर्स" : "१२ चॅप्टर्स",
+      chapters: currentExam === "NEET" ? "28 Chapters" : "12 Chapters",
       bg: "bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-950 dark:text-blue-100",
       accent: "text-blue-600 dark:text-blue-400",
     },
     {
-      name: "रसायनशास्त्र",
+      name: "Chemistry",
       en: "Chemistry",
       icon: "🧪",
-      chapters: currentExam === "NEET" ? "३० चॅप्टर्स" : "१६ चॅप्टर्स",
+      chapters: currentExam === "NEET" ? "30 Chapters" : "16 Chapters",
       bg: "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-950 dark:text-emerald-100",
       accent: "text-emerald-600 dark:text-emerald-400",
     },
     {
-      name: currentExam === "NEET" ? "वनस्पतीशास्त्र" : "गणित",
+      name: currentExam === "NEET" ? "Botany" : "Maths",
       en: currentExam === "NEET" ? "Botany" : "Maths",
       icon: currentExam === "NEET" ? "🌿" : "📐",
-      chapters: currentExam === "NEET" ? "२० चॅप्टर्स" : "१२ चॅप्टर्स",
+      chapters: currentExam === "NEET" ? "20 Chapters" : "12 Chapters",
       bg: "bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-800 text-purple-950 dark:text-purple-100",
       accent: "text-purple-600 dark:text-purple-400",
     },
     {
-      name: currentExam === "NEET" ? "प्राणीशास्त्र" : "जीवशास्त्र",
+      name: currentExam === "NEET" ? "Zoology" : "Biology",
       en: currentExam === "NEET" ? "Zoology" : "Biology",
       icon: currentExam === "NEET" ? "🫀" : "🧬",
-      chapters: currentExam === "NEET" ? "१८ चॅप्टर्स" : "२२ चॅप्टर्स",
+      chapters: currentExam === "NEET" ? "18 Chapters" : "22 Chapters",
       bg: "bg-orange-50 dark:bg-orange-950/40 border-orange-200 dark:border-orange-800 text-orange-950 dark:text-orange-100",
       accent: "text-orange-600 dark:text-orange-400",
     },
@@ -194,7 +194,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
           </div>
           <div className="min-w-0">
             <h1 className="text-sm sm:text-base font-black text-slate-900 dark:text-white truncate">
-              नमस्कार, {studentName}!
+              Welcome, {studentName}!
             </h1>
             <div className="relative inline-block">
               <button
@@ -235,7 +235,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         {/* Daily Streak Flame */}
         <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 text-xs font-black shrink-0 shadow-2xs">
           <Flame className="w-4 h-4 text-orange-600 animate-pulse fill-orange-500" />
-          <span>३ दिवस</span>
+          <span>3 Days Streak</span>
         </div>
       </div>
 
@@ -245,15 +245,15 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
           <div className="space-y-1.5 min-w-0">
             <div className="flex items-center gap-1.5 text-[10.5px] font-bold text-amber-200 uppercase tracking-tight">
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
-              <span>आजचे ध्येय (Daily Practice Goal)</span>
+              <span>Daily Practice Goal</span>
             </div>
 
             <div>
               <h2 className="text-sm sm:text-base font-black text-white leading-tight">
-                २० पैकी {totalAttempted > 0 ? Math.min(totalAttempted, 20) : 12} प्रश्न पूर्ण
+                {totalAttempted > 0 ? Math.min(totalAttempted, 20) : 12} of 20 Questions Solved
               </h2>
               <p className="text-[11px] text-orange-100 font-medium mt-0.5">
-                {overallAccuracy > 0 ? `${overallAccuracy}% अचूकता • रँक: ${rank}` : "रोज २० प्रश्न सोडवा आणि रँक सुधारा"}
+                {overallAccuracy > 0 ? `${overallAccuracy}% Accuracy • Rank: ${rank}` : "Solve 20 questions daily to boost your rank"}
               </p>
             </div>
 
@@ -262,7 +262,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
               className="mt-1 px-3 py-1.5 rounded-lg bg-white text-orange-900 font-black text-xs flex items-center gap-1 shadow-xs hover:bg-orange-50 active:scale-95 transition-all cursor-pointer"
             >
               <Play className="w-3 h-3 fill-orange-900" />
-              <span>सराव सुरू करा →</span>
+              <span>Start Practice →</span>
             </button>
           </div>
 
@@ -305,10 +305,10 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       <div className="space-y-1.5">
         <div className="flex items-center justify-between text-xs px-0.5">
           <span className="font-black text-slate-800 dark:text-slate-200">
-            विषय निवडा (Choose Subject)
+            Choose Subject
           </span>
           <span className="text-[11px] font-bold text-orange-600 dark:text-orange-400">
-            सर्व चॅप्टर्स उपलब्ध
+            All Chapters Ready
           </span>
         </div>
 
@@ -326,7 +326,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
                   <span className="text-xs font-black truncate">{sub.name}</span>
                 </div>
                 <div className="text-[10px] opacity-75 font-mono font-bold mt-0.5 pl-0.5">
-                  {sub.en} · {sub.chapters}
+                  {sub.chapters}
                 </div>
               </div>
               <ArrowRight className="w-3.5 h-3.5 opacity-60 shrink-0" />
@@ -339,10 +339,10 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       <div className="space-y-1.5 pt-0.5">
         <div className="flex items-center justify-between text-xs px-0.5">
           <span className="font-black text-slate-800 dark:text-slate-200">
-            मुख्य सराव साधने (Primary Modules)
+            Primary Modules
           </span>
           <span className="text-[11px] font-bold text-slate-500">
-            १००% मोफत व अमर्याद
+            100% Free & Unlimited
           </span>
         </div>
 
@@ -357,18 +357,18 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             </div>
             <div>
               <h3 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
-                ग्रँड मॉक टेस्ट्स
+                Grand Mock Tests
               </h3>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                १० पूर्ण टेस्ट्स • OMR & Rank
+                10 Full Tests • OMR & Rank
               </p>
             </div>
             <span className="text-[10.5px] font-bold text-amber-600 dark:text-amber-400 block pt-0.5">
-              सुरू करा →
+              Start Test →
             </span>
           </div>
 
-          {/* Card 2: 50+ Points Notes */}
+          {/* Card 2: 200 Points Notes */}
           <div
             onClick={() => onNavigate("notes")}
             className="p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-emerald-300 dark:border-emerald-800 hover:border-emerald-500 transition-all cursor-pointer active:scale-95 shadow-xs space-y-1.5"
@@ -378,14 +378,14 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             </div>
             <div>
               <h3 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
-                ५०+ मुद्दे नोट्स व PDF
+                200 Points Notes & PDF
               </h3>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                प्रत्येक चॅप्टरचे ५० मुद्दे
+                200 Key Points Per Subject
               </p>
             </div>
             <span className="text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 block pt-0.5">
-              PDF मिळवा →
+              Get PDF →
             </span>
           </div>
 
@@ -399,14 +399,14 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             </div>
             <div>
               <h3 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
-                मागील वर्षे PYQs
+                Previous Years PYQs
               </h3>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                २०१५-२०२५ सोडवलेले पेपर्स
+                2015-2025 Solved Papers
               </p>
             </div>
             <span className="text-[10.5px] font-bold text-blue-600 dark:text-blue-400 block pt-0.5">
-              सराव करा →
+              Solve Now →
             </span>
           </div>
 
@@ -420,34 +420,34 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
             </div>
             <div>
               <h3 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
-                चूक बँक व सेव्हड
+                Mistakes & Saved
               </h3>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                चुकलेले प्रश्न व रिव्हिजन
+                Wrong MCQs & Bookmarks
               </p>
             </div>
             <span className="text-[10.5px] font-bold text-rose-600 dark:text-rose-400 block pt-0.5">
-              तपासा →
+              Review →
             </span>
           </div>
         </div>
       </div>
 
-      {/* 5. Interactive "आजचा प्रश्न" (Daily Quick Challenge MCQ) */}
+      {/* 5. Interactive "Daily Question" (Daily Quick Challenge MCQ) */}
       <div className="p-3.5 rounded-2xl bg-slate-900 text-white border border-slate-800 shadow-md space-y-2.5">
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5 text-orange-400 font-black">
             <Zap className="w-4 h-4 fill-orange-400" />
-            <span>आजचा चॅलेंज प्रश्न (Daily MCQ)</span>
+            <span>Daily Challenge Question (Daily MCQ)</span>
           </div>
           <span className="text-[10px] font-mono font-bold text-slate-400">
             {dailyQuestion.subject}
           </span>
         </div>
 
-        {/* Question Text */}
+        {/* Question Text in English */}
         <p className="text-xs sm:text-[13px] font-bold text-slate-100 leading-snug">
-          {dailyQuestion.textMr}
+          {dailyQuestion.textEn || dailyQuestion.textMr}
         </p>
 
         {/* 4 Interactive Options */}
@@ -487,7 +487,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
         {dailyShowSolution && (
           <div className="pt-2 border-t border-slate-800 text-xs space-y-1 animate-in fade-in">
             <div className="font-mono text-emerald-400 font-bold">
-              सूत्र: {dailyQuestion.formula}
+              Formula: {dailyQuestion.formula}
             </div>
             <div className="text-slate-300 text-[11px] leading-relaxed">
               {dailyQuestion.explanation}
@@ -499,19 +499,19 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       {/* 6. Performance Summary Strip (Single Clean Row) */}
       <div className="grid grid-cols-4 gap-1.5 bg-slate-100 dark:bg-slate-800/80 p-2 rounded-xl text-center text-xs">
         <div>
-          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">चाचण्या</span>
+          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">Tests</span>
           <strong className="font-mono font-black text-slate-900 dark:text-white text-xs">{testsTaken}</strong>
         </div>
         <div>
-          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">सोडवले</span>
+          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">Solved</span>
           <strong className="font-mono font-black text-orange-600 dark:text-orange-400 text-xs">{totalAttempted}</strong>
         </div>
         <div>
-          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">गुण</span>
+          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">Score</span>
           <strong className="font-mono font-black text-emerald-600 dark:text-emerald-400 text-xs">{bestScore}</strong>
         </div>
         <div>
-          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">रँक</span>
+          <span className="text-[9.5px] font-bold text-slate-500 uppercase block">Rank</span>
           <strong className="font-mono font-black text-amber-500 text-xs">{rank}</strong>
         </div>
       </div>
@@ -520,9 +520,9 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
       <div className="pt-2 text-center text-[10px] text-slate-400 dark:text-slate-500 space-y-0.5">
         <div className="font-black text-slate-700 dark:text-slate-300 text-[11px] flex items-center justify-center gap-1">
           <ShieldCheck className="w-3.5 h-3.5 text-orange-600" />
-          <span>मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</span>
+          <span>Mi Marathiwala Classes, Ambad</span>
         </div>
-        <div>सपोर्ट: 9307220454 · UPI: 9307220454@yz</div>
+        <div>Support: 9307220454 · UPI: 9307220454@yz</div>
       </div>
     </div>
   );

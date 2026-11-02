@@ -138,15 +138,15 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                 <button
                   onClick={onBack}
                   className="px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ring-1 ring-white/30"
-                  title="मागे जा"
+                  title="Go back"
                 >
                   <ArrowLeft className="w-3.5 h-3.5 text-amber-300" />
-                  <span>← मागे जा</span>
+                  <span>← Back</span>
                 </button>
               )}
               <span className="px-3 py-1 rounded-full bg-orange-500/30 border border-orange-400/40 text-orange-200 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>मी मराठीवाला क्लासेस • Revision Notes & Formulas</span>
+                <span>Mi Marathiwala Classes • 200 Revision Points & Formulas</span>
               </span>
               <span className="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-extrabold flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5" />
@@ -156,13 +156,13 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
 
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
               <BookOpen className="w-8 h-8 text-amber-400 shrink-0" />
-              <span>प्रकरणनिहाय अभ्यास नोट्स आणि रिव्हिजन PDF</span>
+              <span>Chapter-Wise Revision Notes & 200 High-Yield PDFs</span>
             </h1>
 
             <p className="text-sm text-orange-100/90 max-w-3xl leading-relaxed">
-              MHT-CET, NEET आणि JEE Main साठी सर्व विषयांच्या (Physics, Chemistry, Maths, Biology) 
-              प्रकरणांचे महत्त्वाचे नियम, १०० हाय-यील्ड पॉईंट्स, सूत्रे, शॉर्टकट ट्रिक्स आणि सामान्य चुकांची सुधारणा.
-              तुम्ही <strong>प्रत्येक चॅप्टरची स्वतंत्र PDF</strong> किंवा <strong>सर्व चॅप्टर्सची एकत्रित PDF</strong> एका क्लिकवर मिळवू शकता!
+              Comprehensive 200-point revision packs for MHT-CET, NEET, and JEE Main across Physics, Chemistry, Mathematics, and Biology. 
+              Each chapter includes 200 non-repeating points, formulas, shortcut tricks, and PYQ trends. 
+              <strong>Download single chapter PDFs</strong> or <strong>all chapters combined</strong> in one click!
             </p>
           </div>
 
@@ -174,12 +174,12 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-orange-950/40 hover:scale-105 transition-all cursor-pointer border border-orange-400/30"
             >
               <Download className="w-4 h-4" />
-              <span>सर्व {filteredNotes.length} चॅप्टर्स PDF डाऊनलोड करा</span>
+              <span>Download All {filteredNotes.length} Chapters PDF</span>
             </button>
 
             <div className="text-xs text-orange-200/90 flex items-center gap-1.5">
               <GraduationCap className="w-3.5 h-3.5 text-amber-300" />
-              <span>क्लास/इन्स्टिट्यूट: <strong>{instituteName}</strong></span>
+              <span>Institute: <strong>{instituteName}</strong></span>
             </div>
           </div>
         </div>
@@ -194,10 +194,10 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
             </div>
             <div>
               <h3 className="text-sm font-black text-slate-900">
-                चॅप्टर निवडा आणि स्वतंत्र PDF डाऊनलोड / प्रिंट करा (Single Chapter PDF)
+                Select Chapter for Single Chapter PDF & Print
               </h3>
               <p className="text-xs text-slate-600">
-                खालील यादीतून हवे असलेले प्रकरण निवडा आणि थेट A4 PDF जनरेट करा
+                Choose any chapter from the list below and instantly generate its A4 PDF
               </p>
             </div>
           </div>
@@ -212,7 +212,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               >
                 {TOPIC_NOTES_DATA.map((note) => (
                   <option key={note.id} value={note.id}>
-                    [{note.subject}] {note.chapterMr}
+                    [{note.subject}] {note.chapter} ({note.chapterMr})
                   </option>
                 ))}
               </select>
@@ -224,7 +224,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               className="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-black flex items-center gap-2 shadow-xs cursor-pointer hover:scale-105 transition-all"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>या चॅप्टरची PDF मिळवा</span>
+              <span>Get Chapter PDF</span>
             </button>
 
             <button
@@ -237,7 +237,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               }}
               className="px-3.5 py-2 rounded-xl bg-white hover:bg-orange-100 text-orange-800 border border-orange-300 text-xs font-extrabold flex items-center gap-1.5 cursor-pointer transition-all"
             >
-              <span>खाली नोट्स उघडा ↓</span>
+              <span>View Notes ↓</span>
             </button>
           </div>
         </div>

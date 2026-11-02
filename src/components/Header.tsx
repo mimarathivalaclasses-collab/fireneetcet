@@ -104,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({
   // Student first name for compact display
   const studentFirstName = currentUser?.name
     ? currentUser.name.trim().split(" ")[0]
-    : "विद्यार्थी";
+    : "Student";
 
   const examShortNames: Record<ExamType, string> = {
     MHT_CET: "CET",
@@ -125,7 +125,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onOpenDrawer}
               className="p-1.5 sm:p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-orange-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700 transition-colors cursor-pointer shrink-0 active:scale-95"
-              title="सर्व मेनू (Navigation Menu)"
+              title="Navigation Menu"
               aria-label="Open Navigation Drawer"
             >
               <Menu className="w-5 h-5 text-orange-600 dark:text-orange-400" />
@@ -143,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <div className="min-w-0 hidden xs:block">
                 <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white truncate block leading-tight">
-                  {activeInstitute.nameMr || activeInstitute.name}
+                  {activeInstitute.name}
                 </span>
                 <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 font-mono block leading-none">
                   {activeInstitute.instituteCode}
@@ -209,7 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             onClick={() => setIsMobileExamOpen(!isMobileExamOpen)}
             className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-300 text-xs font-black cursor-pointer shadow-2xs active:scale-95"
-            title="लक्ष्य परीक्षा बदला"
+            title="Change Target Exam"
           >
             <span>{examShortNames[currentExam]}</span>
             <ChevronDown className="w-3 h-3 stroke-[3]" />
@@ -248,10 +248,10 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             onClick={() => handleNavClick("notes")}
             className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 text-xs font-black shadow-2xs cursor-pointer active:scale-95 transition-all"
-            title="सर्व ५०+ मुद्दे नोट्स व सूत्रे (High-Yield Notes)"
+            title="200 Key Points & Notes"
           >
             <BookOpen className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <span className="hidden sm:inline">नोट्स</span>
+            <span className="hidden sm:inline">Notes</span>
           </button>
 
           {/* Language Switcher Dropdown */}
@@ -260,7 +260,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
               className="p-1.5 sm:p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer shrink-0"
-              title="भाषा बदला (Language)"
+              title="Change Language"
               aria-label="Change Language"
             >
               <Languages className="w-4 h-4 text-slate-700 dark:text-slate-300" />
@@ -270,12 +270,22 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="absolute right-0 mt-1.5 w-32 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1 z-50 animate-in fade-in zoom-in-95">
                 <button
                   type="button"
+                  onClick={() => handleLangChange("en")}
+                  className={`w-full px-3 py-1.5 text-left text-xs font-bold flex items-center justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 ${
+                    currentLang === "en" ? "text-orange-600 dark:text-orange-400 font-black" : "text-slate-700 dark:text-slate-300"
+                  }`}
+                >
+                  <span>English</span>
+                  {currentLang === "en" && <Check className="w-3.5 h-3.5" />}
+                </button>
+                <button
+                  type="button"
                   onClick={() => handleLangChange("bilingual")}
                   className={`w-full px-3 py-1.5 text-left text-xs font-bold flex items-center justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 ${
                     currentLang === "bilingual" ? "text-orange-600 dark:text-orange-400 font-black" : "text-slate-700 dark:text-slate-300"
                   }`}
                 >
-                  <span>द्विभाषिक</span>
+                  <span>Bilingual</span>
                   {currentLang === "bilingual" && <Check className="w-3.5 h-3.5" />}
                 </button>
                 <button
@@ -285,18 +295,8 @@ export const Header: React.FC<HeaderProps> = ({
                     currentLang === "mr" ? "text-orange-600 dark:text-orange-400 font-black" : "text-slate-700 dark:text-slate-300"
                   }`}
                 >
-                  <span>मराठी</span>
+                  <span>Marathi</span>
                   {currentLang === "mr" && <Check className="w-3.5 h-3.5" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleLangChange("en")}
-                  className={`w-full px-3 py-1.5 text-left text-xs font-bold flex items-center justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 ${
-                    currentLang === "en" ? "text-orange-600 dark:text-orange-400 font-black" : "text-slate-700 dark:text-slate-300"
-                  }`}
-                >
-                  <span>English</span>
-                  {currentLang === "en" && <Check className="w-3.5 h-3.5" />}
                 </button>
               </div>
             )}
@@ -309,7 +309,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onToggleDarkMode}
               className="p-1.5 sm:p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-amber-300 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shrink-0 active:scale-95"
-              title={isDarkMode ? "लाइट मोड" : "डार्क मोड"}
+              title={isDarkMode ? "Light Mode" : "Dark Mode"}
               aria-label="Toggle Dark/Light Mode"
             >
               {isDarkMode ? (
@@ -329,7 +329,7 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={onOpenAuthModal}
                 className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-xs font-bold hover:bg-slate-200 transition-colors cursor-pointer active:scale-95"
-                title={`${currentUser.name} - विद्यार्थी खाते`}
+                title={`${currentUser.name} - Student Profile`}
               >
                 <div className="w-5 h-5 rounded-lg bg-orange-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">
                   {studentFirstName.charAt(0).toUpperCase()}
@@ -346,7 +346,7 @@ export const Header: React.FC<HeaderProps> = ({
                   type="button"
                   onClick={onLogout}
                   className="p-1.5 sm:p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer shrink-0 active:scale-95"
-                  title="लॉग आऊट (Logout)"
+                  title="Logout"
                   aria-label="Logout"
                 >
                   <LogOut className="w-4 h-4" />
@@ -359,10 +359,10 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               onClick={onOpenAuthModal}
               className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white text-xs font-black transition-all cursor-pointer shadow-xs active:scale-95 shrink-0"
-              title="लॉगिन किंवा मोफत खाते उघडा"
+              title="Login or Register Free"
             >
               <LogIn className="w-3.5 h-3.5" />
-              <span>लॉगिन</span>
+              <span>Login</span>
             </button>
           )}
 

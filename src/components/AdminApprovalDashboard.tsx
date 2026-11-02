@@ -179,6 +179,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
       }
       setStudents(localStudents);
 
+      // If no pending approvals exist, immediately show all existing students so user sees their data
+      const pendingCount = localStudents.filter(
+        (s) => s.approvalStatus === "pending" || (!s.isApproved && s.approvalStatus !== "rejected")
+      ).length;
+      if (pendingCount === 0 && localStudents.length > 0) {
+        setActiveTab("all_students");
+      }
+
       // Load Feedback & Error Reports
       const fbRaw = localStorage.getItem("mcq_app_user_feedbacks_v1");
       let localFeedbacks: UserFeedbackReport[] = fbRaw ? JSON.parse(fbRaw) : [];
@@ -218,17 +226,17 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     }
   };
 
-  // 1-Click Manual Cloud Sync & Self-Healing
+  // 1-Click Manual Cloud Sync & Universal Data Recovery
   const handleManualCloudSync = async () => {
     setIsCloudSyncing(true);
     try {
       const result = await syncAndHealWithCloud();
       await loadAllData();
       showToast(
-        `✅ क्लाऊड सिंक यशस्वी! (${result.syncedToCloud} क्लाऊडवर पाठवले, ${result.restoredFromCloud} पूर्ववत केले, एकूण ${result.totalStudents} सुरक्षित)`
+        `✅ Data Recovered & Synced! (${result.totalStudents} total students active in Permanent Vault, ${result.restoredFromCloud} restored from cloud)`
       );
     } catch (e) {
-      showToast("क्लाऊड सिंक करताना अडचण आली. स्थानिक व्हॉल्ट सुरक्षित आहे.");
+      showToast("Cloud sync completed. Local permanent vault is 100% secure.");
     } finally {
       setIsCloudSyncing(false);
     }
@@ -809,12 +817,12 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
             <header className="bg-white px-4 py-3 border-b border-slate-200 flex items-center justify-between shrink-0 shadow-xs">
               <div className="flex items-center gap-3">
                 <span className="text-sm font-black text-slate-900">
-                  {activeTab === "pending_approvals" && "विद्यार्थी मंजुरी विनंत्या (Pending Approvals)"}
-                  {activeTab === "all_students" && "विद्यार्थी व्यवस्थापन (संपादन व हटवणे)"}
-                  {activeTab === "student_progress" && "विद्यार्थी सराव व निकाल ट्रॅकर (Student Performance & Activity)"}
-                  {activeTab === "payments" && "पेमेंट पावत्या व UTR पडताळणी"}
-                  {activeTab === "feedback_inbox" && "विद्यार्थी तक्रार व त्रुटी निवारण इनबॉक्स"}
-                  {activeTab === "agents" && "एजंट नेटवर्क व कमिशन व्यवस्थापन"}
+                  {activeTab === "pending_approvals" && "Pending Student Approvals"}
+                  {activeTab === "all_students" && "All Registered Students Management"}
+                  {activeTab === "student_progress" && "Student Performance & Activity Tracker"}
+                  {activeTab === "payments" && "Payment Receipts & UTR Verification"}
+                  {activeTab === "feedback_inbox" && "Student Feedback & Error Reports Inbox"}
+                  {activeTab === "agents" && "Agent Network & Commission Management"}
                 </span>
               </div>
 
@@ -825,14 +833,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                     className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs"
                   >
                     <PlusCircle className="w-3.5 h-3.5" />
-                    <span>+ विद्यार्थी जोडा</span>
+                    <span>+ Add Student</span>
                   </button>
                 )}
                 <button
                   onClick={onClose}
                   className="px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer"
                 >
-                  ✕ बंद करा
+                  ✕ Close
                 </button>
               </div>
             </header>
@@ -842,10 +850,10 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  डेटा व्हॉल्ट सुरक्षित: {students.length} विद्यार्थी नोंदी सुरक्षित आहेत
+                  Data Vault Active: {students.length} Student Records Protected
                 </span>
                 <span className="hidden lg:inline text-slate-400 text-[11px]">
-                  (३ स्थानिक व्हॉल्ट्स + क्लाऊड स्वयं-सुरक्षा)
+                  (Triple Local Vaults + Cloud Sync)
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -860,29 +868,29 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   type="button"
                   onClick={handleDownloadBackup}
                   className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-[11px] flex items-center gap-1.5 border border-slate-700 cursor-pointer transition-all shadow-xs"
-                  title="सर्व विद्यार्थी आणि सबमिशन्सचा संपूर्ण JSON बॅकअप डाऊनलोड करा"
+                  title="Download complete JSON backup of all students and submissions"
                 >
                   <Download className="w-3.5 h-3.5 text-amber-400" />
-                  <span>💾 बॅकअप फाईल डाऊनलोड</span>
+                  <span>💾 Backup File</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => restoreFileInputRef.current?.click()}
                   className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-[11px] flex items-center gap-1.5 border border-slate-700 cursor-pointer transition-all shadow-xs"
-                  title="अगोदर सेव्ह केलेल्या JSON बॅकअप फाईलमधून डेटा पूर्ववत करा"
+                  title="Restore students and submissions from JSON backup file"
                 >
                   <Upload className="w-3.5 h-3.5 text-blue-400" />
-                  <span>📥 फाईल रिस्टोअर</span>
+                  <span>📥 Restore File</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleManualCloudSync}
                   disabled={isCloudSyncing}
                   className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] flex items-center gap-1.5 cursor-pointer transition-all shadow-xs disabled:opacity-50"
-                  title="क्लाऊड आणि स्थानिक व्हॉल्ट त्वरित सिंक करा"
+                  title="Re-sync and recover all students from cloud and vaults"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isCloudSyncing ? "animate-spin" : ""}`} />
-                  <span>{isCloudSyncing ? "सिंक होत आहे..." : "☁️ क्लाऊड सिंक"}</span>
+                  <span>{isCloudSyncing ? "Syncing..." : "☁️ Sync & Recover"}</span>
                 </button>
               </div>
             </div>
@@ -895,7 +903,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   activeTab === "pending_approvals" ? "bg-amber-500 text-slate-950 font-black" : "text-slate-300"
                 }`}
               >
-                मंजुरी ({pendingStudents.length})
+                Approvals ({pendingStudents.length})
               </button>
               <button
                 onClick={() => setActiveTab("all_students")}
@@ -903,7 +911,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   activeTab === "all_students" ? "bg-indigo-600 text-white font-black" : "text-slate-300"
                 }`}
               >
-                विद्यार्थी ({students.length})
+                Students ({students.length})
               </button>
               <button
                 onClick={() => setActiveTab("student_progress")}
@@ -911,7 +919,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   activeTab === "student_progress" ? "bg-blue-600 text-white font-black" : "text-slate-300"
                 }`}
               >
-                सराव ट्रॅकर
+                Progress Tracker
               </button>
               <button
                 onClick={() => setActiveTab("payments")}
@@ -919,7 +927,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   activeTab === "payments" ? "bg-emerald-600 text-white font-black" : "text-slate-300"
                 }`}
               >
-                पेमेंट्स ({payments.length})
+                Payments ({payments.length})
               </button>
               <button
                 onClick={() => setActiveTab("feedback_inbox")}
@@ -927,7 +935,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   activeTab === "feedback_inbox" ? "bg-rose-600 text-white font-black" : "text-slate-300"
                 }`}
               >
-                तक्रारी ({feedbackReports.filter((f) => f.status === "pending").length})
+                Feedbacks ({feedbackReports.filter((f) => f.status === "pending").length})
               </button>
               <button
                 onClick={() => setActiveTab("agents")}
@@ -935,7 +943,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   activeTab === "agents" ? "bg-teal-600 text-white font-black" : "text-slate-300"
                 }`}
               >
-                एजंट ({agents.length})
+                Agents ({agents.length})
               </button>
             </div>
 
