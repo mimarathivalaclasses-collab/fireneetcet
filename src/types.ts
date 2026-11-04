@@ -14,12 +14,9 @@ export interface Question {
   topic?: string;
   difficulty: DifficultyLevel;
   questionText: string;
-  questionTextMr?: string;
   options: [string, string, string, string];
-  optionsMr?: [string, string, string, string];
   correctOption: number; // 0, 1, 2, 3
   explanation: string;
-  explanationMr?: string;
   formula?: string;
   pyqYear?: string; // e.g. "NEET 2023", "JEE Main 2024", "MHT-CET 2023"
   isCustom?: boolean;
@@ -96,10 +93,8 @@ export interface FormulaCard {
   subject: SubjectType;
   chapter: string;
   title: string;
-  titleMr: string;
   formula: string;
   description: string;
-  descriptionMr: string;
   keyUnits?: string;
   tip?: string;
 }
@@ -126,9 +121,7 @@ export interface FlashcardItem {
   chapter: string;
   topic: string;
   front: string;
-  frontMr?: string;
   back: string;
-  backMr?: string;
   keyFact?: string;
   badge?: string; // e.g. "NEET Repeat Trend", "High Yield"
   mnemonic?: string;
@@ -137,7 +130,6 @@ export interface FlashcardItem {
 export interface ChapterPointItem {
   id: number;
   point: string;
-  pointMr: string;
   category?: "Concept" | "Formula" | "Rule" | "Definition" | "Shortcut" | "PYQ_Trend" | "Exception";
   formula?: string;
   badge?: string;
@@ -145,31 +137,24 @@ export interface ChapterPointItem {
 
 export interface TopicNoteSection {
   title: string;
-  titleMr: string;
   points: string[];
-  pointsMr: string[];
   keyFormula?: string;
   keyMnemonic?: string;
   examTip?: string;
-  examTipMr?: string;
 }
 
 export interface TopicNote {
   id: string;
   chapter: string;
-  chapterMr: string;
   subject: SubjectType;
   exams: ExamType[];
   title: string;
-  titleMr: string;
   summary: string;
-  summaryMr: string;
   highYieldWeightage: "High" | "Medium" | "Low";
   sections: TopicNoteSection[];
   points100?: ChapterPointItem[];
   quickRevisionPoints: {
     en: string;
-    mr: string;
   }[];
   keyFormulasTable: {
     name: string;
@@ -178,9 +163,7 @@ export interface TopicNote {
   }[];
   commonMistakesToAvoid: {
     mistake: string;
-    mistakeMr: string;
     correction: string;
-    correctionMr: string;
   }[];
 }
 
@@ -192,7 +175,6 @@ export interface UserFeedbackReport {
   studentMobile?: string;
   userRole?: string;
   category?: "question_error" | "mock_test_issue" | "app_suggestion" | "login_issue" | "other" | string;
-  categoryMr?: string;
   issueCategory?: string;
   subject?: SubjectType | string;
   exam?: ExamType;
@@ -267,7 +249,6 @@ export interface GrandMockTestItem {
   id: string;
   testNumber: number;
   title: string;
-  titleMr: string;
   exam: ExamType;
   group?: "PCM" | "PCB" | "PCMB" | "All";
   targetPercentileGoal: string;
@@ -281,7 +262,6 @@ export interface GrandMockTestItem {
     unattempted: number;
   };
   syllabusCoverage: string;
-  syllabusCoverageMr: string;
   difficulty: "Real Exam Exact" | "Moderate to Hard" | "High Rank Challenger";
   subjectsIncluded: SubjectType[];
   subjectDistribution: {
@@ -290,8 +270,6 @@ export interface GrandMockTestItem {
     marks: number;
   }[];
   predictedCollegeTargets: string[];
-  descriptionMr: string;
-  instructionsMr: string[];
   fixedQuestions?: Question[];
 }
 
@@ -350,7 +328,7 @@ export interface StudentUser {
   trialStartedAt?: number;
   instituteId?: string; // If registered under a coaching class
   instituteCode?: string;
-  className?: string; // Coaching Class, College, or School name (कोचिंग क्लास / कॉलेजचे नाव)
+  className?: string; // Coaching Class, College, or School name
   coachingClass?: string;
   referralCode?: string; // Student's own referral code e.g. "REF-930722"
   referredBy?: string; // Code of agent or friend who referred them
@@ -358,7 +336,7 @@ export interface StudentUser {
   totalReferredCount?: number; // Count of friends referred
   refundClaimed?: boolean; // If 10 referrals reached and full refund given
 
-  // Activity & Performance Metrics (कोणी किती सोडवले)
+  // Activity & Performance Metrics
   totalTestsTaken?: number;
   totalQuestionsSolved?: number;
   totalCorrect?: number;
@@ -483,7 +461,6 @@ export interface DeviceApprovalRequest {
 export interface InstituteProfile {
   id: string;
   name: string;
-  nameMr: string;
   instituteCode: string; // e.g. "SHREE2026", "ROYAL_MHT"
   directorName: string;
   contactNumber: string;
@@ -493,7 +470,6 @@ export interface InstituteProfile {
   maxStudentsLimit: number; // e.g. 2000
   batches: string[];
   bannerNotice?: string;
-  bannerNoticeMr?: string;
   createdAt: number;
 }
 
@@ -516,7 +492,6 @@ export interface InstituteWeeklyTest {
   instituteId: string;
   testCode: string;
   title: string;
-  titleMr: string;
   exam: ExamType;
   subject: SubjectType | "All";
   chapters: string[];
@@ -563,9 +538,7 @@ export interface AchievementBadge {
   id: string;
   code: string;
   title: string;
-  titleMr: string;
   description: string;
-  descriptionMr: string;
   icon: string;
   color: string;
   category: "practice" | "accuracy" | "streak" | "grand_test" | "special";
@@ -579,7 +552,6 @@ export interface AchievementBadge {
 export interface CoachingRegistrationApplication {
   id: string;
   instituteName: string;
-  instituteNameMr: string;
   directorName: string;
   contactNumber: string;
   city: string;

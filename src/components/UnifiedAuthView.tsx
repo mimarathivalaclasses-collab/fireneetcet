@@ -140,14 +140,14 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     const last10Digits = cleanDigits.length >= 10 ? cleanDigits.slice(-10) : cleanDigits;
 
     if (!cleanIdentifier) {
-      setErrorMessage("कृपया मोबाईल नंबर किंवा यूजरनेम टाका.");
+      setErrorMessage("Please enter your mobile number or username.");
       setIsLoading(false);
       triggerHaptic("warning");
       return;
     }
 
     if (!cleanPassword) {
-      setErrorMessage("कृपया पासवर्ड / सिक्युरिटी पिन टाका.");
+      setErrorMessage("Please enter your password / security PIN.");
       setIsLoading(false);
       triggerHaptic("warning");
       return;
@@ -171,7 +171,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         sessionStorage.setItem("mcq_admin_logged_in", "true");
         const adminUser: StudentUser = {
           id: "super_admin_master",
-          name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
+          name: "Super Admin Director",
           mobile: "9307220454",
           email: "mimarathivalaclasses@gmail.com",
           role: "admin",
@@ -188,7 +188,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
         saveUserSession(adminUser);
         triggerHaptic("success");
-        setSuccessMessage("🔐 स्वागत आहे, मुख्य ॲडमिन डायरेक्टर! कन्सोल उघडत आहे...");
+        setSuccessMessage("🔐 Welcome, Super Admin Director! Opening console...");
         setTimeout(() => {
           setIsLoading(false);
           onLoginSuccess(adminUser);
@@ -198,7 +198,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       } else if (selectedRole === "admin") {
         setIsLoading(false);
         triggerHaptic("warning");
-        setErrorMessage("अवैध ॲडमिन सिक्युरिटी पिन! कृपया योग्य पिन टाका.");
+        setErrorMessage("Invalid Admin Security PIN! Please enter the correct PIN.");
         return;
       }
     }
@@ -212,7 +212,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
       if (authMode === "register") {
         if (!fullName.trim()) {
-          setErrorMessage("कृपया एजंटचे नाव टाका.");
+          setErrorMessage("Please enter the agent's name.");
           setIsLoading(false);
           triggerHaptic("warning");
           return;
@@ -226,7 +226,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           mobile: cleanIdentifier,
           password: cleanPassword,
           email: `${cleanIdentifier}@partner.com`,
-          city: agentCity.trim() || "महाराष्ट्र",
+          city: agentCity.trim() || "Maharashtra",
           upiId: agentUpi.trim() || `${cleanIdentifier}@upi`,
           commissionRate: REFERRAL_CONFIG.AGENT_COMMISSION_PER_STUDENT,
           totalEarnings: 0,
@@ -263,7 +263,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
         saveUserSession(agentUser);
         triggerHaptic("success");
-        setSuccessMessage(`🎉 अभिनंदन! तुमचा एजंट कोड: ${newAgent.agentCode}`);
+        setSuccessMessage(`🎉 Congratulations! Your Agent Code: ${newAgent.agentCode}`);
         setTimeout(() => {
           setIsLoading(false);
           onLoginSuccess(agentUser);
@@ -317,7 +317,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
           saveUserSession(agentUser);
           triggerHaptic("success");
-          setSuccessMessage(`स्वागत आहे, एजंट ${matched.name}!`);
+          setSuccessMessage(`Welcome, Agent ${matched.name}!`);
           setTimeout(() => {
             setIsLoading(false);
             onLoginSuccess(agentUser);
@@ -326,7 +326,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         } else {
           setIsLoading(false);
           triggerHaptic("warning");
-          setErrorMessage("एजंट कोड / मोबाईल नंबर किंवा पासवर्ड चुकीचा आहे.");
+          setErrorMessage("Agent code / mobile number or password is incorrect.");
           return;
         }
       }
@@ -337,7 +337,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     // -------------------------------------------------------------
     if (authMode === "register") {
       if (!fullName.trim()) {
-        setErrorMessage("कृपया विद्यार्थ्याचे पूर्ण नाव टाका.");
+        setErrorMessage("Please enter the student's full name.");
         setIsLoading(false);
         triggerHaptic("warning");
         return;
@@ -367,7 +367,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         saveUserSession(duplicate);
         triggerHaptic("success");
 
-        setSuccessMessage(`स्वागत आहे, ${duplicate.name}! आपले खाते सक्रिय आहे...`);
+        setSuccessMessage(`Welcome, ${duplicate.name}! Your account is active...`);
         setTimeout(() => {
           setIsLoading(false);
           onLoginSuccess(duplicate);
@@ -421,7 +421,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
       saveUserSession(newStudent);
       triggerHaptic("success");
-      setSuccessMessage(`🎉 नोंदणी यशस्वी! स्वागत आहे, ${newStudent.name}!`);
+      setSuccessMessage(`🎉 Registration successful! Welcome, ${newStudent.name}!`);
 
       setTimeout(() => {
         setIsLoading(false);
@@ -472,7 +472,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       if (!foundUser) {
         setIsLoading(false);
         triggerHaptic("warning");
-        setErrorMessage("विद्यार्थी खाते सापडले नाही. कृपया 'नवीन नोंदणी' (Sign Up) करा.");
+        setErrorMessage("Student account not found. Please 'Sign Up'.");
         return;
       }
 
@@ -481,7 +481,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       if (!isMasterPin && foundUser.password && foundUser.password !== cleanPassword) {
         setIsLoading(false);
         triggerHaptic("warning");
-        setErrorMessage("पासवर्ड चुकीचा आहे. जर पासवर्ड विसरला असाल तर खाली 'पासवर्ड विसरलात?' वर दाबा.");
+        setErrorMessage("Password is incorrect. If you forgot your password, click 'Forgot Password?' below.");
         return;
       }
 
@@ -498,7 +498,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       saveUserSession(foundUser);
       triggerHaptic("success");
 
-      setSuccessMessage(`स्वागत आहे, ${foundUser.name}! टेस्ट सिरीज उघडत आहे...`);
+      setSuccessMessage(`Welcome, ${foundUser.name}! Opening test series...`);
       setTimeout(() => {
         setIsLoading(false);
         onLoginSuccess(foundUser!);
@@ -513,13 +513,13 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     const last10 = cleanDigits.length >= 10 ? cleanDigits.slice(-10) : cleanDigits;
 
     if (!cleanDigits || cleanDigits.length < 10) {
-      setForgotStatus("कृपया १० अंकी वैध मोबाईल नंबर टाका.");
+      setForgotStatus("Please enter a valid 10-digit mobile number.");
       triggerHaptic("warning");
       return;
     }
 
     if (!forgotNewPassword.trim() || forgotNewPassword.trim().length < 4) {
-      setForgotStatus("कृपया किमान ४ अक्षरी नवीन पासवर्ड टाका.");
+      setForgotStatus("Please enter a new password (min 4 characters).");
       triggerHaptic("warning");
       return;
     }
@@ -536,7 +536,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       saveStudentPermanently(student);
       saveStudentToCloud(student).catch(() => {});
       triggerHaptic("success");
-      setForgotStatus(`✅ अभिनंदन ${student.name}! पासवर्ड यशस्वीरित्या बदलला. आता लॉगिन करा.`);
+      setForgotStatus(`✅ Congratulations ${student.name}! Password changed successfully. Now login.`);
       setPassword(forgotNewPassword.trim());
       setIdentifier(student.mobile);
       setTimeout(() => {
@@ -545,7 +545,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
       }, 1500);
     } else {
       triggerHaptic("warning");
-      setForgotStatus("या नंबरचे विद्यार्थी खाते सापडले नाही. कृपया नवीन नोंदणी करा किंवा WhatsApp वर संपर्क करा.");
+      setForgotStatus("No student account found for this number. Please register or contact us on WhatsApp.");
     }
   };
 
@@ -553,7 +553,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     triggerHaptic("success");
     const demoStudent: StudentUser = {
       id: "student_verified_" + Date.now().toString().slice(-4),
-      name: "सराव विद्यार्थी (Fast Demo Student)",
+      name: "Fast Demo Student",
       mobile: "9876543210",
       email: "student@mimarathivala.com",
       role: "student",
@@ -569,7 +569,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     };
     saveStudentPermanently(demoStudent);
     saveUserSession(demoStudent);
-    setSuccessMessage("🎉 १-क्लिक विद्यार्थी लॉगिन यशस्वी! स्वागत आहे.");
+    setSuccessMessage("🎉 1-Click Student Login Successful! Welcome.");
     setTimeout(() => {
       onLoginSuccess(demoStudent);
     }, 250);
@@ -582,7 +582,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     setSelectedRole("admin");
     const adminUser: StudentUser = {
       id: "super_admin_master",
-      name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
+      name: "Super Admin Director",
       mobile: "9307220454",
       email: "mimarathivalaclasses@gmail.com",
       role: "admin",
@@ -598,7 +598,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
     };
     saveUserSession(adminUser);
     sessionStorage.setItem("mcq_admin_logged_in", "true");
-    setSuccessMessage("🔐 १-क्लिक मास्टर ॲडमिन लॉगिन यशस्वी!");
+    setSuccessMessage("🔐 1-Click Master Admin Login Successful!");
     setTimeout(() => {
       onLoginSuccess(adminUser);
       if (onOpenAdmin) onOpenAdmin();
@@ -621,7 +621,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 text-xs font-bold transition-all active:scale-95 cursor-pointer shadow-md"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>← मुख्य ॲप पहा / मोफत सराव (Back to App)</span>
+              <span>← View Main App / Free Practice</span>
             </button>
           </div>
         )}
@@ -639,15 +639,15 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
           <div className="space-y-0.5">
             <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-black uppercase tracking-wider">
-              <span>अंबड (जि. जालना)</span>
+              <span>Ambad (Jalna)</span>
               <span>•</span>
-              <span>अधिकृत सराव पोर्टल</span>
+              <span>Official Practice Portal</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
               NCJ MOCK TEST APP
             </h1>
             <p className="text-xs sm:text-sm text-orange-200 font-bold leading-snug">
-              मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)
+              Mi Marathiwala Classes, Ambad
             </p>
             <p className="text-[11px] text-amber-400 font-semibold">
               MHT-CET (PCM/PCB) • NEET • JEE Main
@@ -666,15 +666,15 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 <Play className="w-4 h-4 fill-slate-950" />
               </div>
               <div className="text-left">
-                <div className="text-xs font-black text-white">मोफत डेमो टेस्ट्स (Free Mock Tests)</div>
-                <div className="text-[10px] text-teal-300">लॉगिन न करता लगेच सराव सुरू करा</div>
+                <div className="text-xs font-black text-white">Free Mock Tests</div>
+                <div className="text-[10px] text-teal-300">Start practicing immediately without login</div>
               </div>
             </div>
             <button
               onClick={() => onStartDemoTest("MHT_CET", 1)}
               className="px-3 py-1.5 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-black text-xs cursor-pointer shadow-md transition-transform active:scale-95"
             >
-              सुरू करा →
+              Start Now →
             </button>
           </div>
         )}
@@ -685,13 +685,13 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           <div className="text-center pb-2 border-b border-slate-100 space-y-2">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-orange-50 border border-orange-200/70 text-xs font-black text-orange-900">
               {authMode === "login"
-                ? "🔑 विद्यार्थी / ॲडमिन लॉगिन"
-                : "📝 नवीन विद्यार्थी नोंदणी (Sign Up)"}
+                ? "🔑 Student / Admin Login"
+                : "📝 New Student Registration (Sign Up)"}
             </span>
             <p className="text-[11px] text-slate-500 font-medium">
               {authMode === "login"
-                ? "आपला नोंदणीकृत मोबाईल नंबर व पासवर्ड टाकून त्वरित लॉगिन करा."
-                : "आपले नाव, मोबाईल नंबर व परीक्षेचे लक्ष्य निवडून लगेच नोंदणी करा."}
+                ? "Login immediately using your registered mobile number and password."
+                : "Register immediately by selecting your name, mobile number, and target exam."}
             </p>
           </div>
 
@@ -711,7 +711,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              लॉगिन (Login)
+              Login
             </button>
             <button
               type="button"
@@ -727,7 +727,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              नवीन नोंदणी (Sign Up)
+              Sign Up
             </button>
           </div>
 
@@ -737,19 +737,19 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               type="button"
               onClick={handleQuickStudentLogin}
               className="py-2 px-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-950 text-xs font-black flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
-              title="नोंदणी किंवा पासवर्ड न टाकता त्वरित विद्यार्थी म्हणून आत जा"
+              title="Enter immediately as a student without registration or password"
             >
               <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span className="truncate">१-क्लिक विद्यार्थी लॉगिन</span>
+              <span className="truncate">1-Click Student Login</span>
             </button>
             <button
               type="button"
               onClick={handleQuickAdminLogin}
               className="py-2 px-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-950 text-xs font-black flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-95 transition-all"
-              title="मास्टर ॲडमिन डायरेक्टर कन्सोल त्वरित उघडा"
+              title="Open Master Admin Director Console immediately"
             >
               <KeyRound className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-              <span className="truncate">१-क्लिक ॲडमिन (14101994)</span>
+              <span className="truncate">1-Click Admin (14101994)</span>
             </button>
           </div>
 
@@ -768,7 +768,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   : "text-slate-500 hover:text-slate-900"
               }`}
             >
-              👨‍🎓 विद्यार्थी
+              👨‍🎓 Student
             </button>
             <button
               type="button"
@@ -783,7 +783,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   : "text-slate-500 hover:text-slate-900"
               }`}
             >
-              💼 एजंट
+              💼 Agent
             </button>
             <button
               type="button"
@@ -798,7 +798,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   : "text-slate-500 hover:text-slate-900"
               }`}
             >
-              👑 ॲडमिन
+              👑 Admin
             </button>
           </div>
 
@@ -807,10 +807,10 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
             <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-950 space-y-1">
               <div className="font-black flex items-center gap-1 text-amber-900">
                 <KeyRound className="w-4 h-4 text-amber-600" />
-                <span>मास्टर ॲडमिन लॉगिन:</span>
+                <span>Master Admin Login:</span>
               </div>
               <p className="text-[11px] text-amber-800 leading-tight">
-                ॲडमिन पिन टाकून डॅशबोर्ड उघडा व विद्यार्थ्यांचे गुण तपासा.
+                Open dashboard and check student marks by entering Admin PIN.
               </p>
             </div>
           )}
@@ -840,8 +840,8 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   required
                   placeholder={
                     selectedRole === "agent"
-                      ? "एजंटचे पूर्ण नाव (Full Name)"
-                      : "विद्यार्थ्याचे पूर्ण नाव (Full Name)"
+                      ? "Agent's Full Name"
+                      : "Student's Full Name"
                   }
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
@@ -858,7 +858,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 placeholder={
                   selectedRole === "admin"
                     ? "Admin Username / 9307220454"
-                    : "१० अंकी मोबाईल नंबर (Mobile Number)"
+                    : "10-digit Mobile Number"
                 }
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
@@ -871,7 +871,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               <input
                 type={showPassword ? "text" : "password"}
                 required
-                placeholder={selectedRole === "admin" ? "Admin Security PIN" : "पासवर्ड (Password)"}
+                placeholder={selectedRole === "admin" ? "Admin Security PIN" : "Password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 pr-11 py-3 rounded-xl border border-slate-300 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-teal-500 outline-none"
@@ -903,7 +903,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   </select>
                   <input
                     type="text"
-                    placeholder="रेफरल कोड (ऐच्छिक)"
+                    placeholder="Referral Code (Optional)"
                     value={referralCode}
                     onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
                     className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs uppercase font-bold text-slate-800 outline-none"
@@ -914,7 +914,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 <div>
                   <input
                     type="text"
-                    placeholder="🏫 क्लास / कॉलेजचे नाव (Class / College Name)"
+                    placeholder="🏫 Class / College Name"
                     value={className}
                     onChange={(e) => setClassName(e.target.value)}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-teal-500 outline-none"
@@ -936,7 +936,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   className="text-xs text-indigo-600 hover:text-indigo-800 font-bold hover:underline cursor-pointer flex items-center gap-1"
                 >
                   <HelpCircle className="w-3.5 h-3.5" />
-                  <span>पासवर्ड विसरलात? (Forgot Password?)</span>
+                  <span>Forgot Password?</span>
                 </button>
               </div>
             )}
@@ -950,15 +950,15 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <RotateCw className="w-4 h-4 animate-spin" />
-                  <span>पडताळणी सुरू आहे...</span>
+                  <span>Verifying...</span>
                 </div>
               ) : (
                 <span>
                   {selectedRole === "admin"
-                    ? "🔐 ॲडमिन कन्सोल उघडा (Sign In)"
+                    ? "🔐 Opening Admin Console (Sign In)"
                     : authMode === "login"
-                    ? "लॉगिन करा (Sign In) →"
-                    : "नोंदणी पूर्ण करा (Sign Up & Start) →"}
+                    ? "Login (Sign In) →"
+                    : "Complete Registration (Sign Up & Start) →"}
                 </span>
               )}
             </button>
@@ -974,10 +974,10 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                 }}
                 className="text-indigo-600 hover:text-indigo-800 underline cursor-pointer"
               >
-                {authMode === "login" ? "नवीन विद्यार्थी नोंदणी (Sign Up)" : "आधीच खाते आहे? लॉगिन करा"}
+                {authMode === "login" ? "New Student Registration (Sign Up)" : "Already have an account? Login"}
               </button>
               <span className="text-[11px] text-slate-400">
-                🔒 सुरक्षित कूटबद्ध लॉगिन
+                🔒 Secure Encrypted Login
               </span>
             </div>
           </form>
@@ -988,7 +988,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="पासवर्ड पुनर्प्राप्ती"
+            aria-label="Password Recovery"
             className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in"
           >
             <div className="bg-white text-slate-900 rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-2xl border border-slate-200">
@@ -998,7 +998,7 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                     <KeyRound className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-black text-sm text-slate-900">पासवर्ड पुनर्प्राप्ती</h3>
+                    <h3 className="font-black text-sm text-slate-900">Password Recovery</h3>
                     <p className="text-[11px] text-slate-500">Password Recovery</p>
                   </div>
                 </div>
@@ -1020,12 +1020,12 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
               <form onSubmit={handleResetPasswordSubmit} className="space-y-3">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    नोंदणीकृत मोबाईल नंबर:
+                    Registered Mobile Number:
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="१० अंकी मोबाईल नंबर"
+                    placeholder="10-digit Mobile Number"
                     value={forgotMobile}
                     onChange={(e) => setForgotMobile(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium text-slate-900 outline-none focus:border-indigo-500"
@@ -1034,12 +1034,12 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
-                    नवीन पासवर्ड (New Password):
+                    New Password:
                   </label>
                   <input
                     type="password"
                     required
-                    placeholder="किमान ४ अक्षरी पासवर्ड"
+                    placeholder="Min 4 character password"
                     value={forgotNewPassword}
                     onChange={(e) => setForgotNewPassword(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium text-slate-900 outline-none focus:border-indigo-500"
@@ -1050,20 +1050,20 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
                   type="submit"
                   className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shadow-md transition-all cursor-pointer"
                 >
-                  नवीन पासवर्ड सेव्ह करा (Reset)
+                  Save New Password (Reset)
                 </button>
 
                 <div className="pt-2 border-t border-slate-100 text-center">
                   <a
                     href={`https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(
-                      `नमस्कार ॲडमिन सर, मी मी मराठीवाला क्लासेस ॲपचा पासवर्ड विसरलो आहे. माझा नोंदणीकृत मोबाईल: ${forgotMobile}. कृपया मला पासवर्ड रीसेट करून द्या.`
+                      `Hello Admin, I have forgotten my Mi Marathiwala Classes app password. My registered mobile: ${forgotMobile}. Please help me reset my password.`
                     )}`}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-black hover:underline"
                   >
                     <MessageCircle className="w-4 h-4" />
-                    <span>WhatsApp ॲडमिनकडून पासवर्ड मिळवा →</span>
+                    <span>Get password from WhatsApp Admin →</span>
                   </a>
                 </div>
               </form>
@@ -1075,10 +1075,10 @@ export const UnifiedAuthView: React.FC<UnifiedAuthViewProps> = ({
         <div className="bg-stone-900/80 backdrop-blur-xs rounded-2xl p-4 border border-orange-500/20 text-stone-300 text-[10px] leading-relaxed space-y-1.5 text-justify">
           <div className="flex items-center gap-1.5 text-orange-300 font-bold text-[11px]">
             <ShieldCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>अधिकृत शैक्षणिक सूचना (Official Educational Notice)</span>
+            <span>Official Educational Notice</span>
           </div>
           <p>
-            हे ॲप <strong>'मी मराठीवाला क्लासेस, अंबड' (Mi Marathiwala Classes, Ambad)</strong> द्वारे ग्रामीण व स्पर्धा परीक्षा (NEET, JEE, MHT-CET) देणाऱ्या विद्यार्थ्यांच्या सरावासाठी चालवले जाणारे अधिकृत डिजिटल पोर्टल आहे.
+            This app is the official digital portal run by <strong>'Mi Marathiwala Classes, Ambad' (Mi Marathiwala Classes, Ambad)</strong> for the practice of rural and competitive exam (NEET, JEE, MHT-CET) students.
           </p>
         </div>
       </div>

@@ -131,7 +131,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
   }, [isSubmitted, examQuestions, omrAnswers, currentExam, unattemptedCount, attemptedCount, onRecordMistake]);
 
   const handleResetOmr = () => {
-    if (window.confirm("तुम्हाला OMR शीट रिसेट करून नव्याने सोडवायची आहे का?")) {
+    if (window.confirm("Are you sure you want to reset the OMR sheet and solve again?")) {
       setOmrAnswers({});
       setIsSubmitted(false);
       setTimeElapsedSeconds(0);
@@ -143,7 +143,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
   const handleSubmitOmr = () => {
     if (unattemptedCount > 0) {
       const confirmSubmit = window.confirm(
-        `तुम्ही अजून ${unattemptedCount} प्रश्न सोडवलेले नाहीत. तरीही OMR शीट सबमिट करायची आहे का?`
+        `You have not solved ${unattemptedCount} questions. Do you still want to submit the OMR sheet?`
       );
       if (!confirmSubmit) return;
     }
@@ -169,8 +169,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                 className="px-3 py-1 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ring-1 ring-white/20"
                 title="मागे जा"
               >
-                <ArrowLeft className="w-3.5 h-3.5 text-amber-400" />
-                <span>← मागे जा</span>
+                <span>← Back</span>
               </button>
             )}
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider border border-emerald-500/30 flex items-center gap-1">
@@ -182,21 +181,19 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">
-            डिजिटल OMR शीट प्रॅक्टिस (Real Bubble Filling)
+            Digital OMR Sheet Practice (Real Bubble Filling)
           </h1>
         </div>
 
         {/* Live Timer & Stats Header */}
         <div className="flex items-center gap-3">
           <div className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 flex items-center gap-2 text-xs">
-            <Timer className="w-4 h-4 text-amber-400" />
-            <span className="text-slate-400 font-medium">वेळ:</span>
+            <span className="text-slate-400 font-medium">Time:</span>
             <span className="text-white font-bold font-mono-numbers text-sm">{formatTimer(timeElapsedSeconds)}</span>
           </div>
 
           <div className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 flex items-center gap-2 text-xs">
-            <span className="text-emerald-400 font-bold font-mono-numbers">{attemptedCount}</span>
-            <span className="text-slate-400">/ {examQuestions.length} भरलेले</span>
+            <span className="text-slate-400">/ {examQuestions.length} Filled</span>
           </div>
 
           {!isSubmitted ? (
@@ -204,7 +201,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
               onClick={handleSubmitOmr}
               className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition-all cursor-pointer hover:scale-102"
             >
-              OMR सबमिट करा
+              Submit OMR
             </button>
           ) : (
             <button
@@ -212,7 +209,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
               className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all cursor-pointer flex items-center gap-1.5"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>पुन्हा सोडवा (Reset)</span>
+              <span>Reset & Retake</span>
             </button>
           )}
         </div>
@@ -227,15 +224,15 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                 <Award className="w-6 h-6" />
               </div>
               <div>
-                <h2 className="text-lg font-extrabold text-slate-900">OMR तपासणी निकाल (Evaluation Report)</h2>
+                <h2 className="text-lg font-extrabold text-slate-900">OMR Evaluation Report</h2>
                 <p className="text-xs text-slate-500 font-medium">
-                  एकूण वेळ: {formatTimer(timeElapsedSeconds)} • अचूकता: {scoreData.accuracy}%
+                  Total Time: {formatTimer(timeElapsedSeconds)} • Accuracy: {scoreData.accuracy}%
                 </p>
               </div>
             </div>
 
             <div className="text-right">
-              <span className="text-xs font-bold text-slate-500">मिळालेले गुण (Score)</span>
+              <span className="text-xs font-bold text-slate-500">Marks Obtained</span>
               <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 font-mono-numbers">
                 {scoreData.score} <span className="text-sm font-normal text-slate-400">/ {scoreData.maxScore}</span>
               </div>
@@ -244,19 +241,19 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
-              <span className="text-xs font-semibold text-emerald-700">बरोबर उत्तरे</span>
+              <span className="text-xs font-semibold text-emerald-700">Correct</span>
               <div className="text-xl font-bold text-emerald-900 font-mono-numbers">{scoreData.correct}</div>
             </div>
             <div className="p-3 rounded-xl bg-red-50 border border-red-200">
-              <span className="text-xs font-semibold text-red-700">चुकीची उत्तरे</span>
+              <span className="text-xs font-semibold text-red-700">Incorrect</span>
               <div className="text-xl font-bold text-red-900 font-mono-numbers">{scoreData.wrong}</div>
             </div>
             <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <span className="text-xs font-semibold text-slate-700">न सोडवलेले</span>
+              <span className="text-xs font-semibold text-slate-700">Unattempted</span>
               <div className="text-xl font-bold text-slate-900 font-mono-numbers">{scoreData.unattempted}</div>
             </div>
             <div className="p-3 rounded-xl bg-blue-50 border border-blue-200">
-              <span className="text-xs font-semibold text-blue-700">टक्केवारी</span>
+              <span className="text-xs font-semibold text-blue-700">Percentage</span>
               <div className="text-xl font-bold text-blue-900 font-mono-numbers">{scoreData.percentage}%</div>
             </div>
           </div>
@@ -306,11 +303,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                 <p className="text-base font-semibold text-slate-900 leading-relaxed">
                   {currentQ.questionText}
                 </p>
-                {(language === "bilingual" || language === "mr") && currentQ.questionTextMr && (
-                  <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/70 text-xs text-amber-900 leading-relaxed">
-                    <strong>मराठी अनुवाद:</strong> {currentQ.questionTextMr}
-                  </div>
-                )}
+                  {/* Marathi Translation Removed */}
               </div>
 
               {/* Options */}
@@ -345,11 +338,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                         </span>
                         <div>
                           <div className="leading-snug">{opt}</div>
-                          {currentQ.optionsMr && currentQ.optionsMr[optIndex] && (language === "bilingual" || language === "mr") && (
-                            <div className={`text-[11px] mt-0.5 ${isBubbleSelected && !isSubmitted ? "text-slate-300" : "text-slate-500"}`}>
-                              ({currentQ.optionsMr[optIndex]})
-                            </div>
-                          )}
+                          {/* Marathi Text Removed */}
                         </div>
                       </div>
 
@@ -373,11 +362,11 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-2 animate-in fade-in">
                   <div className="flex items-center gap-1.5 font-bold text-indigo-900">
                     <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                    <span>स्पष्टीकरण (Solution):</span>
+                    <span>Solution & Explanation:</span>
                   </div>
                   {currentQ.formula && (
                     <div className="p-2 rounded-lg bg-indigo-50 border border-indigo-200 font-mono text-[11px] text-indigo-950">
-                      <strong>सूत्र:</strong> {currentQ.formula}
+                      <strong>Formula:</strong> {currentQ.formula}
                     </div>
                   )}
                   <p className="text-slate-800 leading-relaxed">{currentQ.explanation}</p>
@@ -392,7 +381,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                   className="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 cursor-pointer"
                 >
                   <ChevronLeft className="w-4 h-4" />
-                  <span>मागील प्रश्न</span>
+                  <span>Previous Question</span>
                 </button>
 
                 {!isSubmitted && omrAnswers[activeQuestionIdx] !== undefined && (
@@ -400,7 +389,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                     onClick={() => handleClearBubble(activeQuestionIdx)}
                     className="text-xs font-bold text-red-600 hover:underline cursor-pointer"
                   >
-                    गोल क्लिअर करा (Clear)
+                    Clear Bubble
                   </button>
                 )}
 
@@ -409,7 +398,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                   onClick={() => setActiveQuestionIdx((prev) => Math.min(examQuestions.length - 1, prev + 1))}
                   className="px-3.5 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 cursor-pointer"
                 >
-                  <span>पुढील प्रश्न</span>
+                  <span>Next Question</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -423,10 +412,10 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
             {/* OMR Header Strip */}
             <div className="border-b-2 border-dashed border-amber-300 pb-3 text-center">
               <h3 className="text-xs font-extrabold tracking-wider text-slate-900 uppercase">
-                OMR ANSWER SHEET (अधिकृत गोल पत्रिका)
+                OMR ANSWER SHEET
               </h3>
               <p className="text-[10px] text-slate-600 mt-0.5">
-                काळजीपूर्वक योग्य पर्यायाचा गोल (A, B, C, D) काळा / निळा करा
+                Carefully shade the correct option (A, B, C, D) using Black / Blue ink
               </p>
             </div>
 
@@ -485,7 +474,7 @@ export const OmrSheetView: React.FC<OmrSheetViewProps> = ({
                               handleBubbleClick(qIndex, optI);
                             }}
                             className={`w-7 h-7 rounded-full border-2 flex items-center justify-center text-[11px] font-bold transition-transform active:scale-90 cursor-pointer ${bubbleStyle}`}
-                            title={`प्रश्न ${qIndex + 1} - पर्याय ${letter}`}
+                            title={`Question ${qIndex + 1} - Option ${letter}`}
                           >
                             {letter}
                           </button>

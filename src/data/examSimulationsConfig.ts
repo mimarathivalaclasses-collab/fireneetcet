@@ -23,7 +23,6 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
       id: `grand-test-pcm-${i}`,
       testNumber: i,
       title: `MHT-CET Grand Full Mock ${i.toString().padStart(2, "0")} (PCM Engineering)`,
-      titleMr: `MHT-CET मुख्य परीक्षा सराव चाचणी ${i.toString().padStart(2, "0")} (PCM इंजिनिअरिंग)`,
       exam: "MHT_CET",
       group: "PCM",
       targetPercentileGoal: target,
@@ -34,10 +33,9 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
         correct: 1,
         mathsCorrect: 2,
         incorrect: 0,
-        unattempted: 0,
+        unattempted: 0
       },
       syllabusCoverage: `Complete Class 11th (20%) + Class 12th (80%) PCM Standard Set ${i}`,
-      syllabusCoverageMr: `संपूर्ण ११ वी (२०%) व १२ वी (८०%) भौतिकशास्त्र, रसायनशास्त्र आणि गणित - सराव संच ${i}`,
       difficulty: isSpecial ? "High Rank Challenger" : i % 2 === 0 ? "Moderate to Hard" : "Real Exam Exact",
       subjectsIncluded: ["Physics", "Chemistry", "Mathematics"],
       subjectDistribution: [
@@ -51,12 +49,7 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
         "PICT Pune (Computer Engg)",
         "SPIT Mumbai / Walchand Sangli",
       ],
-      descriptionMr: `महाराष्ट्र CET सेलच्या ताज्या पॅटर्नवर आधारित २०० गुणांची संपूर्ण मॉक टेस्ट ${i}. वेळेचे नियोजन आणि अचूकतेचा सराव करा.`,
-      instructionsMr: [
-        "Physics ५० गुण (५० प्रश्न) + Chemistry ५० गुण (५० प्रश्न) - ९० मिनिटे.",
-        "Mathematics १०० गुण (५० प्रश्न - प्रत्येक अचूक उत्तरास २ गुण) - ९० मिनिटे.",
-        "निगेटिव्ह मार्किंग नाही.",
-      ],
+      descriptionMr: `महाराष्ट्र CET सेलच्या ताज्या पॅटर्नवर आधारित २०० गुणांची संपूर्ण मॉक टेस्ट ${i}. वेळेचे नियोजन आणि अचूकतेचा सराव करा.`
     });
   }
 
@@ -67,7 +60,6 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
       id: `grand-test-pcb-${i}`,
       testNumber: i,
       title: `MHT-CET Grand Full Mock ${i.toString().padStart(2, "0")} (PCB Pharmacy / Agri)`,
-      titleMr: `MHT-CET मुख्य परीक्षा सराव चाचणी ${i.toString().padStart(2, "0")} (PCB फार्मसी व ॲग्री)`,
       exam: "MHT_CET",
       group: "PCB",
       targetPercentileGoal: "99.0+ %ile Target (Top Pharmacy Colleges)",
@@ -77,10 +69,9 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
       markingScheme: {
         correct: 1,
         incorrect: 0,
-        unattempted: 0,
+        unattempted: 0
       },
       syllabusCoverage: `Complete Class 11th & 12th Physics, Chemistry, Biology Set ${i}`,
-      syllabusCoverageMr: `वर्ग ११ व १२ संपूर्ण भौतिकशास्त्र, रसायनशास्त्र आणि जीवशास्त्र संच ${i}`,
       difficulty: isSpecial ? "High Rank Challenger" : "Real Exam Exact",
       subjectsIncluded: ["Physics", "Chemistry", "Biology"],
       subjectDistribution: [
@@ -94,11 +85,7 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
         "Bombay College of Pharmacy",
         "MPKV Rahuri (B.Sc Agri)",
       ],
-      descriptionMr: `PCB ग्रुपसाठी २०० गुणांची परिपूर्ण सराव चाचणी ${i}. जीवशास्त्रातील आकृत्या व हाय-यिल्ड संकल्पनांवर भर.`,
-      instructionsMr: [
-        "Physics ५० प्रश्न (५० गुण), Chemistry ५० प्रश्न (५० गुण), Biology १०० प्रश्न (१०० गुण).",
-        "वेळ: १५० मिनिटे. निगेटिव्ह मार्किंग नाही.",
-      ],
+      descriptionMr: `PCB ग्रुपसाठी २०० गुणांची परिपूर्ण सराव चाचणी ${i}. जीवशास्त्रातील आकृत्या व हाय-यिल्ड संकल्पनांवर भर.`
     });
   }
 
@@ -109,7 +96,6 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
       id: `grand-test-neet-${i}`,
       testNumber: i,
       title: `NEET-UG All India Grand Mock ${i.toString().padStart(2, "0")} (720 Marks Full CBT)`,
-      titleMr: `NEET-UG राष्ट्रीय मुख्य परीक्षा पेपर ${i.toString().padStart(2, "0")} (७२० गुण ऑल इंडिया)`,
       exam: "NEET",
       targetPercentileGoal: "650+ Marks Target (Govt. Medical College)",
       totalMarks: 720,
@@ -118,10 +104,9 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
       markingScheme: {
         correct: 4,
         incorrect: -1,
-        unattempted: 0,
+        unattempted: 0
       },
       syllabusCoverage: `NCERT Class 11 & 12 Complete Biology (90Q), Physics (45Q), Chemistry (45Q) Set ${i}`,
-      syllabusCoverageMr: `एनसीईआरटी वर्ग ११ व १२ संपूर्ण अभ्यासक्रम - सेट ${i}`,
       difficulty: isSpecial ? "High Rank Challenger" : i % 2 === 0 ? "Moderate to Hard" : "Real Exam Exact",
       subjectsIncluded: ["Biology", "Physics", "Chemistry"],
       subjectDistribution: [
@@ -135,12 +120,7 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
         "BJ Medical College, Pune",
         "GMC Nagpur / GMC Miraj / GMC Aurangabad",
       ],
-      descriptionMr: `NTA NEET-UG अधिकृत पॅटर्ननुसार ७२० गुणांची २०० मिनिटांची टेस्ट ${i}. +४ बरोबर आणि -१ निगेटिव्ह मार्किंग.`,
-      instructionsMr: [
-        "एकूण प्रश्न १८० (Biology ९० = ३६० गुण, Physics ४५ = १८० गुण, Chemistry ४५ = १८० गुण).",
-        "बरोबर उत्तरास +४ गुण, चुकीच्या उत्तरास -१ गुण वजा.",
-        "वेळ: २०० मिनिटे (३ तास २० मिनिटे).",
-      ],
+      descriptionMr: `NTA NEET-UG अधिकृत पॅटर्ननुसार ७२० गुणांची २०० मिनिटांची टेस्ट ${i}. +४ बरोबर आणि -१ निगेटिव्ह मार्किंग.`
     });
   }
 
@@ -151,7 +131,6 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
       id: `grand-test-jee-${i}`,
       testNumber: i,
       title: `JEE Main All India Grand Mock ${i.toString().padStart(2, "0")} (300 Marks Full CBT)`,
-      titleMr: `JEE Main राष्ट्रीय मुख्य परीक्षा पेपर ${i.toString().padStart(2, "0")} (३०० गुण ऑल इंडिया)`,
       exam: "JEE_MAIN",
       targetPercentileGoal: "99.4+ %ile Target (Top 5 NITs / IIITs)",
       totalMarks: 300,
@@ -160,10 +139,9 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
       markingScheme: {
         correct: 4,
         incorrect: -1,
-        unattempted: 0,
+        unattempted: 0
       },
       syllabusCoverage: `Class 11 & 12 Physics (25Q), Chemistry (25Q), Mathematics (25Q) Full Set ${i}`,
-      syllabusCoverageMr: `वर्ग ११ व १२ भौतिकशास्त्र (२५), रसायनशास्त्र (२५) आणि गणित (२५) - संच ${i}`,
       difficulty: isSpecial ? "High Rank Challenger" : i % 2 === 0 ? "Moderate to Hard" : "Real Exam Exact",
       subjectsIncluded: ["Mathematics", "Physics", "Chemistry"],
       subjectDistribution: [
@@ -177,12 +155,7 @@ export function generateDefaultExamSimulations(): GrandMockTestItem[] {
         "IIIT Hyderabad / IIIT Pune",
         "JEE Advanced 2025/2026 Qualification",
       ],
-      descriptionMr: `NTA JEE Main पॅटर्ननुसार ३०० गुणांची १८० मिनिटांची टेस्ट ${i}. अचूकता आणि वेळेचे गणित सांभाळा.`,
-      instructionsMr: [
-        "Physics २५ प्रश्न (१०० गुण), Chemistry २५ प्रश्न (१०० गुण), Mathematics २५ प्रश्न (१०० गुण).",
-        "बरोबर उत्तरास +४ गुण, चुकीच्या उत्तरास -१ निगेटिव्ह मार्किंग.",
-        "वेळ: १८० मिनिटे (३ तास).",
-      ],
+      descriptionMr: `NTA JEE Main पॅटर्ननुसार ३०० गुणांची १८० मिनिटांची टेस्ट ${i}. अचूकता आणि वेळेचे गणित सांभाळा.`
     });
   }
 

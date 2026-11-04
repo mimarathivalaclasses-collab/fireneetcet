@@ -5,18 +5,14 @@ export const PHYSICS_NOTES: TopicNote[] = [
   {
     id: "note_phy_rotational_dynamics",
     chapter: "Rotational Dynamics",
-    chapterMr: "परिपत्रक गती आणि परिभ्रमण गती (Rotational Dynamics)",
     subject: "Physics",
     exams: ["MHT_CET", "NEET", "JEE_MAIN"],
     title: "Complete Rotational Dynamics & Circular Motion Revision Note",
-    titleMr: "परिपत्रक आणि परिभ्रमण गती संपूर्ण रिव्हिजन नोट्स",
     summary: "Comprehensive guide covering Centripetal Force, Banking of Roads, Vertical Circular Motion, Moment of Inertia Theorems, Torque, and Rolling Motion.",
-    summaryMr: "अभिकेंद्री बल, रस्त्याचे बँकिंग, उभ्या वर्तुळाकार गती, जडत्व आघूर्ण (MI) ची प्रमेये, टॉर्क आणि रोलिंग गती या सर्वांची सविस्तर सूत्रे व स्पष्टीकरणे.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Uniform Circular Motion & Banking of Roads",
-        titleMr: "१. एकसमान वर्तुळाकार गती व रस्त्याचे बँकिंग",
         points: [
           "Centripetal Acceleration: a_c = v²/r = ω²r = vω (directed towards center).",
           "Centripetal Force: F_c = m v² / r = m ω² r.",
@@ -25,37 +21,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Minimum Safe Speed with friction μ_s: v_min = √[ r g (tan θ - μ_s) / (1 + μ_s tan θ) ].",
           "Conical Pendulum: Period T = 2π √(L cos θ / g) = 2π √(h / g). Frequency n = (1/2π) √(g / L cos θ).",
         ],
-        pointsMr: [
-          "अभिकेंद्री प्रवेग (Centripetal Acceleration): a_c = v²/r = ω²r (केंद्राच्या दिशेने).",
-          "बँक केलेल्या वळणावर सुरक्षित कमाल वेग (Optimum Speed): v = √(r g tan θ).",
-          "घर्षण (μ_s) सह कमाल वेग: v_max = √[ r g (μ_s + tan θ) / (1 - μ_s tan θ) ].",
-          "शंकू लंबक (Conical Pendulum) आवर्तकाळ: T = 2π √(L cos θ / g).",
-        ],
         keyFormula: "v = √(r g tan θ) | T = 2π √(L cos θ / g)",
         keyMnemonic: "Remember: 'Top speed needs Plus upstairs' -> (tan θ + μ) in numerator for v_max.",
-        examTip: "In MHT-CET/NEET, if road is frictionless, directly use tan θ = v² / (r g).",
-        examTipMr: "घर्षणरहित रस्त्यासाठी सरळ tan θ = v² / (rg) वापरा.",
+        examTip: "In MHT-CET/NEET, if road is frictionless, directly use tan θ = v² / (r g)."
       },
       {
         title: "2. Vertical Circular Motion (VCM)",
-        titleMr: "२. उभ्या प्रतलातील वर्तुळाकार गती (VCM)",
         points: [
           "Velocity at Top (Highest Point H): v_H = √(r g). Tension T_H = 0.",
           "Velocity at Bottom (Lowest Point L): v_L = √(5 r g). Tension T_L = 6 mg.",
           "Velocity at Mid-way (Horizontal M): v_M = √(3 r g). Tension T_M = 3 mg.",
           "Difference in Tension between Bottom and Top: T_L - T_H = 6 mg (always constant).",
         ],
-        pointsMr: [
-          "सर्वोच्च बिंदूवरील किमान वेग (Top point): v_H = √(r g), ताण T_H = 0.",
-          "सर्वात खालच्या बिंदूवरील किमान वेग (Bottom point): v_L = √(5 r g), ताण T_L = 6 mg.",
-          "तळातील आणि शिखरावरील ताणातील फरक: T_L - T_H = 6 mg (नेहमी ६ पट वस्तुमान×गुरुत्व).",
-        ],
         keyFormula: "v_L = √(5rg) | v_H = √(rg) | T_L - T_H = 6mg",
-        examTip: "Mass tied to rigid light rod: v_H = 0, v_L = √(4 r g) = 2√(r g), T_L - T_H = 6 mg.",
+        examTip: "Mass tied to rigid light rod: v_H = 0, v_L = √(4 r g) = 2√(r g), T_L - T_H = 6 mg."
       },
       {
         title: "3. Moment of Inertia & Theorems",
-        titleMr: "३. जडत्व आघूर्ण (Moment of Inertia) आणि प्रमेये",
         points: [
           "Radius of Gyration: k = √(I / M) => I = M k².",
           "Parallel Axes Theorem: I_O = I_C + M h² (axis through C must pass through center of mass).",
@@ -64,36 +46,24 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Solid Sphere: I = (2/5) M R², Hollow Sphere: I = (2/3) M R².",
           "Solid Cylinder: I = (1/2) M R², Thin Rod (center): I = (1/12) M L².",
         ],
-        pointsMr: [
-          "परिभ्रमण त्रिज्या (Radius of Gyration): k = √(I / M) म्हणजेच I = M k².",
-          "समांतर अक्ष प्रमेय: I_O = I_C + M h².",
-          "लंब अक्ष प्रमेय: I_z = I_x + I_y.",
-          "चकती: I = (1/2) M R², घन गोल: I = (2/5) M R², पोकळ गोल: I = (2/3) M R².",
-        ],
         keyFormula: "I_O = I_C + M h² | I_z = I_x + I_y | I = M k²",
-        keyMnemonic: "Spheres: Solid (2/5 = 0.4) is smaller MI than Hollow (2/3 = 0.67).",
+        keyMnemonic: "Spheres: Solid (2/5 = 0.4) is smaller MI than Hollow (2/3 = 0.67)."
       },
       {
         title: "4. Rolling Motion on an Inclined Plane",
-        titleMr: "४. उतरत्या प्रतलावर फिरणाऱ्या वस्तूची गती (Rolling Motion)",
         points: [
           "Total Kinetic Energy: E_total = K_trans + K_rot = (1/2) M v² (1 + k²/R²).",
           "Linear Acceleration down incline θ: a = (g sin θ) / (1 + k²/R²).",
           "Velocity at bottom: v = √[ (2 g h) / (1 + k²/R²) ].",
           "Order of arrival at bottom (fastest to slowest): Solid Sphere > Disc/Solid Cylinder > Hollow Sphere > Ring/Hollow Cylinder.",
         ],
-        pointsMr: [
-          "एकूण गतिज ऊर्जा: E = (1/2) M v² (1 + k²/R²).",
-          "उतरणीवरील प्रवेग: a = (g sin θ) / (1 + k²/R²).",
-          "तळाशी सर्वात आधी कोण पोहोचते? घन गोल (Solid Sphere) > चकती (Disc) > पोकळ गोल > कडे (Ring).",
-        ],
-        keyFormula: "a = (g sin θ) / (1 + k²/R²) | v = √[ 2gh / (1 + k²/R²) ]",
+        keyFormula: "a = (g sin θ) / (1 + k²/R²) | v = √[ 2gh / (1 + k²/R²) ]"
       },
     ],
     quickRevisionPoints: [
-      { en: "Angular momentum is conserved (L = I ω = constant) when net external torque τ_ext = 0.", mr: "बाह्य टॉर्क शून्य (τ = 0) असल्यास कोनीय संवेग स्थिर राहतो (L = I ω = स्थिरांक)." },
-      { en: "Kinetic energy of rotation: E_rot = (1/2) I ω² = L² / (2I).", mr: "परिभ्रमण गतिज ऊर्जा: E_rot = (1/2) I ω² = L² / (2I)." },
-      { en: "Torque-Angular Acceleration relation: τ = I α = dL/dt.", mr: "टॉर्क आणि कोनीय प्रवेग: τ = I α = dL/dt." },
+      { en: "Angular momentum is conserved (L = I ω = constant) when net external torque τ_ext = 0." },
+      { en: "Kinetic energy of rotation: E_rot = (1/2) I ω² = L² / (2I)." },
+      { en: "Torque-Angular Acceleration relation: τ = I α = dL/dt." },
     ],
     keyFormulasTable: [
       { name: "Centripetal Force", formula: "F_c = m v² / r = m ω² r", description: "Force directed towards center of circle" },
@@ -105,35 +75,27 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Applying Parallel Axes Theorem about an arbitrary axis instead of Center of Mass.",
-        mistakeMr: "समांतर अक्ष प्रमेयात I_C च्या जागी गुरुत्वमध्य नसणारा कोणताही इतर अक्ष वापरणे.",
-        correction: "I_C MUST always be the axis passing strictly through the Center of Mass.",
-        correctionMr: "I_C हा अक्ष अनिवार्यपणे वस्तूच्या गुरुत्वमध्यामधूनच (Center of Mass) गेलेला असावा.",
+        correction: "I_C MUST always be the axis passing strictly through the Center of Mass."
       },
       {
         mistake: "Confusing Radius of Gyration (k) with Radius of Object (R).",
-        mistakeMr: "परिभ्रमण त्रिज्या (k) आणि वस्तूची प्रत्यक्ष त्रिज्या (R) एकच समजणे.",
-        correction: "For a disc, k = R/√2, so k²/R² = 1/2. For sphere, k²/R² = 2/5.",
-        correctionMr: "चकतीसाठी k²/R² = 1/2 आणि घन गोलासाठी 2/5 असते.",
+        correction: "For a disc, k = R/√2, so k²/R² = 1/2. For sphere, k²/R² = 2/5."
       },
-    ],
+    ]
   },
 
   // 2. Thermodynamics & Kinetic Theory
   {
     id: "note_phy_thermo",
     chapter: "Thermodynamics & Kinetic Theory",
-    chapterMr: "उष्णतागतिकी आणि वायूंचा गतिज सिद्धांत (Thermodynamics)",
     subject: "Physics",
     exams: ["MHT_CET", "NEET", "JEE_MAIN"],
     title: "Thermodynamics & KTG Complete Fast Track Notes",
-    titleMr: "उष्णतागतिकी आणि गतिज सिद्धांत रिव्हिजन नोट्स",
     summary: "First Law of Thermodynamics, Isothermal, Adiabatic, Isobaric, Isochoric processes, Carnot Engine Efficiency, and Mean Free Path.",
-    summaryMr: "उष्णतागतिकीचा पहिला नियम, समतापी, रुद्धोष्म, समदाब प्रक्रिया, कार्नो इंजिन कार्यक्षमता आणि सरासरी मुक्त मार्ग.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. First Law & Thermodynamic Processes",
-        titleMr: "१. पहिला नियम व विविध प्रक्रिया",
         points: [
           "First Law of Thermodynamics: ΔQ = ΔU + ΔW, where ΔU = n C_v ΔT.",
           "Work done in general: W = ∫ P dV (Area under P-V indicator diagram).",
@@ -142,17 +104,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Isochoric Process (V = const, ΔW = 0): ΔQ = ΔU = n C_v ΔT.",
           "Isobaric Process (P = const): W = P (V2 - V1) = n R ΔT. ΔQ = n C_p ΔT.",
         ],
-        pointsMr: [
-          "पहिला नियम: ΔQ = ΔU + ΔW (येथे ΔU = n C_v ΔT).",
-          "समतापी प्रक्रिया (T स्थिर, ΔU = 0): W = 2.303 n R T log10(V2 / V1).",
-          "रुद्धोष्म प्रक्रिया (ΔQ = 0): W = n R (T1 - T2) / (γ - 1).",
-          "समदाब प्रक्रिया (P स्थिर): W = P ΔV = n R ΔT.",
-        ],
-        keyFormula: "ΔQ = ΔU + ΔW | W_iso = n R T ln(V2/V1) | P V^γ = const",
+        keyFormula: "ΔQ = ΔU + ΔW | W_iso = n R T ln(V2/V1) | P V^γ = const"
       },
       {
         title: "2. Heat Engines, Refrigerators & Carnot Cycle",
-        titleMr: "२. उष्मा इंजिन आणि कार्नो सायकल",
         points: [
           "Efficiency of Heat Engine: η = W / Q1 = 1 - (Q2 / Q1) = 1 - (T2 / T1).",
           "Coefficient of Performance (COP) of Refrigerator: β = Q2 / W = T2 / (T1 - T2).",
@@ -160,18 +115,11 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Mayer's Relation: C_p - C_v = R (for 1 mole) or c_p - c_v = R / M (per gram).",
           "Adiabatic exponent γ = C_p / C_v = 1 + 2/f (Monoatomic: γ = 5/3, Diatomic: γ = 7/5).",
         ],
-        pointsMr: [
-          "कार्नो इंजिन कार्यक्षमता: η = 1 - T_sink / T_source = 1 - T2/T1.",
-          "रेफ्रिजरेटरचा COP (β): β = T2 / (T1 - T2).",
-          "मेयरचे सूत्र: C_p - C_v = R.",
-          "γ चे मूल्य: एकअणुक (Monoatomic) = 5/3 (1.67), द्विअणुक (Diatomic) = 7/5 (1.40).",
-        ],
         keyFormula: "η = 1 - T2/T1 | β = T2 / (T1 - T2) | C_p - C_v = R",
-        examTip: "Always convert temperatures to Kelvin (K = °C + 273.15) before calculating Carnot efficiency.",
+        examTip: "Always convert temperatures to Kelvin (K = °C + 273.15) before calculating Carnot efficiency."
       },
       {
         title: "3. Kinetic Theory of Gases (KTG)",
-        titleMr: "३. वायूंचा गतिज सिद्धांत (KTG)",
         points: [
           "Gas Pressure: P = (1/3) ρ v_rms² = (1/3) (N m / V) v_rms².",
           "Root Mean Square Velocity: v_rms = √(3 R T / M) = √(3 k_B T / m).",
@@ -179,19 +127,13 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Ratio: v_mp : v_avg : v_rms = √2 : √(8/π) : √3 = 1 : 1.128 : 1.224.",
           "Mean Free Path: λ = 1 / (√2 π n d²), where n = N/V and d is molecular diameter.",
         ],
-        pointsMr: [
-          "दाब सूत्र: P = (1/3) ρ v_rms².",
-          "RMS वेग: v_rms = √(3 R T / M).",
-          "वेगांचे गुणोत्तर: v_mp : v_avg : v_rms = √2 : √(8/π) : √3.",
-          "सरासरी मुक्त मार्ग (Mean Free Path): λ = 1 / (√2 π n d²).",
-        ],
         keyFormula: "v_rms = √(3RT/M) | λ = 1 / (√2 π n d²)",
-        keyMnemonic: "RAM -> RMS (highest) > Average > Most Probable (lowest).",
+        keyMnemonic: "RAM -> RMS (highest) > Average > Most Probable (lowest)."
       },
     ],
     quickRevisionPoints: [
-      { en: "In cyclic process, total internal energy change ΔU = 0, so net Q = net W.", mr: "चक्रीय प्रक्रियेमध्ये (Cyclic process) ΔU = 0, त्यामुळे निव्वळ Q = निव्वळ W." },
-      { en: "Slope of Adiabatic curve on P-V diagram is γ times steeper than Isothermal curve (Slope_ad = γ × Slope_iso).", mr: "P-V आलेखावर रुद्धोष्म वक्राचा उतार समतापी वक्रापेक्षा γ पट तीव्र असतो." },
+      { en: "In cyclic process, total internal energy change ΔU = 0, so net Q = net W." },
+      { en: "Slope of Adiabatic curve on P-V diagram is γ times steeper than Isothermal curve (Slope_ad = γ × Slope_iso)." },
     ],
     keyFormulasTable: [
       { name: "First Law", formula: "ΔQ = ΔU + P ΔV", description: "Conservation of energy in thermodynamics" },
@@ -202,29 +144,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Plugging Celsius temperature into Carnot formula η = 1 - T2/T1.",
-        mistakeMr: "कार्नो सूत्रात तापमानाची व्हॅल्यू सेल्सिअस (°C) मध्ये टाकणे.",
-        correction: "T1 and T2 must ALWAYS be in absolute Kelvin (K = °C + 273).",
-        correctionMr: "T1 व T2 नेहमी केल्विन (K = °C + 273) मध्येच असले पाहिजेत.",
+        correction: "T1 and T2 must ALWAYS be in absolute Kelvin (K = °C + 273)."
       },
-    ],
+    ]
   },
 
   // 3. Electrostatics & Current Electricity
   {
     id: "note_phy_electrostatics_current",
     chapter: "Electrostatics & Current Electricity",
-    chapterMr: "स्थितिक विद्युत आणि विद्युतधारा (Electrostatics & Current)",
     subject: "Physics",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Electrostatics, Capacitors & Current Electricity Master Notes",
-    titleMr: "स्थितिक विद्युत, कपॅसिटर आणि विद्युतधारा संपूर्ण नोट्स",
     summary: "Coulomb's Law, Gauss's Law, Electric Potential, Capacitance with Dielectrics, Ohm's Law, Kirchhoff's Laws, Wheatstone Bridge, and Potentiometer.",
-    summaryMr: "कुलॉमचा नियम, गॉसचे प्रमेय, विद्युत विभव, डायइलेक्ट्रिकसह कपॅसिटन्स, ओहमचा नियम, किर्चॉफचे नियम, व्हीटस्टोन ब्रिज आणि पोटेंशियोमीटर.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Electrostatics & Gauss's Theorem",
-        titleMr: "१. स्थितिक विद्युत आणि गॉसचे प्रमेय",
         points: [
           "Coulomb's Force: F = (1 / 4πε₀) · (q₁ q₂ / r²) (in vacuum).",
           "Electric Field of Point Charge: E = (1 / 4πε₀) · (q / r²).",
@@ -233,18 +169,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Electric Field near Infinite Plane Sheet: E = σ / (2ε₀) (independent of distance).",
           "Electric Field outside Spherical Shell (r ≥ R): E = (1/4πε₀)(Q/r²); Inside shell (r < R): E = 0.",
         ],
-        pointsMr: [
-          "कुलॉमचे बल: F = (1 / 4πε₀) · (q₁ q₂ / r²).",
-          "विद्युत द्विध्रुव आघूर्ण (Dipole Moment): p = q × (2a) (-q कडून +q कडे). टॉर्क τ = p × E.",
-          "गॉसचा नियम: एकूण फ्लक्स Φ = Q_enclosed / ε₀.",
-          "सपाट भारित पत्र्याजवळ विद्युत क्षेत्र: E = σ / (2ε₀).",
-          "गोलाकार कवचाच्या आत विद्युत क्षेत्र नेहमी शून्य (E = 0) असते.",
-        ],
-        keyFormula: "Φ = Q_enc / ε₀ | E_sheet = σ / (2ε₀) | τ = p × E",
+        keyFormula: "Φ = Q_enc / ε₀ | E_sheet = σ / (2ε₀) | τ = p × E"
       },
       {
         title: "2. Capacitance & Energy Storage",
-        titleMr: "२. धारकता (Capacitance) आणि ऊर्जा साठा",
         points: [
           "Parallel Plate Capacitor: C₀ = ε₀ A / d.",
           "With Dielectric of constant K filling entire space: C = K C₀.",
@@ -253,17 +181,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Energy Density of Electric Field: u_E = (1/2) ε₀ E².",
           "Series Combination: 1/C_eq = 1/C₁ + 1/C₂; Parallel: C_eq = C₁ + C₂.",
         ],
-        pointsMr: [
-          "समांतर पट्टी कपॅसिटर: C₀ = ε₀ A / d.",
-          "K डायइलेक्ट्रिक भरल्यास धारकता K पटीने वाढते: C = K C₀.",
-          "साठवलेली ऊर्जा: U = (1/2) C V² = Q² / (2C).",
-          "ऊर्जा घनता: u_E = (1/2) ε₀ E².",
-        ],
-        keyFormula: "C = K ε₀ A / d | U = (1/2) C V² = Q² / (2C)",
+        keyFormula: "C = K ε₀ A / d | U = (1/2) C V² = Q² / (2C)"
       },
       {
         title: "3. Current Electricity & Circuit Laws",
-        titleMr: "३. विद्युतधारा आणि परिपथ नियम",
         points: [
           "Drift Velocity: v_d = e E τ / m => Current I = n e A v_d.",
           "Resistance & Resistivity: R = ρ L / A. Temperature dependence: R_T = R₀(1 + α ΔT).",
@@ -273,20 +194,13 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Meter Bridge (Unknown Resistance X): X = R · (l_X / l_R).",
           "Potentiometer Principle: Potential drop V ∝ l (V = k l, where k is potential gradient).",
         ],
-        pointsMr: [
-          "ड्रिफ्ट वेग: v_d = e E τ / m, विद्युतधारा I = n e A v_d.",
-          "किर्चॉफचा पहिला नियम (KCL): जंक्शनवर एकूण करंट शून्य Σ I = 0 (विद्युतप्रभार संवर्धन).",
-          "किर्चॉफचा दुसरा नियम (KVL): लूपमधील एकूण व्होल्टेज Σ V = 0 (ऊर्जा संवर्धन).",
-          "व्हीटस्टोन ब्रिज समतोल: P / Q = R / S.",
-          "पोटेंशियोमीटरचे तत्त्व: विभवपात हा तारेच्या लांबीच्या समप्रमाणात असतो (V ∝ l).",
-        ],
         keyFormula: "I = n e A v_d | P/Q = R/S | E₁/E₂ = l₁/l₂",
-        examTip: "Internal resistance of cell using potentiometer: r = R ( (l₁ - l₂) / l₂ ).",
+        examTip: "Internal resistance of cell using potentiometer: r = R ( (l₁ - l₂) / l₂ )."
       },
     ],
     quickRevisionPoints: [
-      { en: "Electric potential inside a hollow charged conducting sphere is constant and equals potential at surface V = (1/4πε₀)(Q/R).", mr: "पोकळ भारित गोलाच्या आत विद्युत विभव सर्वत्र समान व पृष्ठभागाच्या विभवाइतकेच असते." },
-      { en: "When a dielectric slab is inserted with battery disconnected: Q remains constant, V decreases by K, C increases by K, U decreases by K.", mr: "बॅटरी काढल्यानंतर डायइलेक्ट्रिक टाकल्यास: प्रभार (Q) स्थिर राहतो, विभव V = V₀/K कमी होते आणि धारकता K पटीने वाढते." },
+      { en: "Electric potential inside a hollow charged conducting sphere is constant and equals potential at surface V = (1/4πε₀)(Q/R)." },
+      { en: "When a dielectric slab is inserted with battery disconnected: Q remains constant, V decreases by K, C increases by K, U decreases by K." },
     ],
     keyFormulasTable: [
       { name: "Coulomb's Law", formula: "F = (1/4πε₀)(q₁q₂/r²)", description: "Electrostatic force between two stationary charges" },
@@ -297,29 +211,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing Series vs Parallel formulas for Capacitors and Resistors.",
-        mistakeMr: "रेझिस्टर्स आणि कपॅसिटर्सच्या सिरीज/पॅरलल सूत्रांची सरमिसळ करणे.",
-        correction: "Capacitors in parallel ADD directly (C1+C2), while in series they add reciprocally (1/C1+1/C2) - opposite of resistors!",
-        correctionMr: "कपॅसिटर्स पॅरललमध्ये थेट जोडले जातात (C1+C2) आणि सिरीजमध्ये व्यस्त (1/C1+1/C2) होतात.",
+        correction: "Capacitors in parallel ADD directly (C1+C2), while in series they add reciprocally (1/C1+1/C2) - opposite of resistors!"
       },
-    ],
+    ]
   },
 
   // 4. Optics (Ray & Wave Optics)
   {
     id: "note_phy_optics",
     chapter: "Optics (Ray & Wave Optics)",
-    chapterMr: "प्रकाशशास्त्र: किरण व तरंग प्रकाशशास्त्र (Ray & Wave Optics)",
     subject: "Physics",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Ray Optics, Optical Instruments & Wave Optics Master Notes",
-    titleMr: "किरण प्रकाशशास्त्र, सूक्ष्मदर्शक, टेलिस्कोप व तरंग प्रकाशशास्त्र नोट्स",
     summary: "Refraction, Total Internal Reflection, Lens Maker's Formula, Prism Dispersion, Microscopes, Telescopes, YDSE Fringe Width, and Diffraction.",
-    summaryMr: "अपवर्तन, पूर्ण अंतर्गत परावर्तन, लेन्स मेकर सूत्र, प्रिझम, सूक्ष्मदर्शक, दुर्बीण, यंगचा द्वि-छिद्र प्रयोग (YDSE) आणि विवर्तन (Diffraction).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Ray Optics & Optical Instruments",
-        titleMr: "१. किरण प्रकाशशास्त्र व प्रकाशीय उपकरणे",
         points: [
           "Snell's Law: n₁ sin i = n₂ sin r => sin i / sin r = μ₂ / μ₁.",
           "Total Internal Reflection (TIR): Critical angle sin C = 1 / μ (when light travels from denser to rarer medium).",
@@ -329,18 +237,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Compound Microscope Magnification: Normal adjustment: M = (v₀ / u₀) × (D / f_e). At near point: M = (v₀/u₀) [ 1 + (D/f_e) ].",
           "Astronomical Telescope Magnification: Normal adjustment: M = f₀ / f_e. Tube length L = f₀ + f_e.",
         ],
-        pointsMr: [
-          "स्नेलचा नियम: μ₁ sin i = μ₂ sin r.",
-          "क्रांतिक कोन (Critical angle): sin C = 1 / μ.",
-          "लेन्स मेकर सूत्र: 1/f = (μ - 1) [ (1/R₁) - (1/R₂) ].",
-          "प्रिझम सूत्र: μ = sin[ (A + δ_m) / 2 ] / sin(A / 2).",
-          "खगोलीय दुर्बीण (Telescope) विवर्धन: M = f₀ / f_e, नळीची लांबी L = f₀ + f_e.",
-        ],
-        keyFormula: "1/f = (μ-1)(1/R₁ - 1/R₂) | sin C = 1/μ | M_tele = f₀/f_e",
+        keyFormula: "1/f = (μ-1)(1/R₁ - 1/R₂) | sin C = 1/μ | M_tele = f₀/f_e"
       },
       {
         title: "2. Wave Optics & Interference (YDSE)",
-        titleMr: "२. तरंग प्रकाशशास्त्र आणि व्यतिकरण (Interference)",
         points: [
           "Huygens' Principle: Every point on a wavefront acts as a secondary source of spherical wavelets.",
           "Superposition & Resultant Intensity: I = I₁ + I₂ + 2√(I₁ I₂) cos φ. Maximum I_max = (√I₁ + √I₂)², Minimum I_min = (√I₁ - √I₂)². If I₁=I₂=I₀: I = 4I₀ cos²(φ/2).",
@@ -350,18 +250,12 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Fringe Width (Bandwidth): β = λ D / d (same for bright and dark fringes).",
           "Single Slit Diffraction Minima: a sin θ = n λ (n = 1, 2, 3...). Width of Central Maxima = 2 λ D / a.",
         ],
-        pointsMr: [
-          "हायगेन्सचे तत्त्व: तरंगाग्रावरील प्रत्येक बिंदू दुय्यम तरंगांचा स्रोत म्हणून काम करतो.",
-          "YDSE फ्रिंज रुंदी (Fringe Width): β = λ D / d.",
-          "चमकदार पट्टा: y_n = n λ D / d, गडद पट्टा: y_n = (2n - 1) λ D / (2d).",
-          "विवर्तन (Diffraction): मध्यवर्ती तेजस्वी पट्ट्याची रुंदी = 2 λ D / a.",
-        ],
-        keyFormula: "β = λ D / d | Central Max Width = 2 λ D / a | I = 4 I₀ cos²(φ/2)",
+        keyFormula: "β = λ D / d | Central Max Width = 2 λ D / a | I = 4 I₀ cos²(φ/2)"
       },
     ],
     quickRevisionPoints: [
-      { en: "When YDSE apparatus is immersed in a liquid of refractive index μ, fringe width decreases: β' = β / μ.", mr: "YDSE उपकरण μ अपवर्तनांक असणाऱ्या द्रवात बुडवल्यास फ्रिंजची रुंदी β' = β / μ अशी कमी होते." },
-      { en: "Brewster's Law of Polarization: tan i_p = μ. Reflected and refracted rays are perpendicular (i_p + r = 90°).", mr: "ब्रूस्टरचा नियम: tan i_p = μ. परावर्तित आणि अपवर्तित किरण एकमेकांना लंबरूप असतात (९० अंश)." },
+      { en: "When YDSE apparatus is immersed in a liquid of refractive index μ, fringe width decreases: β' = β / μ." },
+      { en: "Brewster's Law of Polarization: tan i_p = μ. Reflected and refracted rays are perpendicular (i_p + r = 90°)." },
     ],
     keyFormulasTable: [
       { name: "Lens Maker's Equation", formula: "1/f = (μ - 1)(1/R₁ - 1/R₂)", description: "Focal length in terms of radii of curvature" },
@@ -372,29 +266,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Applying YDSE bright fringe condition (n λ) to diffraction maxima.",
-        mistakeMr: "विवर्तनाच्या मॅक्झिमासाठी व्यतिकरणाचे सूत्र n λ वापरणे.",
-        correction: "In Single Slit Diffraction, a sin θ = n λ gives MINIMA (destructive interference), NOT maxima!",
-        correctionMr: "एकल छिद्र विवर्तनात a sin θ = n λ मुळे गडद (किमान) पट्टे मिळतात.",
+        correction: "In Single Slit Diffraction, a sin θ = n λ gives MINIMA (destructive interference), NOT maxima!"
       },
-    ],
+    ]
   },
 
   // 5. Electromagnetic Induction & AC
   {
     id: "note_phy_emi_ac",
     chapter: "Electromagnetic Induction & AC",
-    chapterMr: "विद्युतचुंबकीय प्रवर्तन आणि प्रत्यावर्ती धारा (EMI & AC)",
     subject: "Physics",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Faraday's Laws, Lenz's Law, LCR Circuits & Resonance Notes",
-    titleMr: "फॅराडेचे नियम, लेन्झचा नियम, LCR परिपथ व रेझोनन्स नोट्स",
     summary: "Magnetic Flux, Faraday's Laws, Lenz's Law, Motional EMF, Self & Mutual Inductance, AC RMS values, LCR Series Circuit, Resonant Frequency, and Power Factor.",
-    summaryMr: "चुंबकीय फ्लक्स, फॅराडेचे नियम, लेन्झचा नियम, गतीजन्य EMF, प्रेरकत्व (Inductance), AC आरएमएस मूल्य, LCR श्रेणी परिपथ, अनुनाद (Resonance) आणि पॉवर फॅक्टर.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Electromagnetic Induction (EMI)",
-        titleMr: "१. विद्युतचुंबकीय प्रवर्तन (EMI)",
         points: [
           "Magnetic Flux: Φ = B · A = B A cos θ (SI unit: Weber, Wb).",
           "Faraday's Law: Induced EMF e = - dΦ / dt = - N (dΦ / dt).",
@@ -404,18 +292,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Self Inductance (L): Φ = L I => e = - L (dI / dt). Solenoid: L = μ₀ n² A l = μ₀ N² A / l.",
           "Mutual Inductance (M): e₂ = - M (dI₁ / dt). Coupling factor: M = k √(L₁ L₂), where 0 ≤ k ≤ 1.",
         ],
-        pointsMr: [
-          "फॅराडेचा नियम: प्रवर्तित विद्युतगामी बल e = - dΦ / dt.",
-          "लेन्झचा नियम: प्रवर्तित EMF नेहमी बदलाला विरोध करतो (ऊर्जा संवर्धन नियम).",
-          "धावणाऱ्या दांड्यातील EMF: e = B v L.",
-          "फिरणाऱ्या दांड्यातील EMF: e = (1/2) B ω L².",
-          "स्व-प्रेरकत्व (Self Inductance): e = - L (dI/dt), सोलेनॉइडसाठी L = μ₀ n² A l.",
-        ],
-        keyFormula: "e = - dΦ/dt | e = B v L | e = (1/2) B ω L² | L = μ₀ n² A l",
+        keyFormula: "e = - dΦ/dt | e = B v L | e = (1/2) B ω L² | L = μ₀ n² A l"
       },
       {
         title: "2. Alternating Current (AC) & LCR Resonance",
-        titleMr: "२. प्रत्यावर्ती धारा (AC) आणि LCR अनुनाद",
         points: [
           "RMS Values: I_rms = I₀ / √2 ≈ 0.707 I₀, V_rms = V₀ / √2 ≈ 0.707 V₀.",
           "Average Value (half cycle): I_avg = (2 / π) I₀ ≈ 0.637 I₀.",
@@ -426,19 +306,12 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Quality Factor (Q-factor): Q = ω_r L / R = (1/R) √(L/C).",
           "Average AC Power: P_avg = V_rms I_rms cos φ, where cos φ = R / Z is the Power Factor.",
         ],
-        pointsMr: [
-          "RMS मूल्य: I_rms = I₀ / √2 = 0.707 I₀.",
-          "प्रेरक रोध (X_L): X_L = 2π f L; धारक रोध (X_C): X_C = 1 / (2π f C).",
-          "LCR एकूण रोध (Impedance): Z = √[ R² + (X_L - X_C)² ].",
-          "अनुनाद वारंवारता (Resonance): f_r = 1 / (2π √(LC)), येथे Z = R (किमान) व करंट कमाल होतो.",
-          "पॉवर फॅक्टर: cos φ = R / Z. अनुनादाच्या वेळी cos φ = 1.",
-        ],
-        keyFormula: "Z = √[ R² + (X_L - X_C)² ] | f_r = 1 / (2π √(LC)) | P_avg = V_rms I_rms cos φ",
+        keyFormula: "Z = √[ R² + (X_L - X_C)² ] | f_r = 1 / (2π √(LC)) | P_avg = V_rms I_rms cos φ"
       },
     ],
     quickRevisionPoints: [
-      { en: "In a purely inductive or purely capacitive AC circuit, φ = 90°, so Power Factor cos φ = 0 and average power consumed is ZERO (Wattless Current).", mr: "शुद्ध इंडक्टर किंवा कपॅसिटर परिपथात cos φ = ० असल्याने सरासरी खर्ची पडणारी विद्युत शक्ती शून्य असते (वॉटलेस करंट)." },
-      { en: "Transformer Equation: V_s / V_p = N_s / N_p = I_p / I_s = k (transformation ratio).", mr: "ट्रान्सफॉर्मर सूत्र: V_s / V_p = N_s / N_p = I_p / I_s = k." },
+      { en: "In a purely inductive or purely capacitive AC circuit, φ = 90°, so Power Factor cos φ = 0 and average power consumed is ZERO (Wattless Current)." },
+      { en: "Transformer Equation: V_s / V_p = N_s / N_p = I_p / I_s = k (transformation ratio)." },
     ],
     keyFormulasTable: [
       { name: "Faraday's Law", formula: "e = - dΦ / dt", description: "EMF induced due to rate of change of magnetic flux" },
@@ -449,29 +322,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming domestic AC voltage (220V, 50Hz) is the peak voltage V0.",
-        mistakeMr: "घरातील २२०V AC व्होल्टेज हे पीक व्होल्टेज V० आहे असे मानणे.",
-        correction: "220V is the RMS value (V_rms). Peak voltage is actually V0 = 220 × √2 ≈ 311 Volts!",
-        correctionMr: "२२०V हे RMS मूल्य असते. पीक व्होल्टेज V० = २२० × √२ = ३११ व्होल्ट असते.",
+        correction: "220V is the RMS value (V_rms). Peak voltage is actually V0 = 220 × √2 ≈ 311 Volts!"
       },
-    ],
+    ]
   },
 
   // 6. Modern Physics & Dual Nature
   {
     id: "note_phy_modern_physics",
     chapter: "Modern Physics & Dual Nature",
-    chapterMr: "आधुनिक भौतिकशास्त्र आणि अणू-केंद्रक (Modern Physics)",
     subject: "Physics",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Photoelectric Effect, Bohr Model, Radioactivity & Semiconductors",
-    titleMr: "प्रकाशविद्युत परिणाम, बोर मॉडेल, किरणोत्सार व सेमीकंडक्टर नोट्स",
     summary: "Einstein's Photoelectric Equation, de Broglie wavelength, Bohr's postulates & energy levels, Radioactive decay law, Half-life, p-n junction, and logic gates.",
-    summaryMr: "आइन्स्टाईनचे प्रकाशविद्युत समीकरण, द ब्रॉग्ली तरंगलांबी, बोरचे गृहीतके व ऊर्जा स्तर, किरणोत्सारी क्षय नियम, अर्ध-आयुष्यकाळ, p-n जंक्शन डायोड आणि लॉजिक गेट्स.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Photoelectric Effect & Dual Nature of Radiation",
-        titleMr: "१. प्रकाशविद्युत परिणाम व द्वैत स्वभाव",
         points: [
           "Photon Energy: E = h ν = h c / λ. Momentum: p = h / λ = E / c.",
           "Einstein's Photoelectric Equation: K_max = h ν - Φ₀ = e V₀, where Φ₀ = h ν₀ is work function.",
@@ -480,18 +347,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "de Broglie Wavelength: λ = h / p = h / (m v) = h / √(2 m K).",
           "For electron accelerated through potential V: λ = 12.27 / √V Å = 1.227 / √V nm.",
         ],
-        pointsMr: [
-          "फोटॉन ऊर्जा: E = h ν = h c / λ.",
-          "आइन्स्टाईनचे समीकरण: K_max = h ν - Φ₀ = e V₀ (येथे Φ₀ = कार्यफलन).",
-          "थांबवणारा विभव (Stopping Potential): e V₀ = h (ν - ν₀).",
-          "फोटोइलेक्ट्रिक करंट प्रकाशाच्या तीव्रतेवर अवलंबून असतो, तर इलेक्ट्रॉनची ऊर्जा वारंवारतेवर अवलंबून असते.",
-          "इलेक्ट्रॉनची द ब्रॉग्ली तरंगलांबी: λ = १२.२७ / √V Å.",
-        ],
-        keyFormula: "K_max = h ν - Φ₀ = e V₀ | λ = h / √(2mK) = 12.27/√V Å",
+        keyFormula: "K_max = h ν - Φ₀ = e V₀ | λ = h / √(2mK) = 12.27/√V Å"
       },
       {
         title: "2. Atomic Structure & Bohr's Hydrogen Model",
-        titleMr: "२. अणू रचना आणि बोरचे हायड्रोजन मॉडेल",
         points: [
           "Bohr Postulate 1: Centripetal force provided by electrostatic attraction: m v² / r = (1/4πε₀) (e² / r²).",
           "Bohr Postulate 2: Quantization of Angular Momentum: L = m v r = n (h / 2π) = n ℏ.",
@@ -501,18 +360,11 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Rydberg Formula for Spectral Lines: 1/λ = R_H Z² [ (1/n₁²) - (1/n₂²) ].",
           "Spectral Series: Lyman (n₁=1, UV), Balmer (n₁=2, Visible), Paschen (n₁=3, IR), Brackett (n₁=4, IR), Pfund (n₁=5, Far IR).",
         ],
-        pointsMr: [
-          "कोनीय संवेग परिमाणीकरण: L = m v r = n h / (2π).",
-          "n व्या कक्षेची त्रिज्या: r_n = ०.५२९ × (n² / Z) Å.",
-          "n व्या कक्षेतील ऊर्जा: E_n = - १३.६ × (Z² / n²) eV.",
-          "वर्णपंक्ती श्रेणी: लायमन (Lyman - अतिनील UV), बामर (Balmer - दृश्य Visible), पाश्चेन (Paschen - अवरक्त IR).",
-        ],
         keyFormula: "E_n = -13.6 (Z²/n²) eV | r_n = 0.529 (n²/Z) Å | 1/λ = R_H [ 1/n₁² - 1/n₂² ]",
-        keyMnemonic: "L B P B P -> Lyman (UV), Balmer (Visible), Paschen, Brackett, Pfund (all IR).",
+        keyMnemonic: "L B P B P -> Lyman (UV), Balmer (Visible), Paschen, Brackett, Pfund (all IR)."
       },
       {
         title: "3. Radioactivity & Semiconductor Electronics",
-        titleMr: "३. किरणोत्सार आणि सेमीकंडक्टर",
         points: [
           "Radioactive Decay Law: N(t) = N₀ e^(-λ t).",
           "Half-life: T_1/2 = ln 2 / λ = 0.693 / λ. Mean life: τ = 1 / λ = 1.44 T_1/2.",
@@ -521,18 +373,12 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Intrinsic vs Extrinsic Semiconductors: n_type (doped with pentavalent P, As: electrons majority); p_type (doped with trivalent B, Al, In: holes majority). Mass action law: n_e · n_h = n_i².",
           "Logic Gates: AND (Y=A·B), OR (Y=A+B), NOT (Y=A'), NAND (Y=(A·B)'), NOR (Y=(A+B)').",
         ],
-        pointsMr: [
-          "क्षय नियम: N(t) = N₀ e^(-λt).",
-          "अर्ध आयुष्यकाळ: T_1/2 = ०.६९३ / λ. n अर्ध-आयुष्यानंतर उरलेले अणू: N = N₀ (१/२)^n.",
-          "बंधन ऊर्जा (Binding Energy): BE = Δm × ९३१.५ MeV.",
-          "p-n जंक्शन: फॉरवर्ड बायसमध्ये करंट वाहतो, रिव्हर्स बायसमध्ये सूक्ष्म करंट (झेनर डायोड व्होल्टेज रेग्युलेटर म्हणून).",
-        ],
-        keyFormula: "N = N₀ (1/2)^n | T_1/2 = 0.693/λ | BE = Δm × 931.5 MeV",
+        keyFormula: "N = N₀ (1/2)^n | T_1/2 = 0.693/λ | BE = Δm × 931.5 MeV"
       },
     ],
     quickRevisionPoints: [
-      { en: "Balmer series is the only spectral series of hydrogen falling in the visible spectrum region.", mr: "हायड्रोजन वर्णपंक्तीमधील केवळ बामर (Balmer) श्रेणीच मानवी डोळ्यांना दिसणाऱ्या (Visible) प्रकाशात येते." },
-      { en: "Universal Logic Gates: NAND and NOR can be combined to form all basic gates (AND, OR, NOT).", mr: "NAND आणि NOR हे युनिव्हर्सल गेट्स आहेत कारण यांच्या साहाय्याने कोणतेही गेट बनवता येते." },
+      { en: "Balmer series is the only spectral series of hydrogen falling in the visible spectrum region." },
+      { en: "Universal Logic Gates: NAND and NOR can be combined to form all basic gates (AND, OR, NOT)." },
     ],
     keyFormulasTable: [
       { name: "Einstein Photoelectric Equation", formula: "K_max = h ν - Φ₀ = e V₀", description: "Conservation of energy in photoelectric emission" },
@@ -543,29 +389,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming increasing light intensity increases the maximum kinetic energy of photoelectrons.",
-        mistakeMr: "प्रकाशाची तीव्रता वाढवल्यास इलेक्ट्रॉन्सची गतिज ऊर्जा वाढते असे मानणे.",
-        correction: "Intensity only increases the NUMBER of photoelectrons (current); Kinetic energy depends STRICTLY on frequency of incident light.",
-        correctionMr: "तीव्रता वाढल्याने फक्त करंट (इलेक्ट्रॉन्सची संख्या) वाढतो; गतिज ऊर्जा केवळ वारंवारतेवर (Frequency) अवलंबून असते.",
+        correction: "Intensity only increases the NUMBER of photoelectrons (current); Kinetic energy depends STRICTLY on frequency of incident light."
       },
-    ],
+    ]
   },
 
   // 7. Oscillations & Waves
   {
     id: "note_phy_oscillations_waves",
     chapter: "Oscillations & Waves",
-    chapterMr: "दोलने आणि ध्वनी लहरी (Oscillations & Waves)",
     subject: "Physics",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Simple Harmonic Motion (SHM), Wave Superposition, Doppler Effect Notes",
-    titleMr: "सरळ आवर्ती गती (SHM), ध्वनी तरंगांचे अध्यारोपण व डॉप्लर इफेक्ट",
     summary: "Differential equation of linear SHM, Velocity, Acceleration, Energy of SHM, Simple Pendulum, Standing Waves in Strings & Pipes, Beats, and Doppler Effect.",
-    summaryMr: "SHM चे अवकल समीकरण, वेग, प्रवेग, दोलनातील गतिज व स्थितीज ऊर्जा, साधा लंबक, ताणलेल्या तारेतील व नळीतील अप्रगामी तरंगांचे प्रकार, बीट्स आणि डॉप्लर इफेक्ट.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Simple Harmonic Motion (SHM)",
-        titleMr: "१. सरळ आवर्ती गती (SHM)",
         points: [
           "Differential Equation: d²x/dt² + ω² x = 0 (where ω = √(k/m)).",
           "Displacement: x = A sin(ω t + φ). Velocity: v = ω √(A² - x²). Max velocity at mean position: v_max = A ω.",
@@ -575,18 +415,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Simple Pendulum: T = 2π √(L / g). Seconds pendulum has T = 2 seconds (length L ≈ 1 meter).",
           "Spring-Mass System: T = 2π √(m / k). In series: 1/k_eq = 1/k₁ + 1/k₂; In parallel: k_eq = k₁ + k₂.",
         ],
-        pointsMr: [
-          "SHM चे समीकरण: d²x/dt² + ω² x = 0.",
-          "वेग: v = ω √(A² - x²). मध्यभागी कमाल वेग v_max = A ω.",
-          "प्रवेग: a = - ω² x. टोकावर कमाल प्रवेग a_max = ω² A.",
-          "एकूण ऊर्जा: E = (1/2) m ω² A² (सर्व ठिकाणी स्थिर राहते).",
-          "साधा लंबक आवर्तकाळ: T = 2π √(L / g). सेकंद लंबकाचा आवर्तकाळ २ सेकंद असतो.",
-        ],
-        keyFormula: "v = ω√(A² - x²) | a = -ω² x | E = (1/2) m ω² A² | T = 2π√(L/g)",
+        keyFormula: "v = ω√(A² - x²) | a = -ω² x | E = (1/2) m ω² A² | T = 2π√(L/g)"
       },
       {
         title: "2. Stationary Waves, Organ Pipes & Doppler Effect",
-        titleMr: "२. अप्रगामी तरंग, ऑर्गन पाईप्स आणि डॉप्लर इफेक्ट",
         points: [
           "Stretched String Fundamental Frequency: n = (1 / 2L) √(T / m) (where m is mass per unit length).",
           "Pipe Open at Both Ends: Fundamental n₀ = v / (2L). All harmonics (1n₀, 2n₀, 3n₀...) present.",
@@ -595,20 +427,13 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Beats Frequency: Beat frequency = |n₁ - n₂| (Difference of frequencies).",
           "Doppler Effect in Sound: Apparent frequency f' = f [ (v ± v_o) / (v ∓ v_s) ].",
         ],
-        pointsMr: [
-          "ताणलेल्या तारेची वारंवारता: n = (1/2L) √(T/m).",
-          "दोन्ही बाजूंनी उघडी नळी: n = v / (2L) (सर्व १, २, ३... हार्मोनिक्स उपस्थित).",
-          "एका बाजूने बंद नळी: n = v / (4L) (केवळ विषम १, ३, ५... हार्मोनिक्स उपस्थित).",
-          "बीट्स (Beats): बीट वारंवारता = |n₁ - n₂|.",
-          "डॉप्लर परिणाम: f' = f [ (v ± v_o) / (v ∓ v_s) ].",
-        ],
         keyFormula: "n_open = v/(2L) | n_closed = v/(4L) | Beat Freq = |n₁ - n₂|",
-        examTip: "A closed pipe of length L has the same fundamental frequency as an open pipe of length 2L.",
+        examTip: "A closed pipe of length L has the same fundamental frequency as an open pipe of length 2L."
       },
     ],
     quickRevisionPoints: [
-      { en: "In SHM, Kinetic energy equals Potential energy at x = ± A / √2 (where K = U = E/2).", mr: "SHM मध्ये x = ± A / √२ या बिंदूवर गतिज ऊर्जा व स्थितिज ऊर्जा एकमेकांइतकी (अर्धी) होते." },
-      { en: "Waxing a tuning fork decreases its frequency; Filing a tuning fork increases its frequency.", mr: "ट्युनिंग फोर्कला मेण लावल्यास वारंवारता कमी होते; घासल्यास (filing) वारंवारता वाढते." },
+      { en: "In SHM, Kinetic energy equals Potential energy at x = ± A / √2 (where K = U = E/2)." },
+      { en: "Waxing a tuning fork decreases its frequency; Filing a tuning fork increases its frequency." },
     ],
     keyFormulasTable: [
       { name: "Total SHM Energy", formula: "E = (1/2) m ω² A²", description: "Constant mechanical energy in simple harmonic motion" },
@@ -619,29 +444,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Counting both even and odd harmonics for an organ pipe closed at one end.",
-        mistakeMr: "एका बाजूने बंद असणाऱ्या पाईपमध्ये सम (even) हार्मोनिक्स मोजणे.",
-        correction: "A closed pipe produces ONLY odd harmonics (1st, 3rd, 5th...). The 1st overtone is the 3rd harmonic!",
-        correctionMr: "बंद पाईपमध्ये फक्त विषम हार्मोनिक्स असतात. पहिला ओव्हरटोन म्हणजेच तिसरा हार्मोनिक (3n) असतो.",
+        correction: "A closed pipe produces ONLY odd harmonics (1st, 3rd, 5th...). The 1st overtone is the 3rd harmonic!"
       },
-    ],
+    ]
   },
 
   // 8. Gravitation & Laws of Motion
   {
     id: "note_phy_gravitation_laws",
     chapter: "Gravitation & Laws of Motion",
-    chapterMr: "गुरुत्वाकर्षण आणि गतीचे नियम (Gravitation & Laws)",
     subject: "Physics",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Gravitation, Kepler's Laws, Newton's Laws & Friction Master Notes",
-    titleMr: "गुरुत्वाकर्षण, केपलरचे नियम, न्यूटनचे गती नियम व घर्षण नोट्स",
     summary: "Newton's Universal Law of Gravitation, Variation of g with altitude & depth, Kepler's Laws, Escape Velocity, Orbital Velocity, Newton's Laws of Motion, and Friction.",
-    summaryMr: "न्यूटनचा वैश्विक गुरुत्वाकर्षण नियम, उंची व खोलीनुसार 'g' मधील बदल, केपलरचे नियम, मुक्ती वेग (Escape Velocity), कक्षीय वेग, न्यूटनचे गती नियम आणि घर्षण.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Gravitation, Kepler's Laws & Satellites",
-        titleMr: "१. गुरुत्वाकर्षण, केपलरचे नियम व उपग्रह",
         points: [
           "Newton's Law: F = G M m / r² (where G = 6.67 × 10⁻¹¹ N·m²/kg²).",
           "Acceleration due to gravity at Earth surface: g = G M / R² ≈ 9.8 m/s².",
@@ -651,19 +470,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Escape Velocity from surface: v_e = √(2 G M / R) = √(2 g R) ≈ 11.2 km/s.",
           "Orbital Velocity of satellite near surface: v_o = √(G M / R) = √(g R) ≈ 7.92 km/s. Note: v_e = √2 · v_o.",
         ],
-        pointsMr: [
-          "गुरुत्वाकर्षण बल: F = G M m / r².",
-          "पृथ्वीच्या पृष्ठभागावर प्रवेग: g = G M / R² = ९.८ m/s².",
-          "उंचीनुसार 'g': g_h = g (1 - 2h/R); खोलीनुसार 'g': g_d = g (1 - d/R). पृथ्वीच्या केंद्रस्थानी g = ०.",
-          "केपलरचा तिसरा नियम: T² ∝ r³.",
-          "मुक्ती वेग (Escape Velocity): v_e = √(2 g R) = ११.२ किमी/सेकंद.",
-          "कक्षीय वेग (Orbital Velocity): v_o = √(g R) = ७.९२ किमी/सेकंद. (v_e = √२ × v_o).",
-        ],
-        keyFormula: "g = GM/R² | v_e = √(2gR) ≈ 11.2 km/s | v_o = √(gR) | T² ∝ r³",
+        keyFormula: "g = GM/R² | v_e = √(2gR) ≈ 11.2 km/s | v_o = √(gR) | T² ∝ r³"
       },
       {
         title: "2. Newton's Laws of Motion & Friction",
-        titleMr: "२. न्यूटनचे गती नियम आणि घर्षण",
         points: [
           "Newton's 2nd Law: F_net = dp/dt = m a (for constant mass). Impulse J = F Δt = Δp.",
           "Conservation of Linear Momentum: When F_ext = 0 => m₁ v₁ + m₂ v₂ = constant.",
@@ -672,19 +482,12 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Angle of Friction (λ): tan λ = μ_s. Angle of Repose (θ): θ = λ.",
           "Connected Bodies on Pulley (Atwood Machine): a = (m₁ - m₂) g / (m₁ + m₂), Tension T = 2 m₁ m₂ g / (m₁ + m₂).",
         ],
-        pointsMr: [
-          "न्यूटनचा दुसरा नियम: F = m a. संवेग बदल (Impulse): J = F Δt = Δp.",
-          "संवेग संवर्धन नियम: बाह्य बल शून्य असल्यास एकूण रेषीय संवेग स्थिर राहतो.",
-          "स्थितिक घर्षण कमाल मर्यादा: f_L = μ_s N.",
-          "गतिक घर्षण: f_k = μ_k N.",
-          "कप्पीवरील प्रवेग: a = (m₁ - m₂) g / (m₁ + m₂), ताण T = 2 m₁ m₂ g / (m₁ + m₂).",
-        ],
-        keyFormula: "F = dp/dt = m a | f_L = μ_s N | a_pulley = (m₁ - m₂)g / (m₁ + m₂)",
+        keyFormula: "F = dp/dt = m a | f_L = μ_s N | a_pulley = (m₁ - m₂)g / (m₁ + m₂)"
       },
     ],
     quickRevisionPoints: [
-      { en: "Total energy of an orbiting satellite is negative: E_total = - G M m / (2r) = - K = U / 2.", mr: "कक्षेत फिरणाऱ्या उपग्रहाची एकूण ऊर्जा ऋण असते: E = - K = U / 2." },
-      { en: "Geostationary Satellite: Time period = 24 hours, height above surface ≈ 36,000 km, rotates West to East in equatorial plane.", mr: "भूस्थिर उपग्रहाचा आवर्तकाळ २४ तास, उंची ३६,००० किमी असून तो पश्चिमेकडून पूर्वेकडे फिरतो." },
+      { en: "Total energy of an orbiting satellite is negative: E_total = - G M m / (2r) = - K = U / 2." },
+      { en: "Geostationary Satellite: Time period = 24 hours, height above surface ≈ 36,000 km, rotates West to East in equatorial plane." },
     ],
     keyFormulasTable: [
       { name: "Escape Velocity", formula: "v_e = √(2 g R)", description: "Minimum speed required to escape gravitational pull" },
@@ -695,29 +498,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Using formula g_h = g(1 - 2h/R) when h is comparable to Earth radius R (e.g., h = R).",
-        mistakeMr: "h ची किंमत खूप मोठी असताना (उदा. h = R) g_h = g(1 - 2h/R) हे अंदाजे सूत्र वापरणे.",
-        correction: "g_h = g(1 - 2h/R) is an approximation valid ONLY for h << R (e.g., h < 500 km). For large h, use exact formula g_h = g [R / (R + h)]².",
-        correctionMr: "h चे मूल्य मोठे असल्यास अचूक सूत्र g_h = g [R / (R + h)]² वापरावे.",
+        correction: "g_h = g(1 - 2h/R) is an approximation valid ONLY for h << R (e.g., h < 500 km). For large h, use exact formula g_h = g [R / (R + h)]²."
       },
-    ],
+    ]
   },
 
   // 8. Electromagnetic Induction (EMI) & AC Circuits
   {
     id: "note_phy_emi_ac_circuits",
     chapter: "Electromagnetic Induction & AC Circuits",
-    chapterMr: "विद्युतचुंबकीय प्रवर्तन आणि प्रत्यावर्ती धारा (EMI & AC)",
     subject: "Physics",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "EMI, Faraday's Laws, Self/Mutual Inductance & LCR Resonance Notes",
-    titleMr: "विद्युतचुंबकीय प्रवर्तन, लेन्झचा नियम, LCR अनुनाद व ट्रान्सफॉर्मर सूत्रे",
     summary: "Magnetic Flux, Faraday's Laws, Lenz's Law, Motional EMF, Inductance (L and M), AC Peak vs RMS, Reactance, Impedance, LCR Series Resonance, Quality Factor, and Transformers.",
-    summaryMr: "चुंबकीय फ्लक्स, फॅराडेचे नियम, लेन्झचा नियम, प्रेरकत्व (L व M), RMS व्होल्टेज व प्रवाह, LCR मालिका अनुनाद, Q-फॅक्टर आणि ट्रान्सफॉर्मरची कार्यपद्धती.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Faraday's Laws, Lenz's Law & Motional EMF",
-        titleMr: "१. फॅराडेचे नियम, लेन्झचा नियम व गतिज EMF",
         points: [
           "Magnetic Flux: Φ = B · A = B A cos θ (SI Unit: Weber, Wb; 1 Wb = 10⁸ Maxwell).",
           "Faraday's Law of Induction: e = - dΦ/dt = - N (dΦ/dt).",
@@ -728,21 +525,11 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Energy Stored in Inductor: U = (1/2) L I² (Magnetic energy density u_B = B² / 2μ₀).",
           "Mutual Inductance (M): Φ₂ = M I₁ => e₂ = - M (dI₁/dt). For concentric coils: M = k √(L₁ L₂).",
         ],
-        pointsMr: [
-          "चुंबकीय फ्लक्स: Φ = B A cos θ (एकक: वेबर Wb).",
-          "फॅराडेचा नियम: e = - dΦ/dt.",
-          "लेन्झचा नियम: प्रेरित प्रवाह हा ज्या बदलामुळे निर्माण होतो त्यालाच विरोध करतो (ऊर्जा संवर्धन नियम).",
-          "गतिज EMF: e = B L v (B ला लंब गती).",
-          "फिरणाऱ्या दांड्यामधील EMF: e = (1/2) B L² ω.",
-          "स्वयंप्रेरकत्व (Self Inductance): e = - L (dI/dt), साठवलेली ऊर्जा: U = (1/2) L I².",
-          "परस्पर प्रेरकत्व (Mutual Inductance): M = k √(L₁ L₂).",
-        ],
         keyFormula: "e = - dΦ/dt | e_motional = B L v | U = (1/2) L I² | M = k √(L₁ L₂)",
-        keyMnemonic: "Lenz opposes cause: Increase in flux -> opposing field; Decrease in flux -> supporting field.",
+        keyMnemonic: "Lenz opposes cause: Increase in flux -> opposing field; Decrease in flux -> supporting field."
       },
       {
         title: "2. Alternating Current (AC) & LCR Series Resonance",
-        titleMr: "२. प्रत्यावर्ती धारा (AC) आणि LCR मालिका अनुनाद",
         points: [
           "RMS & Peak Values: I_rms = I₀ / √2 ≈ 0.707 I₀, V_rms = V₀ / √2 ≈ 0.707 V₀.",
           "Average Value (Half Cycle): I_avg = 2 I₀ / π ≈ 0.637 I₀ (Full cycle average is 0).",
@@ -755,20 +542,12 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Power in AC Circuit: P_avg = V_rms I_rms cos φ, where cos φ = R / Z (Power Factor).",
           "Transformer Ratio: V_s / V_p = N_s / N_p = I_p / I_s = k (Step-up: k > 1, Step-down: k < 1).",
         ],
-        pointsMr: [
-          "RMS मूल्य: I_rms = I₀ / √2 = ०.७०७ I₀, V_rms = V₀ / √2.",
-          "प्रेरक रोध (X_L): X_L = 2π f L; धारिता रोध (X_C): X_C = 1 / (2π f C).",
-          "LCR एकूण रोध (Impedance): Z = √[ R² + (X_L - X_C)² ].",
-          "अनुनाद वारंवारता (Resonance Frequency): f_r = 1 / (2π √(L C)).",
-          "अनुनादाच्या वेळी: Z = R (किमान रोध), प्रवाह कमाल, पॉवर फॅक्टर cos φ = १.",
-          "ट्रान्सफॉर्मर गुणोत्तर: V_s / V_p = N_s / N_p = I_p / I_s.",
-        ],
-        keyFormula: "f_r = 1 / (2π √(LC)) | Z = √[R² + (X_L - X_C)²] | P_avg = V_rms I_rms cos φ",
+        keyFormula: "f_r = 1 / (2π √(LC)) | Z = √[R² + (X_L - X_C)²] | P_avg = V_rms I_rms cos φ"
       },
     ],
     quickRevisionPoints: [
-      { en: "In purely inductive or capacitive circuit, phase angle is 90° and average power consumed is ZERO (Wattless Current).", mr: "केवळ L किंवा C असणाऱ्या सर्किटमध्ये सरासरी खर्चीक पॉवर शून्य (Wattless current) असते." },
-      { en: "Choke coil has high inductance L and very low resistance R, ideal for controlling AC without major power loss.", mr: "चोक कॉईलमध्ये उच्च प्रेरकत्व आणि नगण्य रोध असल्याने ऊर्जेची हानी न होता AC नियंत्रित करता येतो." },
+      { en: "In purely inductive or capacitive circuit, phase angle is 90° and average power consumed is ZERO (Wattless Current)." },
+      { en: "Choke coil has high inductance L and very low resistance R, ideal for controlling AC without major power loss." },
     ],
     keyFormulasTable: [
       { name: "Resonant Frequency", formula: "f_r = 1 / (2π √(LC))", description: "Frequency at which series LCR circuit has minimum impedance" },
@@ -779,29 +558,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming frequency of AC in DC circuit or calculating X_L for DC.",
-        mistakeMr: "DC सर्किटसाठी AC ची वारंवारता मानणे किंवा इंडक्टरचा रोध काढणे.",
-        correction: "For direct current (DC), frequency f = 0. Therefore, X_L = 0 (inductor acts as short circuit/pure wire) and X_C = ∞ (capacitor blocks DC completely).",
-        correctionMr: "DC साठी वारंवारता f = 0 असल्याने इंडक्टरचा रोध X_L = 0 (शॉर्ट) आणि कपॅसिटरचा रोध X_C = अनंत (ब्लॉक) असतो.",
+        correction: "For direct current (DC), frequency f = 0. Therefore, X_L = 0 (inductor acts as short circuit/pure wire) and X_C = ∞ (capacitor blocks DC completely)."
       },
-    ],
+    ]
   },
 
   // 9. Magnetic Effects of Electric Current & Magnetism
   {
     id: "note_phy_magnetism_matter",
     chapter: "Magnetic Effects of Electric Current & Magnetism",
-    chapterMr: "विद्युतधारेचे चुंबकीय परिणाम आणि चुंबकत्व (Magnetism)",
     subject: "Physics",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Biot-Savart Law, Ampere's Law, Moving Coil Galvanometer & Magnetic Materials",
-    titleMr: "बायोट-साव्हर्ट नियम, अँपिअरचा नियम, गॅल्व्हानोमीटर व चुंबकीय पदार्थ",
     summary: "Biot-Savart Law, Field of Straight Wire & Circular Loop, Solenoid, Force on Moving Charge (Lorentz Force), Cyclotron, Torque on Loop, MCG Conversion (Ammeter & Voltmeter), and Dia/Para/Ferromagnetism.",
-    summaryMr: "बायोट-साव्हर्ट नियम, अँपिअरचा नियम, लॉरेन्झ बल, सायक्लोट्रॉन, गॅल्व्हानोमीटरचे ॲमीटर व व्होल्टमीटरमध्ये रूपांतर, आणि प्रतिचुंबकीय, अनुचुंबकीय व फेरोचुंबकीय पदार्थ.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Biot-Savart Law, Ampere's Law & Lorentz Force",
-        titleMr: "१. बायोट-साव्हर्ट नियम, अँपिअरचा नियम व लॉरेन्झ बल",
         points: [
           "Biot-Savart Law: dB = (μ₀ / 4π) · (I dl sin θ / r²), where μ₀/4π = 10⁻⁷ T·m/A.",
           "Magnetic Field at center of Circular Coil of N turns: B = μ₀ N I / (2 R).",
@@ -813,20 +586,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Force on Current Carrying Conductor in B: F = I (L × B) = I L B sin θ.",
           "Force between two parallel long currents: F/L = (μ₀ I₁ I₂) / (2π d) (Attract if same direction, Repel if opposite).",
         ],
-        pointsMr: [
-          "बायोट-साव्हर्ट नियम: dB = (μ₀ / 4π) (I dl sin θ / r²).",
-          "वर्तुळाकार कॉईलच्या केंद्रावरील चुंबकीय क्षेत्र: B = μ₀ N I / (2 R).",
-          "सरळ लांब तारेमुळे क्षेत्र: B = μ₀ I / (2π d).",
-          "सोलेनॉईडच्या आत: B = μ₀ n I (n = प्रति मीटर फेऱ्यांची संख्या).",
-          "लॉरेन्झ बल: F = q (v × B) = q v B sin θ.",
-          "चुंबकीय क्षेत्रातील वर्तुळाकार त्रिज्या: r = m v / (q B), आवर्तकाळ: T = 2π m / (q B).",
-          "दोन समांतर तारांमधील बल: F/L = μ₀ I₁ I₂ / (2π d).",
-        ],
-        keyFormula: "B_center = μ₀ N I / 2R | B_wire = μ₀ I / 2πd | r = mv / qB | F = q(v × B)",
+        keyFormula: "B_center = μ₀ N I / 2R | B_wire = μ₀ I / 2πd | r = mv / qB | F = q(v × B)"
       },
       {
         title: "2. Moving Coil Galvanometer (MCG) & Magnetic Properties of Matter",
-        titleMr: "२. मूव्हिंग कॉईल गॅल्व्हानोमीटर आणि चुंबकीय गुणधर्म",
         points: [
           "MCG Deflection Principle: Torque τ = N I A B = C θ => I = (C / NAB) θ = K θ.",
           "Conversion to Ammeter: Connect small shunt resistance S in parallel: S = [ I_g / (I - I_g) ] · G.",
@@ -836,19 +599,12 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Ferromagnetic: Strongly attracted, forms domains, χ is very large and positive. Above Curie Temp T_c becomes Paramagnetic (e.g., Fe, Co, Ni, Nd).",
           "Curie-Weiss Law (above T_c): χ = C / (T - T_c).",
         ],
-        pointsMr: [
-          "गॅल्व्हानोमीटरचे ॲमीटरमध्ये रूपांतर: समांतर जोडणीत लहान शंट रोध (S) जोडतात: S = I_g G / (I - I_g).",
-          "गॅल्व्हानोमीटरचे व्होल्टमीटरमध्ये रूपांतर: एकसर जोडणीत मोठा रोध (R_s) जोडतात: R_s = (V / I_g) - G.",
-          "प्रतिचुंबकीय (Diamagnetic): चुंबकीय क्षेत्राला विरोध करतात, χ ऋण असते (उदा. तांबे Cu, पाणी, Bi).",
-          "अनुचुंबकीय (Paramagnetic): हलके आकर्षित होतात, क्युरी नियमाचे पालन करतात χ ∝ 1/T (उदा. Al, O₂).",
-          "फेरोचुंबकीय (Ferromagnetic): अतिशय तीव्र आकर्षण, T_c च्या वर अनुचुंबकीय बनतात (उदा. Fe, Co, Ni).",
-        ],
-        keyFormula: "S = [I_g / (I - I_g)] G | R_s = (V / I_g) - G | Curie Law: χ = C / T",
+        keyFormula: "S = [I_g / (I - I_g)] G | R_s = (V / I_g) - G | Curie Law: χ = C / T"
       },
     ],
     quickRevisionPoints: [
-      { en: "Magnetic Lorentz force does ZERO work on a charged particle because F is always perpendicular to velocity v (Kinetic energy remains constant).", mr: "लॉरेन्झ चुंबकीय बल वेगाला लंब असल्याने ते कोणतेही कार्य करत नाही, त्यामुळे कणाची गतिज ऊर्जा स्थिर राहते." },
-      { en: "Ideal Ammeter has ZERO resistance; Ideal Voltmeter has INFINITE resistance.", mr: "आदर्श ॲमीटरचा रोध शून्य आणि आदर्श व्होल्टमीटरचा रोध अनंत असतो." },
+      { en: "Magnetic Lorentz force does ZERO work on a charged particle because F is always perpendicular to velocity v (Kinetic energy remains constant)." },
+      { en: "Ideal Ammeter has ZERO resistance; Ideal Voltmeter has INFINITE resistance." },
     ],
     keyFormulasTable: [
       { name: "Shunt Resistance", formula: "S = (I_g · G) / (I - I_g)", description: "Parallel resistor to convert galvanometer into ammeter" },
@@ -859,29 +615,23 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Connecting shunt in series or voltmeter multiplier in parallel.",
-        mistakeMr: "ॲमीटरचा शंट सिरीजमध्ये जोडणे किंवा व्होल्टमीटरचा रोध समांतर जोडणे.",
-        correction: "Ammeter Shunt is ALWAYS in PARALLEL with Galvanometer. Voltmeter Multiplier is ALWAYS in SERIES.",
-        correctionMr: "ॲमीटरसाठी शंट रोध नेहमी समांतर (Parallel) आणि व्होल्टमीटरसाठी रोध नेहमी एकसर (Series) जोडतात.",
+        correction: "Ammeter Shunt is ALWAYS in PARALLEL with Galvanometer. Voltmeter Multiplier is ALWAYS in SERIES."
       },
-    ],
+    ]
   },
 
   // 10. Semiconductor Electronics & Logic Gates
   {
     id: "note_phy_semiconductor_devices",
     chapter: "Semiconductor Electronics & Logic Gates",
-    chapterMr: "अर्धवाहक इलेक्ट्रॉनिक्स आणि लॉजिक गेट्स (Semiconductors)",
     subject: "Physics",
     exams: ["MHT_CET", "NEET", "JEE_MAIN"],
     title: "Semiconductor Physics, P-N Junction, Zener Diode & Logic Gates Notes",
-    titleMr: "अर्धवाहक, P-N जंक्शन, झेनर डायोड व्होल्टेज रेग्युलेटर आणि लॉजिक गेट्स",
     summary: "Intrinsic vs Extrinsic Semiconductors (P-type and N-type), Depletion Layer, Forward & Reverse Bias, Half Wave & Full Wave Rectifiers, Zener Diode as Voltage Regulator, Optoelectronic Devices (LED, Photodiode, Solar Cell), and Boolean Logic Gates (AND, OR, NOT, NAND, NOR, XOR).",
-    summaryMr: "नैसर्गिक व अपद्रव्यी अर्धवाहक (N-type व P-type), फॉरवर्ड व रिव्हर्स बायस, अर्ध व पूर्ण तरंग दिष्टकारी (Rectifiers), झेनर डायोड व्होल्टेज नियामक आणि सर्व लॉजिक गेट्सची सत्यता सारणी.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Semiconductors & P-N Junction Diode",
-        titleMr: "१. अर्धवाहक आणि P-N जंक्शन डायोड",
         points: [
           "Intrinsic Semiconductor (Pure Si, Ge): n_e = n_h = n_i. Conductivity σ = e (n_e μ_e + n_h μ_h).",
           "Extrinsic N-type: Doped with Pentavalent (P, As, Sb). Majority carriers = Electrons (n_e >> n_h), Donor energy level just below conduction band.",
@@ -891,19 +641,10 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "Reverse Bias: P connected to Negative, N to Positive. Depletion layer width INCREASES, barrier height rises (V_0 + V), only tiny minority leakage current flows (~μA).",
           "Rectifiers: Half-Wave Rectifier efficiency η_max = 40.6%, Ripple frequency = f. Full-Wave Rectifier η_max = 81.2%, Ripple frequency = 2f.",
         ],
-        pointsMr: [
-          "N-प्रकार: पंचसंयुजी अपद्रव्य (P, As) मिसळतात; बहुसंख्य वाहक = इलेक्ट्रॉन्स (n_e >> n_h).",
-          "P-प्रकार: त्रिसंयुजी अपद्रव्य (B, Al) मिसळतात; बहुसंख्य वाहक = होल्स (n_h >> n_e).",
-          "वस्तुमान क्रिया नियम: n_e · n_h = n_i².",
-          "फॉरवर्ड बायस: Depletion layer ची रुंदी कमी होते, विद्युतप्रवाह सहज वाहतो.",
-          "रिव्हर्स बायस: Depletion layer ची रुंदी वाढते, केवळ सूक्ष्म गळती प्रवाह (Leakage current) वाहतो.",
-          "रेक्टिफायर: हाफ-वेव्ह कमाल कार्यक्षमता = ४०.६% (रिपल = f), फुल-वेव्ह कमाल कार्यक्षमता = ८१.२% (रिपल = २f).",
-        ],
-        keyFormula: "n_e · n_h = n_i² | η_full_wave = 81.2% | Ripple freq_FW = 2f",
+        keyFormula: "n_e · n_h = n_i² | η_full_wave = 81.2% | Ripple freq_FW = 2f"
       },
       {
         title: "2. Zener Diode, Optoelectronics & Logic Gates",
-        titleMr: "२. झेनर डायोड आणि लॉजिक गेट्स (Logic Gates)",
         points: [
           "Zener Diode: Heavily doped P-N junction operated in REVERSE BREAKDOWN region, acts as constant Voltage Regulator.",
           "Photodiode: Operated in REVERSE bias to detect optical signals. Fast response, current proportional to light intensity.",
@@ -918,21 +659,13 @@ export const PHYSICS_NOTES: TopicNote[] = [
           "XOR Gate: Y = A ⊕ B = A' B + A B' (High when inputs are DIFFERENT).",
           "De Morgan's Laws: (A + B)' = A' · B' and (A · B)' = A' + B'.",
         ],
-        pointsMr: [
-          "झेनर डायोड: अतिडोप केलेला असतो, रिव्हर्स ब्रेकडाउन भागात व्होल्टेज रेग्युलेटर (Voltage Regulator) म्हणून काम करतो.",
-          "फोटोडायोड: रिव्हर्स बायसमध्ये कार्य करतो (प्रकाश तीव्रता मोजण्यासाठी).",
-          "LED: फॉरवर्ड बायसमध्ये प्रकाश उत्सर्जित करतो.",
-          "सार्वत्रिक गेट्स (Universal Gates): NAND आणि NOR गेट्स.",
-          "XOR गेट: इनपुट्स वेगळे (Different) असताना आउटपुट १ मिळते (A'B + AB').",
-          "डी मॉर्गनचे नियम: (A + B)' = A' · B' आणि (A · B)' = A' + B'.",
-        ],
         keyFormula: "De Morgan: (A + B)' = A' · B' | (A · B)' = A' + B' | Zener: V_out = V_Z",
-        keyMnemonic: "NAND & NOR are Universal: Build all other gates using only NAND or only NOR.",
+        keyMnemonic: "NAND & NOR are Universal: Build all other gates using only NAND or only NOR."
       },
     ],
     quickRevisionPoints: [
-      { en: "In semiconductor, conductivity increases with temperature (Negative Temperature Coefficient of resistance).", mr: "अर्धवाहकाचे तापमान वाढल्यास त्याचा रोध घटतो व वाहकता वाढते (ऋण तापमान गुणांक)." },
-      { en: "Zener breakdown occurs in heavily doped diodes with thin depletion region; Avalanche breakdown occurs in lightly doped diodes with thick depletion region.", mr: "झेनर ब्रेकडाउन उच्च डोपिंग असणाऱ्या डायोडमध्ये तर हिमस्खलन (Avalanche) ब्रेकडाउन कमी डोपिंगमध्ये घडते." },
+      { en: "In semiconductor, conductivity increases with temperature (Negative Temperature Coefficient of resistance)." },
+      { en: "Zener breakdown occurs in heavily doped diodes with thin depletion region; Avalanche breakdown occurs in lightly doped diodes with thick depletion region." },
     ],
     keyFormulasTable: [
       { name: "Mass Action Law", formula: "n_e · n_h = n_i²", description: "Product of electron and hole concentrations in thermal equilibrium" },
@@ -943,10 +676,8 @@ export const PHYSICS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Connecting Photodiode in forward bias or Zener regulator in forward bias.",
-        mistakeMr: "फोटोडायोड किंवा झेनर व्होल्टेज रेग्युलेटर फॉरवर्ड बायसमध्ये जोडणे.",
-        correction: "Photodiodes and Zener Voltage Regulators MUST ALWAYS be operated in REVERSE BIAS.",
-        correctionMr: "फोटोडायोड आणि झेनर व्होल्टेज रेग्युलेटर अनिवार्यपणे रिव्हर्स बायस (Reverse Bias) मध्येच जोडले जातात.",
+        correction: "Photodiodes and Zener Voltage Regulators MUST ALWAYS be operated in REVERSE BIAS."
       },
-    ],
+    ]
   },
 ];

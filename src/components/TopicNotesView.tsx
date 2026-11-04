@@ -42,13 +42,13 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
   const [selectedExam, setSelectedExam] = useState<ExamType | "All">(currentExam);
   const [selectedSubject, setSelectedSubject] = useState<SubjectType | "All">("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [viewLanguage, setViewLanguage] = useState<LanguageMode>(initialLanguage || "bilingual");
+  const [viewLanguage, setViewLanguage] = useState<LanguageMode>("en");
   const [onlyMvp, setOnlyMvp] = useState<boolean>(false);
   const [expandedNoteIds, setExpandedNoteIds] = useState<Set<string>>(
     new Set(TOPIC_NOTES_DATA.map((n) => n.id))
   );
   const [cardTabState, setCardTabState] = useState<Record<string, "points100" | "sections" | "formulas">>({});
-  const [instituteName, setInstituteName] = useState<string>("मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes, Ambad)");
+  const [instituteName, setInstituteName] = useState<string>("Mi Marathiwala Classes, Ambad");
 
   // Toggle single note expansion
   const toggleExpand = (id: string) => {
@@ -89,9 +89,9 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
       }
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const matchTitle = note.title.toLowerCase().includes(q) || note.titleMr.toLowerCase().includes(q);
-        const matchChapter = note.chapter.toLowerCase().includes(q) || note.chapterMr.toLowerCase().includes(q);
-        const matchSummary = note.summary.toLowerCase().includes(q) || note.summaryMr.toLowerCase().includes(q);
+        const matchTitle = note.title.toLowerCase().includes(q);
+        const matchChapter = note.chapter.toLowerCase().includes(q);
+        const matchSummary = note.summary.toLowerCase().includes(q);
         const matchFormulas = note.keyFormulasTable.some(
           (f) => f.name.toLowerCase().includes(q) || f.formula.toLowerCase().includes(q)
         );
@@ -111,12 +111,12 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
     printTopicNotesReport([note], instituteName, viewLanguage);
   };
 
-  const subjectsList: { id: SubjectType | "All"; label: string; labelMr: string }[] = [
-    { id: "All", label: "All Subjects", labelMr: "सर्व विषय" },
-    { id: "Physics", label: "Physics", labelMr: "भौतिकशास्त्र" },
-    { id: "Chemistry", label: "Chemistry", labelMr: "रसायनशास्त्र" },
-    { id: "Mathematics", label: "Mathematics", labelMr: "गणित" },
-    { id: "Biology", label: "Biology", labelMr: "जीवशास्त्र" },
+  const subjectsList: { id: SubjectType | "All"; label: string }[] = [
+    { id: "All", label: "All Subjects" },
+    { id: "Physics", label: "Physics" },
+    { id: "Chemistry", label: "Chemistry" },
+    { id: "Mathematics", label: "Mathematics" },
+    { id: "Biology", label: "Biology" },
   ];
 
   const [quickPdfChapterId, setQuickPdfChapterId] = useState<string>(TOPIC_NOTES_DATA[0]?.id || "");
@@ -127,7 +127,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      {/* Top Banner Card - Bhagva Saffron Theme */}
+      {/* Top Banner Card - Saffron Theme */}
       <div className="bg-gradient-to-r from-orange-950 via-amber-900 to-stone-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-orange-500/30 relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-8 -mr-8 w-64 h-64 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -141,7 +141,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                   title="Go back"
                 >
                   <ArrowLeft className="w-3.5 h-3.5 text-amber-300" />
-                  <span>← Back</span>
+                  <span>Back</span>
                 </button>
               )}
               <span className="px-3 py-1 rounded-full bg-orange-500/30 border border-orange-400/40 text-orange-200 text-xs font-black uppercase tracking-wider flex items-center gap-1.5">
@@ -185,7 +185,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
         </div>
       </div>
 
-      {/* NEW: Dedicated Chapter-Wise Quick PDF Selector Bar */}
+      {/* Chapter-Wise Quick PDF Selector Bar */}
       <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl p-4 sm:p-5 border-2 border-orange-200 shadow-xs space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
@@ -212,7 +212,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               >
                 {TOPIC_NOTES_DATA.map((note) => (
                   <option key={note.id} value={note.id}>
-                    [{note.subject}] {note.chapter} ({note.chapterMr})
+                    [{note.subject}] {note.chapter}
                   </option>
                 ))}
               </select>
@@ -237,7 +237,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               }}
               className="px-3.5 py-2 rounded-xl bg-white hover:bg-orange-100 text-orange-800 border border-orange-300 text-xs font-extrabold flex items-center gap-1.5 cursor-pointer transition-all"
             >
-              <span>View Notes ↓</span>
+              <span>View Notes</span>
             </button>
           </div>
         </div>
@@ -248,14 +248,14 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
         {/* Search and Institute Name Controls */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* Search Box */}
-          <div className="md:col-span-6 relative">
+          <div className="md:col-span-9 relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               id="input-notes-search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="कोणताही टॉपिक, सूत्र किंवा संकल्पना शोधा (उदा. Banking of Roads, Nernst, Central Dogma)..."
+              placeholder="Search any topic, formula or concept (e.g. Banking of Roads, Nernst, Central Dogma)..."
               className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all font-medium"
             />
           </div>
@@ -268,24 +268,10 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               onChange={(e) => setSelectedExam(e.target.value as any)}
               className="w-full py-2.5 px-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 font-bold focus:outline-hidden focus:ring-2 focus:ring-orange-500"
             >
-              <option value="All">सर्व परीक्षा (All Exams: MHT-CET + NEET + JEE)</option>
+              <option value="All">All Exams (MHT-CET + NEET + JEE)</option>
               <option value="MHT_CET">MHT-CET (Engineering / Pharmacy)</option>
               <option value="NEET">NEET (Medical UG)</option>
               <option value="JEE_MAIN">JEE Main (Engineering)</option>
-            </select>
-          </div>
-
-          {/* Language Mode */}
-          <div className="md:col-span-3">
-            <select
-              id="select-notes-language-mode"
-              value={viewLanguage}
-              onChange={(e) => setViewLanguage(e.target.value as any)}
-              className="w-full py-2.5 px-3 rounded-xl bg-orange-50 border border-orange-200 text-xs text-orange-950 font-extrabold focus:outline-hidden focus:ring-2 focus:ring-orange-500"
-            >
-              <option value="bilingual">मराठी + English (द्विभाषिक नोट्स)</option>
-              <option value="mr">केवळ मराठी (Marathi Only)</option>
-              <option value="en">English Only</option>
             </select>
           </div>
         </div>
@@ -313,7 +299,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                       : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                   }`}
                 >
-                  <span>{sub.labelMr}</span>
+                  <span>{sub.label}</span>
                   <span
                     className={`px-1.5 py-0.2 rounded-md text-[10px] font-mono-numbers ${
                       isSelected ? "bg-white/20 text-white" : "bg-slate-200 text-slate-700"
@@ -335,10 +321,10 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                   ? "bg-gradient-to-r from-amber-500 to-rose-500 text-white border-transparent shadow-md shadow-amber-500/20 scale-105"
                   : "bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-700 hover:bg-amber-100"
               }`}
-              title="परीक्षेत १००% येणारे संभाव्य Most MVP चॅप्टर्स"
+              title="Most MVP Chapters with 100% Exam Probability"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>🔥 १००% Most MVP चॅप्टर्स</span>
+              <span>🔥 100% Most MVP Chapters</span>
             </button>
           </div>
 
@@ -347,14 +333,14 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
               onClick={expandAll}
               className="text-xs text-orange-600 hover:text-orange-800 font-bold px-2 py-1 rounded-md hover:bg-orange-50 transition-colors"
             >
-              सर्व उघडा (Expand All)
+              Expand All
             </button>
             <span className="text-slate-300">•</span>
             <button
               onClick={collapseAll}
               className="text-xs text-slate-500 hover:text-slate-700 font-bold px-2 py-1 rounded-md hover:bg-slate-100 transition-colors"
             >
-              सर्व बंद करा (Collapse All)
+              Collapse All
             </button>
           </div>
         </div>
@@ -365,15 +351,12 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
         {filteredNotes.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 space-y-3">
             <BookOpen className="w-12 h-12 text-slate-300 mx-auto" />
-            <h3 className="text-base font-bold text-slate-800">कोणतीही नोट्स सापडली नाही</h3>
-            <p className="text-xs text-slate-500">कृपया तुमचे सर्च किंवा फिल्टर बदलून पुन्हा प्रयत्न करा.</p>
+            <h3 className="text-base font-bold text-slate-800">No notes found</h3>
+            <p className="text-xs text-slate-500">Please try changing your search or filter.</p>
           </div>
         ) : (
           filteredNotes.map((note) => {
             const isExpanded = expandedNoteIds.has(note.id);
-            const isMr = viewLanguage === "mr";
-            const isEn = viewLanguage === "en";
-            const isBilingual = viewLanguage === "bilingual";
 
             return (
               <div
@@ -411,7 +394,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                       </div>
 
                       <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-                        {note.chapterMr}
+                        {note.chapter}
                       </h2>
 
                       <p className="text-xs text-slate-600 italic">
@@ -426,10 +409,10 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                         id={`btn-export-pdf-${note.id}`}
                         onClick={() => handleExportSinglePdf(note)}
                         className="px-3.5 py-2 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-700 border border-orange-200 text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105"
-                        title="फक्त या प्रकरणाची PDF डाऊनलोड / प्रिंट करा"
+                        title="Download / Print PDF for this chapter"
                       >
                         <Printer className="w-3.5 h-3.5 text-orange-600" />
-                        <span>या चॅप्टरची PDF</span>
+                        <span>Get PDF</span>
                       </button>
 
                       {/* Practice CTA */}
@@ -437,9 +420,9 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                         <button
                           onClick={() => onNavigateToPractice(note.subject, note.chapter)}
                           className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-orange-600 text-white text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
-                          title="या चॅप्टरच्या प्रश्नांचा सराव करा"
+                          title="Practice questions for this chapter"
                         >
-                          <span>सराव करा</span>
+                          <span>Practice</span>
                           <ArrowRight className="w-3.5 h-3.5" />
                         </button>
                       )}
@@ -448,7 +431,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                       <button
                         onClick={() => toggleExpand(note.id)}
                         className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
-                        title={isExpanded ? "नोट्स लपवा" : "नोट्स दाखवा"}
+                        title={isExpanded ? "Hide notes" : "Show notes"}
                       >
                         {isExpanded ? (
                           <ChevronUp className="w-4 h-4" />
@@ -461,11 +444,8 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
 
                   {/* Summary Box */}
                   <div className="mt-3 bg-white/80 border border-slate-200/60 rounded-xl p-3 text-xs text-slate-700 leading-relaxed">
-                    <strong className="text-slate-900 font-bold">प्रकरणाचा सारांश: </strong>
-                    {isMr ? note.summaryMr : note.summary}
-                    {isBilingual && (
-                      <div className="text-[11px] text-slate-500 mt-1">({note.summary})</div>
-                    )}
+                    <strong className="text-slate-900 font-bold">Chapter Summary: </strong>
+                    {note.summary}
                   </div>
                 </div>
 
@@ -484,7 +464,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                           }`}
                         >
                           <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                          <span>💯 १०० महत्त्वाचे पॉईंट्स (100 High-Yield Points)</span>
+                          <span>💯 100 High-Yield Points</span>
                           <span className="bg-white/20 text-white px-1.5 py-0.2 rounded-md text-[10px] ml-0.5">
                             {note.points100?.length || 100}
                           </span>
@@ -499,7 +479,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                           }`}
                         >
                           <BookOpen className="w-3.5 h-3.5" />
-                          <span>सविस्तर विश्लेषण ({note.sections.length} उपविभाग)</span>
+                          <span>Detailed Analysis ({note.sections.length} Sections)</span>
                         </button>
 
                         <button
@@ -511,7 +491,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                           }`}
                         >
                           <Cpu className="w-3.5 h-3.5" />
-                          <span>सूत्रे व चुकांची यादी</span>
+                          <span>Formulas & Mistakes</span>
                         </button>
                       </div>
 
@@ -525,10 +505,9 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                       <Chapter100PointsSection
                         noteId={note.id}
                         chapterTitle={note.title}
-                        chapterTitleMr={note.chapterMr}
                         subject={note.subject}
                         points={note.points100 || []}
-                        language={viewLanguage}
+                        language="en"
                       />
                     )}
 
@@ -541,35 +520,17 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                             className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 sm:p-5 space-y-3"
                           >
                             <h3 className="text-sm sm:text-base font-black text-slate-900 border-b border-slate-200 pb-2">
-                              {isMr || isBilingual ? sec.titleMr : ""}
-                              {isBilingual && sec.title !== sec.titleMr && (
-                                <span className="text-xs font-semibold text-slate-500 ml-2">
-                                  • {sec.title}
-                                </span>
-                              )}
-                              {!isMr && !isBilingual && sec.title}
+                              {sec.title}
                             </h3>
 
                             {/* Points List */}
                             <ul className="space-y-2 text-xs text-slate-800">
                               {sec.points.map((pt, pIdx) => {
-                                const ptMr = sec.pointsMr && sec.pointsMr[pIdx] ? sec.pointsMr[pIdx] : "";
                                 return (
                                   <li key={pIdx} className="flex items-start gap-2 leading-relaxed">
                                     <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 mt-1.5 shrink-0"></span>
-                                    <div>
-                                      {(isBilingual || isMr) && ptMr && (
-                                        <div className="font-bold text-slate-900">{ptMr}</div>
-                                      )}
-                                      {(isBilingual || isEn || !ptMr) && (
-                                        <div
-                                          className={`text-slate-600 ${
-                                            isBilingual && ptMr ? "text-[11px] mt-0.5" : "font-semibold"
-                                          }`}
-                                        >
-                                          {pt}
-                                        </div>
-                                      )}
+                                    <div className="font-semibold text-slate-700">
+                                      {pt}
                                     </div>
                                   </li>
                                 );
@@ -581,7 +542,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                               <div className="bg-blue-50/80 border border-blue-200 rounded-xl p-2.5 text-xs text-blue-900 flex items-start gap-2">
                                 <Sparkles className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                                 <div>
-                                  <strong className="font-bold">महत्त्वाचे सूत्र (Formula): </strong>
+                                  <strong className="font-bold">Key Formula: </strong>
                                   <code className="font-mono font-bold text-blue-950 bg-blue-100/80 px-1.5 py-0.5 rounded-md">
                                     {sec.keyFormula}
                                   </code>
@@ -594,7 +555,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                               <div className="bg-purple-50/80 border border-purple-200 rounded-xl p-2.5 text-xs text-purple-900 flex items-start gap-2">
                                 <Lightbulb className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
                                 <div>
-                                  <strong className="font-bold">💡 मेमरी ट्रिक (Mnemonic): </strong>
+                                  <strong className="font-bold">💡 Memory Trick (Mnemonic): </strong>
                                   <span>{sec.keyMnemonic}</span>
                                 </div>
                               </div>
@@ -605,13 +566,8 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                               <div className="bg-amber-50/80 border border-amber-200 rounded-xl p-2.5 text-xs text-amber-900 flex items-start gap-2">
                                 <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                                 <div>
-                                  <strong className="font-bold">🎯 परीक्षेसाठी टीप (Exam Tip): </strong>
-                                  <span>{isMr && sec.examTipMr ? sec.examTipMr : sec.examTip}</span>
-                                  {isBilingual && sec.examTipMr && (
-                                    <span className="text-[11px] text-amber-800/80 ml-1">
-                                      ({sec.examTip})
-                                    </span>
-                                  )}
+                                  <strong className="font-bold">🎯 Exam Tip: </strong>
+                                  <span>{sec.examTip}</span>
                                 </div>
                               </div>
                             )}
@@ -628,16 +584,16 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                           <div className="space-y-2">
                             <h4 className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                               <Cpu className="w-3.5 h-3.5 text-indigo-600" />
-                              <span>Quick Formula Table (महत्त्वाची सूत्रे)</span>
+                              <span>Quick Formula Table</span>
                             </h4>
 
                             <div className="overflow-x-auto rounded-xl border border-slate-200">
                               <table className="w-full text-left text-xs border-collapse">
                                 <thead>
                                   <tr className="bg-slate-100/80 text-slate-700 font-bold border-b border-slate-200">
-                                    <th className="p-2.5">संकल्पना (Concept)</th>
-                                    <th className="p-2.5">सूत्र (Formula)</th>
-                                    <th className="p-2.5">स्पष्टीकरण (Description)</th>
+                                    <th className="p-2.5">Concept</th>
+                                    <th className="p-2.5">Formula</th>
+                                    <th className="p-2.5">Description</th>
                                   </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-200 bg-white">
@@ -661,7 +617,7 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                           <div className="space-y-2">
                             <h4 className="text-xs font-black uppercase tracking-wider text-rose-600 flex items-center gap-1.5">
                               <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
-                              <span>विद्यार्थ्यांकडून होणाऱ्या नेहमीच्या चुका व खबरदारी (Avoid Traps)</span>
+                              <span>Common Mistakes & Traps to Avoid</span>
                             </h4>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -671,10 +627,10 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                                   className="bg-rose-50/50 border border-rose-200 rounded-xl p-3 text-xs space-y-1.5"
                                 >
                                   <div className="text-rose-900 font-bold">
-                                    ❌ चूक: {isMr ? m.mistakeMr : m.mistake}
+                                    ❌ Mistake: {m.mistake}
                                   </div>
                                   <div className="text-emerald-800 font-bold">
-                                    ✓ योग्य: {isMr ? m.correctionMr : m.correction}
+                                    ✓ Correction: {m.correction}
                                   </div>
                                 </div>
                               ))}
@@ -687,14 +643,14 @@ export const TopicNotesView: React.FC<TopicNotesViewProps> = ({
                     {/* Card Footer Single PDF Download Button */}
                     <div className="pt-2 flex items-center justify-between border-t border-slate-100 text-xs">
                       <span className="text-slate-500 font-semibold">
-                        💯 १०० पॉईंट्स • {note.sections.length} उपविभाग • {note.keyFormulasTable.length} सूत्रे
+                        💯 100 Points • {note.sections.length} Sections • {note.keyFormulasTable.length} Formulas
                       </span>
                       <button
                         onClick={() => handleExportSinglePdf(note)}
                         className="px-4 py-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer hover:scale-105"
                       >
                         <Download className="w-3.5 h-3.5" />
-                        <span>या प्रकरणाची १०० पॉईंट्स PDF डाऊनलोड करा</span>
+                        <span>Download 100 Points PDF</span>
                       </button>
                     </div>
                   </div>

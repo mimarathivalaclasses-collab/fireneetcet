@@ -337,7 +337,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
             }`}
           >
             <Timer className="w-4 h-4 text-indigo-600" />
-            <span>वेळ: {formatTime(secondsRemaining)}</span>
+            <span>Time: {formatTime(secondsRemaining)}</span>
           </div>
 
           {perQuestionTimerSeconds && perQuestionTimerSeconds > 0 ? (
@@ -350,7 +350,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                   : "bg-indigo-600 text-white border-indigo-400 shadow-xs"
               }`}
             >
-              <span>⏱️ प्रश्न वेळ:</span>
+              <span>⏱️ Q Time:</span>
               <span className="text-sm font-black underline">{questionSecondsRemaining}s</span>
               {enforcePerQuestionTimer && (
                 <span className="text-[9px] px-1 py-0.2 bg-black/30 rounded font-normal uppercase">Auto-Next</span>
@@ -363,22 +363,6 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Language toggle */}
           <div className="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200 text-xs">
-            <button
-              onClick={() => setLanguage("bilingual")}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
-                language === "bilingual" ? "bg-indigo-600 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              द्विभाषिक
-            </button>
-            <button
-              onClick={() => setLanguage("mr")}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
-                language === "mr" ? "bg-indigo-600 text-white shadow-xs" : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              मराठी
-            </button>
             <button
               onClick={() => setLanguage("en")}
               className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
@@ -395,7 +379,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
             className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <Send className="w-3.5 h-3.5" />
-            <span>सबमिट करा</span>
+            <span>Submit</span>
           </button>
         </div>
       </header>
@@ -408,7 +392,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
           <div className="bg-slate-50 border-b border-slate-200 px-5 py-3 flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2">
               <span className="font-black text-slate-900 bg-white px-3 py-1 rounded-lg border border-slate-200 shadow-2xs">
-                प्रश्न {currentIndex + 1} / {selectedQuestions.length}
+                Question {currentIndex + 1} / {selectedQuestions.length}
               </span>
               <span className="font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200">
                 {currentQ.subject}
@@ -418,7 +402,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
 
             {currentMarking && (
               <div className="text-[11px] font-bold text-slate-600 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                बरोबर: <span className="text-emerald-600 font-black">+{currentMarking.correctMarks}</span> | चूक:{" "}
+                Correct: <span className="text-emerald-600 font-black">+{currentMarking.correctMarks}</span> | Wrong:{" "}
                 <span className="text-rose-600 font-black">{currentMarking.negativeMarks}</span>
               </div>
             )}
@@ -430,16 +414,11 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
             <div className="space-y-3">
               {(language === "en" || language === "bilingual") && (
                 <div className="text-base sm:text-lg font-bold text-slate-900 leading-relaxed" id="question-text">
-                  प्रश्न् {currentIndex + 1}: {currentQ.questionText}
+                  Question {currentIndex + 1}: {currentQ.questionText}
                 </div>
               )}
 
-              {(language === "mr" || language === "bilingual") && currentQ.questionTextMr && (
-                <div className="text-base sm:text-lg font-semibold text-slate-800 bg-amber-50/60 p-4 rounded-xl border border-amber-200/80 leading-relaxed">
-                  <span className="text-xs font-bold text-amber-900 block mb-1">मराठी भाषांतर:</span>
-                  प्रश्न् {currentIndex + 1}: {currentQ.questionTextMr}
-                </div>
-              )}
+              {/* Marathi Translation Removed - Only English Mode */}
             </div>
 
             {/* Options List */}
@@ -471,9 +450,6 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                     </span>
                     <div className="space-y-0.5 flex-1">
                       <div className="text-sm sm:text-base font-medium leading-snug">{optText}</div>
-                      {language !== "en" && optMrText && optMrText !== optText && (
-                        <div className="text-xs text-slate-600 font-normal">({optMrText})</div>
-                      )}
                     </div>
                   </button>
                 );
@@ -486,7 +462,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                 <summary className="px-4 py-3 text-xs font-black text-indigo-900 bg-indigo-50/70 hover:bg-indigo-100/80 cursor-pointer flex items-center justify-between transition-colors select-none">
                   <div className="flex items-center gap-2">
                     <span className="w-5 h-5 rounded-md bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold">✓</span>
-                    <span>योग्य उत्तर व सविस्तर स्पष्टीकरण (Solution & Explanation)</span>
+                    <span>Solution & Explanation</span>
                   </div>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-bold group-open:rotate-180 transition-transform">
                     ▼
@@ -494,26 +470,22 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                 </summary>
                 <div className="p-4 sm:p-5 space-y-3 bg-white text-xs">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-700">योग्य पर्याय:</span>
+                    <span className="font-bold text-slate-700">Correct Option:</span>
                     <span className="px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-950 font-black font-mono">
-                      पर्याय ({String.fromCharCode(65 + currentQ.correctOption)}) - {currentQ.options[currentQ.correctOption]}
+                      Option ({String.fromCharCode(65 + currentQ.correctOption)}) - {currentQ.options[currentQ.correctOption]}
                     </span>
                   </div>
 
                   {currentQ.formula && (
                     <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 font-mono text-xs">
-                      <strong>सूत्र (Formula): </strong> {currentQ.formula}
+                      <strong>Formula: </strong> {currentQ.formula}
                     </div>
                   )}
 
                   <div className="space-y-1.5 text-slate-700 leading-relaxed">
-                    <p className="font-bold text-slate-900">स्पष्टीकरण:</p>
+                    <p className="font-bold text-slate-900">Explanation:</p>
                     <p>{currentQ.explanation}</p>
-                    {currentQ.explanationMr && currentQ.explanationMr !== currentQ.explanation && (
-                      <p className="pt-1.5 text-slate-800 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
-                        {currentQ.explanationMr}
-                      </p>
-                    )}
+                    {/* Marathi Explanation Removed */}
                   </div>
                 </div>
               </details>
@@ -529,7 +501,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                 className="px-4 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-                <span>पुसून टाका (Clear)</span>
+                <span>Clear Response</span>
               </button>
 
               <button
@@ -538,7 +510,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                 className="px-3.5 py-2.5 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 hover:bg-purple-100 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 <Flag className="w-3.5 h-3.5 text-purple-600" />
-                <span>रिव्ह्यूसाठी ठेवा (Review)</span>
+                <span>Mark for Review</span>
               </button>
             </div>
 
@@ -550,7 +522,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                 className="px-4 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-800 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
-                <span>मागील (Prev)</span>
+                <span>Previous</span>
               </button>
 
               <button
@@ -558,7 +530,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                 onClick={handleSaveAndNext}
                 className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
               >
-                <span>पुढील (Next & Save)</span>
+                <span>Save & Next</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -569,7 +541,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
         <div className="space-y-4">
           <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 shadow-xs">
             <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
-              प्रश्न पॅनल (Question Palette)
+              Question Palette
             </h4>
 
             {/* Questions Grid (5-column grid) */}
@@ -613,15 +585,15 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
             <div className="pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
               <div className="flex items-center gap-2">
                 <span className="w-3.5 h-3.5 rounded-sm bg-emerald-600 border border-emerald-600"></span>
-                <span>सोडवलेले प्रश्न (Answered)</span>
+                <span>Answered</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-3.5 h-3.5 rounded-sm bg-white border border-slate-300"></span>
-                <span>न सोडवलेले (Unanswered)</span>
+                <span>Unanswered</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-3.5 h-3.5 rounded-sm bg-purple-100 border border-purple-300"></span>
-                <span>रिव्ह्यूसाठी (Marked for Review)</span>
+                <span>Marked for Review</span>
               </div>
             </div>
 
@@ -633,7 +605,7 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
                 className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>अंतिम टेस्ट सबमिट करा</span>
+                <span>Submit Test</span>
               </button>
             </div>
           </div>
@@ -650,10 +622,10 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
               </div>
               <div>
                 <h3 className="text-base font-bold text-slate-900">
-                  तुम्हाला टेस्ट सबमिट करायची आहे का?
+                  Are you sure you want to submit the test?
                 </h3>
                 <p className="text-xs text-slate-500">
-                  एकदा सबमिट केल्यावर निकाल व सविस्तर स्पष्टीकरणे दिसतील.
+                  Once submitted, you will be shown the results and detailed explanations.
                 </p>
               </div>
             </div>
@@ -661,19 +633,19 @@ export const ActiveTestView: React.FC<ActiveTestViewProps> = ({
             {/* Summary details */}
             <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-2 text-xs">
               <div className="flex justify-between py-1 border-b border-slate-200/60">
-                <span className="text-slate-600">एकूण प्रश्न:</span>
+                <span className="text-slate-600">Total Questions:</span>
                 <strong className="text-slate-900">{selectedQuestions.length}</strong>
               </div>
               <div className="flex justify-between py-1 border-b border-slate-200/60">
-                <span className="text-emerald-700 font-medium">सोडवलेले प्रश्न (Answered):</span>
+                <span className="text-emerald-700 font-medium">Answered:</span>
                 <strong className="text-emerald-700 font-bold">{countAnswered}</strong>
               </div>
               <div className="flex justify-between py-1 border-b border-slate-200/60">
-                <span className="text-purple-700 font-medium">रिव्ह्यूसाठी चिन्हांकित:</span>
+                <span className="text-purple-700 font-medium">Marked for Review:</span>
                 <strong className="text-purple-700 font-bold">{countMarked}</strong>
               </div>
               <div className="flex justify-between py-1">
-                <span className="text-rose-700 font-medium">न सोडवलेले प्रश्न:</span>
+                <span className="text-rose-700 font-medium">Unanswered Questions:</span>
                 <strong className="text-rose-700 font-bold">{countNotAnswered + countNotVisited}</strong>
               </div>
             </div>

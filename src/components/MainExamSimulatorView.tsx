@@ -96,7 +96,6 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
         selectedDifficultyFilter === "All" || test.difficulty === selectedDifficultyFilter;
       const matchSearch =
         !searchQuery ||
-        test.titleMr.toLowerCase().includes(searchQuery.toLowerCase()) ||
         test.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (test.group && test.group.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchExam && matchDiff && matchSearch;
@@ -123,7 +122,7 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
   const handleLaunchTest = (test: GrandMockTestItem) => {
     const generatedQuestions = buildGrandMockQuestionSet(test, questions);
     onStartGrandTest({
-      title: test.titleMr,
+      title: test.title,
       exam: test.exam,
       subject: "All",
       durationMinutes: test.durationMinutes,
@@ -141,19 +140,19 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
             <button
               onClick={onBack}
               className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer"
-              title="मागे जा"
+              title="Go back"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">मागे जा</span>
+              <span className="hidden sm:inline">Back</span>
             </button>
           )}
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
               <Trophy className="w-6 h-6 text-amber-500" />
-              <span>🏆 ग्रँड टेस्ट्स (Full Length Mock Tests)</span>
+              <span>🏆 Grand Tests (Full Length Mock Tests)</span>
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
-              NEET (१८० प्रश्न • ७२० गुण), MHT-CET आणि JEE Main चे अधिकृत फुल-लेन्थ सराव पेपर्स
+              Official full-length practice papers for NEET (180 Qs • 720 Marks), MHT-CET, and JEE Main
             </p>
           </div>
         </div>
@@ -181,24 +180,24 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
               ⭐ Special 1 Grand Mock Test (100 Questions)
             </h2>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Physics (२५ प्रश्न), Chemistry (२५ प्रश्न), Biology (२५ प्रश्न), Maths (२५ प्रश्न). संपूर्ण मराठी भाषांतर, अचूक उत्तरांच्या स्पष्टीकरणासह १०० दर्जेदार प्रश्नांचा संच!
+              Physics (25 Qs), Chemistry (25 Qs), Biology (25 Qs), Maths (25 Qs). A premium set of 100 high-quality questions with accurate explanations!
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs text-indigo-200">
               <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
-                Physics २५
+                Physics 25
               </span>
               <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
-                Chemistry २५
+                Chemistry 25
               </span>
               <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
-                Biology २५
+                Biology 25
               </span>
               <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />
-                Maths २५
+                Maths 25
               </span>
             </div>
           </div>
@@ -209,14 +208,14 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
               className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-[1.02] active:scale-98"
             >
               <Play className="w-4 h-4 fill-slate-950" />
-              <span>Special 1 टेस्ट सुरू करा →</span>
+              <span>Start Special 1 Test →</span>
             </button>
             <button
               onClick={() => setActiveInstructionModal(SPECIAL_1_GRAND_TEST_ITEM)}
               className="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-white/20"
             >
               <Info className="w-3.5 h-3.5 text-indigo-300" />
-              <span>नियम</span>
+              <span>Rules</span>
             </button>
           </div>
         </div>
@@ -241,20 +240,20 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
               🌿 NEET Full Mock Test — 180 Questions
             </h2>
             <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
-              Physics (४५ प्रश्न), Chemistry (४५ प्रश्न), Botany (४५ प्रश्न), Zoology (४५ प्रश्न) एकूण १८० प्रश्न आणि ७२० गुण. संपूर्ण मराठी भाषांतरासह अचूक उत्तरे व स्पष्टीकरणासहित!
+              Physics (45 Qs), Chemistry (45 Qs), Botany (45 Qs), Zoology (45 Qs) total 180 questions and 720 marks. Accurate answers with full explanations!
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1 text-xs text-emerald-300">
               <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                Physics ४५ Qs
+                Physics 45 Qs
               </span>
               <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                Chemistry ४५ Qs
+                Chemistry 45 Qs
               </span>
               <span className="flex items-center gap-1 font-semibold bg-white/5 px-2 py-1 rounded-lg border border-white/5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                Biology ९० Qs
+                Biology 90 Qs
               </span>
             </div>
           </div>
@@ -265,33 +264,33 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
               className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-xs sm:text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer hover:scale-[1.02] active:scale-98"
             >
               <Play className="w-4 h-4 fill-slate-950" />
-              <span>NEET १८० प्रश्नांची टेस्ट सुरू करा →</span>
+              <span>Start NEET 180 Qs Test →</span>
             </button>
             <button
               onClick={() => setActiveInstructionModal(NEET_180_GRAND_TEST_ITEM)}
               className="py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all border border-white/20"
             >
               <Info className="w-3.5 h-3.5 text-emerald-300" />
-              <span>नियम</span>
+              <span>Rules</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* 3. Filters & Search Bar */}
-      <div className="space-y-3 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs">
+      {/* Filters & Search Bar */}
+      <div className="space-y-3 bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="शिफ्ट, परीक्षा किंवा विषयानुसार शोधा (उदा. PCM Shift 1, NEET 720, JEE, COEP)..."
+              placeholder="Search by shift, exam or subject (e.g. PCM Shift 1, NEET 720, JEE, COEP)..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-xs text-slate-900 placeholder:text-slate-400 outline-none"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 outline-none"
             />
             {searchQuery && (
               <button
@@ -303,20 +302,20 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
             )}
           </div>
 
-          <div className="text-xs font-bold text-slate-600 whitespace-nowrap">
-            एकूण पेपर्स: <span className="text-indigo-600 font-extrabold">{filteredTests.length} पेपर्स उपलब्ध</span>
+          <div className="text-xs font-bold text-slate-600 dark:text-slate-400 whitespace-nowrap">
+            Total Papers: <span className="text-indigo-600 dark:text-indigo-400 font-extrabold">{filteredTests.length} available</span>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-bold text-slate-600 mr-1 flex items-center gap-1">
+            <span className="text-xs font-bold text-slate-600 dark:text-slate-400 mr-1 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-              <span>पॅटर्न:</span>
+              <span>Pattern:</span>
             </span>
 
             {([
-              { key: "All", label: "सर्व 110+ पेपर्स (All)" },
+              { key: "All", label: "All 110+ Papers" },
               { key: "MHT_CET", label: "MHT-CET (PCM/PCB)" },
               { key: "NEET", label: "NEET-UG (720 Marks)" },
               { key: "JEE_MAIN", label: "JEE Main (300 Marks)" },
@@ -330,7 +329,7 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   selectedExamFilter === item.key
                     ? "bg-indigo-600 text-white shadow-xs"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                 }`}
               >
                 {item.label}
@@ -340,21 +339,21 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
 
           {totalPages > 1 && (
             <div className="text-xs text-slate-500 font-semibold">
-              पान {currentPage} / {totalPages}
+              Page {currentPage} / {totalPages}
             </div>
           )}
         </div>
       </div>
 
-      {/* 4. 100+ Grand Test Cards Grid */}
+      {/* 100+ Grand Test Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {paginatedTests.map((test) => {
-          const pastResult = getTestPastResult(test.titleMr) || getTestPastResult(test.title);
+          const pastResult = getTestPastResult(test.title);
 
           return (
             <div
               key={test.id}
-              className="bg-white rounded-3xl border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between space-y-5 relative overflow-hidden group hover:border-indigo-400"
+              className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between space-y-5 relative overflow-hidden group hover:border-indigo-400"
             >
               {/* Top Strip */}
               <div className="flex items-start justify-between gap-3">
@@ -379,70 +378,65 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
                         {test.difficulty}
                       </span>
                     </div>
-                    <h3 className="text-base font-extrabold text-slate-900 mt-1 leading-snug group-hover:text-indigo-600 transition-colors">
-                      {test.titleMr}
+                    <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-1 leading-snug group-hover:text-indigo-600 transition-colors">
+                      {test.title}
                     </h3>
                   </div>
                 </div>
 
                 <button
                   onClick={() => setActiveInstructionModal(test)}
-                  title="नियम व सूचना पहा"
-                  className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 flex items-center justify-center transition-all cursor-pointer shrink-0"
+                  title="View rules and instructions"
+                  className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-300 flex items-center justify-center transition-all cursor-pointer shrink-0"
                 >
                   <Info className="w-4 h-4" />
                 </button>
               </div>
 
-              {/* Description */}
-              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                {test.descriptionMr}
-              </p>
-
               {/* Stats Strip */}
-              <div className="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-100 text-center">
+              <div className="grid grid-cols-3 gap-2 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 text-center">
                 <div>
-                  <span className="text-[10px] text-slate-400 block font-medium">एकूण गुण</span>
-                  <span className="text-sm font-black text-slate-900 font-mono-numbers">
+                  <span className="text-[10px] text-slate-400 block font-medium">Total Marks</span>
+                  <span className="text-sm font-black text-slate-900 dark:text-white font-mono-numbers">
                     {test.totalMarks} Marks
                   </span>
                 </div>
-                <div className="border-x border-slate-200">
-                  <span className="text-[10px] text-slate-400 block font-medium">कालावधी</span>
-                  <span className="text-sm font-black text-indigo-700 font-mono-numbers">
-                    {test.durationMinutes} मि.
+                <div className="border-x border-slate-200 dark:border-slate-700">
+                  <span className="text-[10px] text-slate-400 block font-medium">Duration</span>
+                  <span className="text-sm font-black text-indigo-700 dark:text-indigo-300 font-mono-numbers">
+                    {test.durationMinutes} min
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400 block font-medium">एकूण प्रश्न</span>
-                  <span className="text-sm font-black text-emerald-700 font-mono-numbers">
-                    {test.totalQuestions} प्रश्न
+                  <span className="text-[10px] text-slate-400 block font-medium">Questions</span>
+                  <span className="text-sm font-black text-emerald-700 dark:text-emerald-400 font-mono-numbers">
+                    {test.totalQuestions} Qs
                   </span>
                 </div>
               </div>
 
               {/* Target & Marking Rule */}
               <div className="space-y-2 text-xs">
-                <div className="flex items-center justify-between p-2 rounded-xl bg-amber-50/70 border border-amber-200/60 text-amber-900">
+                <div className="flex items-center justify-between p-2 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 text-amber-900 dark:text-amber-200">
                   <div className="flex items-center gap-1.5 font-bold">
                     <Target className="w-3.5 h-3.5 text-amber-600" />
-                    <span>लक्ष्य पर्सेंटाईल:</span>
+                    <span>Target Percentile:</span>
                   </div>
-                  <span className="font-extrabold text-amber-800">{test.targetPercentileGoal}</span>
+                  <span className="font-extrabold text-amber-800 dark:text-amber-400">{test.targetPercentileGoal}</span>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-slate-600 px-1">
+                <div className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400 px-1">
                   <span>
-                    मार्क पद्धत:{" "}
-                    <strong className="text-slate-800">
-                      +{test.markingScheme.correct} बरोबर{" "}
+                    Marking:{" "}
+                    <strong className="text-slate-800 dark:text-slate-200">
+                      +{test.markingScheme.correct} Correct{" "}
                       {test.markingScheme.mathsCorrect ? `(Maths +${test.markingScheme.mathsCorrect}) ` : ""}
                       {test.markingScheme.incorrect !== 0
-                        ? `| ${test.markingScheme.incorrect} चूक`
+                        ? `| ${test.markingScheme.incorrect} Incorrect`
                         : "| No Negative"}
                     </strong>
                   </span>
-                  <span className="text-emerald-700 font-semibold">
+                  <span className="text-emerald-700 dark:text-emerald-400 font-semibold">
                     {test.subjectsIncluded.join(" • ")}
                   </span>
                 </div>
@@ -450,12 +444,12 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
 
               {/* Past attempt badge if exists */}
               {pastResult && (
-                <div className="p-3 rounded-2xl bg-indigo-50/80 border border-indigo-200 flex items-center justify-between">
+                <div className="p-3 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-900/40 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
                     <div className="text-xs">
-                      <span className="text-indigo-900 font-bold">मागील स्कोअर: </span>
-                      <strong className="text-indigo-700 font-mono-numbers">
+                      <span className="text-indigo-900 dark:text-indigo-200 font-bold">Last Score: </span>
+                      <strong className="text-indigo-700 dark:text-indigo-300 font-mono-numbers">
                         {pastResult.score}/{pastResult.maxMarks} ({pastResult.percentage}%)
                       </strong>
                     </div>
@@ -463,9 +457,9 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
                   {onViewPastResult && (
                     <button
                       onClick={() => onViewPastResult(pastResult)}
-                      className="text-[11px] font-bold text-indigo-600 hover:underline cursor-pointer"
+                      className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
                     >
-                      निकाल पहा →
+                      View Result →
                     </button>
                   )}
                 </div>
@@ -480,7 +474,7 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
                 >
                   <Play className="w-4 h-4 fill-white" />
                   <span>
-                    {pastResult ? "पुन्हा परीक्षा द्या (Re-take Test)" : "मुख्य परीक्षा सुरू करा (Start Exam)"}
+                    {pastResult ? "Retake Exam" : "Start Exam"}
                   </span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
@@ -496,9 +490,9 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer shadow-xs"
+            className="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer shadow-xs"
           >
-            ← मागील पान
+            ← Previous
           </button>
 
           <div className="flex items-center gap-1">
@@ -511,82 +505,83 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
                   className={`w-8 h-8 rounded-xl text-xs font-black transition-all cursor-pointer ${
                     currentPage === pageNum
                       ? "bg-indigo-600 text-white shadow-xs"
-                      : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
+                      : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
                   }`}
                 >
                   {pageNum}
                 </button>
               );
             })}
-            {totalPages > 7 && (
-              <span className="text-xs text-slate-400 font-bold px-1">... {totalPages}</span>
-            )}
           </div>
 
           <button
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 cursor-pointer shadow-xs"
+            className="px-4 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer shadow-xs"
           >
-            पुढील पान →
+            Next →
           </button>
         </div>
       )}
 
-      {/* 5. Real Exam Instructions Modal */}
+      {/* Real Exam Instructions Modal */}
       {activeInstructionModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 animate-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-5 animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                <div className="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-extrabold text-slate-900">
-                    {activeInstructionModal.titleMr}
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                    {activeInstructionModal.title}
                   </h3>
                   <span className="text-xs text-slate-500">
-                    {activeInstructionModal.exam} अधिकृत परीक्षा नियमावली व स्वरूप
+                    {activeInstructionModal.exam} Official Exam Pattern & Rules
                   </span>
                 </div>
               </div>
               <button
                 onClick={() => setActiveInstructionModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 flex items-center justify-center cursor-pointer font-bold"
+                className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center cursor-pointer font-bold"
               >
                 ✕
               </button>
             </div>
 
-            {/* Instructions list */}
+            {/* Instructions placeholder - as we removed instructionsMr */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                महत्त्वाच्या सूचना (Exam Instructions):
+              <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                Exam Instructions:
               </h4>
-              <ul className="space-y-2 text-xs text-slate-700">
-                {activeInstructionModal.instructionsMr.map((inst, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="w-5 h-5 rounded-full bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
-                      {i + 1}
-                    </span>
-                    <span>{inst}</span>
-                  </li>
-                ))}
+              <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <li className="flex items-start gap-2">
+                   <span className="w-5 h-5 rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">1</span>
+                   <span>Read all questions carefully before answering.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                   <span className="w-5 h-5 rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">2</span>
+                   <span>Each correct answer will award marks as per the scheme.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                   <span className="w-5 h-5 rounded-full bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">3</span>
+                   <span>Maintain academic integrity and focus during the exam.</span>
+                </li>
               </ul>
             </div>
 
             {/* Target colleges */}
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs">
-              <div className="font-bold text-slate-900 flex items-center gap-1.5">
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 space-y-1.5 text-xs">
+              <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                 <Building className="w-4 h-4 text-indigo-600" />
-                <span>संभाव्य टार्गेट कॉलेजेस (Target Colleges):</span>
+                <span>Target Colleges:</span>
               </div>
               <div className="flex flex-wrap gap-1.5 pt-1">
                 {activeInstructionModal.predictedCollegeTargets.map((c, i) => (
                   <span
                     key={i}
-                    className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 text-[11px] font-medium"
+                    className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-medium"
                   >
                     🏛️ {c}
                   </span>
@@ -598,9 +593,9 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
             <div className="flex items-center gap-3 pt-2">
               <button
                 onClick={() => setActiveInstructionModal(null)}
-                className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs cursor-pointer"
+                className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs cursor-pointer"
               >
-                बंद करा (Close)
+                Close
               </button>
 
               <button
@@ -612,7 +607,7 @@ export const MainExamSimulatorView: React.FC<MainExamSimulatorViewProps> = ({
                 className="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Play className="w-4 h-4 fill-white" />
-                <span>आत्ताच परीक्षा सुरू करा (Start Exam Now)</span>
+                <span>Start Exam Now</span>
               </button>
             </div>
           </div>

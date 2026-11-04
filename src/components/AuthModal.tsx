@@ -115,7 +115,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleQuickDemoLogin = () => {
     const demoUser: StudentUser = {
       id: `demo_student_${Date.now().toString().slice(-4)}`,
-      name: "डेमो विद्यार्थी (Demo Student)",
+      name: "Demo Student",
       mobile: "9800000000",
       role: "student",
       examTarget: examTarget || "MHT_CET",
@@ -141,18 +141,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setSuccessMessage("");
 
     if (!name.trim() || !mobile.trim()) {
-      setErrorMessage("कृपया आपले पूर्ण नाव आणि मोबाईल नंबर प्रविष्ट करा.");
+      setErrorMessage("Please enter your full name and mobile number.");
       return;
     }
 
     const cleanDigits = mobile.trim().replace(/\D/g, "");
     if (cleanDigits.length < 10) {
-      setErrorMessage("कृपया वैध १० अंकी मोबाईल नंबर टाका.");
+      setErrorMessage("Please enter a valid 10-digit mobile number.");
       return;
     }
 
     if (!password.trim() || password.trim().length < 3) {
-      setErrorMessage("कृपया किमान ३ अक्षरांचा सुरक्षित पासवर्ड तयार करा.");
+      setErrorMessage("Please create a secure password (at least 3 characters).");
       return;
     }
 
@@ -238,7 +238,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       sessionStorage.setItem("mcq_admin_logged_in", "true");
       const adminUser: StudentUser = {
         id: "super_admin_master",
-        name: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
+        name: "Super Admin Director",
         mobile: "9307220454",
         email: "admin@abhyasmitra.com",
         role: "admin",
@@ -252,7 +252,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         lastLoginAt: Date.now(),
       };
       saveUserSession(adminUser);
-      setSuccessMessage("🔐 मास्टर ॲडमिन कन्सोल उघडत आहे...");
+      setSuccessMessage("🔐 Opening Master Admin Console...");
       setTimeout(() => {
         onLoginSuccess(adminUser);
         if (onOpenAdminDashboard) onOpenAdminDashboard();
@@ -261,7 +261,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
 
     if (!cleanDigits && !cleanMobile) {
-      setErrorMessage("कृपया आपला नोंदणीकृत मोबाईल नंबर टाका.");
+      setErrorMessage("Please enter your registered mobile number.");
       return;
     }
 
@@ -295,13 +295,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
 
     if (!student) {
-      setErrorMessage("हे विद्यार्थी खाते सापडले नाही. कृपया 'नवीन नोंदणी' (Sign Up) करा.");
+      setErrorMessage("Student account not found. Please Sign Up.");
       return;
     }
 
     // Password Check
     if (student.password && student.password !== cleanPassword) {
-      setErrorMessage("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड प्रविष्ट करा.");
+      setErrorMessage("Incorrect password! Please enter the correct password.");
       return;
     }
 
@@ -320,7 +320,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     saveUserSession(student);
     saveStudentToCloud(student);
 
-    setSuccessMessage(`स्वागत आहे, ${student.name}!`);
+    setSuccessMessage(`Welcome, ${student.name}!`);
     setTimeout(() => {
       onLoginSuccess(student!);
     }, 300);
@@ -330,7 +330,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleUtrSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!utrInput.trim() || utrInput.trim().length < 4) {
-      alert("कृपया वैध UTR नंबर प्रविष्ट करा.");
+      alert("Please enter a valid UTR number.");
       return;
     }
 
@@ -351,7 +351,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         id: `pay-${Date.now()}`,
         upiId: UPI_ID,
         amount: AMOUNT_INR,
-        planName: "मी मराठीवाला क्लासेस - विद्यार्थी ॲक्सेस",
+        planName: "Mi Marathiwala Classes - Student Access",
         utr: utrInput.trim(),
         studentName: updated.name,
         studentPhone: updated.mobile,
@@ -395,10 +395,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         saveStudentPermanently(verified);
         saveUserSession(verified);
         saveStudentToCloud(verified);
-        alert("🎉 अभिनंदन! आपले खाते मंजूर झाले आहे!");
+        alert("🎉 Congratulations! Your account has been approved!");
         onLoginSuccess(verified);
       } else {
-        alert("अद्याप ॲडमिन मंजुरी प्रलंबित आहे. ॲडमिनने मंजुरी दिल्यावर खाते त्वरित अनलॉक होईल.");
+        alert("Admin approval is still pending. Your account will be unlocked as soon as admin approves it.");
       }
     } catch (e) {
       console.error(e);
@@ -416,33 +416,33 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               onClick={onClose}
               className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-              title="बंद करा (Close)"
+              title="Close"
             >
               <X className="w-5 h-5" />
             </button>
           )}
 
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-orange-600 via-amber-500 to-orange-500 text-white flex flex-col items-center justify-center mx-auto mb-2.5 shadow-lg ring-2 ring-white/20">
-            <span className="text-[13px] font-black tracking-tight leading-none">म</span>
+            <span className="text-[13px] font-black tracking-tight leading-none">M</span>
             <span className="text-[8px] text-amber-200 font-bold uppercase leading-none tracking-widest mt-0.5">MMC</span>
           </div>
 
           {/* Big App Name */}
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-            मी मराठीवाला क्लासेस
+            Mi Marathiwala Classes
           </h1>
 
           {/* Subtitle */}
           <p className="text-xs font-bold text-amber-300 mt-0.5">
-            अंबड (जि. जालना) • Mi Marathiwala Classes
+            Ambad (Jalna) • Mi Marathiwala Classes
           </p>
           <p className="text-xs text-orange-200 font-medium max-w-sm mx-auto leading-relaxed">
-            NEET | JEE | MHT-CET ऑनलाईन परीक्षा व सराव पोर्टल
+            NEET | JEE | MHT-CET Online Exam & Practice Portal
           </p>
 
           {isTrialExpired && (
             <p className="text-rose-300 text-xs mt-2 max-w-sm mx-auto font-semibold bg-rose-950/60 py-1 px-3 rounded-lg border border-rose-800/60">
-              ⏱️ चाचणी वेळ संपली आहे. पुढे सुरू ठेवण्यासाठी लॉगिन करा किंवा ॲडमिन मंजुरी मिळवा.
+              ⏱️ Trial period expired. Please login or get admin approval to continue.
             </p>
           )}
 
@@ -461,7 +461,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     : "text-slate-300 hover:text-white"
                 }`}
               >
-                लॉगिन (Login)
+                Login
               </button>
               <button
                 type="button"
@@ -475,7 +475,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     : "text-slate-300 hover:text-white"
                 }`}
               >
-                नवीन नोंदणी (Sign Up)
+                Sign Up
               </button>
             </div>
           )}
@@ -508,21 +508,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
                 <div className="space-y-1">
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-200 text-amber-900 uppercase tracking-wide">
-                    मंजुरी प्रलंबित (Pending Admin Approval)
+                    Pending Admin Approval
                   </span>
                   <h3 className="text-base font-black text-slate-900 pt-1">
-                    नमस्कार {pendingStudent.name}, तुमची नोंदणी सुरक्षित नोंदवली आहे!
+                    Hello {pendingStudent.name}, your registration has been successfully recorded!
                   </h3>
                   <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                    मोबाईल: <strong>{pendingStudent.mobile}</strong>. फक्त ₹२९ चे पेमेंट करून खाली UTR टाका किंवा ॲडमिनशी संपर्क साधा.
+                    Mobile: <strong>{pendingStudent.mobile}</strong>. Pay only ₹29 and enter the UTR number below or contact admin.
                   </p>
                 </div>
 
                 {/* Direct UPI Payment App Buttons */}
                 <div className="p-3.5 bg-white rounded-2xl border border-slate-300 space-y-2.5 text-left">
                   <div className="text-xs font-bold text-slate-800 flex items-center justify-between">
-                    <span>१. थेट ॲपद्वारे ₹२९ भरा:</span>
-                    <span className="font-mono text-emerald-700 font-black">फक्त ₹{AMOUNT_INR}</span>
+                    <span>1. Pay ₹29 via UPI apps:</span>
+                    <span className="font-mono text-emerald-700 font-black">Just ₹{AMOUNT_INR}</span>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -548,7 +548,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       href={upiUri}
                       className="py-2 px-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 font-black text-xs flex items-center justify-center text-center transition-all"
                     >
-                      इतर UPI
+                      Other UPI
                     </a>
                   </div>
 
@@ -565,7 +565,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       }`}
                     >
                       {copiedUpi ? <CheckCircle2 className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      <span>{copiedUpi ? "कॉपी झाले!" : "कॉपी"}</span>
+                      <span>{copiedUpi ? "Copied!" : "Copy"}</span>
                     </button>
                   </div>
                 </div>
@@ -573,12 +573,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 {/* UTR Submission Form */}
                 <form onSubmit={handleUtrSubmit} className="p-3 bg-emerald-50 rounded-2xl border border-emerald-300 space-y-2 text-left">
                   <div className="text-xs font-bold text-emerald-900">
-                    २. पेमेंट झाल्यावर UTR / Ref No प्रविष्ट करा:
+                    2. Enter UTR / Ref No. after payment:
                   </div>
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="12 अंकी UTR / Ref No."
+                      placeholder="12-digit UTR / Ref No."
                       value={utrInput}
                       onChange={(e) => setUtrInput(e.target.value)}
                       className="flex-1 px-3 py-2 rounded-xl border border-emerald-300 bg-white text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-emerald-600"
@@ -587,13 +587,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       type="submit"
                       className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs rounded-xl shadow-xs cursor-pointer"
                     >
-                      सबमिट
+                      Submit
                     </button>
                   </div>
                   {utrSubmitted && (
                     <div className="text-[11px] text-emerald-800 font-bold flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>UTR नोंदवला गेला आहे! ॲडमिन कडून लवकरच मंजुरी मिळेल.</span>
+                      <span>UTR registered! Admin will approve it shortly.</span>
                     </div>
                   )}
                 </form>
@@ -602,16 +602,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div className="pt-1 flex flex-col gap-2">
                   <a
                     href={`https://wa.me/91${ADMIN_PHONE}?text=${encodeURIComponent(
-                      `नमस्कार ॲडमिन सर, मी ${pendingStudent.name} (${pendingStudent.mobile}) मी मराठीवाला क्लासेस (अंबड) ॲपमध्ये नोंदणी केली असून ₹२९ भरले आहेत.${
+                      `Hello Admin, I am ${pendingStudent.name} (${pendingStudent.mobile}). I have registered in Mi Marathiwala Classes App and paid ₹29.${
                         utrInput ? `\n🧾 UTR: ${utrInput}` : ""
-                      }\nकृपया माझे खाते मंजूर (Approve) करा.`
+                      }\nPlease approve my account.`
                     )}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center justify-center gap-2"
                   >
                     <MessageCircle className="w-4 h-4" />
-                    <span>WhatsApp वर ॲडमिनला मेसेज पाठवा ({ADMIN_PHONE})</span>
+                    <span>Message Admin on WhatsApp ({ADMIN_PHONE})</span>
                   </a>
 
                   <div className="grid grid-cols-2 gap-2">
@@ -622,7 +622,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       className="py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <RefreshCw className={`w-3.5 h-3.5 text-amber-400 ${isCheckingStatus ? "animate-spin" : ""}`} />
-                      <span>{isCheckingStatus ? "तपासत आहे..." : "मंजुरी तपासा"}</span>
+                      <span>{isCheckingStatus ? "Checking..." : "Check Approval"}</span>
                     </button>
 
                     <button
@@ -633,7 +633,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       }}
                       className="py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <span>दुसऱ्या नंबरने लॉगिन</span>
+                      <span>Login with another number</span>
                     </button>
                   </div>
 
@@ -649,7 +649,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     }}
                     className="w-full py-2.5 rounded-xl bg-gradient-to-r from-teal-700 to-indigo-700 hover:from-teal-600 hover:to-indigo-600 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer transition-all active:scale-95"
                   >
-                    <span>⚡ मोफत सराव सुरू करा (Start Free Practice) →</span>
+                    <span>⚡ Start Free Practice →</span>
                   </button>
                 </div>
               </div>
@@ -659,14 +659,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  नोंदणीकृत मोबाईल नंबर:
+                  Registered Mobile Number:
                 </label>
                 <div className="relative">
                   <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="tel"
                     required
-                    placeholder="आपला १० अंकी मोबाईल नंबर टाका"
+                    placeholder="Enter your 10-digit mobile number"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-300 text-slate-900 text-sm font-bold focus:border-indigo-600 outline-none"
@@ -677,7 +677,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-xs font-bold text-slate-700">
-                    पासवर्ड / सिक्युरिटी पिन:
+                    Password / Security PIN:
                   </label>
                 </div>
                 <div className="relative">
@@ -685,7 +685,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   <input
                     type={showPassword ? "text" : "password"}
                     required
-                    placeholder="आपला पासवर्ड प्रविष्ट करा"
+                    placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full pl-10 pr-11 py-3 rounded-2xl border border-slate-300 text-slate-900 text-sm font-bold focus:border-indigo-600 outline-none"
@@ -705,7 +705,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 className="w-full py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
               >
                 <LogIn className="w-4 h-4" />
-                <span>लॉगिन करा (Sign In)</span>
+                <span>Login</span>
               </button>
             </form>
           ) : (
@@ -713,12 +713,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <form onSubmit={handleRegister} className="space-y-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  विद्यार्थ्याचे पूर्ण नाव:
+                  Full Student Name:
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="आपले पूर्ण नाव प्रविष्ट करा"
+                  placeholder="Enter your full name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
@@ -727,12 +727,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  मोबाईल नंबर (WhatsApp):
+                  Mobile Number (WhatsApp):
                 </label>
                 <input
                   type="tel"
                   required
-                  placeholder="१० अंकी मोबाईल नंबर"
+                  placeholder="10-digit mobile number"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
@@ -741,13 +741,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  पासवर्ड तयार करा:
+                  Create Password:
                 </label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
                     required
-                    placeholder="किमान ३ अक्षरी पासवर्ड"
+                    placeholder="Min 3 character password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full px-4 pr-11 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
@@ -764,7 +764,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  टारगेट परीक्षा:
+                  Target Exam:
                 </label>
                 <select
                   value={examTarget}
@@ -779,11 +779,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">
-                  शाळा / कॉलेज किंवा क्लासेसचे नाव:
+                  School / College or Class Name:
                 </label>
                 <input
                   type="text"
-                  placeholder="क्लास किंवा कॉलेजचे नाव (ऐच्छिक)"
+                  placeholder="Class or College name (Optional)"
                   value={className}
                   onChange={(e) => setClassName(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 text-xs font-bold focus:border-indigo-600 outline-none"
@@ -794,7 +794,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 type="submit"
                 className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800 hover:brightness-110 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-purple-900/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
               >
-                <span>नोंदणी करा व PhonePe ने ₹२९ भरा →</span>
+                <span>Register & Pay ₹29 via PhonePe →</span>
               </button>
             </form>
           )}
@@ -802,10 +802,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {/* Educational Disclaimer */}
           <div className="pt-2 text-[10px] text-slate-500 leading-snug space-y-1 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
             <p className="font-bold text-slate-700 flex items-center gap-1">
-              <span>⚖️ शैक्षणिक अस्वीकरण व अटी:</span>
+              <span>⚖️ Educational Disclaimer & Terms:</span>
             </p>
             <p className="text-slate-600 text-[9px] leading-tight">
-              हे ॲप गरजू विद्यार्थ्यांच्या मोफत/सुलभ परीक्षा सरावासाठी आहे. नावाचे इतर कोणत्याही संस्थेशी साधर्म्य आढळल्यास तो निव्वळ योगायोग समजावा. कायदेशीर आक्षेप असल्यास विना-वाद १० आठवड्यांत (10 weeks) नाव बदलले जाईल.
+              This app is intended for easy exam practice for students. Any resemblance of the name to other institutions is purely coincidental. In case of legal objections, the name will be changed within 10 weeks without dispute.
             </p>
           </div>
         </div>

@@ -5,18 +5,14 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
   {
     id: "note_bio_plant_reproduction",
     chapter: "Reproduction in Lower and Higher Plants",
-    chapterMr: "वनस्पतींमधील प्रजनन (Reproduction in Lower & Higher Plants)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Microsporogenesis, Megasporogenesis, Double Fertilization & Seed Development",
-    titleMr: "परागकण निर्मिती, बीजांड रचना, दुहेरी फलन आणि बीजनिर्मिती संपूर्ण नोट्स",
     summary: "Complete NEET/MHT-CET guide to Flower parts, Anther wall tapetum, Sporopollenin, Anatropous ovule, 7-celled 8-nucleate embryo sac, Pollination types, Double fertilization (Syngamy + Triple fusion), and Endosperm types.",
-    summaryMr: "फ्लॉवरची रचना, परागकोश भित्तिका व टॅपिटम (Tapetum), स्पोरोपोलिनिन (सर्वात चिवट सेंद्रिय पदार्थ), ॲनाट्रॉपस बीजांड, ७-पेशीय ८-केंद्रकीय भ्रूणकोश (Embryo Sac), परागीभवन प्रकार, दुहेरी फलन (Double Fertilization: Zygote 2n + Endosperm 3n) आणि एंडोस्पर्मचे प्रकार.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Microsporogenesis & Pollen Grain Structure",
-        titleMr: "१. परागकण निर्मिती (Microsporogenesis) आणि रचना",
         points: [
           "Structure of Anther: Dithecous (two lobes) and tetrasporangiate (four microsporangia).",
           "Anther Wall Layers (outside to inside): (1) Epidermis (protective single layer), (2) Endothecium (hygroscopic fibrous α-cellulosic bands for dehiscence), (3) Middle layers (1-3 ephemeral nutritive layers), (4) TAPETUM (innermost layer, polyploid/multinucleate, secretes enzymes, hormones, and nutritive fluids for developing pollen grains, produces Ubisch bodies and Pollenkit).",
@@ -26,19 +22,11 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "Inner Intine: Thin, continuous layer composed of PECTIN and CELLULOSE.",
           "Male Gametophyte: Generative cell (small, divides mitotically into TWO non-motile male gametes) + Vegetative / Tube cell (large, abundant food reserve, forms pollen tube). Shed at 2-celled stage in 60% angiosperms, 3-celled stage in remaining 40%.",
         ],
-        pointsMr: [
-          "परागकोश स्तर (बाहेरून आत): १. बाह्यत्वचा (Epidermis), २. एंडोथेशियम (Endothecium - पराग फुटण्यास मदत), ३. मध्य स्तर (Middle layers), ४. टॅपिटम (Tapetum - परागकणांना पोषण देणारा थर).",
-          "परागकण भित्तिका: बाह्य आवरण (Exine) हे स्पोरोपोलिनिन (Sporopollenin) चे बनलेले असते, जे कोणत्याही आम्ल किंवा विकराने नष्ट होत नाही.",
-          "जर्म पोअर (Germ pore): जेथे स्पोरोपोलिनिन नसते, तेथून परागननलिका बाहेर पडते.",
-          "अंतर्गत आवरण (Intine): पेक्टिन व सेल्युलोजचे बनलेले असते.",
-          "नर युग्मक: जनन पेशीपासून २ अचल (Non-motile) नर युग्मक तयार होतात.",
-        ],
         keyFormula: "Sporoderm = Exine (Sporopollenin) + Intine (Pectocellulose) | 2 Male Gametes",
-        examTip: "Tapetum is nutritive and multinucleate; Sporopollenin is synthesized by tapetum and allows fossil preservation of pollen.",
+        examTip: "Tapetum is nutritive and multinucleate; Sporopollenin is synthesized by tapetum and allows fossil preservation of pollen."
       },
       {
         title: "2. Megasporogenesis & Anatropous Ovule",
-        titleMr: "२. बीजांड रचना (Anatropous Ovule) आणि भ्रूणकोश",
         points: [
           "Typical Angiospermic Ovule is ANATROPOUS (inverted by 180° such that micropyle lies close to funicle).",
           "Parts: Funicle (stalk), Hilum (junction of funicle and body), Nucellus (nutritive parenchymatous tissue), Integuments (outer and inner protective coats), Micropyle (small pore for pollen tube entry), Chalaza (basal part opposite to micropyle).",
@@ -49,18 +37,10 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "(2) Central Cell: Largest cell with TWO Polar Nuclei (fuses to form diploid secondary nucleus).",
           "(3) Antipodal Cells: 3 cells at chalazal end (nutritive, degenerate).",
         ],
-        pointsMr: [
-          "ॲनाट्रॉपस बीजांड: १८०° उलटे झालेले बीजांड. यात मायक्रोपाईलमधून परागनलिका आत जाते.",
-          "भ्रूणकोश (Embryo Sac): ८-केंद्रकीय आणि ७-पेशीय रचना असते.",
-          "मायक्रोपीलर टोकाला: १ अंडी पेशी (Egg) + २ सहाय्यक पेशी (Synergids ज्यांच्यात फिलीफॉर्म उपकरण असते).",
-          "मध्यभागी: २ ध्रुवीय केंद्रके (Polar nuclei).",
-          "चलाझा टोकाला: ३ प्रतिध्रुवीय पेशी (Antipodal cells).",
-        ],
-        keyFormula: "Angiosperm Embryo Sac = 7-celled, 8-nucleate structure | Synergid = Filiform apparatus",
+        keyFormula: "Angiosperm Embryo Sac = 7-celled, 8-nucleate structure | Synergid = Filiform apparatus"
       },
       {
         title: "3. Double Fertilization & Endosperm",
-        titleMr: "३. दुहेरी फलन (Double Fertilization) आणि भ्रूणपोष",
         points: [
           "Double Fertilization: Unique characteristic of ANGIOSPERMS, discovered by S.G. Nawaschin (1898) in Lilium and Fritillaria.",
           "Event 1 (Syngamy / Generative Fertilization): 1st Male Gamete (n) + Egg Cell (n) -> Diploid ZYGOTE (2n) -> develops into EMBRYO.",
@@ -71,21 +51,14 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "(3) Helobial Endosperm (intermediate, e.g. Asphodelus).",
           "Special phenomena: Apomixis (development of seeds without fertilization, mimic of sexual reproduction); Polyembryony (presence of more than one embryo in seed, e.g. Citrus, Mango).",
         ],
-        pointsMr: [
-          "दुहेरी फलन (Double Fertilization): फक्त आवृत्तबीजी (Angiosperms) वनस्पतींमध्ये आढळणारे वैशिष्ट्य (शोध: नवाचीन).",
-          "१. संयुग्मन (Syngamy): नर युग्मक (n) + अंडी पेशी (n) → द्विगुणित युग्मनज / झायगोट (2n) → भ्रूण.",
-          "२. त्रिसंयोग (Triple Fusion): दुसरा नर युग्मक (n) + दुय्यम केंद्रक (2n) → त्रिगुणित भ्रूणपोष केंद्रक (PEN, 3n) → भ्रूणपोष (Endosperm).",
-          "शहाळ्याचे पाणी: मुक्त केंद्रकीय भ्रूणपोष (Free nuclear endosperm); खोबऱ्याचा पांढरा भाग: पेशीय भ्रूणपोष.",
-          "अपोमिक्सिस (Apomixis): फलन न होता बी तयार होण्याची प्रक्रिया.",
-        ],
         keyFormula: "Syngamy: n + n = 2n Zygote | Triple Fusion: n + 2n = 3n Endosperm (PEN)",
-        examTip: "Ploidy levels: Synergid/Antipodal = n; Zygote = 2n; Endosperm in angiosperms = 3n (In gymnosperms, endosperm is haploid n, formed before fertilization!).",
+        examTip: "Ploidy levels: Synergid/Antipodal = n; Zygote = 2n; Endosperm in angiosperms = 3n (In gymnosperms, endosperm is haploid n, formed before fertilization!)."
       },
     ],
     quickRevisionPoints: [
-      { en: "Tapetum nourishes pollen; Exine is made of resistant Sporopollenin.", mr: "टॅपिटम परागकणांना पोषण देते; बाह्य आवरण स्पोरोपोलिनिनचे असते." },
-      { en: "Embryo sac is 7-celled, 8-nucleate. Filiform apparatus guides pollen tube.", mr: "भ्रूणकोश ७-पेशीय, ८-केंद्रकीय असतो. फिलीफॉर्म उपकरण परागकण नळीला दिशा दाखवते." },
-      { en: "Double fertilization yields 2n Zygote + 3n Endosperm. Unique to angiosperms.", mr: "दुहेरी फलनाने २n झायगोट आणि ३n भ्रूणपोष (Endosperm) तयार होतो." },
+      { en: "Tapetum nourishes pollen; Exine is made of resistant Sporopollenin." },
+      { en: "Embryo sac is 7-celled, 8-nucleate. Filiform apparatus guides pollen tube." },
+      { en: "Double fertilization yields 2n Zygote + 3n Endosperm. Unique to angiosperms." },
     ],
     keyFormulasTable: [
       { name: "Double Fertilization Equation", formula: "Male Gamete(n) + Egg(n) -> 2n Zygote; Male Gamete(n) + 2 Polar Nuclei(2n) -> 3n PEN", description: "Dual fusion events yielding embryo and endosperm" },
@@ -94,29 +67,23 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming gymnosperms also show double fertilization and triploid endosperm.",
-        mistakeMr: "अनावृत्तबीजी (Gymnosperms) मध्येही ३n भ्रूणपोष असतो असे मानणे.",
-        correction: "Double fertilization and 3n endosperm occur ONLY in Angiosperms. In Gymnosperms, endosperm is haploid (n) and forms before fertilization.",
-        correctionMr: "दुहेरी फलन फक्त आवृत्तबीजी वनस्पतींमध्येच होते. अनावृत्तबीजीमध्ये भ्रूणपोष एकगुणित (n) असतो.",
+        correction: "Double fertilization and 3n endosperm occur ONLY in Angiosperms. In Gymnosperms, endosperm is haploid (n) and forms before fertilization."
       },
-    ],
+    ]
   },
 
   // 2. Human Reproduction & Reproductive Health
   {
     id: "note_bio_human_reproduction",
     chapter: "Human Reproduction & Reproductive Health",
-    chapterMr: "मानवी प्रजनन आणि जनन आरोग्य (Human Reproduction & Health)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Gametogenesis, Menstrual Cycle, Fertilization, Placenta & Assisted Reproduction (ART)",
-    titleMr: "युग्मक निर्मिती, मासिक पाळी चक्र, फलन, वार (Placenta) व IVF/ART तंत्रज्ञान",
     summary: "Complete guide covering Male/Female reproductive anatomy, Spermatogenesis vs Oogenesis, Hormonal regulation (GnRH, LH, FSH, Progesterone), Menstrual cycle phases, Blastocyst implantation, Parturition, and Contraception/ART (IVF, ZIFT, GIFT).",
-    summaryMr: "नर व मादी प्रजनन संस्था, शुक्राणू व अंडपेशी निर्मिती (Spermatogenesis vs Oogenesis), संप्रेरक नियंत्रण (LH Surge, FSH, प्रोजेस्टेरॉन), मासिक पाळीचे ४ टप्पे, फलन (Ampulla), ब्लास्टोसिस्टचे गर्भाशयात रोपण, ऑक्सिटोसिन व प्रसूती, आणि गर्भनिरोधक पद्धती (Saheli) व वंध्यत्व निवारण तंत्रज्ञान (IVF, ZIFT, GIFT).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Male & Female Reproductive Systems & Gametogenesis",
-        titleMr: "१. नर व मादी प्रजनन संस्था आणि युग्मक निर्मिती",
         points: [
           "Male System: Testes located outside abdominal cavity in Scrotum (maintains 2-2.5°C lower than normal body temperature, essential for spermatogenesis).",
           "Seminiferous Tubules: Contain Male germ cells (Spermatogonia, 2n) and SERTOLI CELLS (nurse cells, provide nutrition to developing spermatozoa, secrete Androgen Binding Protein and Inhibin).",
@@ -128,19 +95,11 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "Meiosis-I completes just before ovulation, forming 1 Secondary Oocyte (n) and 1st POLAR BODY (unequal division).",
           "Meiosis-II completes ONLY UPON ENTRY OF SPERM in the ampulla, releasing 2nd Polar Body and haploid Ovum (Ootid).",
         ],
-        pointsMr: [
-          "वृषण (Testes): शरीराबाहेर अंडकोशात (Scrotum) असतात, जिथे तापमान २ ते २.५°C कमी असते.",
-          "सर्टोली पेशी (Sertoli Cells): शुक्राणूंना पोषण पुरवतात.",
-          "लेडिग पेशी (Leydig Cells): एलएच (LH) संप्रेरकाच्या प्रभावाखाली टेस्टोस्टेरॉन स्त्रवतात.",
-          "शुक्राणू मार्ग: सेमिनिफेरस नलिका → रेते टेस्टिस → व्हॅसा एफरेन्शिया → एपिडिडायमिस (परिपक्वता) → व्हॅस डेफरन्स → मूत्रमार्ग.",
-          "अंडजनन (Oogenesis): जन्मापूर्वीच सुरू होते व अर्धसूत्री-१ च्या डिप्लोटीन टप्प्यात थांबते. शुक्राणूचा प्रवेश झाल्यावरच अर्धसूत्री-२ पूर्ण होते आणि २ री पोलर बॉडी बाहेर पडते.",
-        ],
         keyFormula: "1 Primary Spermatocyte -> 4 Sperms | 1 Primary Oocyte -> 1 Ovum + 2-3 Polar Bodies",
-        examTip: "Meiosis-II in human oocyte is arrested at Metaphase-II and is completed ONLY upon fertilization by sperm entry.",
+        examTip: "Meiosis-II in human oocyte is arrested at Metaphase-II and is completed ONLY upon fertilization by sperm entry."
       },
       {
         title: "2. Menstrual Cycle & Hormonal Feedback",
-        titleMr: "२. मासिक पाळी चक्र (Menstrual Cycle) आणि संप्रेरक नियंत्रण",
         points: [
           "Standard 28-day cycle divided into 4 phases:",
           "(1) Menstrual Phase (Days 1 - 5): Breakdown of endometrium and blood vessels due to sudden drop in Progesterone and Estrogen levels.",
@@ -150,18 +109,10 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "If fertilization does NOT occur: Corpus luteum degenerates into CORPUS ALBICANS (white scar), progesterone drops, triggering next menstruation.",
           "If fertilization occurs: Embryo secretes human Chorionic Gonadotropin (hCG) which rescues and maintains Corpus Luteum.",
         ],
-        pointsMr: [
-          "१. स्राव टप्पा (दिवस १ ते ५): प्रोजेस्टेरॉन कमी झाल्याने गर्भाशयाचे अस्तर (Endometrium) गळून पडते.",
-          "२. फॉलिक्युलर टप्पा (दिवस ६ ते १३): FSH मुळे ग्रॅफियन फॉलिकल वाढते आणि इस्ट्रोजेनमुळे अस्तर पुन्हा तयार होते.",
-          "३. अंडमोचन (दिवस १४ - Ovulation): एलएचची पातळी सर्वोच्च (LH Surge) होते आणि ग्रॅफियन फॉलिकलमधून अंडपेशी बाहेर पडते.",
-          "४. ल्युटियल टप्पा (दिवस १५ ते २८): कॉर्पस ल्युटियम (Corpus Luteum) तयार होऊन तो मोठ्या प्रमाणात प्रोजेस्टेरॉन (Progesterone) स्त्रवतो.",
-          "फलन न झाल्यास कॉर्पस ल्युटियम नष्ट होऊन कॉर्पस अल्बिकन्स बनते.",
-        ],
-        keyFormula: "Day 14: LH Surge -> Ovulation | Corpus Luteum -> High Progesterone | Degenerates -> Corpus Albicans",
+        keyFormula: "Day 14: LH Surge -> Ovulation | Corpus Luteum -> High Progesterone | Degenerates -> Corpus Albicans"
       },
       {
         title: "3. Fertilization, Embryo Development & Reproductive Technologies",
-        titleMr: "३. फलन, भ्रूण विकास आणि वंध्यत्व निवारण तंत्रज्ञान (ART)",
         points: [
           "Site of Fertilization: AMPULLA of Fallopian tube.",
           "Acrosome Reaction: Acrosome contains enzymes (Hyaluronidase, Corona penetrating enzyme, Acrosin) that digest zona pellucida.",
@@ -175,24 +126,13 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "GIFT (Gamete Intra Fallopian Transfer): Transfer of ovum collected from donor into fallopian tube of recipient who cannot produce ova.",
           "ICSI (Intra Cytoplasmic Sperm Injection): Sperm is directly injected into cytoplasm of ovum.",
         ],
-        pointsMr: [
-          "फलनाचे स्थान: फॅलोपियन नलिकेचा ॲम्प्युला (Ampulla) भाग.",
-          "झोना पेल्युसिडा (Zona Pellucida): एका शुक्राणूचा प्रवेश होताच ही भित्ती कडक होते जेणेकरून इतर शुक्राणू आत येऊ नयेत (पॉलिस्पर्मिला प्रतिबंध).",
-          "रोपण (Implantation): फलनानंतर सातव्या दिवशी ब्लास्टोसिस्ट गर्भाशयाच्या भिंतीत रोवले जाते.",
-          "प्रसूती संप्रेरक: गर्भाशयाचे आकुंचन घडवून आणण्यासाठी ऑक्सिटोसिन (Oxytocin) स्त्रवले जाते.",
-          "वंध्यत्व निवारण (ART):",
-          "ZIFT: ८ ब्लास्टोमीअर्सपर्यंतचा भ्रूण फॅलोपियन नलिकेत सोडणे.",
-          "IUT: ८ पेक्षा जास्त पेशी असलेला भ्रूण थेट गर्भाशयात सोडणे.",
-          "GIFT: दाता स्त्रीकडून घेतलेली अंडपेशी फॅलोपियन नळीत सोडणे.",
-          "ICSI: शुक्राणू थेट अंडपेशीच्या पेशीद्रव्यात टोचणे.",
-        ],
-        keyFormula: "ZIFT: Embryo ≤ 8 blastomeres -> Fallopian Tube | IUT: Embryo > 8 blastomeres -> Uterus",
+        keyFormula: "ZIFT: Embryo ≤ 8 blastomeres -> Fallopian Tube | IUT: Embryo > 8 blastomeres -> Uterus"
       },
     ],
     quickRevisionPoints: [
-      { en: "Spermatogenesis occurs in seminiferous tubules; Leydig cells secrete testosterone under LH.", mr: "शुक्राणू निर्मिती सेमिनिफेरस नलिकेत होते; लेडिग पेशी टेस्टोस्टेरॉन स्त्रवतात." },
-      { en: "LH surge on day 14 causes ovulation; Corpus luteum produces Progesterone.", mr: "१४ व्या दिवशी LH Surge मुळे ओव्ह्युलेशन होते; कॉर्पस ल्युटियम प्रोजेस्टेरॉन बनवतो." },
-      { en: "Fertilization happens in the Ampulla. ZIFT = up to 8 blastomeres; IUT = >8 blastomeres.", mr: "फलन ॲम्प्युलामध्ये होते. ZIFT = ८ पेशींपर्यंत; IUT = ८ पेक्षा जास्त पेशी." },
+      { en: "Spermatogenesis occurs in seminiferous tubules; Leydig cells secrete testosterone under LH." },
+      { en: "LH surge on day 14 causes ovulation; Corpus luteum produces Progesterone." },
+      { en: "Fertilization happens in the Ampulla. ZIFT = up to 8 blastomeres; IUT = >8 blastomeres." },
     ],
     keyFormulasTable: [
       { name: "Fertilization Locus", formula: "Ampullary Region of Oviduct", description: "Physiological site of sperm-egg fusion" },
@@ -202,29 +142,23 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing ZIFT and IUT transfer destinations.",
-        mistakeMr: "ZIFT आणि IUT च्या अवयवात गल्लत करणे.",
-        correction: "ZIFT transfers into the Fallopian Tube (up to 8 cells). IUT transfers into the Uterus (>8 cells).",
-        correctionMr: "ZIFT मध्ये ८ पेशींपर्यंतचा भ्रूण नळीत (Fallopian tube) सोडतात; IUT मध्ये ८ पेक्षा मोठा भ्रूण गर्भाशयात (Uterus) सोडतात.",
+        correction: "ZIFT transfers into the Fallopian Tube (up to 8 cells). IUT transfers into the Uterus (>8 cells)."
       },
-    ],
+    ]
   },
 
   // 3. Control and Coordination (Nervous & Endocrine Systems)
   {
     id: "note_bio_control_coordination",
     chapter: "Control and Coordination",
-    chapterMr: "नियंत्रण आणि समन्वय (Control and Coordination)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Nerve Impulse Conduction, Brain Regions, Reflex Arc & Master Endocrine Glands",
-    titleMr: "मज्जा आवेग वहन, मानवी मेंदूचे भाग, प्रतिक्षिप्त क्रिया व अंतःस्रावी ग्रंथी नोट्स",
     summary: "Complete guide covering Action potential generation (Na⁺ influx/K⁺ efflux), Synaptic transmission, Human brain (Cerebrum, Cerebellum, Medulla), Spinal reflex arc, Pituitary hormones, Thyroid, Adrenal, and Pancreatic hormones.",
-    summaryMr: "मज्जासंस्थेतील आवेग वहन (विश्रामी विभव -70 mV, क्रिया विभव +30 mV, Na⁺/K⁺ पंप), सायनॅप्स व न्युरोट्रान्समीटर (Acetylcholine), मानवी मेंदूचे भाग (प्रमस्तिष्क, अनुमस्तिष्क, मज्जासेतू, लंबमज्जा), प्रतिक्षिप्त क्रिया (Reflex Arc), आणि पीयूषिका, थायरॉईड, अधिवृक्क व स्वादुपिंडातील सर्व संप्रेरके आणि आजार.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Nerve Impulse Generation & Conduction",
-        titleMr: "१. मज्जा आवेग निर्मिती आणि वहन (Impulse Transmission)",
         points: [
           "Resting Membrane Potential (-70 mV): Axonal membrane is polarized. Outer surface is positive, inner surface is negative.",
           "Maintained by Active Na⁺/K⁺ ATPase Pump: Pumps 3 Na⁺ OUTWARDS for every 2 K⁺ transported INWARDS, using 1 ATP.",
@@ -234,18 +168,10 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "Hyperpolarization: Delayed closure of K⁺ channels drops potential below -70 mV (-90 mV) until Na⁺/K⁺ pump restores equilibrium.",
           "Synaptic Transmission: Chemical synapse uses neurotransmitter (e.g. ACETYLCHOLINE). Nerve impulse reaches axon terminal -> triggers Ca²⁺ influx -> synaptic vesicles fuse with presynaptic membrane and release neurotransmitter into synaptic cleft -> binds to receptors on postsynaptic membrane.",
         ],
-        pointsMr: [
-          "विश्रामी विभव (Resting Potential, -70 mV): मज्जातंतूच्या आत ऋण आणि बाहेर धन प्रभार असतो.",
-          "Na⁺/K⁺ पंप: ३ Na⁺ बाहेर टाकतो आणि २ K⁺ आत घेतो (ऊर्जा वापरून).",
-          "डिपोलरायझेशन (Action Potential, +30 mV): उत्तेजना मिळाल्यावर Na⁺ वेगाने आत येतो आणि आत धन प्रभार तयार होतो.",
-          "रिपोलरायझेशन (Repolarization): K⁺ बाहेर पडून पुन्हा मूळ विश्रामी स्थिती प्राप्त होते.",
-          "सायनॅप्स (Synapse): Ca²⁺ आयन आत आल्यामुळे ॲसिटिलकोलीन (Acetylcholine) हे न्युरोट्रान्समीटर स्रावले जाते.",
-        ],
-        keyFormula: "Resting = -70 mV | Action = +30 mV | Na⁺/K⁺ Pump: 3 Na⁺ OUT : 2 K⁺ IN | Neurotransmitter = Acetylcholine",
+        keyFormula: "Resting = -70 mV | Action = +30 mV | Na⁺/K⁺ Pump: 3 Na⁺ OUT : 2 K⁺ IN | Neurotransmitter = Acetylcholine"
       },
       {
         title: "2. Human Brain Divisions & Functions",
-        titleMr: "२. मानवी मेंदूचे भाग आणि कार्ये",
         points: [
           "Forebrain (Prosencephalon):",
           "(1) Cerebrum: Largest part (80-85% brain weight). Divided into Left and Right Cerebral Hemispheres connected by a thick nerve tract called CORPUS CALLOSUM (unique mammalian feature).",
@@ -259,18 +185,10 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "(2) Pons Varolii: Contains PNEUMOTAXIC CENTER which regulates respiration rate.",
           "(3) Medulla Oblongata: Controls involuntary vital functions: cardiac center (heart rate), respiratory rhythm center, vasomotor center, swallowing, vomiting, coughing.",
         ],
-        pointsMr: [
-          "प्रमस्तिष्क (Cerebrum): मेंदूचा सर्वात मोठा भाग. दोन्ही गोलार्ध कॉर्पस कॅलोसम (Corpus Callosum) ने जोडलेले असतात (सस्तन प्राण्यांचे वैशिष्ट्य). स्मृती व बुद्धिमत्ता केंद्र.",
-          "हायपोथॅलॅमस (Hypothalamus): शरीराचे तापमान (थर्मोरेग्युलेशन), भूक, तहान व संप्रेरकांचे नियंत्रण केंद्र.",
-          "अनुमस्तिष्क (Cerebellum): शरीराचा तोल (Balance), मुद्रा आणि स्नायूंचे समन्वय सांभाळतो (मद्याच्या प्रभावाने हा भाग बाधित होतो).",
-          "पॉन्स (Pons): न्युमोटाक्सिक केंद्र (श्वसन नियमन).",
-          "लंबमज्जा (Medulla Oblongata): हृदयगती, श्वसन दर, रक्तदाब, गिळणे व उलट्या होणे या अनैच्छिक क्रियांचे नियंत्रण केंद्र.",
-        ],
-        keyFormula: "Corpus Callosum connects Cerebral Hemispheres | Hypothalamus = Thermostat | Cerebellum = Body Balance | Medulla = Vital Involuntary Centers",
+        keyFormula: "Corpus Callosum connects Cerebral Hemispheres | Hypothalamus = Thermostat | Cerebellum = Body Balance | Medulla = Vital Involuntary Centers"
       },
       {
         title: "3. Endocrine Glands & Hormone Disorders",
-        titleMr: "३. अंतःस्रावी ग्रंथी, संप्रेरके आणि आजार",
         points: [
           "Pituitary Gland (Hypophysis): Located in sella turcica bone cavity. Master endocrine gland.",
           "Anterior Pituitary (Adenohypophysis): GH (Growth Hormone - hypersecretion in children causes Gigantism, in adults Acromegaly; hyposecretion causes Dwarfism), PRL, TSH, ACTH, LH, FSH.",
@@ -285,21 +203,14 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "α-cells secrete GLUCAGON (hyperglycemic hormone, raises blood glucose).",
           "β-cells secrete INSULIN (hypoglycemic hormone, lowers blood glucose by promoting cellular uptake). Deficiency leads to DIABETES MELLITUS (hyperglycemia and glycosuria).",
         ],
-        pointsMr: [
-          "पीयूषिका ग्रंथी (Pituitary): ऑक्सिटोसिन (प्रसूती व दूध स्राव) आणि व्हॅसोप्रेसिन/ADH (पाणी पुनर्शोषण; कमतरतेमुळे डायबेटिस इन्सिपिडस होतो).",
-          "थायरॉईड: थायरॉक्सिन (T₄/T₃). आयोडीन अभावामुळे गलगंड (Goitre); लहान मुलांत क्रेटिनिझम; कॅल्सीटोनिन रक्तातील कॅल्शियम कमी करतो.",
-          "पॅराथायरॉईड (PTH): रक्तातील कॅल्शियम वाढवतो (कॅल्सीटोनिनच्या विरुद्ध).",
-          "अधिवृक्क (Adrenal): कोर्टिसोल व अल्डोस्टेरॉन; मेड्युलातून ॲड्रेनालाईन (आपत्कालीन संप्रेरक - Fight or Flight) स्रावले जाते.",
-          "स्वादुपिंड: बीटा पेशींमधून इन्सुलिन (रक्तातील साखर कमी करते; कमतरतेने डायबेटिस मेलिटस होतो); अल्फा पेशींमधून ग्लुकागॉन (साखर वाढवते).",
-        ],
-        keyFormula: "Insulin lowers Blood Glucose | Glucagon raises Blood Glucose | Calcitonin lowers Ca²⁺ | PTH raises Ca²⁺",
+        keyFormula: "Insulin lowers Blood Glucose | Glucagon raises Blood Glucose | Calcitonin lowers Ca²⁺ | PTH raises Ca²⁺"
       },
     ],
     quickRevisionPoints: [
-      { en: "Na⁺/K⁺ pump exports 3 Na⁺ and imports 2 K⁺ using ATP, maintaining -70 mV.", mr: "Na⁺/K⁺ पंप ३ Na⁺ बाहेर आणि २ K⁺ आत पाठवून -70 mV विश्रामी विभव ठेवतो." },
-      { en: "Corpus callosum connects cerebral hemispheres; Cerebellum maintains balance.", mr: "कॉर्पस कॅलोसम प्रमस्तिष्क गोलार्ध जोडतो; सेरेबेलम शरीराचा तोल सांभाळतो." },
-      { en: "ADH deficiency causes Diabetes Insipidus (dilute urine); Insulin deficiency causes Diabetes Mellitus.", mr: "ADH अभावाने डायबेटिस इन्सिपिडस होतो; इन्सुलिन अभावाने डायबेटिस मेलिटस होतो." },
-      { en: "PTH increases blood Ca²⁺ while Calcitonin decreases blood Ca²⁺ (antagonistic).", mr: "PTH कॅल्शियम वाढवतो आणि कॅल्सीटोनिन कॅल्शियम कमी करतो (परस्परविरोधी कार्य)." },
+      { en: "Na⁺/K⁺ pump exports 3 Na⁺ and imports 2 K⁺ using ATP, maintaining -70 mV." },
+      { en: "Corpus callosum connects cerebral hemispheres; Cerebellum maintains balance." },
+      { en: "ADH deficiency causes Diabetes Insipidus (dilute urine); Insulin deficiency causes Diabetes Mellitus." },
+      { en: "PTH increases blood Ca²⁺ while Calcitonin decreases blood Ca²⁺ (antagonistic)." },
     ],
     keyFormulasTable: [
       { name: "Resting Membrane Potential", formula: "V_m = -70 mV", description: "Polarized baseline state across axonal neurolemma" },
@@ -309,29 +220,23 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing Diabetes Insipidus with Diabetes Mellitus.",
-        mistakeMr: "डायबेटिस इन्सिपिडस आणि डायबेटिस मेलिटस मध्ये गल्लत करणे.",
-        correction: "Diabetes Insipidus is caused by ADH deficiency (frequent urination without sugar). Diabetes Mellitus is caused by Insulin deficiency (high blood sugar and glucose in urine).",
-        correctionMr: "डायबेटिस इन्सिपिडस ADH च्या कमतरतेने होतो (साखरेचा संबंध नाही); डायबेटिस मेलिटस इन्सुलिन अभावाने होतो (रक्तात व लघवीत साखर).",
+        correction: "Diabetes Insipidus is caused by ADH deficiency (frequent urination without sugar). Diabetes Mellitus is caused by Insulin deficiency (high blood sugar and glucose in urine)."
       },
-    ],
+    ]
   },
 
   // 4. Respiration and Energy Transfer in Organisms
   {
     id: "note_bio_respiration_energy",
     chapter: "Respiration and Energy Transfer",
-    chapterMr: "श्वसन आणि ऊर्जा वहन (Respiration & Cellular Energetics)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Glycolysis (EMP), Link Reaction, Krebs TCA Cycle, ETS & ATP Calculation",
-    titleMr: "ग्लायकोलिसिस (EMP), लिंक अभिक्रिया, क्रेब्स चक्र (TCA), ETS आणि ATP हिशोब",
     summary: "Complete guide covering Cytoplasmic Glycolysis (10 steps), Substrate level phosphorylation, Mitochondrial Pyruvate Dehydrogenase link reaction, Krebs TCA cycle enzymes, Inner membrane Complexes I to V, and Respiratory Quotient (RQ).",
-    summaryMr: "पेशीद्रव्यातील ग्लायकोलिसिस (१० टप्पे, निव्वळ २ ATP व २ NADH), मायटोकॉन्ड्रियामधील लिंक अभिक्रिया (एसिटिल CoA निर्मिती), क्रेब्स सायकल (TCA Cycle) ची सर्व सूत्रे व विकरे, इलेक्ट्रॉन वहन संस्था (Complexes I-V) आणि श्वसन गुणांक (Respiratory Quotient - RQ).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Glycolysis (EMP Pathway)",
-        titleMr: "१. ग्लायकोलिसिस (EMP पाथवे)",
         points: [
           "Discovered by Embden, Meyerhof, and Parnas (EMP Pathway). Occurs in CYTOPLASM of all living organisms (common to both aerobic and anaerobic respiration).",
           "Breakdown of 1 Molecule of Glucose (6C) into 2 Molecules of Pyruvic Acid (3C) through 10 enzyme-catalyzed steps without requiring oxygen.",
@@ -344,19 +249,11 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "Step 10: Phosphoenolpyruvate (PEP) -> Pyruvate yields 2 ATP (Substrate-Level Phosphorylation, catalyzed by Pyruvate Kinase).",
           "Net Yield of Glycolysis: 2 Pyruvate + 2 ATP (Net) + 2 NADH + 2 H₂O.",
         ],
-        pointsMr: [
-          "ईएमपी पाथवे (EMP Pathway): सर्व सजीवांच्या पेशीद्रव्यात (Cytoplasm) घडतो; ऑक्सिजनची गरज नसते.",
-          "१ ग्लुकोज (6C) रेणूपासून २ पायरुविक ऍसिड (3C) रेणू तयार होतात.",
-          "ऊर्जा गुंतवणूक: २ ATP वापरले जातात (हेक्सोकायनेज आणि PFK विकरांद्वारे).",
-          "ऊर्जा प्राप्ती: ४ ATP (थेट सबस्ट्रेट पातळीवर) + २ NADH तयार होतात.",
-          "ग्लायकोलिसिसचा निव्वळ नफा (Net Yield): २ ATP + २ NADH + २ पायरुवेट.",
-        ],
         keyFormula: "Glucose + 2 NAD⁺ + 2 ADP + 2 Pi -> 2 Pyruvate + 2 NADH + 2 H⁺ + 2 ATP (Net)",
-        examTip: "Phosphofructokinase (PFK) is the key regulatory pacemaker enzyme of glycolysis. Substrate level phosphorylation occurs at steps 7 and 10.",
+        examTip: "Phosphofructokinase (PFK) is the key regulatory pacemaker enzyme of glycolysis. Substrate level phosphorylation occurs at steps 7 and 10."
       },
       {
         title: "2. Link Reaction & Krebs Cycle (TCA Cycle)",
-        titleMr: "२. लिंक अभिक्रिया आणि क्रेब्स सायकल (TCA Cycle)",
         points: [
           "Link Reaction (Gateway Step / Oxidative Decarboxylation):",
           "Occurs in MITOCHONDRIAL MATRIX.",
@@ -372,17 +269,10 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "Yield of 1 Krebs Cycle turn (for 1 Acetyl-CoA): 3 NADH + 1 FADH₂ + 1 GTP (ATP) + 2 CO₂.",
           "For 1 Glucose molecule (2 turns): 6 NADH + 2 FADH₂ + 2 GTP + 4 CO₂.",
         ],
-        pointsMr: [
-          "लिंक अभिक्रिया (Link Reaction): मायटोकॉन्ड्रियाच्या मॅट्रिक्समध्ये घडते. पायरुव्हेट (3C) चे रूपांतर एसिटिल-CoA (2C) मध्ये होते (१ CO₂ व १ NADH बाहेर पडतो).",
-          "क्रेब्स सायकल (TCA Cycle): मॅट्रिक्समध्ये घडते. पहिला पदार्थ सायट्रिक ऍसिड (6C) बनतो.",
-          "सक्सिनेट डिहायड्रोजनेज (Succinate Dehydrogenase) हे क्रेब्स सायकलचे एकमेव विकर मायटोकॉन्ड्रियाच्या आतील पडद्यावर (Inner membrane) असते.",
-          "१ ग्लुकोजसाठी क्रेब्स सायकलची २ चक्रे होतात: ६ NADH + २ FADH₂ + २ GTP + ४ CO₂.",
-        ],
-        keyFormula: "1 Krebs Turn = 3 NADH + 1 FADH₂ + 1 GTP + 2 CO₂ | For 1 Glucose = Double this",
+        keyFormula: "1 Krebs Turn = 3 NADH + 1 FADH₂ + 1 GTP + 2 CO₂ | For 1 Glucose = Double this"
       },
       {
         title: "3. Electron Transport System (ETS) & Respiratory Quotient (RQ)",
-        titleMr: "३. इलेक्ट्रॉन वहन संस्था (ETS), ATP हिशोब आणि श्वसन गुणांक (RQ)",
         points: [
           "ETS location: INNER MITOCHONDRIAL MEMBRANE (Cristae).",
           "Complex I: NADH Dehydrogenase (oxidizes NADH, pumps 4 H⁺ into intermembrane space).",
@@ -399,22 +289,14 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "Organic Acids (Malic acid): RQ > 1 (e.g. 1.33).",
           "Anaerobic Respiration: RQ = INFINITY (∞) (no O₂ consumed).",
         ],
-        pointsMr: [
-          "इलेक्ट्रॉन वहन संस्था (ETS): मायटोकॉन्ड्रियाच्या आतील पडद्यावर (Cristae) असते.",
-          "शेवटचा इलेक्ट्रॉन स्वीकारणारा घटक: ऑक्सिजन (O₂) असून त्यापासून पाणी (H₂O) तयार होते.",
-          "Complex V: ATP सिंथेज (F₀-F₁ कॉम्प्लेक्स) जो प्रोटॉन प्रवणतेने ATP बनवतो.",
-          "१ NADH = २.५ (किंवा ३) ATP; १ FADH₂ = १.५ (किंवा २) ATP.",
-          "श्वसन गुणांक (RQ = बाहेर पडलेला CO₂ / वापरलेला O₂):",
-          "कर्बोदके (ग्लुकोज): RQ = १.०; चरबी (ट्रायपामिटिन): RQ = ०.७; प्रथिने: RQ = ०.९; सेंद्रिय आम्ले: RQ > १; विनॉक्सी श्वसन: RQ = अनंत (∞).",
-        ],
-        keyFormula: "RQ = Vol CO₂ / Vol O₂ | Glucose RQ = 1.0 | Fat RQ = 0.7 | Protein RQ = 0.9 | Anaerobic RQ = ∞",
+        keyFormula: "RQ = Vol CO₂ / Vol O₂ | Glucose RQ = 1.0 | Fat RQ = 0.7 | Protein RQ = 0.9 | Anaerobic RQ = ∞"
       },
     ],
     quickRevisionPoints: [
-      { en: "Glycolysis occurs in cytoplasm; yields 2 ATP net + 2 NADH per glucose.", mr: "ग्लायकोलिसिस पेशीद्रव्यात घडतो; निव्वळ २ ATP + २ NADH मिळतात." },
-      { en: "TCA cycle occurs in matrix; Succinate dehydrogenase is in inner membrane.", mr: "क्रेब्स सायकल मॅट्रिक्समध्ये घडते; सक्सिनेट डिहायड्रोजनेज आतील पडद्यावर असते." },
-      { en: "Oxygen is the terminal electron acceptor in ETS, forming water.", mr: "ETS मध्ये ऑक्सिजन हा अंतिम इलेक्ट्रॉन स्वीकारणारा घटक असून पाणी बनते." },
-      { en: "RQ values: Carbohydrates = 1.0, Fats = 0.7, Proteins = 0.9, Anaerobic = ∞.", mr: "RQ किमती: कर्बोदके = १.०, फॅट्स = ०.७, प्रथिने = ०.९, विनॉक्सी = ∞." },
+      { en: "Glycolysis occurs in cytoplasm; yields 2 ATP net + 2 NADH per glucose." },
+      { en: "TCA cycle occurs in matrix; Succinate dehydrogenase is in inner membrane." },
+      { en: "Oxygen is the terminal electron acceptor in ETS, forming water." },
+      { en: "RQ values: Carbohydrates = 1.0, Fats = 0.7, Proteins = 0.9, Anaerobic = ∞." },
     ],
     keyFormulasTable: [
       { name: "Respiratory Quotient", formula: "RQ = (Volume of CO₂ released) / (Volume of O₂ absorbed)", description: "Ratio indicating respiratory substrate metabolized" },
@@ -423,29 +305,23 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming all TCA cycle enzymes reside freely in the mitochondrial matrix.",
-        mistakeMr: "क्रेब्स सायकलचे सर्व विकर मॅट्रिक्समध्ये मोकळे असतात असे मानणे.",
-        correction: "Succinate Dehydrogenase (Complex II) is firmly embedded in the INNER MITOCHONDRIAL MEMBRANE, not in the matrix.",
-        correctionMr: "सक्सिनेट डिहायड्रोजनेज हे विकर मॅट्रिक्समध्ये नसून मायटोकॉन्ड्रियाच्या आतील पडद्यात बसवलेले असते.",
+        correction: "Succinate Dehydrogenase (Complex II) is firmly embedded in the INNER MITOCHONDRIAL MEMBRANE, not in the matrix."
       },
-    ],
+    ]
   },
 
   // 5. Human Health and Diseases
   {
     id: "note_bio_human_health",
     chapter: "Human Health and Diseases",
-    chapterMr: "मानवी आरोग्य आणि रोग (Human Health & Diseases)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Pathogens, Antibody Structure, Innate vs Acquired Immunity, AIDS & Cancer",
-    titleMr: "रोगकारक, प्रतिपिंड (Antibody) रचना, जन्मजात व उपार्जित प्रतिकारशक्ती, एड्स व कर्करोग",
     summary: "Complete guide covering Typhoid (Widal test), Malaria life cycle, Pneumonia, Amoebiasis, Filariasis, Ringworm, Antibody structure (H₂L₂), Immunoglobulin classes (IgG, IgA, IgM, IgE), HIV-AIDS replication, and Cancer characteristics.",
-    summaryMr: "टायफॉइड (Widal टेस्ट), मलेरियाचे जीवनचक्र (प्लास्मोडियम, हिमोझोइन विष), न्यूमोनिया, हत्तीरोग (Wuchereria), दाद (Ringworm), प्रतिपिंड (Antibody H₂L₂) रचना, इम्युनोग्लोब्युलिन प्रकार (IgG, IgA-आईचे दूध, IgM, IgE-ॲलर्जी), एड्स (HIV सायकल, ELISA) आणि कर्करोग (Benign vs Malignant, Metastasis).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Common Infectious Diseases & Pathogens",
-        titleMr: "१. सामान्य संसर्गजन्य रोग आणि रोगजंतू",
         points: [
           "Bacterial Diseases:",
           "(1) Typhoid: Caused by Salmonella typhi. Transmitted via contaminated food and water. Symptoms: sustained high fever (39-40°C), stomach pain, constipation, intestinal perforation in severe cases. Confirmatory test: WIDAL TEST. Classic carrier: Mary Mallon ('Typhoid Mary').",
@@ -459,20 +335,11 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "(1) Filariasis / Elephantiasis: Caused by Wuchereria bancrofti and Wuchereria malayi. Transmitted by female Culex mosquito. Chronic inflammation of lymphatic vessels of lower limbs and genital organs.",
           "(2) Ringworm: Caused by fungi genera Microsporum, Trichophyton, and Epidermophyton. Dry, scaly lesions on skin, nails, scalp with intense itching.",
         ],
-        pointsMr: [
-          "टायफॉइड: सालमोनेला टायफी; विडाल चाचणीने (Widal test) खात्री केली जाते.",
-          "न्यूमोनिया: स्ट्रेप्टोकोकस न्यूमोनी; फुप्फुसांच्या वायुकोशात (Alveoli) पाणी भरते.",
-          "सर्दी (Common Cold): राइनोव्हायरसमुळे होते; फुप्फुसांना संसर्ग होत नाही.",
-          "मलेरिया: प्लास्मोडियममुळे होतो; डासाच्या लाळेतून स्पोरोझोईट्स (Sporozoites) शरीरात येतात. तांबड्या रक्तपेशी फुटून हिमोझोइन (Haemozoin) विष बाहेर पडल्याने हुडहुडी भरून ताप येतो.",
-          "हत्तीरोग (Filariasis): वुचेरेरिया (Wuchereria); क्युलेक्स डासामुळे लसिका वाहिन्यांना सूज येते.",
-          "दाद (Ringworm): ट्रायकोफायटॉन, मायक्रोस्पोरम या बुरशींमुळे होतो.",
-        ],
         keyFormula: "Typhoid = Widal Test | Malaria Chills = Haemozoin Toxin | Filariasis = Culex + Wuchereria",
-        examTip: "Pneumonia infects lung alveoli; Common Cold infects only upper respiratory tract, NEVER the alveoli.",
+        examTip: "Pneumonia infects lung alveoli; Common Cold infects only upper respiratory tract, NEVER the alveoli."
       },
       {
         title: "2. Immunity & Structure of Antibody",
-        titleMr: "२. प्रतिकारशक्ती आणि प्रतिपिंड (Antibody) रचना",
         points: [
           "Innate Immunity (Non-specific, present from birth):",
           "(1) Physical barriers: Skin, mucus coating of respiratory/digestive tracts.",
@@ -492,19 +359,10 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "IgE: Mediates ALLERGIC reactions (triggers histamine and serotonin release from mast cells and basophils).",
           "IgD: Functions as antigen receptor on B-cell surface.",
         ],
-        pointsMr: [
-          "जन्मजात प्रतिकारशक्ती: त्वचा, जठरातील आम्ल, अश्रूतील लायसोझाइम, आणि इंटरफेरॉन (विषाणूग्रस्त पेशींनी स्रावलेले प्रथिन).",
-          "सेल-मेडिएटेड इम्युनिटी (CMI): T-पेशींमुळे मिळते; अवयव प्रत्यारोपण नाकारण्यास (Graft Rejection) CMI कारणीभूत असते.",
-          "प्रतिपिंड रचना (Antibody): H₂L₂ (२ मोठ्या हेवी चेन्स + २ लहान लाईट चेन्स, डायसल्फाइड बंधाने जोडलेल्या).",
-          "IgG: नाळेतून (Placenta) गर्भाकडे जाणारे एकमेव प्रतिपिंड.",
-          "IgA: आईच्या पहिल्या पिवळसर दुधात (Colostrum) आढळणारे बाळाचे संरक्षक प्रतिपिंड.",
-          "IgE: ॲलर्जीच्या वेळेस मास्ट पेशींमधून हिस्टामाइन बाहेर टाकण्यास कारणीभूत.",
-        ],
-        keyFormula: "Antibody = H₂L₂ (Disulfide bonds) | Colostrum = IgA | Crosses Placenta = IgG | Allergy = IgE",
+        keyFormula: "Antibody = H₂L₂ (Disulfide bonds) | Colostrum = IgA | Crosses Placenta = IgG | Allergy = IgE"
       },
       {
         title: "3. AIDS & Cancer",
-        titleMr: "३. एड्स (AIDS) आणि कर्करोग (Cancer)",
         points: [
           "AIDS (Acquired Immuno Deficiency Syndrome):",
           "Caused by Human Immunodeficiency Virus (HIV), a RETROVIRUS with RNA genome enclosed in protein coat.",
@@ -518,22 +376,14 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
           "Carcinogens: Physical (UV, X-rays, gamma rays), Chemical (Tobacco smoke causes lung cancer), Biological (Oncogenic viruses, cellular oncogenes / proto-oncogenes activated to oncogenes).",
           "Treatment: Surgery, Radiation therapy, Chemotherapy, and Immunotherapy (α-INTERFERON activates immune system to destroy tumors).",
         ],
-        pointsMr: [
-          "एड्स (HIV): रेट्रोव्हायरस आहे. रिव्हर्स ट्रान्सक्रिप्टेज विकराद्वारे आरएनएचे डीएनए बनवतो.",
-          "मॅक्रोफेजला 'HIV फॅक्टरी' म्हणतात. हा विषाणू हेल्पर टी-पेशी (Helper T-cells, CD4) नष्ट करतो.",
-          "तपासणी: ELISA चाचणी; खात्रीसाठी वेस्टर्न ब्लॉट (Western blot).",
-          "कर्करोग (Cancer): संपर्क प्रतिबंध (Contact Inhibition) नष्ट झाल्यामुळे पेशींची अनियंत्रित वाढ होते.",
-          "मेटास्टॅसिस (Metastasis): कॅन्सरच्या पेशी रक्तावाटे इतर अवयवांत पसरणे (कॅन्सरचे सर्वात घातक लक्षण).",
-          "उपचार: शस्त्रक्रिया, रेडिएशन, केमोथेरपी आणि अल्फा-इंटरफेरॉनने प्रतिकारशक्ती वाढवणे.",
-        ],
-        keyFormula: "HIV attacks Helper T-Cells (CD4) | AIDS Test = ELISA | Malignant hallmark = Metastasis | Treatment = α-Interferon",
+        keyFormula: "HIV attacks Helper T-Cells (CD4) | AIDS Test = ELISA | Malignant hallmark = Metastasis | Treatment = α-Interferon"
       },
     ],
     quickRevisionPoints: [
-      { en: "Typhoid confirmed by Widal test; Malaria chills caused by Haemozoin release.", mr: "टायफॉइडसाठी विडाल चाचणी; मलेरियात थंडी हिमोझोइनमुळे वाजते." },
-      { en: "Antibody formula H₂L₂; IgG crosses placenta; IgA in colostrum; IgE in allergies.", mr: "प्रतिपिंड H₂L₂; IgG नाळेतून जातो; IgA दुधात असतो; IgE ॲलर्जीसाठी." },
-      { en: "Graft rejection is driven by Cell-Mediated Immunity (T-lymphocytes).", mr: "अवयव प्रत्यारोपण नाकारणे हे सेल-मेडिएटेड इम्युनिटी (T-पेशी) मुळे होते." },
-      { en: "Metastasis is the spread of cancer cells; HIV attacks CD4 Helper T-cells.", mr: "मेटास्टॅसिस म्हणजे कॅन्सरचा प्रसार; HIV हा CD4 हेल्पर T-पेशींवर हल्ला करतो." },
+      { en: "Typhoid confirmed by Widal test; Malaria chills caused by Haemozoin release." },
+      { en: "Antibody formula H₂L₂; IgG crosses placenta; IgA in colostrum; IgE in allergies." },
+      { en: "Graft rejection is driven by Cell-Mediated Immunity (T-lymphocytes)." },
+      { en: "Metastasis is the spread of cancer cells; HIV attacks CD4 Helper T-cells." },
     ],
     keyFormulasTable: [
       { name: "Antibody Subunit Formula", formula: "H₂L₂", description: "Two identical heavy and two identical light chains joined by disulfide linkages" },
@@ -542,10 +392,8 @@ export const BIOLOGY_NOTES_ADDED: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Attributing graft rejection to Humoral antibodies instead of Cell-Mediated Immunity.",
-        mistakeMr: "अवयव प्रत्यारोपण नाकारण्यास B-पेशी कारणीभूत आहेत असे मानणे.",
-        correction: "Organ graft rejection is mediated by CELL-MEDIATED IMMUNITY (T-lymphocytes), which is why T-cell immunosuppressants like Cyclosporin-A are administered.",
-        correctionMr: "अवयव नाकारण्यास T-पेशींची सेल-मेडिएटेड इम्युनिटी (CMI) कारणीभूत असते.",
+        correction: "Organ graft rejection is mediated by CELL-MEDIATED IMMUNITY (T-lymphocytes), which is why T-cell immunosuppressants like Cyclosporin-A are administered."
       },
-    ],
+    ]
   },
 ];

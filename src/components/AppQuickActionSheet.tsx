@@ -55,16 +55,16 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
 
   const handleShare = () => {
     triggerHaptic("success");
-    const shareText = `🎯 मी मराठीवाला क्लासेस (अंबड) - NCJ MOCK TEST APP\n🔥 MHT-CET, NEET & JEE सराव ॲप! १० ग्रँड मॉक टेस्ट्स, डिजिटल OMR व नोट्स!\n👉 आत्ताच मोफत सराव सुरू करा: ${window.location.origin}`;
+    const shareText = `🎯 Mi Marathiwala Classes (Ambad) - NCJ MOCK TEST APP\n🔥 MHT-CET, NEET & JEE Practice App! 10 Grand Mock Tests, Digital OMR & Notes!\n👉 Start Free Practice Now: ${window.location.origin}`;
     if (navigator.share) {
       navigator.share({
-        title: "NCJ MOCK TEST APP - मी मराठीवाला क्लासेस",
+        title: "NCJ MOCK TEST APP - Mi Marathiwala Classes",
         text: shareText,
         url: window.location.origin,
       }).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareText);
-      alert("ॲपची लिंक कॉपी केली आहे! आपण WhatsApp वर पाठवू शकता.");
+      alert("App link copied! You can now paste and send it on WhatsApp.");
     }
     setIsOpen(false);
   };
@@ -76,11 +76,11 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
         <button
           type="button"
           onClick={handleOpen}
-          aria-label="जलद ॲप मेनू"
+          aria-label="Quick App Menu"
           className="group flex items-center gap-2 px-3.5 py-2.5 rounded-full bg-gradient-to-r from-orange-600 via-amber-500 to-orange-600 text-white font-black text-xs shadow-xl shadow-orange-600/30 hover:shadow-orange-600/50 hover:scale-105 active:scale-90 transition-all duration-200 cursor-pointer border border-amber-300/40"
         >
           <Sparkles className="w-4 h-4 animate-spin-slow text-amber-100" />
-          <span className="tracking-wide">जलद ॲप मेनू</span>
+          <span className="tracking-wide">Quick Menu</span>
           <ChevronUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
         </button>
       </div>
@@ -90,7 +90,7 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="जलद ॲप मेनू"
+          aria-label="Quick App Menu"
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center animate-in fade-in duration-200"
           onClick={handleClose}
         >
@@ -110,10 +110,10 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                 </div>
                 <div>
                   <h3 className="font-black text-sm text-slate-900 dark:text-white">
-                    NCJ ॲप जलद कृती (Quick Actions)
+                    NCJ Quick Actions
                   </h3>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    एका क्लिकवर हवे त्या विभागात त्वरित जा
+                    Quickly jump to any section with one click
                   </p>
                 </div>
               </div>
@@ -136,8 +136,8 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                 className="flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-950/60 transition-all active:scale-95 cursor-pointer"
               >
                 <Trophy className="w-6 h-6 text-amber-500 mb-1" />
-                <span className="text-xs font-black">ग्रँड टेस्ट्स</span>
-                <span className="text-[9px] text-amber-600 dark:text-amber-400 font-bold">१० चाचण्या</span>
+                <span className="text-xs font-black">Grand Mocks</span>
+                <span className="text-[9px] text-amber-600 dark:text-amber-400 font-bold">10 Full Tests</span>
               </button>
 
               {/* 2. Notes */}
@@ -147,8 +147,8 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                 className="flex flex-col items-center justify-center p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-emerald-900 dark:text-emerald-200 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 transition-all active:scale-95 cursor-pointer"
               >
                 <BookOpen className="w-6 h-6 text-emerald-500 mb-1" />
-                <span className="text-xs font-black">१०० नोट्स</span>
-                <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold">रिव्हिजन शीट्स</span>
+                <span className="text-xs font-black">100 Notes</span>
+                <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold">Revision Sheets</span>
               </button>
 
               {/* 3. PYQ Papers */}
@@ -158,8 +158,8 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                 className="flex flex-col items-center justify-center p-3 rounded-2xl bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/40 text-purple-900 dark:text-purple-200 hover:bg-purple-100 dark:hover:bg-purple-950/60 transition-all active:scale-95 cursor-pointer"
               >
                 <Calendar className="w-6 h-6 text-purple-500 mb-1" />
-                <span className="text-xs font-black">PYQ पेपर्स</span>
-                <span className="text-[9px] text-purple-600 dark:text-purple-400 font-bold">२०१५-२०२५</span>
+                <span className="text-xs font-black">PYQ Archive</span>
+                <span className="text-[9px] text-purple-600 dark:text-purple-400 font-bold">2015-2025</span>
               </button>
 
               {/* 4. Formulas */}
@@ -169,8 +169,8 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                 className="flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/40 text-blue-900 dark:text-blue-200 hover:bg-blue-100 dark:hover:bg-blue-950/60 transition-all active:scale-95 cursor-pointer"
               >
                 <Zap className="w-6 h-6 text-blue-500 mb-1" />
-                <span className="text-xs font-black">फॉर्म्युला</span>
-                <span className="text-[9px] text-blue-600 dark:text-blue-400 font-bold">शॉर्ट ट्रिक्स</span>
+                <span className="text-xs font-black">Formulas</span>
+                <span className="text-[9px] text-blue-600 dark:text-blue-400 font-bold">Short Tricks</span>
               </button>
 
               {/* 5. Bookmarks */}
@@ -180,9 +180,9 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                 className="flex flex-col items-center justify-center p-3 rounded-2xl bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800/40 text-orange-900 dark:text-orange-200 hover:bg-orange-100 dark:hover:bg-orange-950/60 transition-all active:scale-95 cursor-pointer relative"
               >
                 <Bookmark className="w-6 h-6 text-orange-500 mb-1" />
-                <span className="text-xs font-black">सेव्ह प्रश्न</span>
+                <span className="text-xs font-black">Bookmarks</span>
                 <span className="text-[9px] text-orange-600 dark:text-orange-400 font-bold">
-                  {bookmarkCount} प्रश्न
+                  {bookmarkCount} Items
                 </span>
               </button>
 
@@ -193,9 +193,9 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                 className="flex flex-col items-center justify-center p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 text-rose-900 dark:text-rose-200 hover:bg-rose-100 dark:hover:bg-rose-950/60 transition-all active:scale-95 cursor-pointer relative"
               >
                 <AlertTriangle className="w-6 h-6 text-rose-500 mb-1" />
-                <span className="text-xs font-black">चूक बँक</span>
+                <span className="text-xs font-black">Mistakes Bank</span>
                 <span className="text-[9px] text-rose-600 dark:text-rose-400 font-bold">
-                  {mistakesCount} चुका
+                  {mistakesCount} Errors
                 </span>
               </button>
             </div>
@@ -209,7 +209,7 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                   className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all active:scale-95 cursor-pointer"
                 >
                   <Share2 className="w-4 h-4 text-blue-500" />
-                  <span>मित्र व ग्रुपवर शेअर</span>
+                  <span>Share App</span>
                 </button>
 
                 <button
@@ -218,7 +218,7 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                   className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all active:scale-95 cursor-pointer"
                 >
                   <Scale className="w-4 h-4 text-indigo-500" />
-                  <span>कायदे व नियमावली</span>
+                  <span>Rules & Policies</span>
                 </button>
               </div>
 
@@ -231,7 +231,7 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                     <Sun className="w-4 h-4 text-amber-500" />
                   )}
                   <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                    {isDarkMode ? "डार्क थीम चालू आहे" : "लाईट थीम चालू आहे"}
+                    {isDarkMode ? "Dark Theme Active" : "Light Theme Active"}
                   </span>
                 </div>
                 <button
@@ -242,7 +242,7 @@ export const AppQuickActionSheet: React.FC<AppQuickActionSheetProps> = ({
                   }}
                   className="px-3 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer"
                 >
-                  {isDarkMode ? "लाईट करा" : "डार्क करा"}
+                  {isDarkMode ? "Light Mode" : "Dark Mode"}
                 </button>
               </div>
             </div>

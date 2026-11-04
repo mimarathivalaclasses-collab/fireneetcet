@@ -5,18 +5,14 @@ export const MATHS_NOTES: TopicNote[] = [
   {
     id: "note_math_calculus",
     chapter: "Calculus (Differentiation & Integration)",
-    chapterMr: "कलनशास्त्र: अवकलन व संकलन (Calculus)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Derivatives, Integration Rules, Definite Integral Properties & Area",
-    titleMr: "अवकलन, समाकलन सूत्रे, निश्चित समाकलन गुणधर्म आणि क्षेत्रफळ",
     summary: "Chain rule, Logarithmic differentiation, Standard integrals, LIATE Integration by parts, King's property of definite integrals, and Area bounded by curves.",
-    summaryMr: "चेन रुल, लॉगरिथमिक अवकलन, खंडश: समाकलन (LIATE नियम), निश्चित समाकलनाचा 'किंग्स गुणधर्म' आणि वक्राखालील क्षेत्रफळ.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Differentiation Rules & Standard Formulas",
-        titleMr: "१. अवकलनाचे नियम व प्रमाणित सूत्रे",
         points: [
           "Product Rule: d/dx [u · v] = u v' + v u'. Quotient Rule: d/dx [u / v] = (v u' - u v') / v².",
           "Chain Rule: d/dx [f(g(x))] = f'(g(x)) · g'(x).",
@@ -24,17 +20,10 @@ export const MATHS_NOTES: TopicNote[] = [
           "Parametric Differentiation: If x = f(t) and y = g(t), then dy/dx = (dy/dt) / (dx/dt). Second derivative: d²y/dx² = [ d/dt (dy/dx) ] / (dx/dt).",
           "Standard Derivatives: d/dx [sin⁻¹ x] = 1/√(1 - x²), d/dx [tan⁻¹ x] = 1/(1 + x²), d/dx [a^x] = a^x ln a.",
         ],
-        pointsMr: [
-          "गुणाकार नियम: d/dx [u · v] = u v' + v u'. भागाकार नियम: d/dx [u / v] = (v u' - u v') / v².",
-          "चेन रुल: d/dx [f(g(x))] = f'(g(x)) · g'(x).",
-          "प्रचलिक अवकलन (Parametric): dy/dx = (dy/dt) / (dx/dt).",
-          "प्रमाणित अवकले: d/dx [tan⁻¹ x] = १/(१ + x²), d/dx [sin⁻¹ x] = १/√(१ - x²).",
-        ],
-        keyFormula: "d/dx [u/v] = (v u' - u v')/v² | dy/dx = (dy/dt)/(dx/dt)",
+        keyFormula: "d/dx [u/v] = (v u' - u v')/v² | dy/dx = (dy/dt)/(dx/dt)"
       },
       {
         title: "2. Indefinite & Definite Integration Tricks",
-        titleMr: "२. समाकलन तंत्र व निश्चित समाकलन गुणधर्म",
         points: [
           "Integration by Parts (LIATE rule): ∫ u v dx = u ∫ v dx - ∫ [ (du/dx) ∫ v dx ] dx.",
           "LIATE priority: Logarithmic > Inverse Trig > Algebraic > Trigonometric > Exponential.",
@@ -42,20 +31,13 @@ export const MATHS_NOTES: TopicNote[] = [
           "King's Property of Definite Integral: ∫_a^b f(x) dx = ∫_a^b f(a + b - x) dx.",
           "Even/Odd Function Property: ∫_{-a}^a f(x) dx = 2 ∫_0^a f(x) dx (if even f(-x)=f(x)) OR 0 (if odd f(-x)=-f(x)).",
         ],
-        pointsMr: [
-          "खंडश: समाकलन (By Parts - LIATE): ∫ u v dx = u ∫ v dx - ∫ [ u' ∫ v dx ] dx.",
-          "LIATE क्रम: Logarithmic > Inverse > Algebraic > Trigonometric > Exponential.",
-          "शॉर्टकट सूत्र: ∫ e^x [ f(x) + f'(x) ] dx = e^x f(x) + C.",
-          "किंग्स प्रॉपर्टी (King's Property): ∫_a^b f(x) dx = ∫_a^b f(a + b - x) dx.",
-          "सम/विषम फलन: f(-x) = -f(x) (विषम) असल्यास ∫_{-a}^a f(x) dx = ०.",
-        ],
         keyFormula: "∫ e^x [f(x) + f'(x)] dx = e^x f(x) + C | ∫_a^b f(x) dx = ∫_a^b f(a+b-x) dx",
-        keyMnemonic: "LIATE: Log, Inverse, Algebraic, Trig, Exponential for choosing 'u'.",
+        keyMnemonic: "LIATE: Log, Inverse, Algebraic, Trig, Exponential for choosing 'u'."
       },
     ],
     quickRevisionPoints: [
-      { en: "Area bounded by y = f(x), x-axis, x=a to x=b: Area = ∫_a^b |y| dx.", mr: "वक्राने बंदिस्त केलेले क्षेत्रफळ: Area = ∫_a^b |y| dx." },
-      { en: "Area between parabola y² = 4ax and line y = mx: Area = 8 a² / (3 m³).", mr: "परवलय y²=4ax आणि रेषा y=mx मधील क्षेत्रफळ = 8 a² / (3 m³)." },
+      { en: "Area bounded by y = f(x), x-axis, x=a to x=b: Area = ∫_a^b |y| dx." },
+      { en: "Area between parabola y² = 4ax and line y = mx: Area = 8 a² / (3 m³)." },
     ],
     keyFormulasTable: [
       { name: "Integration by Parts", formula: "∫ u v dx = u ∫ v dx - ∫ [u' ∫ v dx] dx", description: "LIATE priority rule for product of functions" },
@@ -65,47 +47,34 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Forgetting the dt/dx term when taking second derivative of parametric functions d²y/dx².",
-        mistakeMr: "प्रचलिक फलाचे दुसरे अवकलन (d²y/dx²) करताना शेवटी dt/dx ने गुणायला विसरणे.",
-        correction: "d²y/dx² = [ d/dt (dy/dx) ] / (dx/dt). NEVER just differentiate dy/dx with respect to t alone.",
-        correctionMr: "d²y/dx² = [ d/dt (dy/dx) ] ÷ (dx/dt) हे सूत्र वापरा.",
+        correction: "d²y/dx² = [ d/dt (dy/dx) ] / (dx/dt). NEVER just differentiate dy/dx with respect to t alone."
       },
-    ],
+    ]
   },
 
   // 2. Vectors & 3D Geometry
   {
     id: "note_math_vectors_3d",
     chapter: "Vectors & 3D Geometry",
-    chapterMr: "सदिश आणि त्रिमितीय भूमिती (Vectors & 3D Geometry)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Dot Product, Cross Product, Scalar Triple Product & 3D Lines/Planes",
-    titleMr: "सदिश आणि त्रिमितीय भूमिती संपूर्ण सूत्रे व नोट्स",
     summary: "Dot product, Cross product, Box product [a b c], Vector triple product, Line in 3D, Shortest distance between skew lines, and Plane equations.",
-    summaryMr: "डॉट प्रॉडक्ट, क्रॉस प्रॉडक्ट, स्केलर ट्रिपल प्रॉडक्ट [a b c], त्रिमितीय रेषा, दोन रेषांमधील किमान अंतर आणि प्रतलाची समीकरणे.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Vector Algebra & Triple Products",
-        titleMr: "१. सदिश बीजगणित आणि ट्रिपल प्रॉडक्ट्स",
         points: [
           "Dot (Scalar) Product: a · b = |a| |b| cos θ. Angle: cos θ = (a · b) / (|a| |b|). Condition for perpendicularity: a · b = 0.",
           "Cross (Vector) Product: a × b = |a| |b| sin θ n̂. Area of parallelogram with adjacent vectors a, b: Area = |a × b|. Area of triangle: (1/2) |a × b|.",
           "Scalar Triple Product (Box Product): [a b c] = a · (b × c) = Determinant of components. Represents Volume of Parallelepiped. Condition for coplanarity: [a b c] = 0.",
           "Vector Triple Product: a × (b × c) = (a · c) b - (a · b) c ('BAC - CAB' rule).",
         ],
-        pointsMr: [
-          "डॉट प्रॉडक्ट: a · b = |a| |b| cos θ. लंब असण्याची अट: a · b = ०.",
-          "क्रॉस प्रॉडक्ट: a × b = |a| |b| sin θ n̂. समांतरभुज चौकोनाचे क्षेत्रफळ = |a × b|.",
-          "स्केलर ट्रिपल प्रॉडक्ट [a b c]: समांतर षट्फलकाचे घनफळ. समप्रतलीय असण्याची अट: [a b c] = ०.",
-          "व्हेक्टर ट्रिपल प्रॉडक्ट: a × (b × c) = (a · c) b - (a · b) c (BAC - CAB नियम).",
-        ],
         keyFormula: "a · b = |a||b|cos θ | [a b c] = a · (b × c) | a × (b × c) = (a·c)b - (a·b)c",
-        keyMnemonic: "Vector Triple: Remember 'BAC minus CAB' -> a × (b × c) = b(a·c) - c(a·b).",
+        keyMnemonic: "Vector Triple: Remember 'BAC minus CAB' -> a × (b × c) = b(a·c) - c(a·b)."
       },
       {
         title: "2. Three Dimensional Geometry (3D)",
-        titleMr: "२. त्रिमितीय भूमिती (3D Lines & Planes)",
         points: [
           "Direction Cosines & Ratios: l² + m² + n² = 1, where l = cos α, m = cos β, n = cos γ.",
           "Vector Equation of Line passing through a and parallel to b: r = a + λ b.",
@@ -114,18 +83,12 @@ export const MATHS_NOTES: TopicNote[] = [
           "Shortest Distance between Parallel Lines (r = a₁ + λ b and r = a₂ + μ b): d = | (a₂ - a₁) × b | / | b |.",
           "Perpendicular distance from point (x₀, y₀, z₀) to plane Ax + By + Cz + D = 0: d = | A x₀ + B y₀ + C z₀ + D | / √(A² + B² + C²).",
         ],
-        pointsMr: [
-          "दिशा कोज्या: l² + m² + n² = १.",
-          "रेषेचे सदिश समीकरण: r = a + λ b.",
-          "दोन असमरेषीय रेषांमधील किमान अंतर: d = | (a₂ - a₁) · (b₁ × b₂) | / | b₁ × b₂ |.",
-          "बिंदूचे प्रतलापासून लंब अंतर: d = | A x₀ + B y₀ + C z₀ + D | / √(A² + B² + C²).",
-        ],
-        keyFormula: "d_skew = |(a₂ - a₁) · (b₁ × b₂)| / |b₁ × b₂| | l² + m² + n² = 1",
+        keyFormula: "d_skew = |(a₂ - a₁) · (b₁ × b₂)| / |b₁ × b₂| | l² + m² + n² = 1"
       },
     ],
     quickRevisionPoints: [
-      { en: "Projection of vector a on vector b: Projection = (a · b) / |b|.", mr: "सदिश a चा b वरील प्रक्षेप (Projection) = (a · b) / |b|." },
-      { en: "Two lines are perpendicular if a₁ a₂ + b₁ b₂ + c₁ c₂ = 0; parallel if a₁/a₂ = b₁/b₂ = c₁/c₂.", mr: "दोन रेषा लंबरूप असण्याची अट: a₁ a₂ + b₁ b₂ + c₁ c₂ = ०." },
+      { en: "Projection of vector a on vector b: Projection = (a · b) / |b|." },
+      { en: "Two lines are perpendicular if a₁ a₂ + b₁ b₂ + c₁ c₂ = 0; parallel if a₁/a₂ = b₁/b₂ = c₁/c₂." },
     ],
     keyFormulasTable: [
       { name: "Scalar Triple Product", formula: "[a b c] = a · (b × c)", description: "Volume of parallelepiped formed by vectors" },
@@ -135,29 +98,23 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing direction ratios (a, b, c) with direction cosines (l, m, n).",
-        mistakeMr: "दिशा गुणोत्तरे (a, b, c) आणि दिशा कोज्या (l, m, n) एकच मानणे.",
-        correction: "Direction ratios can be any proportional values; Direction cosines MUST strictly satisfy l² + m² + n² = 1.",
-        correctionMr: "दिशा कोज्यांसाठी l² + m² + n² = १ असणे बंधनकारक आहे (l = a/√(a²+b²+c²)).",
+        correction: "Direction ratios can be any proportional values; Direction cosines MUST strictly satisfy l² + m² + n² = 1."
       },
-    ],
+    ]
   },
 
   // 3. Matrices & Determinants
   {
     id: "note_math_matrices_determinants",
     chapter: "Matrices & Determinants",
-    chapterMr: "मॅट्रिसेस आणि निश्चयके (Matrices & Determinants)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Matrix Inversion, Adjoint Properties, Cramers' Rule & System of Equations",
-    titleMr: "मॅट्रिक्स व्यस्त, अ‍ॅडजॉइंटचे गुणधर्म, क्रेमरचा नियम व समीकरण प्रणाली",
     summary: "Properties of Determinants, Adjoint formulas, Inverse of 2x2 and 3x3 matrices, System of linear equations consistency (Cramer's rule & Matrix method), and Cayley-Hamilton theorem.",
-    summaryMr: "निश्चयकांचे गुणधर्म, अ‍ॅडजॉइंटची महत्त्वाची सूत्रे, मॅट्रिक्सचा व्यस्त (Inverse), रेषीय समीकरणांची सुसंगतता (Consistency) आणि क्रेमरचा नियम.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Properties of Determinants & Adjoint Formulas",
-        titleMr: "१. निश्चयकांचे व अ‍ॅडजॉइंटचे महत्त्वाचे गुणधर्म",
         points: [
           "Properties of Determinants: |A^T| = |A|, |A · B| = |A| |B|, |k A| = k^n |A| (for n × n matrix).",
           "Singular Matrix: |A| = 0 (Inverse does NOT exist); Non-singular: |A| ≠ 0.",
@@ -169,19 +126,10 @@ export const MATHS_NOTES: TopicNote[] = [
           "5. adj(A · B) = adj(B) · adj(A).",
           "Matrix Inverse: A⁻¹ = (1 / |A|) · adj(A). Note: (A⁻¹)⁻¹ = A, (A · B)⁻¹ = B⁻¹ · A⁻¹.",
         ],
-        pointsMr: [
-          "निश्चयकांचे गुणधर्म: |k A| = k^n |A| (n × n मॅट्रिक्ससाठी).",
-          "अ‍ॅडजॉइंटचे गुणधर्म: A · adj(A) = |A| I.",
-          "|adj(A)| = |A|^(n - १).",
-          "adj(adj(A)) = |A|^(n - २) · A.",
-          "व्यस्त मॅट्रिक्स (Inverse): A⁻¹ = (१ / |A|) · adj(A).",
-          "उलटा क्रम: (A · B)⁻¹ = B⁻¹ · A⁻¹ आणि adj(AB) = adj(B) · adj(A).",
-        ],
-        keyFormula: "A⁻¹ = (1/|A|) adj(A) | |adj(A)| = |A|^(n-1) | |k A| = k^n |A|",
+        keyFormula: "A⁻¹ = (1/|A|) adj(A) | |adj(A)| = |A|^(n-1) | |k A| = k^n |A|"
       },
       {
         title: "2. System of Linear Equations & Consistency",
-        titleMr: "२. रेषीय समीकरण प्रणाली व सुसंगतता (Consistency)",
         points: [
           "System of equations: A X = B => X = A⁻¹ B = (1/|A|) adj(A) B.",
           "Non-homogeneous system (AX = B, B ≠ 0):",
@@ -193,19 +141,12 @@ export const MATHS_NOTES: TopicNote[] = [
           "- Non-trivial / Infinite solutions: If |A| = 0.",
           "Cramer's Rule: x = D_x / D, y = D_y / D, z = D_z / D (for D ≠ 0).",
         ],
-        pointsMr: [
-          "अद्वितीय उकल (Unique): |A| ≠ ०.",
-          "अमर्याद उकली (Infinite): |A| = ० आणि (adj A) · B = O.",
-          "उकल नाही (No solution): |A| = ० आणि (adj A) · B ≠ O.",
-          "समघाती (Homogeneous, AX = 0): नॉन-ट्रिव्हील उकलीसाठी |A| = ०.",
-          "क्रेमरचा नियम: x = D_x / D, y = D_y / D, z = D_z / D.",
-        ],
-        keyFormula: "x = D_x/D, y = D_y/D, z = D_z/D | Homogeneous non-trivial: |A| = 0",
+        keyFormula: "x = D_x/D, y = D_y/D, z = D_z/D | Homogeneous non-trivial: |A| = 0"
       },
     ],
     quickRevisionPoints: [
-      { en: "Symmetric Matrix: A^T = A; Skew-Symmetric Matrix: A^T = -A (All diagonal elements of a skew-symmetric matrix are always ZERO).", mr: "सममित मॅट्रिक्स: A^T = A; असममित मॅट्रिक्स: A^T = -A (कर्णावरील सर्व घटक शून्य असतात)." },
-      { en: "Orthogonal Matrix: A · A^T = I => |A| = ±1.", mr: "ऑर्थोगोनल मॅट्रिक्स: A · A^T = I => |A| = ±१." },
+      { en: "Symmetric Matrix: A^T = A; Skew-Symmetric Matrix: A^T = -A (All diagonal elements of a skew-symmetric matrix are always ZERO)." },
+      { en: "Orthogonal Matrix: A · A^T = I => |A| = ±1." },
     ],
     keyFormulasTable: [
       { name: "Matrix Inverse", formula: "A⁻¹ = (1 / |A|) adj(A)", description: "Multiplicative inverse of non-singular square matrix" },
@@ -215,29 +156,23 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Writing |k A| = k |A| for a 3×3 matrix.",
-        mistakeMr: "३×३ मॅट्रिक्ससाठी |k A| = k |A| असे लिहिणे.",
-        correction: "For a 3×3 matrix, |k A| = k³ |A|. For 2×2, |k A| = k² |A|.",
-        correctionMr: "३×३ मॅट्रिक्ससाठी |k A| = k³ |A| असते (k चा ३ रा घात).",
+        correction: "For a 3×3 matrix, |k A| = k³ |A|. For 2×2, |k A| = k² |A|."
       },
-    ],
+    ]
   },
 
   // 4. Trigonometric Functions & Inverse Trig
   {
     id: "note_math_trigonometry",
     chapter: "Trigonometric Functions & Inverse Trig",
-    chapterMr: "त्रिकोणमितीय फले व व्यस्त त्रिकोणमिती (Trigonometry)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Trigonometric Identities, General Solutions & Inverse Trig Properties",
-    titleMr: "त्रिकोणमिती सूत्रे, सामान्य उकल आणि व्यस्त त्रिकोणमिती गुणधर्म",
     summary: "Compound angles, Multiple & Sub-multiple angles, Transformation formulas, General solutions of trigonometric equations, Domain & Range of Inverse Trig functions, and principal value branches.",
-    summaryMr: "संयुक्त कोन सूत्रे, ट्रान्सफॉर्मेशन सूत्रे, त्रिकोणमितीय समीकरणांची सामान्य उकल, व्यस्त त्रिकोणमितीची मुख्य मूल्ये (Principal Values) व गुणधर्म.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Compound, Multiple Angles & Transformation Formulas",
-        titleMr: "१. संयुक्त कोन व ट्रान्सफॉर्मेशन सूत्रे",
         points: [
           "sin(A ± B) = sin A cos B ± cos A sin B.",
           "cos(A ± B) = cos A cos B ∓ sin A sin B.",
@@ -246,17 +181,10 @@ export const MATHS_NOTES: TopicNote[] = [
           "Half Angle Identities: 1 - cos θ = 2 sin²(θ/2); 1 + cos θ = 2 cos²(θ/2).",
           "Product to Sum: 2 sin A cos B = sin(A + B) + sin(A - B); 2 cos A cos B = cos(A + B) + cos(A - B); 2 sin A sin B = cos(A - B) - cos(A + B).",
         ],
-        pointsMr: [
-          "sin(A ± B) = sin A cos B ± cos A sin B.",
-          "cos(A ± B) = cos A cos B ∓ sin A sin B (चिन्ह उलटे होते).",
-          "दुप्पट कोन: sin 2θ = 2 sin θ cos θ; cos 2θ = 1 - 2 sin² θ = 2 cos² θ - 1.",
-          "१ - cos θ = २ sin²(θ/२) आणि १ + cos θ = २ cos²(θ/२).",
-        ],
-        keyFormula: "1 - cos 2θ = 2 sin² θ | 1 + cos 2θ = 2 cos² θ | tan 2θ = 2 tan θ/(1 - tan² θ)",
+        keyFormula: "1 - cos 2θ = 2 sin² θ | 1 + cos 2θ = 2 cos² θ | tan 2θ = 2 tan θ/(1 - tan² θ)"
       },
       {
         title: "2. Inverse Trigonometric Functions & Principal Values",
-        titleMr: "२. व्यस्त त्रिकोणमितीय फले व मुख्य मूल्ये (Principal Values)",
         points: [
           "Principal Value Branches:",
           "- sin⁻¹ x: Domain [-1, 1], Range [-π/2, π/2].",
@@ -268,18 +196,12 @@ export const MATHS_NOTES: TopicNote[] = [
           "Complementary Identities: sin⁻¹ x + cos⁻¹ x = π/2; tan⁻¹ x + cot⁻¹ x = π/2; sec⁻¹ x + cosec⁻¹ x = π/2.",
           "Sum of Arctangents: tan⁻¹ x + tan⁻¹ y = tan⁻¹ [ (x + y) / (1 - xy) ] (for xy < 1). If xy > 1 and x,y > 0: π + tan⁻¹ [ (x + y) / (1 - xy) ].",
         ],
-        pointsMr: [
-          "मुख्य मूल्य कक्षा (Principal Branches): sin⁻¹ x ∈ [-π/२, π/२], cos⁻¹ x ∈ [०, π], tan⁻¹ x ∈ (-π/२, π/२).",
-          "ऋण चिन्हाचा नियम: cos⁻¹(-x) = π - cos⁻¹ x, cot⁻¹(-x) = π - cot⁻¹ x.",
-          "कोटिकोनीय संबंध: sin⁻¹ x + cos⁻¹ x = π/२, tan⁻¹ x + cot⁻¹ x = π/२.",
-          "tan⁻¹ x + tan⁻¹ y = tan⁻¹ [ (x + y) / (१ - xy) ] (xy < १ असल्यास).",
-        ],
-        keyFormula: "sin⁻¹ x + cos⁻¹ x = π/2 | cos⁻¹(-x) = π - cos⁻¹ x | tan⁻¹ x + tan⁻¹ y = tan⁻¹[(x+y)/(1-xy)]",
+        keyFormula: "sin⁻¹ x + cos⁻¹ x = π/2 | cos⁻¹(-x) = π - cos⁻¹ x | tan⁻¹ x + tan⁻¹ y = tan⁻¹[(x+y)/(1-xy)]"
       },
     ],
     quickRevisionPoints: [
-      { en: "Range of a sin x + b cos x is [-√(a² + b²), +√(a² + b²)].", mr: "a sin x + b cos x ची मर्यादा [-√(a² + b²), +√(a² + b²)] असते." },
-      { en: "General Solution: If sin θ = sin α => θ = nπ + (-1)^n α; If cos θ = cos α => θ = 2nπ ± α; If tan θ = tan α => θ = nπ + α.", mr: "सामान्य उकल: sin θ = sin α => θ = nπ + (-१)^n α; cos θ = cos α => θ = २nπ ± α." },
+      { en: "Range of a sin x + b cos x is [-√(a² + b²), +√(a² + b²)]." },
+      { en: "General Solution: If sin θ = sin α => θ = nπ + (-1)^n α; If cos θ = cos α => θ = 2nπ ± α; If tan θ = tan α => θ = nπ + α." },
     ],
     keyFormulasTable: [
       { name: "Arctan Addition", formula: "tan⁻¹ x + tan⁻¹ y = tan⁻¹((x+y)/(1-xy))", description: "Addition formula for inverse tangents (xy < 1)" },
@@ -289,46 +211,33 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Writing cos⁻¹(-1/2) = - π/3.",
-        mistakeMr: "cos⁻¹(-1/2) = - π/3 असे उत्तर लिहिणे.",
-        correction: "cos⁻¹(-1/2) = π - cos⁻¹(1/2) = π - π/3 = 2π/3 (120°), because the range of cos⁻¹ is [0, π].",
-        correctionMr: "cos⁻¹(-1/2) = π - π/3 = 2π/3 (१२०°) असते, कारण cos⁻¹ ची रेंज [०, π] असते.",
+        correction: "cos⁻¹(-1/2) = π - cos⁻¹(1/2) = π - π/3 = 2π/3 (120°), because the range of cos⁻¹ is [0, π]."
       },
-    ],
+    ]
   },
 
   // 5. Probability & Binomial Distribution
   {
     id: "note_math_probability",
     chapter: "Probability & Binomial Distribution",
-    chapterMr: "संभाव्यता आणि द्विपद वितरण (Probability)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Conditional Probability, Bayes' Theorem & Binomial Distribution Notes",
-    titleMr: "अटयुक्त संभाव्यता, बेयसचे प्रमेय आणि द्विपद संभाव्यता वितरण",
     summary: "Addition & Multiplication theorems, Conditional probability P(A|B), Total Probability Theorem, Bayes' Theorem, Random Variables, Expectation E(X), Variance, and Binomial Distribution B(n, p).",
-    summaryMr: "अटयुक्त संभाव्यता P(A|B), बेयसचे प्रमेय (Bayes' Theorem), यादृच्छिक चल, मध्यक E(X), विचरण (Variance) आणि द्विपद वितरण B(n, p).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Conditional Probability & Bayes' Theorem",
-        titleMr: "१. अटयुक्त संभाव्यता आणि बेयसचे प्रमेय",
         points: [
           "Conditional Probability: P(A | B) = P(A ∩ B) / P(B) (for P(B) > 0).",
           "Independent Events: P(A ∩ B) = P(A) · P(B) => P(A | B) = P(A).",
           "Total Probability Theorem: If E₁, E₂, ..., Eₙ are mutually exclusive and exhaustive events: P(A) = Σ P(Eᵢ) · P(A | Eᵢ).",
           "Bayes' Theorem: P(E_k | A) = [ P(E_k) · P(A | E_k) ] / [ Σ P(Eᵢ) · P(A | Eᵢ) ].",
         ],
-        pointsMr: [
-          "अटयुक्त संभाव्यता: P(A | B) = P(A ∩ B) / P(B).",
-          "स्वतंत्र घटना (Independent): P(A ∩ B) = P(A) · P(B).",
-          "एकूण संभाव्यता: P(A) = Σ P(Eᵢ) · P(A | Eᵢ).",
-          "बेयसचे प्रमेय: P(E_k | A) = [ P(E_k) P(A | E_k) ] / [ एकूण P(A) ].",
-        ],
-        keyFormula: "P(A|B) = P(A ∩ B)/P(B) | Bayes: P(E₁|A) = P(E₁)P(A|E₁) / Σ P(Eᵢ)P(A|Eᵢ)",
+        keyFormula: "P(A|B) = P(A ∩ B)/P(B) | Bayes: P(E₁|A) = P(E₁)P(A|E₁) / Σ P(Eᵢ)P(A|Eᵢ)"
       },
       {
         title: "2. Random Variables & Binomial Distribution",
-        titleMr: "२. यादृच्छिक चल आणि द्विपद वितरण",
         points: [
           "Probability Distribution: Σ P(X = xᵢ) = 1, where P(xᵢ) ≥ 0.",
           "Mathematical Expectation (Mean μ): E(X) = Σ xᵢ · P(xᵢ).",
@@ -338,18 +247,12 @@ export const MATHS_NOTES: TopicNote[] = [
           "Mean of Binomial Distribution: Mean = n · p.",
           "Variance of Binomial Distribution: Variance = n · p · q (always Variance < Mean since q < 1).",
         ],
-        pointsMr: [
-          "मध्यक (Mean / Expectation): E(X) = Σ xᵢ · P(xᵢ).",
-          "विचरण (Variance): Var(X) = E(X²) - [E(X)]².",
-          "द्विपद वितरण (Binomial): P(X = r) = ⁿCᵣ · pʳ · q^(n - r).",
-          "द्विपद वितरणाचा मध्यक = n · p; विचरण = n · p · q (विचरण नेहमी मध्यकापेक्षा लहान असते).",
-        ],
-        keyFormula: "P(X=r) = ⁿCᵣ pʳ q^(n-r) | Mean = np | Var = npq",
+        keyFormula: "P(X=r) = ⁿCᵣ pʳ q^(n-r) | Mean = np | Var = npq"
       },
     ],
     quickRevisionPoints: [
-      { en: "For independent events A and B: P(A ∪ B) = 1 - P(A') P(B').", mr: "स्वतंत्र घटनांसाठी: P(A ∪ B) = १ - P(A') P(B')." },
-      { en: "If Mean of binomial distribution is 4 and variance is 3, then q = Var/Mean = 3/4, so p = 1/4 and n = Mean/p = 16.", mr: "द्विपद वितरणात q = Var / Mean = ३/४ => p = १/४ आणि n = १६." },
+      { en: "For independent events A and B: P(A ∪ B) = 1 - P(A') P(B')." },
+      { en: "If Mean of binomial distribution is 4 and variance is 3, then q = Var/Mean = 3/4, so p = 1/4 and n = Mean/p = 16." },
     ],
     keyFormulasTable: [
       { name: "Bayes' Theorem", formula: "P(E_k|A) = P(E_k)P(A|E_k) / Σ P(E_i)P(A|E_i)", description: "Posterior probability calculation" },
@@ -359,46 +262,33 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming P(A ∩ B) = P(A) · P(B) for mutually exclusive events.",
-        mistakeMr: "परस्पर अपवर्जक (Mutually exclusive) घटनांसाठी P(A ∩ B) = P(A) · P(B) असे मानणे.",
-        correction: "For mutually exclusive events, P(A ∩ B) = 0. P(A ∩ B) = P(A) · P(B) is true ONLY for Independent events!",
-        correctionMr: "परस्पर अपवर्जक घटनांसाठी P(A ∩ B) = ० असते; स्वतंत्र घटनांसाठीच P(A ∩ B) = P(A) · P(B) असते.",
+        correction: "For mutually exclusive events, P(A ∩ B) = 0. P(A ∩ B) = P(A) · P(B) is true ONLY for Independent events!"
       },
-    ],
+    ]
   },
 
   // 6. Differential Equations & Applications
   {
     id: "note_math_diff_equations",
     chapter: "Differential Equations & Applications",
-    chapterMr: "अवकल समीकरणे आणि उपयोजने (Differential Equations)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Order & Degree, Variable Separable, Homogeneous & Linear Differential Equations",
-    titleMr: "अवकल समीकरणांची कोटी व घात, व्हेरिएबल सेपरेबल व रेषीय समीकरणे",
     summary: "Order and degree of DE, Formation of differential equations, Variable separable method, Homogeneous differential equations (y = vx), Linear Differential Equations (Integrating Factor IF = e^(∫P dx)), and Applications in growth & decay.",
-    summaryMr: "अवकल समीकरणांची कोटी (Order) व घात (Degree), व्हेरिएबल सेपरेबल पद्धत, समघाती समीकरणे (y = vx), रेषीय अवकल समीकरणे (Integrating Factor) व लोकसंख्या वाढ/क्षय उपयोजने.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Order, Degree & Solution Techniques",
-        titleMr: "१. कोटी, घात आणि सोडवण्याच्या पद्धती",
         points: [
           "Order: Highest derivative present in the differential equation.",
           "Degree: Power of the highest order derivative when differential coefficients are free from radicals and fractions (Degree is undefined if derivatives are inside sin, cos, ln, e^x).",
           "Variable Separable Form: f(x) dx + g(y) dy = 0 => Integrate directly: ∫ f(x) dx + ∫ g(y) dy = C.",
           "Homogeneous Differential Equation: dy/dx = f(y/x). Substitute y = v x => dy/dx = v + x (dv/dx), then separate variables v and x.",
         ],
-        pointsMr: [
-          "कोटी (Order): समीकरणातील सर्वोच्च अवकलाचा क्रम.",
-          "घात (Degree): सर्वोच्च अवकलाचा घातांक (अवकल sin, cos, e^x च्या आत असल्यास घात व्याख्यायित नसतो).",
-          "व्हेरिएबल सेपरेबल: x आणि y चे चल वेगवेगळे करून समाकलन करणे.",
-          "समघाती समीकरण (Homogeneous): y = v x आणि dy/dx = v + x (dv/dx) टाकून सोडवणे.",
-        ],
-        keyFormula: "Homogeneous: Put y = vx => dy/dx = v + x (dv/dx)",
+        keyFormula: "Homogeneous: Put y = vx => dy/dx = v + x (dv/dx)"
       },
       {
         title: "2. Linear Differential Equations (LDE)",
-        titleMr: "२. रेषीय अवकल समीकरणे (LDE) व समाकलन गुणक",
         points: [
           "Standard Form 1: dy/dx + P(x) y = Q(x).",
           "- Integrating Factor: I.F. = e^(∫ P(x) dx).",
@@ -408,18 +298,12 @@ export const MATHS_NOTES: TopicNote[] = [
           "- General Solution: x · (I.F.) = ∫ [ Q(y) · (I.F.) ] dy + C.",
           "Growth and Decay Model: dN/dt = k N => N(t) = N₀ e^(kt) (k > 0 for growth, k < 0 for radioactive decay).",
         ],
-        pointsMr: [
-          "प्रमाणित स्वरूप: dy/dx + P y = Q.",
-          "समाकलन गुणक (Integrating Factor): I.F. = e^(∫ P dx).",
-          "सामान्य उकल: y · (I.F.) = ∫ [ Q · (I.F.) ] dx + C.",
-          "दुसरे स्वरूप: dx/dy + P x = Q => x · (I.F.) = ∫ [ Q · (I.F.) ] dy + C.",
-        ],
-        keyFormula: "I.F. = e^(∫ P dx) | y · (I.F.) = ∫ [Q · (I.F.)] dx + C",
+        keyFormula: "I.F. = e^(∫ P dx) | y · (I.F.) = ∫ [Q · (I.F.)] dx + C"
       },
     ],
     quickRevisionPoints: [
-      { en: "Number of arbitrary constants in the GENERAL solution of an nth order differential equation is n; in PARTICULAR solution it is ZERO.", mr: "n व्या कोटीच्या अवकल समीकरणाच्या सामान्य उकलीमध्ये n स्थिरांक असतात; विशिष्ट उकलीमध्ये शून्य (०) असतात." },
-      { en: "e^(ln f(x)) = f(x); useful for simplifying I.F. = e^(∫ (2/x) dx) = e^(ln x²) = x².", mr: "e^(ln f(x)) = f(x); उदा. I.F. = e^(ln x²) = x²." },
+      { en: "Number of arbitrary constants in the GENERAL solution of an nth order differential equation is n; in PARTICULAR solution it is ZERO." },
+      { en: "e^(ln f(x)) = f(x); useful for simplifying I.F. = e^(∫ (2/x) dx) = e^(ln x²) = x²." },
     ],
     keyFormulasTable: [
       { name: "Integrating Factor", formula: "I.F. = exp(∫ P dx)", description: "Factor used to make first-order linear DE exact" },
@@ -429,29 +313,23 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Finding degree of equations like d²y/dx² + sin(dy/dx) = 0.",
-        mistakeMr: "d²y/dx² + sin(dy/dx) = 0 या समीकरणाचा घात १ आहे असे लिहिणे.",
-        correction: "The degree is UNDEFINED because the equation cannot be expressed as a polynomial in derivatives (dy/dx is inside the transcendental sine function). Order is 2.",
-        correctionMr: "येथे dy/dx हे sin च्या आत असल्याने घात अव्याख्यित (Undefined) आहे. कोटी मात्र २ आहे.",
+        correction: "The degree is UNDEFINED because the equation cannot be expressed as a polynomial in derivatives (dy/dx is inside the transcendental sine function). Order is 2."
       },
-    ],
+    ]
   },
 
   // 7. Coordinate Geometry: Lines & Conics
   {
     id: "note_math_coordinate_geometry",
     chapter: "Coordinate Geometry: Lines & Conics",
-    chapterMr: "निर्देशक भूमिती: वर्तुळ, परवलय, लंबवर्तुळ (Conic Sections)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Straight Lines, Pair of Lines, Circles, Parabola, Ellipse & Hyperbola Notes",
-    titleMr: "सरळ रेषा, जोडी रेषा, वर्तुळ, परवलय, लंबवर्तुळ व अपास्त (Conics) नोट्स",
     summary: "Distance formula, Slope, Pair of straight lines angle & condition, Circle standard equations, Tangency condition c² = a²(1 + m²), Parabola, Ellipse, and Hyperbola focal properties & eccentricity.",
-    summaryMr: "रेषेचा उतार, रेषा जोडीचा कोन (tan θ), वर्तुळाचे समीकरण, स्पर्शिकेची अट, परवलय (Parabola), लंबवर्तुळ (Ellipse) आणि अपास्त (Hyperbola) ची उत्केंद्रता (Eccentricity e) व सूत्रे.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Straight Lines & Pair of Straight Lines",
-        titleMr: "१. सरळ रेषा आणि रेषा जोडी",
         points: [
           "Slope m = tan θ = (y₂ - y₁) / (x₂ - x₁) = - a / b (for ax + by + c = 0).",
           "Perpendicular distance from (x₁, y₁) to ax + by + c = 0: d = |a x₁ + b y₁ + c| / √(a² + b²).",
@@ -461,19 +339,10 @@ export const MATHS_NOTES: TopicNote[] = [
           "- Condition for perpendicular lines: a + b = 0 (sum of coefficients of x² and y² is zero).",
           "- Condition for coincident/parallel lines: h² - ab = 0.",
         ],
-        pointsMr: [
-          "उतार: m = - a / b.",
-          "बिंदूचे रेषेपासून अंतर: d = |a x₁ + b y₁ + c| / √(a² + b²).",
-          "समांतर रेषांमधील अंतर: d = |c₁ - c₂| / √(a² + b²).",
-          "रेषा जोडीमधील कोन: tan θ = | 2 √(h² - ab) | / |a + b|.",
-          "रेषा एकमेकांना लंबरूप असण्याची अट: a + b = ०.",
-          "रेषा एकरूप/समांतर असण्याची अट: h² - ab = ०.",
-        ],
-        keyFormula: "tan θ = 2√(h² - ab) / |a + b| | Perpendicular: a + b = 0 | Parallel: h² = ab",
+        keyFormula: "tan θ = 2√(h² - ab) / |a + b| | Perpendicular: a + b = 0 | Parallel: h² = ab"
       },
       {
         title: "2. Circles & Conic Sections (Parabola, Ellipse, Hyperbola)",
-        titleMr: "२. वर्तुळ आणि कोनिक सेक्शन्स (परवलय, लंबवर्तुळ, अपास्त)",
         points: [
           "General Circle: x² + y² + 2gx + 2fy + c = 0. Center = (-g, -f), Radius R = √(g² + f² - c).",
           "Condition for line y = mx + c to touch circle x² + y² = a²: c² = a² (1 + m²).",
@@ -482,19 +351,12 @@ export const MATHS_NOTES: TopicNote[] = [
           "Hyperbola (x²/a² - y²/b² = 1): Eccentricity e = √(1 + b²/a²) (e > 1), Foci (±ae, 0), Directrices x = ±a/e, Latus Rectum = 2b²/a, Tangency condition: c² = a² m² - b².",
           "Rectangular Hyperbola (xy = c²): e = √2, Asymptotes are perpendicular coordinate axes.",
         ],
-        pointsMr: [
-          "वर्तुळ केंद्र = (-g, -f), त्रिज्या R = √(g² + f² - c).",
-          "वर्तुळ स्पर्शिका अट: c² = a² (1 + m²).",
-          "परवलय (y² = 4ax): नाभी (a, 0), लॅटस रेक्टम = 4a, स्पर्शिका अट: c = a / m.",
-          "लंबवर्तुळ (Ellipse, e < 1): e = √(1 - b²/a²), नाभी (±ae, 0), स्पर्शिका: c² = a² m² + b².",
-          "अपास्त (Hyperbola, e > 1): e = √(1 + b²/a²), नाभी (±ae, 0), स्पर्शिका: c² = a² m² - b².",
-        ],
-        keyFormula: "Circle Tangency: c² = a²(1+m²) | Ellipse: e = √(1 - b²/a²) | Hyperbola: e = √(1 + b²/a²)",
+        keyFormula: "Circle Tangency: c² = a²(1+m²) | Ellipse: e = √(1 - b²/a²) | Hyperbola: e = √(1 + b²/a²)"
       },
     ],
     quickRevisionPoints: [
-      { en: "Conic definition based on eccentricity e: e = 0 (Circle), 0 < e < 1 (Ellipse), e = 1 (Parabola), e > 1 (Hyperbola), e = √2 (Rectangular Hyperbola).", mr: "उत्केंद्रता e: e = ० (वर्तुळ), ० < e < १ (लंबवर्तुळ), e = १ (परवलय), e > १ (अपास्त), e = √२ (आयताकृती अपास्त)." },
-      { en: "Tangent to y² = 4ax at point (x₁, y₁): y y₁ = 2a (x + x₁); In parametric form (at², 2at): t y = x + a t².", mr: "y² = 4ax ची स्पर्शिका: y y₁ = 2a (x + x₁); प्रचलिक स्वरूपात: t y = x + a t²." },
+      { en: "Conic definition based on eccentricity e: e = 0 (Circle), 0 < e < 1 (Ellipse), e = 1 (Parabola), e > 1 (Hyperbola), e = √2 (Rectangular Hyperbola)." },
+      { en: "Tangent to y² = 4ax at point (x₁, y₁): y y₁ = 2a (x + x₁); In parametric form (at², 2at): t y = x + a t²." },
     ],
     keyFormulasTable: [
       { name: "Circle Tangent Condition", formula: "c = ± a √(1 + m²)", description: "Condition for straight line y = mx + c to touch circle" },
@@ -505,29 +367,23 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing the sign in ellipse vs hyperbola eccentricity formulas.",
-        mistakeMr: "लंबवर्तुळ आणि अपास्त यांच्या उत्केंद्रता सूत्रातील चिन्हामध्ये (+ किंवा -) चूक करणे.",
-        correction: "Ellipse has MINUS: e = √(1 - b²/a²) (<1); Hyperbola has PLUS: e = √(1 + b²/a²) (>1).",
-        correctionMr: "लंबवर्तुळात वजा चिन्ह (e = √(१ - b²/a²)) असते, तर अपास्तामध्ये अधिक चिन्ह (e = √(१ + b²/a²)) असते.",
+        correction: "Ellipse has MINUS: e = √(1 - b²/a²) (<1); Hyperbola has PLUS: e = √(1 + b²/a²) (>1)."
       },
-    ],
+    ]
   },
 
   // 8. Vectors & 3D Geometry
   {
     id: "note_math_vectors_3d_geometry",
     chapter: "Vectors & Three Dimensional Geometry",
-    chapterMr: "सदिश आणि त्रिमितीय भूमिती (Vectors & 3D Lines/Planes)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Dot & Cross Product, Triple Product, Direction Cosines & Shortest Distance Notes",
-    titleMr: "डॉट व क्रॉस गुणाकार, दिशा कोसाइन (l,m,n) आणि विषम रेषेमधील किमान अंतर",
     summary: "Scalar and vector products, Scalar triple product [a b c] volume of parallelepiped, Direction cosines l² + m² + n² = 1, Line equations in 3D (vector & cartesian), Angle between two lines cos θ, and Shortest distance between two skew lines.",
-    summaryMr: "सदिशांचे डॉट व क्रॉस प्रॉडक्ट, बॉक्स प्रॉडक्ट [a b c], दिशा गुणोत्तरे, त्रिमितीय रेषेची समीकरणे, दोन रेषांमधील कोन आणि skew lines मधील सर्वात कमी अंतर सूत्र.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Vector Algebra & Triple Products",
-        titleMr: "१. सदिश बीजगणित आणि त्रिक गुणाकार (Triple Products)",
         points: [
           "Dot Product: a · b = |a| |b| cos θ. Angle: cos θ = (a · b) / (|a| |b|). Condition for perpendicular vectors: a · b = 0.",
           "Projection of vector a on vector b: Projection = (a · b) / |b|; Vector projection = [ (a · b) / |b|² ] b.",
@@ -538,19 +394,10 @@ export const MATHS_NOTES: TopicNote[] = [
           "- Volume of tetrahedron with coterminous edges a, b, c = (1/6) |[a b c]|.",
           "- Condition for coplanar vectors: [a b c] = 0.",
         ],
-        pointsMr: [
-          "डॉट गुणाकार: a · b = |a| |b| cos θ. लंबरूप असण्याची अट: a · b = ०.",
-          "प्रक्षेप (Projection): a चा b वरील प्रक्षेप = (a · b) / |b|.",
-          "क्रॉस गुणाकार: |a × b| = समांतरभुज चौकोनाचे क्षेत्रफळ; त्रिकोणाचे क्षेत्रफळ = (१/२) |a × b|.",
-          "समांतर असण्याची अट: a × b = ०.",
-          "बॉक्स प्रॉडक्ट [a b c]: समांतर षटकोनाचे घनफळ (Volume of Parallelepiped) = |[a b c]|.",
-          "एकाच प्रतलात असण्याची अट (Coplanar): [a b c] = ०.",
-        ],
-        keyFormula: "a · b = 0 (Perpendicular) | [a b c] = 0 (Coplanar) | Vol = (1/6) |[a b c]| (Tetrahedron)",
+        keyFormula: "a · b = 0 (Perpendicular) | [a b c] = 0 (Coplanar) | Vol = (1/6) |[a b c]| (Tetrahedron)"
       },
       {
         title: "2. Three-Dimensional Geometry (Lines & Distance)",
-        titleMr: "२. त्रिमितीय भूमिती (रेषा, कोसाइन व अंतर)",
         points: [
           "Direction Cosines (l, m, n): l = cos α, m = cos β, n = cos γ. Fundamental identity: l² + m² + n² = 1 (or cos²α + cos²β + cos²γ = 1; sin²α + sin²β + sin²γ = 2).",
           "Direction Ratios (a, b, c): l = a / √(a²+b²+c²), m = b / √(a²+b²+c²), n = c / √(a²+b²+c²).",
@@ -563,18 +410,12 @@ export const MATHS_NOTES: TopicNote[] = [
           "d = | (a₂ - a₁) · (b₁ × b₂) | / |b₁ × b₂|.",
           "Distance between Parallel Lines (r = a₁ + λ b and r = a₂ + μ b): d = | (a₂ - a₁) × b | / |b|.",
         ],
-        pointsMr: [
-          "दिशा कोसाइन: l² + m² + n² = १. sin²α + sin²β + sin²γ = २.",
-          "रेषेचे समीकरण: (x - x₁)/a = (y - y₁)/b = (z - z₁)/c.",
-          "दोन रेषा लंबरूप असण्याची अट: a₁a₂ + b₁b₂ + c₁c₂ = ०.",
-          "दोन विषम रेषांमधील किमान अंतर: d = | (a₂ - a₁) · (b₁ × b₂) | / |b₁ × b₂|.",
-        ],
-        keyFormula: "l² + m² + n² = 1 | Shortest Distance d = |(a₂ - a₁) · (b₁ × b₂)| / |b₁ × b₂|",
+        keyFormula: "l² + m² + n² = 1 | Shortest Distance d = |(a₂ - a₁) · (b₁ × b₂)| / |b₁ × b₂|"
       },
     ],
     quickRevisionPoints: [
-      { en: "If [a b c] is a scalar triple product, cyclic permutations leave the value unchanged: [a b c] = [b c a] = [c a b] = -[b a c].", mr: "[a b c] = [b c a] = [c a b] चक्रीय क्रमाने मूल्य बदलत नाही, क्रम उलटल्यास चिन्ह बदलते (-[b a c])." },
-      { en: "The sum of squares of direction cosines is 1 (l²+m²+n²=1), and sum of squares of direction sines is 2 (sin²α+sin²β+sin²γ=2).", mr: "cos²α + cos²β + cos²γ = १ आणि sin²α + sin²β + sin²γ = २ असते." },
+      { en: "If [a b c] is a scalar triple product, cyclic permutations leave the value unchanged: [a b c] = [b c a] = [c a b] = -[b a c]." },
+      { en: "The sum of squares of direction cosines is 1 (l²+m²+n²=1), and sum of squares of direction sines is 2 (sin²α+sin²β+sin²γ=2)." },
     ],
     keyFormulasTable: [
       { name: "Direction Cosines Relation", formula: "l² + m² + n² = 1", description: "Fundamental identity of direction cosines in 3D" },
@@ -585,29 +426,23 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Dividing by |a₂ - a₁| instead of |b₁ × b₂| in shortest distance formula.",
-        mistakeMr: "किमान अंतर काढताना छेदात चुकीचा सदिश घेणे.",
-        correction: "Denominator MUST be the magnitude of cross product of direction vectors: |b₁ × b₂|.",
-        correctionMr: "छेदात नेहमी दिशा सदिशांच्या क्रॉस प्रॉडक्टचे परिमाण |b₁ × b₂| असावे.",
+        correction: "Denominator MUST be the magnitude of cross product of direction vectors: |b₁ × b₂|."
       },
-    ],
+    ]
   },
 
   // 9. Probability & Binomial Distribution
   {
     id: "note_math_probability_binomial",
     chapter: "Probability & Binomial Distribution",
-    chapterMr: "संभाव्यता आणि द्विपद वितरण (Probability & Binomial)",
     subject: "Mathematics",
     exams: ["JEE_MAIN", "MHT_CET"],
     title: "Conditional Probability, Bayes Theorem, Random Variables & Binomial Notes",
-    titleMr: "सशर्त संभाव्यता, बेयस सिद्धांत, यादृच्छिक चल (E(X), Var(X)) व द्विपद वितरण",
     summary: "Conditional probability P(A|B), Multiplication rule, Total Probability theorem, Bayes' Theorem for reverse probability, Discrete Random Variable Probability Distribution (PMF), Expectation Mean μ = Σ x P(x), Variance σ² = Σ x² P(x) - μ², and Binomial Distribution B(n, p) with mean np and variance npq.",
-    summaryMr: "सशर्त संभाव्यता P(A|B), बेयस प्रमेय (Bayes' Theorem), यादृच्छिक चलाची सरासरी (Mean E(X) = np) आणि प्रसरण (Variance = npq), द्विपद वितरण B(n, p) सूत्र.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Conditional Probability & Bayes' Theorem",
-        titleMr: "१. सशर्त संभाव्यता आणि बेयसचा सिद्धांत (Bayes' Theorem)",
         points: [
           "Conditional Probability: P(A|B) = P(A ∩ B) / P(B), provided P(B) > 0.",
           "Multiplication Theorem: P(A ∩ B) = P(B) · P(A|B) = P(A) · P(B|A).",
@@ -616,17 +451,10 @@ export const MATHS_NOTES: TopicNote[] = [
           "Bayes' Theorem: P(Eₖ | A) = [ P(Eₖ) · P(A|Eₖ) ] / [ Σ P(Eᵢ) · P(A|Eᵢ) ].",
           "- Used to calculate reverse / posterior probability given that event A has already occurred.",
         ],
-        pointsMr: [
-          "सशर्त संभाव्यता: P(A|B) = P(A ∩ B) / P(B).",
-          "स्वतंत्र घटना: P(A ∩ B) = P(A) · P(B).",
-          "एकूण संभाव्यता प्रमेय: P(A) = Σ [ P(Eᵢ) · P(A|Eᵢ) ].",
-          "बेयसचा सिद्धांत (Bayes' Theorem): एखादी घटना घडून आल्यानंतर ती विशिष्ट कारणाने घडण्याची संभाव्यता शोधणे.",
-        ],
-        keyFormula: "Bayes: P(E_k | A) = [P(E_k) P(A|E_k)] / Σ [P(E_i) P(A|E_i)] | P(A∩B) = P(A)P(B)",
+        keyFormula: "Bayes: P(E_k | A) = [P(E_k) P(A|E_k)] / Σ [P(E_i) P(A|E_i)] | P(A∩B) = P(A)P(B)"
       },
       {
         title: "2. Random Variables & Binomial Distribution",
-        titleMr: "२. यादृच्छिक चल आणि द्विपद वितरण (Binomial Distribution)",
         points: [
           "Probability Mass Function (PMF): P(X = xᵢ) = pᵢ such that pᵢ ≥ 0 and Σ pᵢ = 1.",
           "Expected Value (Mean μ): E(X) = Σ [ xᵢ · P(xᵢ) ].",
@@ -639,21 +467,13 @@ export const MATHS_NOTES: TopicNote[] = [
           "- Variance of Binomial Distribution: Var(X) = n p q.",
           "- For Binomial Distribution: Variance is ALWAYS LESS THAN Mean (npq < np since q < 1).",
         ],
-        pointsMr: [
-          "सरासरी (Expected Value): E(X) = μ = Σ [ xᵢ · pᵢ ].",
-          "प्रसरण (Variance): Var(X) = E(X²) - (E(X))².",
-          "द्विपद वितरण B(n, p): P(X = r) = ⁿCᵣ pʳ qⁿ⁻ʳ.",
-          "द्विपद वितरणाची सरासरी (Mean) = n · p.",
-          "द्विपद वितरणाचे प्रसरण (Variance) = n · p · q.",
-          "द्विपद वितरणात प्रसरण (Variance) नेहमी सरासरीपेक्षा लहान असतो (npq < np).",
-        ],
         keyFormula: "P(X = r) = ⁿCᵣ pʳ qⁿ⁻ʳ | Mean = np | Var = npq | Var < Mean",
-        keyMnemonic: "Binomial: Mean = np, Variance = np(1-p). Always Var < Mean.",
+        keyMnemonic: "Binomial: Mean = np, Variance = np(1-p). Always Var < Mean."
       },
     ],
     quickRevisionPoints: [
-      { en: "If A and B are independent events, then A and B', A' and B, and A' and B' are also independent pairs.", mr: "जर A आणि B स्वतंत्र असतील तर त्यांच्या पूरक घटना (A' आणि B') देखील स्वतंत्र असतात." },
-      { en: "In any Binomial Distribution, maximum variance occurs when p = q = 0.5, with Var_max = n / 4.", mr: "द्विपद वितरणात कमाल प्रसरण p = q = ०.५ असताना मिळते (Var_max = n/4)." },
+      { en: "If A and B are independent events, then A and B', A' and B, and A' and B' are also independent pairs." },
+      { en: "In any Binomial Distribution, maximum variance occurs when p = q = 0.5, with Var_max = n / 4." },
     ],
     keyFormulasTable: [
       { name: "Binomial PMF", formula: "P(X=r) = ⁿCᵣ pʳ (1-p)ⁿ⁻ʳ", description: "Probability of exactly r successes in n independent trials" },
@@ -664,10 +484,8 @@ export const MATHS_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing Mutually Exclusive events with Independent events.",
-        mistakeMr: "परस्पर अपवर्जक घटना आणि स्वतंत्र घटना एकच समजणे.",
-        correction: "Mutually Exclusive means P(A ∩ B) = 0 (cannot occur together). Independent means P(A ∩ B) = P(A) · P(B) (occurrence of one doesn't affect probability of the other). Two events with non-zero probabilities CANNOT be both mutually exclusive and independent!",
-        correctionMr: "परस्पर अपवर्जक म्हणजे P(A ∩ B) = ० (एकत्र घडू शकत नाहीत). स्वतंत्र म्हणजे P(A ∩ B) = P(A)·P(B). या दोन पूर्णपणे वेगळ्या संकल्पना आहेत.",
+        correction: "Mutually Exclusive means P(A ∩ B) = 0 (cannot occur together). Independent means P(A ∩ B) = P(A) · P(B) (occurrence of one doesn't affect probability of the other). Two events with non-zero probabilities CANNOT be both mutually exclusive and independent!"
       },
-    ],
+    ]
   },
 ];

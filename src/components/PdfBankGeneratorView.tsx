@@ -44,10 +44,10 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
   const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyLevel | "All">("All");
   const [limitCount, setLimitCount] = useState<number>(25);
   const [docFormat, setDocFormat] = useState<"full_bank" | "question_paper" | "solution_book">("full_bank");
-  const [docLanguage, setDocLanguage] = useState<LanguageMode>("bilingual");
+  const [docLanguage, setDocLanguage] = useState<LanguageMode>("en");
   
   // Custom Institute branding (defaults to user's class)
-  const [instituteName, setInstituteName] = useState<string>("मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes, Ambad)");
+  const [instituteName, setInstituteName] = useState<string>("Mi Marathiwala Classes, Ambad");
   const [docTitle, setDocTitle] = useState<string>("MHT-CET / NEET / JEE 10,00,000+ Unlimited MCQ Question Bank");
   const [testTime, setTestTime] = useState<string>("60 Mins");
   const [showWatermark, setShowWatermark] = useState<boolean>(true);
@@ -71,7 +71,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
     const newQs = generateProceduralQuestions(selectedExam, selectedSubject, proceduralBatchSize);
     if (onAddQuestions) {
       onAddQuestions(newQs);
-      setProceduralNotice(`✅ ${newQs.length} नवीन अल्गोरिदम प्रश्न (Physics, Chem, Maths, Bio) यशस्वीरीत्या ॲपमध्ये आणि PDF बँकेत जोडले गेले!`);
+      setProceduralNotice(`✅ ${newQs.length} new algorithm-based questions (Physics, Chem, Maths, Bio) successfully added to the app and PDF bank!`);
       setTimeout(() => setProceduralNotice(null), 4000);
     }
   };
@@ -101,15 +101,13 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
   const generateRawHtmlString = () => {
     let itemsHtml = "";
     displayedQuestions.forEach((q, idx) => {
-      const qText = docLanguage === "en" ? q.questionText : docLanguage === "mr" ? (q.questionTextMr || q.questionText) : `${q.questionText} <br><i style="color:#475569; font-size: 0.95em;">${q.questionTextMr || ""}</i>`;
-      
-      const optA = docLanguage === "mr" ? (q.optionsMr?.[0] || q.options[0]) : q.options[0];
-      const optB = docLanguage === "mr" ? (q.optionsMr?.[1] || q.options[1]) : q.options[1];
-      const optC = docLanguage === "mr" ? (q.optionsMr?.[2] || q.options[2]) : q.options[2];
-      const optD = docLanguage === "mr" ? (q.optionsMr?.[3] || q.options[3]) : q.options[3];
-
+      const qText = q.questionText;
+      const optA = q.options[0];
+      const optB = q.options[1];
+      const optC = q.options[2];
+      const optD = q.options[3];
       const ansChar = String.fromCharCode(65 + q.correctOption);
-      const expText = docLanguage === "mr" ? (q.explanationMr || q.explanation) : q.explanation;
+      const expText = q.explanation;
 
       itemsHtml += `
       <div class="q-box" style="border: 1px solid #cbd5e1; padding: 14px; margin-bottom: 16px; border-radius: 8px; page-break-inside: avoid;">
@@ -126,9 +124,9 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
           docFormat !== "question_paper"
             ? `
         <div style="background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 8px 12px; margin-top: 8px; font-size: 10pt;">
-          <span style="font-weight: bold; color: #047857;">उत्तर: (${ansChar}) ${q.options[q.correctOption]}</span><br>
-          ${q.formula ? `<b>सूत्र:</b> <code style="background:#e2e8f0; padding:2px 4px;">${q.formula}</code><br>` : ""}
-          <b>स्पष्टीकरण:</b> ${expText}
+          <span style="font-weight: bold; color: #047857;">Answer: (${ansChar}) ${q.options[q.correctOption]}</span><br>
+          ${q.formula ? `<b>Formula:</b> <code style="background:#e2e8f0; padding:2px 4px;">${q.formula}</code><br>` : ""}
+          <b>Explanation:</b> ${expText}
         </div>`
             : ""
         }
@@ -141,7 +139,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
       selectedSubject === "Mathematics" ? "#1a5276" : "#1e3a8a";
 
     return `<!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>${docTitle}</title>
@@ -164,11 +162,11 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
   <div class="header">
     <h1 style="color: #ea580c;">🎓 ${instituteName}</h1>
     <h2 style="font-size: 14pt; margin: 4px 0; color: #1e293b;">${docTitle}</h2>
-    <p style="font-size:10pt; color:#666;">${selectedExam} • विषय: ${selectedSubject} • ${selectedChapter === "All" ? "सर्व चॅप्टर्स (Full Syllabus)" : selectedChapter} • एकूण प्रश्न: ${displayedQuestions.length}</p>
+    <p style="font-size:10pt; color:#666;">${selectedExam} • Subject: ${selectedSubject} • ${selectedChapter === "All" ? "Full Syllabus" : selectedChapter} • Total Questions: ${displayedQuestions.length}</p>
   </div>
   ${itemsHtml}
   <div style="text-align: center; border-top: 2px solid #ea580c; padding-top: 10px; margin-top: 25px; font-size: 10pt; color: #64748b; font-weight: bold;">
-    🎓 ${instituteName} • NEET · JEE · MHT-CET अधिकृत सराव प्रश्नसंच
+    🎓 ${instituteName} • NEET · JEE · MHT-CET Official Practice Sets
   </div>
 </body>
 </html>`;
@@ -191,22 +189,22 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
               <button
                 onClick={onBack}
                 className="px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ring-1 ring-white/30"
-                title="मागे जा"
+                title="Go Back"
               >
                 <ArrowLeft className="w-3.5 h-3.5 text-amber-400" />
-                <span>← मागे जा</span>
+                <span>Back</span>
               </button>
             )}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold">
               <Zap className="w-3.5 h-3.5 text-amber-400" />
-              <span>१०,००,०००+ (1 Million+) अमर्यादित अल्गोरिदम प्रश्न बँक इंजिन</span>
+              <span>1,000,000+ (1 Million+) Unlimited Procedural Question Bank</span>
             </div>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-            MCQ बँक व अमर्यादित प्रश्न जनरेटर
+            MCQ Bank & Unlimited Question Generator
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            Physics, Chemistry, Maths आणि Biology चे प्रश्न A4 फॉरमॅटमध्ये एका क्लिकवर टेस्ट पेपर, उत्तरांसह बुकलेट किंवा अमर्यादित MCQ बँकेच्या स्वरूपात प्रिंट व सेव्ह करा.
+            Print and save Physics, Chemistry, Maths, and Biology questions in A4 format as test papers, solution booklets, or MCQ banks with one click.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -215,20 +213,20 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
               className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-extrabold text-xs shadow-md flex items-center gap-2 transition-all cursor-pointer"
             >
               <Printer className="w-4 h-4" />
-              <span>🖨️ PDF डाउनलोड / प्रिंट करा (Print to PDF)</span>
+              <span>Download PDF / Print</span>
             </button>
             <button
               onClick={handleCopyHtml}
               className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 transition-all cursor-pointer"
             >
               <Copy className="w-4 h-4" />
-              <span>{copiedStatus ? "✅ HTML कॉपी झाले!" : "HTML कोड कॉपी करा"}</span>
+              <span>{copiedStatus ? "✅ HTML Copied!" : "Copy HTML Code"}</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* 10,00,000+ Procedural Batch Generator Bar */}
+      {/* 1,00,000+ Procedural Batch Generator Bar */}
       <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-white rounded-2xl border border-indigo-200 p-5 space-y-4 shadow-xs print:hidden">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-100 pb-3">
           <div className="flex items-center gap-2">
@@ -237,10 +235,10 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                १०,००,०००+ अल्गोरिदम प्रश्न निर्मिती (Instant Procedural Engine)
+                Procedural Question Generation (Instant Engine)
               </h3>
               <p className="text-xs text-slate-600">
-                प्रत्येक विषयाच्या आणि चॅप्टरच्या सूत्रानुसार संख्या व पर्यायांसह अमर्यादित नवनवीन प्रश्न तयार करा.
+                Generate unlimited new questions with dynamic values and options based on subject formulas.
               </p>
             </div>
           </div>
@@ -258,7 +256,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
 
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="font-bold text-slate-700">एकाच वेळी किती प्रश्न हवेत?</span>
+            <span className="font-bold text-slate-700">How many questions per batch?</span>
             {[25, 50, 100, 200, 500].map((num) => (
               <button
                 key={num}
@@ -270,7 +268,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
                     : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
                 }`}
               >
-                +{num} प्रश्न
+                +{num} Qs
               </button>
             ))}
           </div>
@@ -281,7 +279,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
             className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-md flex items-center gap-2 transition-all cursor-pointer"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>⚡ +{proceduralBatchSize} प्रश्न लगेच जनरेट करा (Generate & Add)</span>
+            <span>Generate +{proceduralBatchSize} Questions Now</span>
           </button>
         </div>
       </div>
@@ -291,10 +289,10 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
             <Settings2 className="w-4 h-4 text-blue-600" />
-            <span>PDF स्वरूप आणि फिल्टर पर्याय (PDF Configuration)</span>
+            <span>PDF Configuration & Filters</span>
           </span>
           <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-            निवडलेले प्रश्न: {displayedQuestions.length} / {filteredQuestions.length}
+            Selected Questions: {displayedQuestions.length} / {filteredQuestions.length}
           </span>
         </div>
 
@@ -302,7 +300,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
           {/* Exam */}
           <div>
-            <label className="block font-bold text-slate-700 mb-1">परीक्षा (Exam):</label>
+            <label className="block font-bold text-slate-700 mb-1">Exam:</label>
             <select
               value={selectedExam}
               onChange={(e) => {
@@ -320,7 +318,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
 
           {/* Subject */}
           <div>
-            <label className="block font-bold text-slate-700 mb-1">विषय (Subject):</label>
+            <label className="block font-bold text-slate-700 mb-1">Subject:</label>
             <select
               value={selectedSubject}
               onChange={(e) => {
@@ -329,7 +327,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
               }}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-medium"
             >
-              <option value="All">सर्व विषय (All Subjects)</option>
+              <option value="All">All Subjects</option>
               {availableSubjects.map((sub) => (
                 <option key={sub} value={sub}>
                   {sub}
@@ -340,13 +338,13 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
 
           {/* Chapter */}
           <div>
-            <label className="block font-bold text-slate-700 mb-1">अध्याय (Chapter):</label>
+            <label className="block font-bold text-slate-700 mb-1">Chapter:</label>
             <select
               value={selectedChapter}
               onChange={(e) => setSelectedChapter(e.target.value)}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-medium"
             >
-              <option value="All">सर्व चॅप्टर्स (Full Syllabus)</option>
+              <option value="All">Full Syllabus</option>
               {availableChapters.map((ch) => (
                 <option key={ch.name} value={ch.name}>
                   {ch.name}
@@ -357,17 +355,17 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
 
           {/* Question Limit */}
           <div>
-            <label className="block font-bold text-slate-700 mb-1">प्रश्नांची संख्या (Limit):</label>
+            <label className="block font-bold text-slate-700 mb-1">Question Limit:</label>
             <select
               value={limitCount}
               onChange={(e) => setLimitCount(Number(e.target.value))}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-medium"
             >
-              <option value={10}>१० प्रश्न (Speed Drill)</option>
-              <option value={25}>२५ प्रश्न (Standard Worksheet)</option>
-              <option value={50}>५० प्रश्न (Full Chapter Mock)</option>
-              <option value={100}>१०० प्रश्न (Comprehensive Test)</option>
-              <option value={0}>सर्व उपलब्ध प्रश्न (All in Pool)</option>
+              <option value={10}>10 Questions (Speed Drill)</option>
+              <option value={25}>25 Questions (Standard Worksheet)</option>
+              <option value={50}>50 Questions (Full Chapter Mock)</option>
+              <option value={100}>100 Questions (Comprehensive Test)</option>
+              <option value={0}>All Available Questions</option>
             </select>
           </div>
         </div>
@@ -376,35 +374,33 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
           {/* Format */}
           <div>
-            <label className="block font-bold text-slate-700 mb-1">दस्तऐवज प्रकार (Doc Format):</label>
+            <label className="block font-bold text-slate-700 mb-1">Document Format:</label>
             <select
               value={docFormat}
               onChange={(e) => setDocFormat(e.target.value as any)}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-medium"
             >
-              <option value="full_bank">📖 संपूर्ण MCQ बँक (प्रश्ने + उत्तरे + स्पष्टीकरण)</option>
-              <option value="question_paper">📝 टेस्ट पेपर (केवळ प्रश्न - विद्यार्थ्यांसाठी)</option>
-              <option value="solution_book">🔑 उत्तरतालिका व सोल्युशन्स (Answer Key)</option>
+              <option value="full_bank">📖 Full MCQ Bank (Q + A + Explanation)</option>
+              <option value="question_paper">📝 Test Paper (Questions Only)</option>
+              <option value="solution_book">🔑 Answer Key & Solutions</option>
             </select>
           </div>
 
           {/* Language */}
           <div>
-            <label className="block font-bold text-slate-700 mb-1">भाषा (Language):</label>
+            <label className="block font-bold text-slate-700 mb-1">Language:</label>
             <select
               value={docLanguage}
-              onChange={(e) => setDocLanguage(e.target.value as any)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-medium"
+              disabled
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-medium opacity-70"
             >
-              <option value="bilingual">द्विभाषिक (English + Marathi)</option>
               <option value="en">English Only</option>
-              <option value="mr">मराठी माध्यम (Marathi Only)</option>
             </select>
           </div>
 
           {/* Class Name */}
           <div>
-            <label className="block font-bold text-slate-700 mb-1">क्लास / संस्थेचे नाव (Header):</label>
+            <label className="block font-bold text-slate-700 mb-1">Institute Name (Header):</label>
             <input
               type="text"
               value={instituteName}
@@ -429,16 +425,16 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
           </h1>
           <h2 className="text-base sm:text-lg font-bold text-slate-900">{docTitle}</h2>
           <p className="text-xs sm:text-sm font-semibold text-slate-600">
-            {selectedExam} • {selectedSubject === "All" ? "Physics | Chemistry | Mathematics / Biology" : selectedSubject} • {selectedChapter === "All" ? "Complete Syllabus" : selectedChapter}
+            {selectedExam} • Subject: {selectedSubject === "All" ? "Physics | Chemistry | Mathematics / Biology" : selectedSubject} • {selectedChapter === "All" ? "Complete Syllabus" : selectedChapter}
           </p>
 
           {/* Test Paper Metadata Header (if Question Paper format) */}
           {docFormat === "question_paper" && (
             <div className="pt-3 flex flex-wrap items-center justify-between text-xs font-bold text-slate-700 border-t border-dashed border-slate-300 mt-3">
-              <span>विद्यार्थ्याचे नाव: _______________________________</span>
-              <span>रोल नं: _______</span>
-              <span>वेळ: {testTime}</span>
-              <span>एकूण गुण: {displayedQuestions.length * (selectedExam === "MHT_CET" && selectedSubject === "Mathematics" ? 2 : 4)}</span>
+              <span>Student Name: _______________________________</span>
+              <span>Roll No: _______</span>
+              <span>Time: {testTime}</span>
+              <span>Total Marks: {displayedQuestions.length * (selectedExam === "MHT_CET" && selectedSubject === "Mathematics" ? 2 : 4)}</span>
             </div>
           )}
         </div>
@@ -447,25 +443,16 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
         <div className="space-y-4">
           {displayedQuestions.length === 0 ? (
             <div className="p-8 text-center text-xs text-slate-500 font-medium">
-              निवडलेल्या निकषांनुसार कोणतेही प्रश्न सापडले नाहीत. कृपया फिल्टर बदला.
+              No questions found for the selected criteria. Please change the filters.
             </div>
           ) : (
             displayedQuestions.map((q, index) => {
               const qNumber = index + 1;
-              const qText =
-                docLanguage === "en"
-                  ? q.questionText
-                  : docLanguage === "mr"
-                  ? q.questionTextMr || q.questionText
-                  : q.questionText;
-
-              const qTextMr = docLanguage === "bilingual" ? q.questionTextMr : null;
-
-              const optA = docLanguage === "mr" ? q.optionsMr?.[0] || q.options[0] : q.options[0];
-              const optB = docLanguage === "mr" ? q.optionsMr?.[1] || q.options[1] : q.options[1];
-              const optC = docLanguage === "mr" ? q.optionsMr?.[2] || q.options[2] : q.options[2];
-              const optD = docLanguage === "mr" ? q.optionsMr?.[3] || q.options[3] : q.options[3];
-
+              const qText = q.questionText;
+              const optA = q.options[0];
+              const optB = q.options[1];
+              const optC = q.options[2];
+              const optD = q.options[3];
               const ansLetter = String.fromCharCode(65 + q.correctOption);
 
               return (
@@ -481,11 +468,6 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
                       [{q.subject} - {q.chapter}]
                     </span>
                     <span>{qText}</span>
-                    {qTextMr && (
-                      <div className="mt-1 text-slate-700 text-xs font-normal italic">
-                        {qTextMr}
-                      </div>
-                    )}
                   </div>
 
                   {/* Options 4 Grid */}
@@ -513,7 +495,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
                     <div className="p-3 rounded-lg bg-emerald-50/80 border-l-4 border-emerald-600 text-xs space-y-1 text-slate-800 mt-2">
                       <div className="font-extrabold text-emerald-900 flex items-center justify-between">
                         <span>
-                          उत्तर: ({ansLetter}) {q.options[q.correctOption]}
+                          Answer: ({ansLetter}) {q.options[q.correctOption]}
                         </span>
                         {q.pyqYear && (
                           <span className="text-[10px] bg-emerald-200 text-emerald-950 px-2 py-0.5 rounded font-mono">
@@ -523,12 +505,11 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
                       </div>
                       {q.formula && (
                         <div className="text-[11px] font-mono text-indigo-900">
-                          <strong>सूत्र:</strong> {q.formula}
+                          <strong>Formula:</strong> {q.formula}
                         </div>
                       )}
                       <div className="text-[11px] text-slate-700 leading-relaxed">
-                        <strong>स्पष्टीकरण:</strong>{" "}
-                        {docLanguage === "mr" ? q.explanationMr || q.explanation : q.explanation}
+                        <strong>Explanation:</strong> {q.explanation}
                       </div>
                     </div>
                   )}
@@ -540,7 +521,7 @@ export const PdfBankGeneratorView: React.FC<PdfBankGeneratorViewProps> = ({
 
         {/* Footer */}
         <div className="text-center border-t-2 border-orange-500 pt-4 text-xs text-slate-600 font-bold">
-          🎓 {instituteName} • NEET · JEE · MHT-CET अधिकृत सराव प्रश्नसंच व टेस्ट सिरीज • All Rights Reserved
+          🎓 {instituteName} • NEET · JEE · MHT-CET Official Practice Question Bank & Test Series • All Rights Reserved
         </div>
       </div>
     </div>

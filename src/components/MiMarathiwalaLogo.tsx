@@ -68,7 +68,7 @@ export const MiMarathiwalaLogo: React.FC<MiMarathiwalaLogoProps> = ({
               NCJ MOCK TEST APP
             </span>
             <span className="px-1.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-orange-100 dark:bg-orange-950/80 text-orange-700 dark:text-orange-300 shrink-0 border border-orange-200/80 dark:border-orange-800/80">
-              अंबड
+              Ambad
             </span>
           </div>
           <p
@@ -80,7 +80,7 @@ export const MiMarathiwalaLogo: React.FC<MiMarathiwalaLogoProps> = ({
                 : "text-orange-600 dark:text-amber-400"
             } ${current.subSize}`}
           >
-            मी मराठीवाला क्लासेस • MHT-CET | NEET | JEE
+            Mi Marathiwala Classes • MHT-CET | NEET | JEE
           </p>
         </div>
       )}

@@ -80,28 +80,28 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
   };
 
   const handleShareApp = () => {
-    const shareText = `🎯 मी मराठीवाला क्लासेस (अंबड) - MHT-CET, NEET & JEE Main सराव ॲप!\n🔥 फक्त ₹२९ मध्ये २५,०००+ प्रश्न, १० Grand Tests, सराव व नोट्स!\n🎁 १० मित्रांना रेफर करा आणि १००% फी रिफंड मिळवा!\n👉 आत्ताच सुरू करा: ${window.location.origin}`;
+    const shareText = `🎯 Mi Marathiwala Classes (Ambad) - MHT-CET, NEET & JEE Main Practice App!\n🔥 Only ₹29 for 25,000+ MCQs, 10 Grand Tests, Practice & Notes!\n🎁 Refer 10 friends and get 100% Fee Refund!\n👉 Start Now: ${window.location.origin}`;
     if (navigator.share) {
       navigator.share({
-        title: "मी मराठीवाला क्लासेस - MHT-CET • NEET • JEE सराव ॲप",
+        title: "Mi Marathiwala Classes - MHT-CET • NEET • JEE Practice App",
         text: shareText,
         url: window.location.origin,
       }).catch(() => {});
     } else {
       navigator.clipboard.writeText(shareText);
-      alert("मी मराठीवाला क्लासेस ॲपची लिंक कॉपी केली आहे! आपण WhatsApp वर शेअर करू शकता.");
+      alert("App link copied! You can now share it on WhatsApp.");
     }
   };
 
   const handleRateUs = () => {
-    alert("⭐⭐⭐⭐⭐ \n\nधन्यवाद! तुमचे ५-स्टार रेटिंग आमच्यासाठी मोलाचे आहे. आपले मत 9307220454 वर WhatsApp द्वारे नक्की कळवा.");
+    alert("⭐⭐⭐⭐⭐ \n\nThank you! Your 5-star rating means a lot to us. Share your feedback via WhatsApp at 9307220454.");
   };
 
   const handleOpenWhatsAppAdmin = () => {
     const msg = encodeURIComponent(
       currentUser
-        ? `नमस्कार ॲडमिन, मी ${currentUser.name} (${currentUser.mobile}). मला ॲप/पेमेंट मंजुरी बाबत माहिती हवी आहे.`
-        : `नमस्कार ॲडमिन, मला MHT-CET / NEET सराव ॲप व क्लासेस नोंदणी बाबत माहिती हवी आहे.`
+        ? `Hello Admin, I am ${currentUser.name} (${currentUser.mobile}). I need information regarding app/payment approval.`
+        : `Hello Admin, I need information regarding MHT-CET / NEET practice app and class registration.`
     );
     window.open(`https://wa.me/919307220454?text=${msg}`, "_blank");
   };
@@ -138,12 +138,12 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
                   NCJ MOCK TEST APP
                 </span>
                 <span className="text-[10px] text-amber-300 font-bold block truncate">
-                  मी मराठीवाला क्लासेस, अंबड
+                  Mi Marathiwala Classes, Ambad
                 </span>
               </div>
             </div>
             <p className="text-[9px] text-orange-200/90 font-medium leading-tight mt-1.5">
-              स्पर्धा परीक्षा सराव केंद्र • (MHT-CET | NEET | JEE Main)
+              Competitive Exam Center • (MHT-CET | NEET | JEE Main)
             </p>
           </div>
 
@@ -153,16 +153,16 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
             </div>
             <div className="min-w-0 flex-1">
               <h3 className="font-bold text-sm truncate text-white">
-                {currentUser ? currentUser.name : "अतिथी विद्यार्थी (Guest)"}
+                {currentUser ? currentUser.name : "Guest Student"}
               </h3>
               <p className="text-[11px] text-slate-300 font-mono-numbers">
-                {currentUser ? `📱 ${currentUser.mobile}` : "लॉगिन करून पूर्ण ॲक्सेस मिळवा"}
+                {currentUser ? `📱 ${currentUser.mobile}` : "Login for full access"}
               </p>
               <div className="mt-1 flex items-center gap-1.5 flex-wrap">
                 {currentUser ? (
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                    प्रमाणित खाते
+                    Verified Account
                   </span>
                 ) : (
                   <button
@@ -173,7 +173,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
                     className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 font-black flex items-center gap-1 hover:bg-amber-300 transition-colors"
                   >
                     <LogIn className="w-3 h-3" />
-                    लॉगिन / नोंदणी
+                    Login / Register
                   </button>
                 )}
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 font-bold">
@@ -187,13 +187,13 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           <div className="mt-3.5 p-2.5 rounded-xl bg-gradient-to-r from-emerald-950/80 to-teal-950/80 border border-emerald-500/40 flex items-center justify-between text-xs">
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="line-through text-slate-400 text-[11px]">₹२९९</span>
-                <span className="font-black text-amber-300 text-sm">₹२९</span>
+                <span className="line-through text-slate-400 text-[11px]">₹299</span>
+                <span className="font-black text-amber-300 text-sm">₹29</span>
                 <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-rose-600 text-white uppercase">
                   90% OFF
                 </span>
               </div>
-              <p className="text-[10px] text-emerald-300">१० रेफर करा = १००% फी रिफंड</p>
+              <p className="text-[10px] text-emerald-300">Refer 10 = 100% Refund</p>
             </div>
             <button
               onClick={() => {
@@ -202,7 +202,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
               }}
               className="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[11px] shadow-sm transition-all cursor-pointer"
             >
-              घेऊन टाका
+              Get Now
             </button>
           </div>
         </div>
@@ -218,14 +218,14 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3 text-xs font-bold">
               {isDarkMode ? <Moon className="w-4 h-4 text-indigo-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
-              <span>नाईट मोड (Night Mode)</span>
+              <span>Night Mode</span>
             </div>
             <span
               className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
                 isDarkMode ? "bg-indigo-900/60 text-indigo-300" : "bg-slate-200 text-slate-700"
               }`}
             >
-              {isDarkMode ? "चालू (ON)" : "बंद (OFF)"}
+              {isDarkMode ? "ON" : "OFF"}
             </span>
           </div>
 
@@ -245,10 +245,10 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Gift className="w-4 h-4 text-emerald-500 animate-pulse" />
-              <span>🎁 रेफर आणि कमवा (₹२९ परत / कमिशन)</span>
+              <span>🎁 Refer & Earn (₹29 Back / Commission)</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-emerald-500 text-slate-950">
-              १० रेफर = Free
+              Refer 10 = Free
             </span>
           </button>
 
@@ -266,7 +266,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Zap className="w-4 h-4 text-emerald-500" />
-              <span>⚡ सराव (१२,५०,०००+ प्रश्न बँक)</span>
+              <span>⚡ Practice (1,250,000+ Question Bank)</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-emerald-100 text-emerald-900">
               Auto Sets
@@ -286,7 +286,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Trophy className="w-4 h-4 text-amber-500" />
-              <span>🏆 ग्रँड टेस्ट्स (NEET १८० प्रश्न / MHT-CET)</span>
+              <span>🏆 Grand Tests (NEET 180Q / MHT-CET)</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-amber-100 text-amber-900">
               NEET 180Q
@@ -306,7 +306,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Layers className="w-4 h-4 text-blue-500" />
-              <span>🎯 घटकनिहाय सराव चाचण्या</span>
+              <span>🎯 Topic-wise Mock Tests</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-blue-100 text-blue-900">
               Topic Mocks
@@ -326,7 +326,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <History className="w-4 h-4 text-emerald-500" />
-              <span>📑 मागील वर्षांचे PYQs (2019-2025)</span>
+              <span>📑 Previous Year PYQs (2019-2025)</span>
             </div>
           </button>
 
@@ -343,7 +343,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <FileText className="w-4 h-4 text-indigo-500" />
-              <span>📚 अभ्यास नोट्स व फॉर्म्युला</span>
+              <span>📚 Study Notes & Formulas</span>
             </div>
           </button>
 
@@ -360,7 +360,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <BarChart3 className="w-4 h-4 text-teal-500" />
-              <span>📊 परफॉर्मन्स ॲनालिटिक्स (Recharts)</span>
+              <span>📊 Performance Analytics</span>
             </div>
           </button>
 
@@ -377,7 +377,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Trophy className="w-4 h-4 text-amber-500" />
-              <span>🏆 टॉपर रँकिंग (Leaderboard Top 50)</span>
+              <span>🏆 Leaderboard (Top 50 Ranking)</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-amber-200 text-amber-950">
               Live
@@ -397,7 +397,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Bookmark className="w-4 h-4 text-amber-500" />
-              <span>🔖 सेव्ह केलेले प्रश्न</span>
+              <span>🔖 Saved Questions</span>
             </div>
             {bookmarkCount > 0 && (
               <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-amber-100 text-amber-900 font-mono-numbers">
@@ -419,10 +419,10 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Gift className="w-4 h-4 text-emerald-500" />
-              <span>💰 रेफर करा आणि १००% रिफंड मिळवा</span>
+              <span>💰 Refer & Get 100% Refund</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-emerald-100 text-emerald-950">
-              १० रेफर
+              Refer 10
             </span>
           </button>
 
@@ -439,7 +439,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <MessageSquare className="w-4 h-4 text-rose-500" />
-              <span>💬 त्रुटी तक्रार / अभिप्राय (Feedback)</span>
+              <span>💬 Report Error / Feedback</span>
             </div>
           </button>
 
@@ -452,7 +452,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Share2 className="w-4 h-4 text-blue-500" />
-              <span>📤 ॲप शेअर करा (Share App)</span>
+              <span>📤 Share App</span>
             </div>
           </button>
 
@@ -465,7 +465,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Star className="w-4 h-4 text-amber-500" />
-              <span>⭐ आम्हाला रेट करा (Rate Us)</span>
+              <span>⭐ Rate Us</span>
             </div>
           </button>
 
@@ -482,7 +482,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <Shield className="w-4 h-4 text-indigo-500" />
-              <span>📜 कायदे व नियमावली (AdSense, Firebase, UPI)</span>
+              <span>📜 Rules & Regulations</span>
             </div>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full font-black bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
               Rules
@@ -501,7 +501,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
           >
             <div className="flex items-center gap-3">
               <KeyRound className="w-4 h-4 text-amber-500" />
-              <span>🔐 मास्टर ॲडमिन पॅनल</span>
+              <span>🔐 Master Admin Panel</span>
             </div>
           </button>
         </div>
@@ -513,7 +513,7 @@ export const NavigationDrawer: React.FC<NavigationDrawerProps> = ({
             className="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
           >
             <MessageSquare className="w-4 h-4" />
-            <span>WhatsApp ॲडमिन: 9307220454</span>
+            <span>WhatsApp Admin: 9307220454</span>
           </button>
         </div>
       </div>

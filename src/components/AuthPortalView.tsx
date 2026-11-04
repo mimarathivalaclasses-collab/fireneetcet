@@ -85,7 +85,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
     const demoUser: StudentUser = {
       id: `demo_${type}_${Date.now()}`,
-      name: type === "topper" ? "रोहन देशमुख (Topper Student)" : type === "neet" ? "प्रियांका शिंदे (NEET Aspirant)" : "अमित जोशी (JEE Main)",
+      name: type === "topper" ? "Rohan Deshmukh (Topper Student)" : type === "neet" ? "Priyanka Shinde (NEET Aspirant)" : "Amit Joshi (JEE Main)",
       mobile: type === "topper" ? "9876543210" : type === "neet" ? "9876543211" : "9876543212",
       examTarget: type === "topper" ? "MHT_CET" : type === "neet" ? "NEET" : "JEE_MAIN",
       primaryDeviceId: getOrCreateDeviceId(),
@@ -123,7 +123,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
     const cleanPass = loginPassword.trim();
 
     if (!cleanMobile || cleanMobile.length < 10) {
-      setLoginError("कृपया वैध १० अंकी मोबाईल नंबर टाका.");
+      setLoginError("Please enter a valid 10-digit mobile number.");
       setIsLoading(false);
       return;
     }
@@ -140,14 +140,14 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
       });
 
       if (!student) {
-        setLoginError("हे विद्यार्थी खाते नोंदणीकृत नाही. कृपया खाली 'नवीन नोंदणी करा' (Sign Up) वर क्लिक करा.");
+        setLoginError("This student account is not registered. Please click 'Register' below.");
         setIsLoading(false);
         return;
       }
 
       const isMasterPin = cleanPass === "14101994";
       if (!isMasterPin && student.password && cleanPass && student.password !== cleanPass) {
-        setLoginError("पासवर्ड चुकीचा आहे. कृपया योग्य पासवर्ड प्रविष्ट करा.");
+        setLoginError("Incorrect password. Please enter the correct password.");
         setIsLoading(false);
         return;
       }
@@ -160,7 +160,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
       saveUserSession(student);
       onLoginSuccess(student);
     } catch (e) {
-      setLoginError("लॉगिन करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.");
+      setLoginError("Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -173,11 +173,11 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
     setRegSuccess("");
 
     if (!regName.trim()) {
-      setRegError("कृपया तुमचे पूर्ण नाव प्रविष्ट करा.");
+      setRegError("Please enter your full name.");
       return;
     }
     if (!regMobile.trim() || regMobile.trim().length < 10) {
-      setRegError("कृपया वैध १० अंकी मोबाईल नंबर प्रविष्ट करा.");
+      setRegError("Please enter a valid 10-digit mobile number.");
       return;
     }
 
@@ -186,7 +186,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
       const list: StudentUser[] = stored ? JSON.parse(stored) : [];
 
       if (list.some((s) => s.mobile === regMobile.trim())) {
-        setRegError("या मोबाईल नंबरची आधीच नोंदणी झालेली आहे. कृपया लॉगिन करा.");
+        setRegError("This mobile number is already registered. Please login.");
         return;
       }
 
@@ -212,12 +212,12 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
       list.push(newStudent);
       localStorage.setItem("mcq_app_all_students_v1", JSON.stringify(list));
-      setRegSuccess("नोंदणी यशस्वी झाली! डॅशबोर्ड उघडत आहे...");
+      setRegSuccess("Registration successful! Opening dashboard...");
       setTimeout(() => {
         onLoginSuccess(newStudent);
       }, 500);
     } catch (e) {
-      setRegError("नोंदणी अयशस्वी झाली. पुन्हा प्रयत्न करा.");
+      setRegError("Registration failed. Please try again.");
     }
   };
 
@@ -234,18 +234,18 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
     );
 
     if (!inst) {
-      setClassError("अवैध क्लासेस कोड! कृपया आपल्या क्लासेसचा अचूक कोड टाका.");
+      setClassError("Invalid Institute Code! Please enter the correct code for your classes.");
       return;
     }
 
     if (inst.adminPasscode && classPasscode.trim() !== inst.adminPasscode && classPasscode.trim() !== "class2026") {
-      setClassError("क्लासेस पासवर्ड चुकीचा आहे.");
+      setClassError("Incorrect admin passcode.");
       return;
     }
 
     const classAdminUser: StudentUser = {
       id: `class_admin_${inst.instituteCode}`,
-      name: `${inst.nameMr} (${inst.directorName})`,
+      name: `${inst.name} (${inst.directorName})`,
       mobile: inst.contactNumber,
       examTarget: "MHT_CET",
       instituteCode: inst.instituteCode,
@@ -265,7 +265,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
     <div className="min-h-[88vh] flex items-center justify-center p-3 sm:p-6 lg:p-10">
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden grid grid-cols-1 lg:grid-cols-12">
         
-        {/* LEFT BRANDING PANEL (40% width on Desktop) - Bhagva Theme */}
+        {/* LEFT BRANDING PANEL */}
         <div className="lg:col-span-5 bg-gradient-to-br from-stone-950 via-orange-950 to-stone-900 text-white p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
           <div className="absolute -right-16 -top-16 w-60 h-60 bg-orange-500/25 rounded-full blur-3xl pointer-events-none"></div>
           <div className="absolute -left-16 -bottom-16 w-60 h-60 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -276,19 +276,19 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
               <MiMarathiwalaLogo size="lg" showText={false} />
               <div>
                 <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white leading-tight">
-                  मी मराठीवाला क्लासेस
+                  Mi Marathiwala Classes
                 </h1>
                 <span className="text-[11px] font-bold text-amber-300 block leading-tight">
                   Mi Marathiwala Classes, Ambad
                 </span>
                 <span className="text-[10px] text-orange-200 font-bold block mt-0.5">
-                  MHT-CET | NEET | JEE अधिकृत सराव केंद्र
+                  MHT-CET | NEET | JEE Official Practice Center
                 </span>
               </div>
             </div>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed pt-1">
-              महाराष्ट्रातील विद्यार्थ्यांसाठी #1 ऑनलाईन सराव व मुख्य परीक्षा सिम्युलेटर पोर्टल.
+              #1 Online Practice and Exam Simulator Portal for Students.
             </p>
 
             {/* Feature Highlights */}
@@ -300,17 +300,17 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
               <div className="flex items-center gap-2.5 bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/10 text-xs">
                 <Zap className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="font-bold">थेट संभाव्य राज्यस्तरीय रँक व पर्सेंटाईल प्रेडिक्टर</span>
+                <span className="font-bold">State-level Rank & Percentile Predictor</span>
               </div>
 
               <div className="flex items-center gap-2.5 bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/10 text-xs">
                 <Building2 className="w-4 h-4 text-cyan-300 shrink-0" />
-                <span className="font-bold">१५०+ अग्रगण्य कोचिंग क्लासेस अधिकृत कनेक्ट</span>
+                <span className="font-bold">150+ Leading Coaching Classes Connected</span>
               </div>
 
               <div className="flex items-center gap-2.5 bg-white/10 backdrop-blur-md p-2.5 rounded-2xl border border-white/10 text-xs">
                 <ShieldCheck className="w-4 h-4 text-purple-300 shrink-0" />
-                <span className="font-bold">सुरक्षित डिव्हाइस बाइंडिंग व जलद लॉगिन</span>
+                <span className="font-bold">Secure Device Binding & Quick Login</span>
               </div>
             </div>
           </div>
@@ -319,15 +319,15 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
           <div className="relative z-10 pt-4 mt-6 border-t border-white/10 space-y-2">
             <div className="flex items-center gap-2 text-emerald-300 text-xs font-bold">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>१००% सुरक्षित व अधिकृत विद्यार्थी लॉगिन</span>
+              <span>100% Secure & Official Student Login</span>
             </div>
             <p className="text-[11px] text-stone-300 leading-relaxed">
-              आपला नोंदणीकृत मोबाईल नंबर आणि पासवर्ड टाकून लॉगिन करा. नवीन विद्यार्थ्यांनी प्रथम 'नवीन नोंदणी' करावी.
+              Login using your registered mobile number and password. New students should register first.
             </p>
           </div>
         </div>
 
-        {/* RIGHT INTERACTIVE FORM PANEL (60% width) */}
+        {/* RIGHT INTERACTIVE FORM PANEL */}
         <div className="lg:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-white">
           
           {/* Top Role Selector Tabs */}
@@ -341,7 +341,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                     : "text-stone-700 hover:text-stone-950"
                 }`}
               >
-                विद्यार्थी लॉगिन
+                Student Login
               </button>
               <button
                 onClick={() => setActiveTab("register")}
@@ -351,7 +351,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                     : "text-stone-700 hover:text-stone-950"
                 }`}
               >
-                नवीन नोंदणी (Register)
+                New Registration
               </button>
               <button
                 onClick={() => setActiveTab("class_portal")}
@@ -361,7 +361,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                     : "text-stone-700 hover:text-stone-950"
                 }`}
               >
-                क्लासेस लॉगिन
+                Class Login
               </button>
             </div>
 
@@ -371,16 +371,16 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                 <div className="space-y-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-orange-50 border border-orange-200">
                     <span className="w-2 h-2 rounded-full bg-orange-600 animate-pulse"></span>
-                    <span className="font-black text-xs text-orange-950">मी मराठीवाला क्लासेस, अंबड • अधिकृत पोर्टल</span>
+                    <span className="font-black text-xs text-orange-950">Mi Marathiwala Classes, Ambad • Official Portal</span>
                   </div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    मी मराठीवाला क्लासेस - विद्यार्थी लॉगिन
+                    Student Login
                   </h2>
                   <p className="text-xs sm:text-sm text-orange-700 font-bold">
-                    MHT-CET | NEET | JEE स्पर्धा परीक्षा ऑनलाईन सराव केंद्र
+                    MHT-CET | NEET | JEE Competitive Exam Practice Center
                   </p>
                   <p className="text-xs text-slate-500">
-                    तुमचा नोंदणीकृत मोबाईल नंबर आणि पासवर्ड टाकून त्वरित सराव सुरू करा.
+                    Enter your registered mobile number and password to start practicing.
                   </p>
                 </div>
 
@@ -394,7 +394,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                 <div className="space-y-3">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      मोबाईल नंबर (10 Digit Mobile No.)
+                      Mobile Number (10 Digits)
                     </label>
                     <div className="relative">
                       <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -402,7 +402,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                         type="tel"
                         required
                         maxLength={10}
-                        placeholder="उदा. 9876543210"
+                        placeholder="e.g. 9876543210"
                         value={loginMobile}
                         onChange={(e) => setLoginMobile(e.target.value)}
                         className="w-full pl-10 pr-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-orange-500 text-sm font-semibold outline-none transition-all"
@@ -412,13 +412,13 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      पासवर्ड किंवा पिन (Password)
+                      Password or PIN
                     </label>
                     <div className="relative">
                       <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type={showPassword ? "text" : "password"}
-                        placeholder="पासवर्ड टाका (डिफॉल्ट: 123456)"
+                        placeholder="Enter password (default: 123456)"
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                         className="w-full pl-10 pr-10 py-3 rounded-2xl border-2 border-slate-200 focus:border-orange-500 text-sm font-semibold outline-none transition-all"
@@ -437,7 +437,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                 <div className="flex items-center justify-between text-xs pt-1">
                   <label className="flex items-center gap-1.5 text-slate-600 font-medium cursor-pointer">
                     <input type="checkbox" defaultChecked className="rounded text-orange-600 focus:ring-orange-500" />
-                    <span>लॉगिन सेव्ह ठेवा (Remember Me)</span>
+                    <span>Remember Me</span>
                   </label>
                 </div>
 
@@ -446,7 +446,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                   disabled={isLoading}
                   className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 text-white font-extrabold text-sm shadow-lg hover:shadow-orange-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
-                  <span>{isLoading ? "तपासत आहे..." : "पोर्टलमध्ये प्रवेश करा (Login Now)"}</span>
+                  <span>{isLoading ? "Verifying..." : "Login Now"}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
@@ -458,16 +458,16 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                 <div className="space-y-1">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-orange-50 border border-orange-200">
                     <span className="w-2 h-2 rounded-full bg-orange-600 animate-pulse"></span>
-                    <span className="font-black text-xs text-orange-950">मी मराठीवाला क्लासेस, अंबड • अधिकृत नोंदणी</span>
+                    <span className="font-black text-xs text-orange-950">Mi Marathiwala Classes, Ambad • Official Registration</span>
                   </div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                    मी मराठीवाला क्लासेस - नवीन नोंदणी
+                    New Registration
                   </h2>
                   <p className="text-xs sm:text-sm text-orange-700 font-bold">
-                    MHT-CET | NEET | JEE मोफत सराव व मॉक टेस्ट्स
+                    MHT-CET | NEET | JEE Free Practice & Mock Tests
                   </p>
                   <p className="text-xs text-slate-500">
-                    सर्व १०+ ग्रँड मॉक टेस्ट्स व विश्लेषण मिळवण्यासाठी त्वरित नोंदणी करा.
+                    Register now to access all 10+ Grand Mock Tests and analysis.
                   </p>
                 </div>
 
@@ -487,12 +487,12 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      पूर्ण नाव (Full Name) *
+                      Full Name *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="उदा. राहुल सचिन पाटील"
+                      placeholder="e.g. Rahul Sachin Patil"
                       value={regName}
                       onChange={(e) => setRegName(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-orange-500 text-xs sm:text-sm font-semibold outline-none"
@@ -501,13 +501,13 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      मोबाईल नंबर (WhatsApp No.) *
+                      Mobile Number (WhatsApp) *
                     </label>
                     <input
                       type="tel"
                       required
                       maxLength={10}
-                      placeholder="उदा. 9876543210"
+                      placeholder="e.g. 9876543210"
                       value={regMobile}
                       onChange={(e) => setRegMobile(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-orange-500 text-xs sm:text-sm font-semibold outline-none"
@@ -516,7 +516,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      लक्ष्य परीक्षा (Target Exam) *
+                      Target Exam *
                     </label>
                     <select
                       value={regExam}
@@ -531,11 +531,11 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      पासवर्ड (Password)
+                      Password
                     </label>
                     <input
                       type="text"
-                      placeholder="डिफॉल्ट: 123456"
+                      placeholder="Default: 123456"
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-orange-500 text-xs sm:text-sm font-semibold outline-none"
@@ -544,11 +544,11 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
                   <div className="sm:col-span-2">
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      क्लासेस कोड किंवा रेफरल कोड (ऐच्छिक / Optional)
+                      Institute Code or Referral Code (Optional)
                     </label>
                     <input
                       type="text"
-                      placeholder="उदा. COEP100 किंवा REF-123456"
+                      placeholder="e.g. COEP100 or REF-123456"
                       value={regInstituteCode}
                       onChange={(e) => setRegInstituteCode(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-orange-500 text-xs sm:text-sm font-semibold uppercase outline-none"
@@ -561,7 +561,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                   className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 hover:from-orange-500 hover:to-orange-600 text-white font-extrabold text-sm shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-amber-200" />
-                  <span>मोफत नोंदणी पूर्ण करा (Complete Registration)</span>
+                  <span>Complete Registration</span>
                 </button>
               </form>
             )}
@@ -571,10 +571,10 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
               <form onSubmit={handleClassLogin} className="space-y-4 animate-in fade-in">
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900">
-                    क्लासेस संचालक पोर्टल (Class Admin Portal)
+                    Class Admin Portal
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                    तुमच्या क्लासेस कोडद्वारे लॉगिन करून बॅच व विद्यार्थ्यांचे रिपोर्ट पहा.
+                    Login using your institute code to view batch and student reports.
                   </p>
                 </div>
 
@@ -588,14 +588,14 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                 <div className="space-y-3">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      क्लासेस कोड (Institute Code)
+                      Institute Code
                     </label>
                     <div className="relative">
                       <Building2 className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         required
-                        placeholder="उदा. MAHA101 किंवा TOPPER2026"
+                        placeholder="e.g. MAHA101 or TOPPER2026"
                         value={classCode}
                         onChange={(e) => setClassCode(e.target.value)}
                         className="w-full pl-10 pr-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-orange-500 text-sm font-semibold uppercase outline-none"
@@ -605,13 +605,13 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
-                      क्लासेस ॲडमिन पासवर्ड (Admin Passcode)
+                      Admin Passcode
                     </label>
                     <div className="relative">
                       <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="password"
-                        placeholder="क्लासेस पासवर्ड (उदा. class2026)"
+                        placeholder="Enter admin passcode"
                         value={classPasscode}
                         onChange={(e) => setClassPasscode(e.target.value)}
                         className="w-full pl-10 pr-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-orange-500 text-sm font-semibold outline-none"
@@ -625,7 +625,7 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
                   className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-700 via-amber-700 to-orange-800 hover:from-orange-600 hover:to-amber-600 text-white font-extrabold text-sm shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <Building2 className="w-4 h-4" />
-                  <span>क्लासेस डॅशबोर्ड उघडा (Class Admin Login)</span>
+                  <span>Class Admin Login</span>
                 </button>
               </form>
             )}
@@ -635,20 +635,20 @@ export const AuthPortalView: React.FC<AuthPortalViewProps> = ({
           <div className="pt-6 mt-6 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-2">
             <div className="flex items-center gap-2">
               <Phone className="w-3.5 h-3.5 text-orange-600" />
-              <span>सपोर्ट हेल्पलाईन: <strong>9307220454</strong></span>
+              <span>Support Helpline: <strong>9307220454</strong></span>
             </div>
             <div className="text-[11px] text-slate-400">
-              © 2026 मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)
+              © 2026 Mi Marathiwala Classes, Ambad
             </div>
           </div>
 
-          {/* Legal Disclaimer & Naming Terms (बारीक अक्षरांमध्ये अस्वीकरण व अटी) */}
+          {/* Legal Disclaimer & Naming Terms */}
           <div className="mt-4 pt-3 border-t border-slate-100 text-[10px] text-slate-500 leading-relaxed space-y-1.5 bg-orange-50/50 p-3.5 rounded-xl border border-orange-100">
             <p className="font-bold text-slate-800 flex items-center gap-1.5">
-              <span>⚖️ शैक्षणिक अधिकृत सूचना व अस्वीकरण (Official Educational Notice):</span>
+              <span>⚖️ Official Educational Notice:</span>
             </p>
             <p>
-              <strong>मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes, Ambad)</strong> हे स्पर्धा परीक्षा (MHT-CET, NEET, JEE) तयारीसाठीचे अधिकृत ऑनलाईन सराव पोर्टल आहे. हे ॲप ग्रामीण व होतकरू विद्यार्थ्यांच्या दर्जेदार तयारीसाठी समर्पित आहे.
+              <strong>Mi Marathiwala Classes, Ambad</strong> is an official online practice portal for competitive exams (MHT-CET, NEET, JEE). This app is dedicated to providing high-quality preparation for aspiring students.
             </p>
           </div>
         </div>

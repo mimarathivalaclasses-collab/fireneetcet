@@ -82,12 +82,9 @@ export function detectChapterFromText(text: string, subject: SubjectType): strin
 
 export interface ParsedQuestionDraft {
   questionText: string;
-  questionTextMr?: string;
   options: [string, string, string, string];
-  optionsMr?: [string, string, string, string];
   correctOption: number;
   explanation: string;
-  explanationMr?: string;
   formula?: string;
   pyqYear?: string;
   detectedSubject: SubjectType;
@@ -121,12 +118,9 @@ export function parseRawQuestionText(
   if (lines.length === 0) return null;
 
   let questionText = "";
-  let questionTextMr = "";
   const rawOptions: string[] = ["", "", "", ""];
-  const rawOptionsMr: string[] = ["", "", "", ""];
   let correctOption = 0;
   let explanation = "";
-  let explanationMr = "";
   let formula = "";
   let pyqYear = "";
 
@@ -137,9 +131,9 @@ export function parseRawQuestionText(
   const optBRegex = /^(\(?B\)?|[bB][\.\)\:])\s*(.*)/i;
   const optCRegex = /^(\(?C\)?|[cC][\.\)\:])\s*(.*)/i;
   const optDRegex = /^(\(?D\)?|[dD][\.\)\:])\s*(.*)/i;
-  const ansRegex = /^(Ans|Answer|Correct|उत्तर|योग्य उत्तर)[\s\:\-\=]+([A-Da-d1-4])/i;
-  const expRegex = /^(Exp|Explanation|Solution|स्पष्टीकरण|रीजन)[\s\:\-\=]+(.*)/i;
-  const formRegex = /^(Formula|Equation|सूत्र)[\s\:\-\=]+(.*)/i;
+  const ansRegex = /^(Ans|Answer|Correct)[\s\:\-\=]+([A-Da-d1-4])/i;
+  const expRegex = /^(Exp|Explanation|Solution)[\s\:\-\=]+(.*)/i;
+  const formRegex = /^(Formula|Equation)[\s\:\-\=]+(.*)/i;
   const pyqRegex = /(NEET|JEE|MHT-?CET|CET)\s*(\d{4})/i;
 
   const questionLines: string[] = [];
@@ -250,17 +244,9 @@ export function parseRawQuestionText(
 
   return {
     questionText,
-    questionTextMr: questionTextMr || questionText,
     options: [rawOptions[0], rawOptions[1], rawOptions[2], rawOptions[3]],
-    optionsMr: [
-      rawOptionsMr[0] || rawOptions[0],
-      rawOptionsMr[1] || rawOptions[1],
-      rawOptionsMr[2] || rawOptions[2],
-      rawOptionsMr[3] || rawOptions[3],
-    ],
     correctOption,
     explanation,
-    explanationMr: explanationMr || undefined,
     formula: formula || undefined,
     pyqYear: pyqYear || undefined,
     detectedSubject,

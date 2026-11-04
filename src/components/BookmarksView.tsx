@@ -62,16 +62,12 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
         (q, idx) => `
       <div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 14px; page-break-inside: avoid; background: #fff;">
         <div style="font-size: 11px; font-weight: bold; color: #4338ca; margin-bottom: 4px;">
-          प्रश्न ${idx + 1} • ${q.exam} • ${q.subject} (${q.chapter})
+          Question #${idx + 1} • ${q.exam} • ${q.subject} (${q.chapter})
         </div>
         <div style="font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 6px;">
           ${q.questionText}
         </div>
-        ${
-          q.questionTextMr
-            ? `<div style="font-size: 12px; color: #78350f; background: #fffbeb; padding: 6px 8px; border-radius: 4px; margin-bottom: 6px;">${q.questionTextMr}</div>`
-            : ""
-        }
+
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px; margin-bottom: 8px;">
           ${q.options
             .map((opt, i) => {
@@ -81,14 +77,13 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
               }; background: ${isCorrect ? "#f0fdf4" : "#f8fafc"}; color: ${
                 isCorrect ? "#166534; font-weight: bold;" : "#334155;"
               }">
-                ${String.fromCharCode(65 + i)}. ${opt} ${isCorrect ? " ✓ [योग्य उत्तर]" : ""}
+                ${String.fromCharCode(65 + i)}. ${opt} ${isCorrect ? " ✓ [Correct Answer]" : ""}
               </div>`;
             })
             .join("")}
         </div>
         <div style="background: #f8fafc; border-left: 3px solid #6366f1; padding: 8px 10px; font-size: 11px; color: #1e293b;">
-          <strong>स्पष्टीकरण:</strong> ${q.explanation}
-          ${q.explanationMr ? `<div style="color: #475569; margin-top: 4px;"><strong>मराठी:</strong> ${q.explanationMr}</div>` : ""}
+          <strong>Explanation:</strong> ${q.explanation}
         </div>
       </div>
     `
@@ -107,19 +102,19 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
       </head>
       <body>
         <div class="no-print" style="margin-bottom: 15px; padding: 10px; background: #e0f2fe; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: bold; color: #0369a1;">बुकमार्क रिव्हिजन शीट (${bookmarkedQuestions.length} प्रश्न)</span>
+          <span style="font-weight: bold; color: #0369a1;">Bookmark Revision Sheet (${bookmarkedQuestions.length} Questions)</span>
           <button onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; cursor: pointer;">
-            🖨️ PDF सेव्ह / प्रिंट करा
+            🖨️ Save / Print PDF
           </button>
         </div>
         <div style="border-bottom: 3px solid #ea580c; padding-bottom: 10px; margin-bottom: 16px;">
-          <div style="font-size: 20px; font-weight: 900; color: #c2410c;">🎓 मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)</div>
-          <h2 style="margin: 4px 0 2px 0; color: #0f172a; font-size: 15px;">NEET • JEE MAIN • MHT-CET — महत्त्वाची बुकमार्क रिव्हिजन शीट</h2>
-          <p style="font-size: 12px; color: #64748b; margin: 0;">तारीख: ${new Date().toLocaleDateString("mr-IN")} • एकूण सेव्ह केलेले महत्त्वाचे प्रश्न: <strong>${bookmarkedQuestions.length}</strong></p>
+          <div style="font-size: 20px; font-weight: 900; color: #c2410c;">🎓 Mi Marathiwala Classes, Ambad</div>
+          <h2 style="margin: 4px 0 2px 0; color: #0f172a; font-size: 15px;">NEET • JEE MAIN • MHT-CET — Important Bookmark Revision Sheet</h2>
+          <p style="font-size: 12px; color: #64748b; margin: 0;">Date: ${new Date().toLocaleDateString("en-IN")} • Total Saved Important Questions: <strong>${bookmarkedQuestions.length}</strong></p>
         </div>
         ${cardsHtml}
         <div style="margin-top: 24px; padding-top: 10px; border-top: 1px solid #ea580c; text-align: center; font-size: 11px; color: #64748b; font-weight: bold;">
-          🎓 मी मराठीवाला क्लासेस, अंबड • परीक्षेच्या शेवटच्या क्षणी रिव्हिजनसाठी महत्त्वाचे सेव्ह केलेले प्रश्न
+          🎓 Mi Marathiwala Classes, Ambad • Important saved questions for last-minute revision
         </div>
       </body>
       </html>
@@ -140,16 +135,16 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
                 title="मागे जा"
               >
                 <ArrowLeft className="w-3.5 h-3.5 text-amber-600" />
-                <span>← मागे जा</span>
+                <span>← Back</span>
               </button>
             )}
             <Bookmark className="w-5 h-5 text-amber-500 fill-amber-500" />
             <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-              बुकमार्क केलेले प्रश्न (Saved Questions)
+              Saved Questions (Bookmarks)
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-slate-500">
-            अवघड किंवा महत्त्वाचे वाटणारे प्रश्न येथे सुरक्षित आहेत. परीक्षेपूर्वी जलद रिव्हिजन करा.
+            Questions that you find difficult or important are saved here. Use them for quick revision before exams.
           </p>
         </div>
 
@@ -160,14 +155,14 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
               className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5 text-amber-400" />
-              <span>PDF सेव्ह / प्रिंट करा</span>
+              <span>Save / Print PDF</span>
             </button>
             <button
               onClick={() => onStartPracticeWithList(bookmarkedQuestions)}
               className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-xs flex items-center gap-2 transition-colors cursor-pointer"
             >
               <Play className="w-4 h-4 fill-white" />
-              <span>केवळ सेव्ह केलेल्या प्रश्नांचा सराव करा</span>
+              <span>Practice Saved Questions Only</span>
             </button>
           </div>
         )}
@@ -175,7 +170,7 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
 
       {/* Subject Filter Bar */}
       <div className="flex flex-wrap items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200 shadow-xs text-xs">
-        <span className="font-bold text-slate-500 mr-2">विषय फिल्टर:</span>
+        <span className="font-bold text-slate-500 mr-2">Subject Filter:</span>
         <button
           onClick={() => setSelectedSubject("All")}
           className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
@@ -184,7 +179,7 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
               : "bg-slate-100 text-slate-700 hover:bg-slate-200"
           }`}
         >
-          सर्व विषय ({questions.filter((q) => bookmarkedIds.has(q.id)).length})
+          All Subjects ({questions.filter((q) => bookmarkedIds.has(q.id)).length})
         </button>
         {(["Physics", "Chemistry", "Mathematics", "Biology"] as SubjectType[]).map((sub) => {
           const count = questions.filter((q) => bookmarkedIds.has(q.id) && q.subject === sub).length;
@@ -211,10 +206,10 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
             <Bookmark className="w-8 h-8" />
           </div>
           <h3 className="text-base font-bold text-slate-900">
-            कोणतेही प्रश्न बुकमार्क केलेले नाहीत
+            No questions have been bookmarked yet
           </h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            सराव करताना अवघड वाटणाऱ्या प्रश्नांवरील 'Bookmark' चिन्हावर क्लिक करून त्यांना येथे सेव्ह करा.
+          <p className="text-xs text-slate-500 max-sm mx-auto">
+            Click the 'Bookmark' icon on questions you find difficult during practice to save them here.
           </p>
         </div>
       ) : (
@@ -244,12 +239,12 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
                       onClick={() => toggleReveal(q.id)}
                       className="px-3 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 font-semibold text-xs transition-colors"
                     >
-                      {isRevealed ? "उत्तर लपवा" : "उत्तर व स्पष्टीकरण दाखवा"}
+                      {isRevealed ? "Hide Answer" : "Show Answer & Explanation"}
                     </button>
                     <button
                       onClick={() => onToggleBookmark(q)}
                       className="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 text-xs transition-colors"
-                      title="बुकमार्क काढा"
+                      title="Remove Bookmark"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -261,11 +256,7 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
                   <div className="text-sm font-semibold text-slate-900 leading-relaxed">
                     {q.questionText}
                   </div>
-                  {q.questionTextMr && (
-                    <div className="text-xs text-slate-700 bg-amber-50/50 p-2.5 rounded-xl border border-amber-100">
-                      <strong>मराठी:</strong> {q.questionTextMr}
-                    </div>
-                  )}
+
                 </div>
 
                 {/* Options */}
@@ -300,19 +291,15 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
                   <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
                     <div className="flex items-center gap-1.5 font-bold text-slate-900">
                       <Lightbulb className="w-4 h-4 text-amber-500" />
-                      <span>स्पष्टीकरण:</span>
+                      <span>Explanation:</span>
                     </div>
                     {q.formula && (
                       <div className="font-mono text-[11px] text-blue-800 font-bold">
-                        सूत्र: {q.formula}
+                        Formula: {q.formula}
                       </div>
                     )}
                     <p className="text-slate-700 leading-relaxed">{q.explanation}</p>
-                    {q.explanationMr && (
-                      <p className="text-slate-800 bg-amber-50/50 p-2 rounded-lg border border-amber-100">
-                        {q.explanationMr}
-                      </p>
-                    )}
+
                   </div>
                 )}
               </div>

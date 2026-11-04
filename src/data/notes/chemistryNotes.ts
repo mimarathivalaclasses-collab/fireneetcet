@@ -5,18 +5,14 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
   {
     id: "note_chem_chemical_bonding",
     chapter: "Chemical Bonding & Molecular Structure",
-    chapterMr: "रासायनिक बंध आणि आण्विक रचना (Chemical Bonding)",
     subject: "Chemistry",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "VSEPR, Hybridization, MOT, Dipole Moment & Hydrogen Bonding Notes",
-    titleMr: "VSEPR सिद्धांत, संकरण (Hybridization), आण्विक कक्षक (MOT) व हायड्रोजन बंध",
     summary: "VSEPR Theory shapes, Steric number hybridization rule, Molecular Orbital Theory (Bond Order, Paramagnetism), Dipole Moment, and Hydrogen bonding.",
-    summaryMr: "VSEPR सिद्धांतानुसार रेणूंचे आकार, स्टिरिक क्रमांक संकरण युक्ती, आण्विक कक्षक सिद्धांत (बंध क्रम, चुंबकीय गुणधर्म), द्विध्रुव आघूर्ण आणि हायड्रोजन बंध.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. VSEPR Theory & Hybridization Shortcuts",
-        titleMr: "१. VSEPR सिद्धांत व संकरण (Hybridization) शॉर्टकट्स",
         points: [
           "Steric Number (SN) = (Valence electrons of Central Atom + Monovalent attached atoms - Positive charge + Negative charge) / 2.",
           "SN = 2 => sp (Linear, 180°), e.g., BeCl₂, CO₂.",
@@ -26,19 +22,10 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "SN = 6 => sp³d² (Octahedral, 90°), e.g., SF₆; 1 lone pair => Square Pyramidal (BrF₅); 2 lone pairs => Square Planar (XeF₄).",
           "VSEPR Repulsion Order: Lone Pair - Lone Pair (lp-lp) > Lone Pair - Bond Pair (lp-bp) > Bond Pair - Bond Pair (bp-bp).",
         ],
-        pointsMr: [
-          "स्टिरिक क्रमांक (SN): मध्यवर्ती अणूचे संयुजा इलेक्ट्रॉन्स + एकसंयुजी अणू - धनप्रभार + ऋणप्रभार / २.",
-          "SN = २: sp (रेषीय - १८०°), उदा. BeCl₂, CO₂.",
-          "SN = ३: sp² (समतल त्रिकोणी - १२०°), उदा. BF₃; १ लोन पेअर असल्यास V-आकार (SO₂).",
-          "SN = ४: sp³ (चतुष्कोणीय), उदा. CH₄ (१०९.५°), NH₃ (१०७°), H₂O (१०४.५°).",
-          "SN = ५: sp³d, उदा. PCl₅ (Trigonal Bipyramidal), SF₄ (See-saw), ClF₃ (T-shaped), XeF₂ (Linear).",
-          "प्रतिकर्षण क्रम: लोन पेअर - लोन पेअर > लोन पेअर - बॉन्ड पेअर > बॉन्ड पेअर - बॉन्ड पेअर.",
-        ],
-        keyFormula: "Steric No. = [V + M - C + A] / 2 | Repulsion: lp-lp > lp-bp > bp-bp",
+        keyFormula: "Steric No. = [V + M - C + A] / 2 | Repulsion: lp-lp > lp-bp > bp-bp"
       },
       {
         title: "2. Molecular Orbital Theory (MOT) & Bond Order",
-        titleMr: "२. आण्विक कक्षक सिद्धांत (MOT) आणि बंध क्रम",
         points: [
           "Bond Order (BO) = (N_b - N_a) / 2, where N_b is bonding electrons and N_a is anti-bonding electrons.",
           "Stability: Higher Bond Order => Greater Bond Strength, Shorter Bond Length (Bond Order ∝ 1 / Bond Length).",
@@ -46,19 +33,13 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "14 electrons (N₂) = BO 3.0; 13 or 15 electrons (N₂⁺, O₂⁺) = BO 2.5; 12 or 16 electrons (C₂, O₂) = BO 2.0; 11 or 17 electrons = BO 1.5; 10 or 18 electrons (B₂, F₂) = BO 1.0.",
           "Magnetic Nature: Unpaired electron in MO => Paramagnetic (e.g., O₂ has 2 unpaired electrons in π*2px, π*2py => Paramagnetic; B₂ is Paramagnetic). All electrons paired => Diamagnetic (e.g., N₂).",
         ],
-        pointsMr: [
-          "बंध क्रम (Bond Order): BO = (N_b - N_a) / २.",
-          "स्थैर्य: जास्त BO = जास्त बंध ऊर्जा व कमी बंध लांबी (BO ∝ १ / बंध लांबी).",
-          "शॉर्टकट: १४ इलेक्ट्रॉन्स (N₂) = BO ३.०; प्रत्येकी १ इलेक्ट्रॉन वाढला किंवा कमी झाला की BO ०.५ ने घटतो.",
-          "चुंबकीय गुणधर्म: अयुग्मित इलेक्ट्रॉन असल्यास अनुचुंबकीय (Paramagnetic, उदा. O₂, B₂); सर्व जोडीदार असल्यास प्रतिचुंबकीय (Diamagnetic, उदा. N₂).",
-        ],
         keyFormula: "Bond Order = (N_b - N_a) / 2 | BO ∝ Bond Dissociation Energy ∝ 1/Bond Length",
-        keyMnemonic: "MOT Peak: 14 electrons = Max BO 3.0. Step down by 0.5 for each electron away from 14.",
+        keyMnemonic: "MOT Peak: 14 electrons = Max BO 3.0. Step down by 0.5 for each electron away from 14."
       },
     ],
     quickRevisionPoints: [
-      { en: "Intermolecular Hydrogen Bonding increases boiling point (e.g., H₂O > H₂S, Ethanol > Dimethyl ether).", mr: "आंतररेण्वीय हायड्रोजन बंधामुळे उत्कलनांक वाढतो (उदा. H₂O > H₂S, अल्कोहोल > ईथर)." },
-      { en: "Intramolecular Hydrogen Bonding occurs within the same molecule (e.g., o-nitrophenol, salicylaldehyde), lowering boiling point and making it steam volatile.", mr: "अंतर्गत हायड्रोजन बंध (उदा. ऑर्थो-नायट्रोफिनॉल) उत्कलनांक कमी करतो आणि वाफेसह उडणारा (steam volatile) बनवतो." },
+      { en: "Intermolecular Hydrogen Bonding increases boiling point (e.g., H₂O > H₂S, Ethanol > Dimethyl ether)." },
+      { en: "Intramolecular Hydrogen Bonding occurs within the same molecule (e.g., o-nitrophenol, salicylaldehyde), lowering boiling point and making it steam volatile." },
     ],
     keyFormulasTable: [
       { name: "Steric Number", formula: "SN = (V + M - C + A) / 2", description: "Determines molecular hybridization state" },
@@ -68,29 +49,23 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming O2 is diamagnetic because it has 16 (an even number) of electrons.",
-        mistakeMr: "O2 मध्ये १६ इलेक्ट्रॉन्स (सम संख्या) असल्यामुळे तो प्रतिचुंबकीय आहे असे समजणे.",
-        correction: "According to MOT, O2 has 2 unpaired electrons in its degenerate anti-bonding π* orbitals, making it distinctly PARAMAGNETIC.",
-        correctionMr: "MOT नुसार O2 च्या π* कक्षकात २ अयुग्मित इलेक्ट्रॉन्स असतात, त्यामुळे तो अनुचुंबकीय (Paramagnetic) असतो.",
+        correction: "According to MOT, O2 has 2 unpaired electrons in its degenerate anti-bonding π* orbitals, making it distinctly PARAMAGNETIC."
       },
-    ],
+    ]
   },
 
   // 2. Organic Chemistry: Aldehydes, Ketones & Carboxylic Acids
   {
     id: "note_chem_aldehydes_ketones_acids",
     chapter: "Organic Chemistry: Aldehydes, Ketones & Carboxylic Acids",
-    chapterMr: "अल्डीहाइड्स, कीटोन्स आणि कार्बोक्झिलिक ऍसिड (Carbonyl Compounds)",
     subject: "Chemistry",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Named Reactions, Nucleophilic Addition & Carboxylic Acid Derivatives",
-    titleMr: "कार्बोनिल संयुगांच्या नामांकित प्रक्रिया, न्यूक्लियोफिलिक ऍडिशन व चाचण्या",
     summary: "Rosenmund, Stephen, Gatterman-Koch, Aldol Condensation, Cannizzaro Reaction, Clemmensen & Wolff-Kishner Reduction, Tollens' & Fehling's tests, and HVZ Reaction.",
-    summaryMr: "रोझेनमुंड, स्टीफन, अल्डॉल कंडेन्सेशन, कॅनिझारो प्रक्रिया, क्लेमेन्सन आणि वुल्फ-किशनर रिडक्शन, टॉलेन्स व फेलिंग चाचण्या आणि HVZ प्रक्रिया.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Preparation & Named Carbonyl Syntheses",
-        titleMr: "१. कार्बोनिल संयुगे निर्मिती व नामांकित प्रक्रिया",
         points: [
           "Rosenmund Reduction: Acyl chloride (R-COCl) + H₂ / Pd-BaSO₄ (poisoned with quinoline/S) => Aldehyde (R-CHO).",
           "Stephen Reaction: Nitrile (R-CN) + SnCl₂ / HCl => Imine hydrochloride => (H₃O⁺) => Aldehyde (R-CHO).",
@@ -98,18 +73,10 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Gatterman-Koch Reaction: Benzene + CO + HCl in presence of anhyd. AlCl₃ / CuCl => Benzaldehyde.",
           "Ozonolysis: Alkene + O₃ => Ozonide => (Zn / H₂O) => Aldehydes and/or Ketones.",
         ],
-        pointsMr: [
-          "रोझेनमुंड रिडक्शन: R-COCl + H₂ / Pd-BaSO₄ → R-CHO (अल्डीहाइड).",
-          "स्टीफन प्रक्रिया: R-CN + SnCl₂ / HCl → R-CHO.",
-          "इटार्ड प्रक्रिया: टॉल्विन + CrO₂Cl₂ → बेंझाल्डीहाइड.",
-          "गटरमन-कोच प्रक्रिया: बेंझिन + CO + HCl / AlCl₃ → बेंझाल्डीहाइड.",
-          "ओझोनोलिसिस: अल्कीन + O₃ / Zn-H₂O → अल्डीहाइड / कीटोन.",
-        ],
-        keyFormula: "R-COCl + H₂ --(Pd/BaSO₄)--> R-CHO | R-CN --(SnCl₂/HCl)--> R-CHO",
+        keyFormula: "R-COCl + H₂ --(Pd/BaSO₄)--> R-CHO | R-CN --(SnCl₂/HCl)--> R-CHO"
       },
       {
         title: "2. Nucleophilic Addition & Condensation Reactions",
-        titleMr: "२. न्यूक्लियोफिलिक ऍडिशन आणि कंडेन्सेशन प्रक्रिया",
         points: [
           "Reactivity order towards Nucleophilic Addition: HCHO > R-CHO > Ar-CHO > R-CO-R (due to steric hindrance and +I inductive effect of alkyl groups).",
           "Aldol Condensation: Requires α-hydrogen. 2 CH₃CHO + dil. NaOH => CH₃-CH(OH)-CH₂-CHO (Aldol) => (Heat, -H₂O) => CH₃-CH=CH-CHO (Crotonaldehyde).",
@@ -118,36 +85,23 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Wolff-Kishner Reduction: Carbonyl (>C=O) + NH₂-NH₂ (Hydrazine) / KOH, ethylene glycol (heat) => Alkane (>CH₂) + N₂.",
           "Haloform / Iodoform Test: Compounds with CH₃-C=O or CH₃-CH(OH)- group + I₂ / NaOH => Yellow precipitate of CHI₃ (Iodoform).",
         ],
-        pointsMr: [
-          "अल्डॉल कंडेन्सेशन: α-हायड्रोजन असणे आवश्यक (dil. NaOH).",
-          "कॅनिझारो प्रक्रिया: α-हायड्रोजन नसलेली संयुगे (HCHO, PhCHO) + ५०% conc. KOH → १ अल्कोहोल + १ ऍसिड सॉल्ट (Disproportionation).",
-          "क्लेमेन्सन रिडक्शन: >C=O + Zn-Hg / conc. HCl → >CH₂ (अल्केन).",
-          "वुल्फ-किशनर रिडक्शन: >C=O + NH₂NH₂ / KOH → >CH₂ + N₂.",
-          "आयोडोफॉर्म चाचणी (Iodoform): CH₃-CO- गट असणाऱ्या संयुगांसोबत I₂/NaOH मुळे पिवळा साका (CHI₃) मिळतो.",
-        ],
         keyFormula: "Aldol: 2 R-CH₂CHO --(dil NaOH)--> β-hydroxyaldehyde | CHI₃ (Yellow ppt)",
-        keyMnemonic: "Cannizzaro = 'CANNOT have alpha-H'. Clemmensen = Acidic (HCl), Wolff-Kishner = Basic (KOH).",
+        keyMnemonic: "Cannizzaro = 'CANNOT have alpha-H'. Clemmensen = Acidic (HCl), Wolff-Kishner = Basic (KOH)."
       },
       {
         title: "3. Carboxylic Acids & Hell-Volhard-Zelinsky (HVZ) Reaction",
-        titleMr: "३. कार्बोक्झिलिक ऍसिड आणि HVZ प्रक्रिया",
         points: [
           "Acidity of Carboxylic Acids: Electron Withdrawing Groups (-I, -M like -NO₂, -CN, -F, -Cl) INCREASE acidity by stabilizing conjugate carboxylate base (R-COO⁻).",
           "Acidity order: HCOOH > CH₃COOH > C₂H₅COOH. Trichloroacetic acid > Dichloroacetic acid > Monochloroacetic acid > Acetic acid.",
           "HVZ Reaction: R-CH₂-COOH + X₂ (Cl₂/Br₂) in presence of Red Phosphorus => α-halo carboxylic acid (R-CH(X)-COOH).",
           "Decarboxylation: R-COONa + Soda-lime (NaOH + CaO, 3:1 ratio, heat) => Alkane (R-H) + Na₂CO₃.",
         ],
-        pointsMr: [
-          "ऍसिडिटी: इलेक्ट्रॉन खेचणारे गट (-I प्रभाव) ऍसिडिटी वाढवतात. F-CH₂COOH > Cl-CH₂COOH > CH₃COOH.",
-          "HVZ प्रक्रिया: R-CH₂COOH + Br₂/Red P → R-CH(Br)COOH (α-ब्रोमो ऍसिड).",
-          "डीकार्बोक्सिलेशन: R-COONa + सोडा-लाइम (NaOH + CaO) + उष्णता → R-H (अल्केन) + Na₂CO₃.",
-        ],
-        keyFormula: "HVZ: R-CH₂COOH + X₂ / Red P --> R-CH(X)COOH | Decarboxylation: Soda-lime (3:1)",
+        keyFormula: "HVZ: R-CH₂COOH + X₂ / Red P --> R-CH(X)COOH | Decarboxylation: Soda-lime (3:1)"
       },
     ],
     quickRevisionPoints: [
-      { en: "Tollens' reagent [Ag(NH₃)₂]⁺ reduces with aldehydes to give Silver Mirror, but ketones DO NOT respond (except α-hydroxy ketones).", mr: "टॉलेन्स रिएजंट अल्डीहाइड्ससोबत चंदेरी आरसा (Silver Mirror) देतो, पण कीटोन्स ही चाचणी देत नाहीत." },
-      { en: "Fehling's solution (A: CuSO₄ + B: Rochelle salt) gives red cuprous oxide (Cu₂O) precipitate with aliphatic aldehydes; aromatic aldehydes do not react.", mr: "फेलिंग द्रावण एलिफॅटिक अल्डीहाइड्ससोबत लाल Cu₂O साका देते; एरोमॅटिक अल्डीहाइड्स (Benzaldehyde) ही चाचणी देत नाहीत." },
+      { en: "Tollens' reagent [Ag(NH₃)₂]⁺ reduces with aldehydes to give Silver Mirror, but ketones DO NOT respond (except α-hydroxy ketones)." },
+      { en: "Fehling's solution (A: CuSO₄ + B: Rochelle salt) gives red cuprous oxide (Cu₂O) precipitate with aliphatic aldehydes; aromatic aldehydes do not react." },
     ],
     keyFormulasTable: [
       { name: "Aldol Condensation", formula: "2 CH₃CHO --(OH⁻)--> CH₃CH=CHCHO + H₂O", description: "Enolization and nucleophilic addition of α-carbon" },
@@ -157,29 +111,23 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Expecting Benzaldehyde to undergo Aldol condensation or Fehling's test.",
-        mistakeMr: "बेंझाल्डीहाइड अल्डॉल किंवा फेलिंग चाचणी देईल अशी अपेक्षा करणे.",
-        correction: "Benzaldehyde has NO alpha-hydrogens (undergoes Cannizzaro instead) and is too weak to reduce Fehling's solution.",
-        correctionMr: "बेंझाल्डीहाइडमध्ये α-हायड्रोजन नसतो (त्यामुळे तो कॅनिझारो प्रक्रिया करतो) आणि तो फेलिंग चाचणी देत नाही.",
+        correction: "Benzaldehyde has NO alpha-hydrogens (undergoes Cannizzaro instead) and is too weak to reduce Fehling's solution."
       },
-    ],
+    ]
   },
 
   // 3. Solutions & Colligative Properties
   {
     id: "note_chem_solutions",
     chapter: "Solutions & Colligative Properties",
-    chapterMr: "द्रावणे आणि संलग्न गुणधर्म (Solutions)",
     subject: "Chemistry",
     exams: ["MHT_CET", "NEET", "JEE_MAIN"],
     title: "Solutions & Colligative Properties Complete Master Notes",
-    titleMr: "द्रावणे आणि संलग्न गुणधर्म संपूर्ण नोट्स",
     summary: "Raoult's Law, Ideal & Non-Ideal Solutions, Boiling Point Elevation, Freezing Point Depression, Osmotic Pressure, and van 't Hoff Factor (i).",
-    summaryMr: "राउल्टचा नियम, आदर्श व अनादर्श द्रावणे, उत्कलनांक उन्नयन, गोठणबिंदू अवनमन, परासरण दाब आणि व्हॅन 'ट हॉफ फॅक्टर (i).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Concentration Terms & Raoult's Law",
-        titleMr: "१. संहती एकके व राउल्टचा नियम",
         points: [
           "Molarity (M) = moles of solute / Volume of solution (L) [Temperature dependent].",
           "Molality (m) = moles of solute / Mass of solvent (kg) [Temperature INDEPENDENT].",
@@ -189,19 +137,10 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Positive Deviation: P_exp > P_calc, ΔH_mix > 0, ΔV_mix > 0, forms minimum boiling azeotrope (e.g., Ethanol + Acetone).",
           "Negative Deviation: P_exp < P_calc, ΔH_mix < 0, ΔV_mix < 0, forms maximum boiling azeotrope (e.g., Chloroform + Acetone, HNO₃ + H₂O).",
         ],
-        pointsMr: [
-          "मोलॅलिटी (m) = विद्राव्याचे मोल्स / विद्रावकाचे वजन (kg) [तापमानावर अवलंबून नसते].",
-          "हेन्रीचा नियम: p = K_H · x.",
-          "राउल्टचा नियम: P_total = P°_A x_A + P°_B x_B.",
-          "आदर्श द्रावण: ΔH_mix = ०, ΔV_mix = ० (उदा. बेंझिन + टॉल्विन).",
-          "धन विचलन (Positive): मिनिमम बॉइलिंग अ‍ॅझिओट्रोप (उदा. इथेनॉल + अ‍ॅसिटोन).",
-          "ऋण विचलन (Negative): मॅक्सिमम बॉइलिंग अ‍ॅझिओट्रोप (उदा. क्लोरोफॉर्म + अ‍ॅसिटोन).",
-        ],
-        keyFormula: "P_total = P°_A x_A + P°_B x_B | p = K_H · x",
+        keyFormula: "P_total = P°_A x_A + P°_B x_B | p = K_H · x"
       },
       {
         title: "2. The 4 Colligative Properties & van 't Hoff Factor",
-        titleMr: "२. चार संलग्न गुणधर्म व व्हॅन 'ट हॉफ फॅक्टर",
         points: [
           "1. Relative Lowering of Vapour Pressure (RLVP): (P° - P) / P° = i · x_solute = i · (n₂ / n₁).",
           "2. Elevation of Boiling Point: ΔT_b = T_b - T°_b = i · K_b · m (where K_b is molal boiling point elevation / ebullioscopic constant).",
@@ -210,20 +149,12 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "van 't Hoff factor for Dissociation: i = 1 + (n - 1) α, where n is number of ions produced per molecule and α is degree of dissociation.",
           "van 't Hoff factor for Association: i = 1 + (1/n - 1) α (for dimerization n=2: i = 1 - α/2).",
         ],
-        pointsMr: [
-          "१. बाष्पदाबातील सापेक्ष घट: (P° - P) / P° = i · x_solute.",
-          "२. उत्कलनांक वाढ (Elevation): ΔT_b = i · K_b · m.",
-          "३. गोठणबिंदू घट (Depression): ΔT_f = i · K_f · m.",
-          "४. परासरण दाब (Osmotic Pressure): π = i · C R T.",
-          "विघटनासाठी (Dissociation): i = १ + (n - १) α (उदा. NaCl साठी n=२, BaCl₂ साठी n=३).",
-          "संयुग्मनासाठी (Association - Dimers): i = १ - α/२ (उदा. बेंझिनमध्ये अ‍ॅसिटिक ऍसिड).",
-        ],
-        keyFormula: "ΔT_b = i K_b m | ΔT_f = i K_f m | π = i C R T | i = 1 + (n-1)α",
+        keyFormula: "ΔT_b = i K_b m | ΔT_f = i K_f m | π = i C R T | i = 1 + (n-1)α"
       },
     ],
     quickRevisionPoints: [
-      { en: "Colligative properties depend ONLY on the NUMBER of solute particles in solution, independent of their chemical nature.", mr: "संलग्न गुणधर्म हे केवळ विद्राव्य कणांच्या संख्येवर अवलंबून असतात, त्यांच्या रासायनिक स्वरूपावर नाही." },
-      { en: "Isotonic solutions have the SAME osmotic pressure (π₁ = π₂ => C₁ = C₂ at same temperature).", mr: "समपरासारी (Isotonic) द्रावणांचा परासरण दाब समान असतो (π₁ = π₂)." },
+      { en: "Colligative properties depend ONLY on the NUMBER of solute particles in solution, independent of their chemical nature." },
+      { en: "Isotonic solutions have the SAME osmotic pressure (π₁ = π₂ => C₁ = C₂ at same temperature)." },
     ],
     keyFormulasTable: [
       { name: "RLVP Formula", formula: "(P° - P)/P° = i (n₂/n₁)", description: "Relative lowering of solvent vapour pressure" },
@@ -234,29 +165,23 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Forgetting the van 't Hoff factor (i) for ionic electrolytes like NaCl, CaCl2, Al2(SO4)3 in colligative calculations.",
-        mistakeMr: "NaCl, CaCl2 सारख्या आयनिक पदार्थांसाठी 'i' चे मूल्य सूत्रात न घेणे.",
-        correction: "For 100% dissociated NaCl: i = 2; for CaCl2: i = 3; for Al2(SO4)3: i = 5.",
-        correctionMr: "NaCl साठी i=२, CaCl₂ साठी i=३, Al₂(SO₄)₃ साठी i=५ अनिवार्यपणे वापरा.",
+        correction: "For 100% dissociated NaCl: i = 2; for CaCl2: i = 3; for Al2(SO4)3: i = 5."
       },
-    ],
+    ]
   },
 
   // 4. Electrochemistry & Chemical Kinetics
   {
     id: "note_chem_kinetics_electro",
     chapter: "Electrochemistry & Chemical Kinetics",
-    chapterMr: "विद्युत रसायन आणि रासायनिक गतीशास्त्र (Electrochemistry & Kinetics)",
     subject: "Chemistry",
     exams: ["MHT_CET", "NEET", "JEE_MAIN"],
     title: "Nernst Equation, Kohlrausch Law, Rate Laws & Arrhenius Equation",
-    titleMr: "विद्युत रसायन आणि रासायनिक गतीशास्त्र रिव्हिजन नोट्स",
     summary: "Nernst Equation, Gibbs free energy & EMF, Kohlrausch's Law, Faraday's Laws, Integrated Rate Equations (Zero & First Order), Half-Life, and Arrhenius Activation Energy.",
-    summaryMr: "नर्न्स्ट समीकरण, गिब्स ऊर्जा व ईएमएफ, कोह्लरॉशचा नियम, फॅराडेचे नियम, शून्य व प्रथम श्रेणी प्रक्रिया, अर्ध-आयुष्य आणि अर्रेनियस सक्रियीकरण ऊर्जा.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Electrochemistry & Nernst Equation",
-        titleMr: "१. विद्युत रसायन व नर्न्स्ट समीकरण",
         points: [
           "Nernst Equation at 298 K: E_cell = E°_cell - (0.0591 / n) log10 Q.",
           "Equilibrium Constant relation: E°_cell = (0.0591 / n) log10 K_eq.",
@@ -266,19 +191,10 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Degree of dissociation of weak electrolyte: α = Λ_m / Λ°_m. Dissociation constant: K_a = C α² / (1 - α).",
           "Faraday's 1st Law: Mass deposited W = Z · I · t = (M / nF) · I · t.",
         ],
-        pointsMr: [
-          "नर्न्स्ट समीकरण: E_cell = E°_cell - (०.०५९१ / n) log₁₀ Q.",
-          "गिब्स ऊर्जा: ΔG° = - n F E°_cell.",
-          "मोलार वाहकता: Λ_m = (κ × १०००) / M.",
-          "कोह्लरॉशचा नियम: Λ°_m = ν₊ λ°₊ + ν₋ λ°₋.",
-          "विघटनाचे प्रमाण: α = Λ_m / Λ°_m.",
-          "फॅराडेचा पहिला नियम: W = Z I t = (M / nF) I t.",
-        ],
-        keyFormula: "E_cell = E° - (0.0591/n) log Q | ΔG° = -nFE° | W = (M/nF)It",
+        keyFormula: "E_cell = E° - (0.0591/n) log Q | ΔG° = -nFE° | W = (M/nF)It"
       },
       {
         title: "2. Chemical Kinetics, Rate Laws & Arrhenius Equation",
-        titleMr: "२. रासायनिक गतीशास्त्र आणि अर्रेनियस समीकरण",
         points: [
           "Rate of Reaction: Rate = - (1/a) d[A]/dt = + (1/b) d[B]/dt.",
           "Units of Rate Constant (k): (mol/L)^(1-n) · s⁻¹ (where n is reaction order). Zero order: mol L⁻¹ s⁻¹; 1st order: s⁻¹; 2nd order: L mol⁻¹ s⁻¹.",
@@ -287,19 +203,12 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Time for 99.9% completion of 1st order reaction: t_99.9% = 10 × t_1/2.",
           "Arrhenius Equation: k = A e^(-E_a / RT) => log10(k₂ / k₁) = (E_a / 2.303 R) [ (T₂ - T₁) / (T₁ T₂) ].",
         ],
-        pointsMr: [
-          "दर स्थिरांकाचे (k) एकक: (mol/L)^(1-n) · s⁻¹.",
-          "शून्य श्रेणी: t_1/2 = [A]₀ / (2k) (सुरुवातीच्या संहतीवर अवलंबून).",
-          "प्रथम श्रेणी: k = (२.३०३ / t) log₁₀ ([A]₀ / [A]_t).",
-          "प्रथम श्रेणी अर्ध आयुष्य: t_1/2 = ०.६९३ / k (सुरुवातीच्या संहतीवर अजिबात अवलंबून नसते).",
-          "अर्रेनियस समीकरण: log₁₀(k₂/k₁) = (E_a / २.३०३ R) [ (T₂ - T₁) / (T₁ T₂) ].",
-        ],
-        keyFormula: "k = (2.303/t) log([A]₀/[A]) | t_1/2 = 0.693/k | log(k₂/k₁) = (E_a/2.303R)(ΔT/T₁T₂)",
+        keyFormula: "k = (2.303/t) log([A]₀/[A]) | t_1/2 = 0.693/k | log(k₂/k₁) = (E_a/2.303R)(ΔT/T₁T₂)"
       },
     ],
     quickRevisionPoints: [
-      { en: "Molecularity is theoretical, always an integer (1, 2, 3), and never zero or fractional; Order of reaction is experimental and CAN be zero, fractional, or negative.", mr: "रेण्वीयता (Molecularity) नेहमी पूर्णांक असते आणि शून्य असू शकत नाही; प्रक्रियेची श्रेणी (Order) प्रयोगाने ठरते व ती शून्य किंवा अपूर्णांक असू शकते." },
-      { en: "A catalyst speeds up reaction by providing an alternate pathway with LOWER activation energy (E_a), but DOES NOT change ΔH, ΔG, or equilibrium constant K_eq.", mr: "उत्प्रेरक (Catalyst) सक्रियीकरण ऊर्जा (E_a) कमी करून वेग वाढवतो, परंतु ΔH, ΔG किंवा समतोल स्थिरांक K बदलत नाही." },
+      { en: "Molecularity is theoretical, always an integer (1, 2, 3), and never zero or fractional; Order of reaction is experimental and CAN be zero, fractional, or negative." },
+      { en: "A catalyst speeds up reaction by providing an alternate pathway with LOWER activation energy (E_a), but DOES NOT change ΔH, ΔG, or equilibrium constant K_eq." },
     ],
     keyFormulasTable: [
       { name: "Nernst Equation", formula: "E_cell = E° - (0.0591/n) log Q", description: "Cell EMF under non-standard conditions at 298 K" },
@@ -310,46 +219,33 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing zero order half-life dependence with first order half-life.",
-        mistakeMr: "शून्य श्रेणी आणि प्रथम श्रेणीच्या अर्ध-आयुष्य सूत्रात गल्लत करणे.",
-        correction: "For zero order, doubling [A]0 DOUBLES t_1/2. For first order, changing [A]0 has ZERO effect on t_1/2.",
-        correctionMr: "शून्य श्रेणीत [A]० दुप्पट केल्यास t_1/2 दुप्पट होते; प्रथम श्रेणीत [A]० चा t_1/2 वर कोणताही परिणाम होत नाही.",
+        correction: "For zero order, doubling [A]0 DOUBLES t_1/2. For first order, changing [A]0 has ZERO effect on t_1/2."
       },
-    ],
+    ]
   },
 
   // 5. p-Block & d & f-Block Elements
   {
     id: "note_chem_inorganic_blocks",
     chapter: "p-Block & d & f-Block Elements",
-    chapterMr: "p-ब्लॉक, d आणि f-ब्लॉक मूलद्रव्ये (Inorganic Blocks)",
     subject: "Chemistry",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "p-Block, Transition Metals, Lanthanoid Contraction & Color Notes",
-    titleMr: "p-ब्लॉक, d व f-ब्लॉक मूलद्रव्ये, लॅन्थेनाइड आकुंचन व रंग निर्मिती",
     summary: "Oxoacids of Phosphorus & Sulphur, Interhalogen compounds, Noble gases, Transition metal properties, Magnetic moments (spin-only), Lanthanoid contraction, and KMnO₄ / K₂Cr₂O₇ reactions.",
-    summaryMr: "फॉस्फरस व सल्फरची ऑक्सो-ऍसिड्स, आंतरहॅलोजन संयुगे, नोबेल वायू, d-ब्लॉक मूलद्रव्यांचे गुणधर्म, स्पिन-ओन्ली चुंबकीय आघूर्ण, लॅन्थेनाइड आकुंचन आणि KMnO₄ / K₂Cr₂O₇ प्रक्रिया.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. p-Block Elements & Oxoacids",
-        titleMr: "१. p-ब्लॉक मूलद्रव्ये आणि ऑक्सो-ऍसिड्स",
         points: [
           "Group 15 (Nitrogen family): Haber Process for NH₃ (Fe catalyst, Mo promoter). Ostwald process for HNO₃. Oxoacids of Phosphorus: H₃PO₂ (monobasic, strong reducing agent with 2 P-H bonds), H₃PO₃ (dibasic, 1 P-H bond), H₃PO₄ (tribasic, 0 P-H bonds).",
           "Group 16 (Chalcogens): Contact process for H₂SO₄ (V₂O₅ catalyst). Anomalous behavior of Oxygen due to small size and high electronegativity. Oxoacids of Sulphur: H₂SO₄, H₂S₂O₇ (Oleum), H₂S₂O₈ (Marshall's acid with peroxo linkage -O-O-).",
           "Group 17 (Halogens): Oxidizing power order: F₂ > Cl₂ > Br₂ > I₂. Bleaching powder: CaOCl₂. Interhalogens (XX'ₙ): More reactive than pure halogens (except F₂) due to weaker X-X' bond.",
           "Group 18 (Noble Gases): XeF₂ (Linear), XeF₄ (Square Planar), XeF₆ (Distorted Octahedral), XeO₃ (Pyramidal), XeOF₄ (Square Pyramidal).",
         ],
-        pointsMr: [
-          "फॉस्फरसची ऑक्सो-ऍसिड्स: H₃PO₂ (एक-अम्लीय, २ P-H बंधांमुळे तीव्र रिड्युसिंग एजंट), H₃PO₃ (द्वि-अम्लीय), H₃PO₄ (त्रि-अम्लीय).",
-          "सल्फरचे ऑक्सो-ऍसिड्स: H₂S₂O₇ (ओलियम), H₂S₂O₈ (मार्शल ऍसिड - पेरोक्सी लिंकेज).",
-          "हॅलोजन ऑक्सिडायझिंग क्षमता: F₂ > Cl₂ > Br₂ > I₂.",
-          "झेनॉनची संयुगे: XeF₂ (रेषीय), XeF₄ (समतल चौरस), XeO₃ (पिरॅमिडल).",
-        ],
-        keyFormula: "Spin-only Magnetic Moment: μ = √[ n (n + 2) ] BM",
+        keyFormula: "Spin-only Magnetic Moment: μ = √[ n (n + 2) ] BM"
       },
       {
         title: "2. d-Block & f-Block Elements",
-        titleMr: "२. d-ब्लॉक आणि f-ब्लॉक मूलद्रव्ये",
         points: [
           "General Electronic Configuration: d-block: (n-1)d¹⁻¹⁰ ns¹⁻²; f-block: (n-2)f¹⁻¹⁴ (n-1)d⁰⁻¹ ns².",
           "Variable Oxidation States: Highest oxidation state in 3d series is Manganese (+7 in KMnO₄) and in transition elements is Osmium/Ruthenium (+8 in OsO₄).",
@@ -359,19 +255,12 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Potassium Dichromate (K₂Cr₂O₇): Orange Cr₂O₇²⁻ in acidic medium converts to yellow CrO₄²⁻ in alkaline medium: Cr₂O₇²⁻ + 2OH⁻ ⇌ 2CrO₄²⁻ + H₂O.",
           "Potassium Permanganate (KMnO₄): Intense purple color due to Ligand-to-Metal Charge Transfer (LMCT), NOT d-d transition (Mn is in +7 state, d⁰).",
         ],
-        pointsMr: [
-          "कमाल ऑक्सिडेशन स्टेट: 3d सिरीजमध्ये मॅंगनीज (+7, KMnO₄).",
-          "रंग निर्मिती: d-d संक्रमणामुळे. d⁰ (Sc³⁺) आणि d¹⁰ (Zn²⁺) आयन्स रंगहीन (Colorless) असतात.",
-          "स्पिन-ओन्ली मॅग्नेटिक मोमेंट: μ = √[ n (n + 2) ] BM (n = अयुग्मित इलेक्ट्रॉन्स).",
-          "लॅन्थेनाइड आकुंचन (Lanthanoid Contraction): 4f इलेक्ट्रॉन्सच्या कमकुवत शील्डिंगमुळे अणू आकार घटतो; यामुळे Zr आणि Hf चा आकार तंतोतंत समान असतो.",
-          "KMnO₄ चा जांभळा रंग चार्ज ट्रान्सफर (LMCT) मुळे असतो.",
-        ],
-        keyFormula: "μ = √[ n(n+2) ] BM | Cr₂O₇²⁻ (Orange, Acidic) ⇌ 2CrO₄²⁻ (Yellow, Basic)",
+        keyFormula: "μ = √[ n(n+2) ] BM | Cr₂O₇²⁻ (Orange, Acidic) ⇌ 2CrO₄²⁻ (Yellow, Basic)"
       },
     ],
     quickRevisionPoints: [
-      { en: "Lanthanoid Contraction causes pairs like Zr/Hf, Nb/Ta, and Mo/W to have nearly identical atomic radii and similar chemical properties.", mr: "लॅन्थेनाइड आकुंचनामुळे Zr/Hf आणि Nb/Ta चे आकार जवळपास एकसारखेच असतात." },
-      { en: "Acidic KMnO₄ oxidizes Fe²⁺ to Fe³⁺, Oxalate (C₂O₄²⁻) to CO₂, and Iodide (I⁻) to I₂.", mr: "आम्लयुक्त KMnO₄ हे Fe²⁺ चे Fe³⁺ मध्ये आणि ऑक्झलेटचे CO₂ मध्ये रूपांतर करते." },
+      { en: "Lanthanoid Contraction causes pairs like Zr/Hf, Nb/Ta, and Mo/W to have nearly identical atomic radii and similar chemical properties." },
+      { en: "Acidic KMnO₄ oxidizes Fe²⁺ to Fe³⁺, Oxalate (C₂O₄²⁻) to CO₂, and Iodide (I⁻) to I₂." },
     ],
     keyFormulasTable: [
       { name: "Spin-only Formula", formula: "μ = √[ n (n + 2) ] BM", description: "Magnetic moment from number of unpaired electrons (n)" },
@@ -381,29 +270,23 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Believing KMnO4 color is due to d-d transition.",
-        mistakeMr: "KMnO4 चा जांभळा रंग d-d संक्रमणामुळे आहे असे समजणे.",
-        correction: "Mn in KMnO4 is Mn⁷⁺ which has d⁰ configuration (no d-electrons!). Its intense color is due to Charge Transfer from Oxygen to Manganese.",
-        correctionMr: "KMnO4 मध्ये Mn⁷⁺ (d⁰) असल्याने d-इलेक्ट्रॉन नसतात; जांभळा रंग हा ऑक्सिजनकडून मॅंगनीजकडे होणाऱ्या चार्ज ट्रान्सफरमुळे (LMCT) असतो.",
+        correction: "Mn in KMnO4 is Mn⁷⁺ which has d⁰ configuration (no d-electrons!). Its intense color is due to Charge Transfer from Oxygen to Manganese."
       },
-    ],
+    ]
   },
 
   // 6. Thermodynamics & Chemical Equilibrium
   {
     id: "note_chem_thermo_equilibrium",
     chapter: "Thermodynamics & Equilibrium",
-    chapterMr: "रासायनिक समतोल आणि उष्मागतिकी (Equilibrium & Thermo)",
     subject: "Chemistry",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Enthalpy, Entropy, Gibbs Energy, Le Chatelier's Principle & pH Notes",
-    titleMr: "एन्थॅल्पी, एन्ट्रॉपी, गिब्स ऊर्जा, ले शॅटेलियरचा नियम व pH सूत्रे",
     summary: "Hess's Law, Enthalpy of reaction, Entropy change (ΔS), Gibbs spontaneity criterion (ΔG = ΔH - TΔS), Equilibrium constants (Kp & Kc), Le Chatelier's Principle, and Buffer solutions.",
-    summaryMr: "हेसचा नियम, एन्थॅल्पी, एन्ट्रॉपी बदल (ΔS), गिब्स उत्स्फूर्तता निकष (ΔG), समतोल स्थिरांक (Kp व Kc), ले शॅटेलियरचा नियम, pH आणि बफर द्रावणे.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Chemical Thermodynamics & Spontaneity",
-        titleMr: "१. रासायनिक उष्मागतिकी व उत्स्फूर्तता",
         points: [
           "First Law of Chemical Thermodynamics: ΔU = q + w (IUPAC sign convention: w = - P_ext ΔV).",
           "Enthalpy: H = U + P V => ΔH = ΔU + Δn_g R T (where Δn_g = moles of gaseous products - moles of gaseous reactants).",
@@ -413,18 +296,10 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Spontaneity Criteria: If ΔG < 0 (Spontaneous / Exergonic); If ΔG = 0 (At Equilibrium); If ΔG > 0 (Non-spontaneous / Endergonic).",
           "Temperature dependence of Spontaneity: When ΔH < 0 and ΔS > 0 => Spontaneous at ALL temperatures.",
         ],
-        pointsMr: [
-          "पहिला नियम: ΔU = q + w (येथे w = - P ΔV).",
-          "एन्थॅल्पी संबंध: ΔH = ΔU + Δn_g R T.",
-          "हेसचा नियम: रासायनिक प्रक्रियेतील एकूण एन्थॅल्पी बदल एका टप्प्यात किंवा अनेक टप्प्यांत सारखाच राहतो.",
-          "एन्ट्रॉपी (S): अव्यवस्थेचे माप. ΔS = q_rev / T.",
-          "गिब्स ऊर्जा: ΔG = ΔH - T ΔS. (ΔG < ० असल्यास प्रक्रिया उत्स्फूर्त होते).",
-        ],
-        keyFormula: "ΔH = ΔU + Δn_g R T | ΔG = ΔH - T ΔS | ΔG° = - 2.303 R T log K_eq",
+        keyFormula: "ΔH = ΔU + Δn_g R T | ΔG = ΔH - T ΔS | ΔG° = - 2.303 R T log K_eq"
       },
       {
         title: "2. Chemical & Ionic Equilibrium",
-        titleMr: "२. रासायनिक व आयनिक समतोल",
         points: [
           "Relation between K_p and K_c: K_p = K_c (R T)^(Δn_g).",
           "Le Chatelier's Principle: If a stress (change in concentration, pressure, temperature) is applied to a system at equilibrium, the equilibrium shifts in the direction that tends to counteract the change.",
@@ -435,19 +310,12 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Henderson-Hasselbalch Equation for Acidic Buffer: pH = pK_a + log10([Salt] / [Acid]).",
           "Solubility Product (K_sp): For salt A_x B_y ⇌ x A^(y+) + y B^(x-): K_sp = x^x · y^y · S^(x+y).",
         ],
-        pointsMr: [
-          "Kp व Kc मधील संबंध: K_p = K_c (R T)^(Δn_g).",
-          "ले शॅटेलियरचा नियम: समतोलावर तापमान, दाब किंवा संहती बदलल्यास प्रणाली त्या बदलाचा विरोध करणाऱ्या दिशेने सरकते.",
-          "ऑस्टवाल्डचा नियम: [H⁺] = √(K_a · C) आणि α = √(K_a / C).",
-          "हेंडरसन समीकरण (बफर द्रावण): pH = pK_a + log₁₀([Salt] / [Acid]).",
-          "विद्राव्यता गुणाकार (K_sp): उदा. AgCl साठी K_sp = S², BaCl₂ साठी K_sp = ४ S³.",
-        ],
-        keyFormula: "K_p = K_c (RT)^(Δn_g) | pH = pK_a + log([Salt]/[Acid]) | K_sp = x^x y^y S^(x+y)",
+        keyFormula: "K_p = K_c (RT)^(Δn_g) | pH = pK_a + log([Salt]/[Acid]) | K_sp = x^x y^y S^(x+y)"
       },
     ],
     quickRevisionPoints: [
-      { en: "Adding an inert gas at CONSTANT VOLUME has NO effect on equilibrium; adding at CONSTANT PRESSURE shifts towards greater number of gas moles.", mr: "स्थिर आकारमानावर (Constant Volume) निष्क्रिय वायू टाकल्यास समतोलावर कोणताही परिणाम होत नाही." },
-      { en: "Water ionic product K_w = 1.0 × 10⁻¹⁴ at 25°C; Kw increases with temperature because auto-ionization of water is endothermic.", mr: "पाण्याचा आयनिक गुणाकार (Kw) तापमान वाढल्यास वाढतो कारण पाण्याचे आयनीकरण उष्णताशोषक असते." },
+      { en: "Adding an inert gas at CONSTANT VOLUME has NO effect on equilibrium; adding at CONSTANT PRESSURE shifts towards greater number of gas moles." },
+      { en: "Water ionic product K_w = 1.0 × 10⁻¹⁴ at 25°C; Kw increases with temperature because auto-ionization of water is endothermic." },
     ],
     keyFormulasTable: [
       { name: "Gibbs-Helmholtz", formula: "ΔG = ΔH - T ΔS", description: "Fundamental thermodynamic criterion of spontaneity" },
@@ -458,45 +326,33 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Calculating Δn_g by including solid or liquid phases.",
-        mistakeMr: "Δn_g काढताना घन (solid) किंवा द्रव (liquid) पदार्थांचे मोल्स मोजणे.",
-        correction: "Δn_g includes ONLY stoichiometric coefficients of GASEOUS products and reactants: Δn_g = Σ n_g(products) - Σ n_g(reactants).",
-        correctionMr: "Δn_g मध्ये केवळ वायू स्वरूपातील (gaseous) घटकांचेच मोल्स मोजावे.",
+        correction: "Δn_g includes ONLY stoichiometric coefficients of GASEOUS products and reactants: Δn_g = Σ n_g(products) - Σ n_g(reactants)."
       },
-    ],
+    ]
   },
 
   // 7. Coordination Compounds
   {
     id: "note_chem_coordination_compounds",
     chapter: "Coordination Compounds",
-    chapterMr: "समन्वय संयुगे (Coordination Compounds)",
     subject: "Chemistry",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "IUPAC Nomenclature, Werner's Theory, VBT, CFT & Isomerism Notes",
-    titleMr: "समन्वय संयुगे: IUPAC नामकरण, व्हर्नर सिद्धांत, VBT व क्रिस्टल फील्ड सिद्धांत",
     summary: "Werner's Primary & Secondary valencies, IUPAC naming rules, Structural & Stereoisomerism, Valence Bond Theory (Inner vs Outer orbital complexes), Crystal Field Splitting (Δ_o & Δ_t), and Synergic bonding.",
-    summaryMr: "व्हर्नरचे प्राथमिक व दुय्यम संयुजा, IUPAC नामकरण, समघटकता (Isomerism), संयुजा बंध सिद्धांत (VBT), क्रिस्टल फील्ड सिद्धांत (CFT - Δ_o व Δ_t) आणि मेटल कार्बोनिल्स.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Werner's Theory & IUPAC Nomenclature",
-        titleMr: "१. व्हर्नरचा सिद्धांत आणि IUPAC नामकरण",
         points: [
           "Werner's Theory: Primary Valency is ionizable and corresponds to Oxidation State; Secondary Valency is non-ionizable, directional, and corresponds to Coordination Number.",
           "Coordination Number (CN): Total number of ligand donor atoms directly bonded to central metal atom (e.g., [Co(en)₃]³⁺ has CN = 6 because 'en' is bidentate).",
           "IUPAC Naming Order: Cation named first, then Anion. Ligands listed alphabetically before metal name. Anionic ligands end in '-o' (e.g., chlorido, oxalato), neutral ligands: aqua (H₂O), ammine (NH₃), carbonyl (CO).",
           "If coordination sphere is an anion, metal name ends in '-ate' (e.g., ferrate, cuprate, platinate) with oxidation number in Roman numerals in parentheses.",
         ],
-        pointsMr: [
-          "व्हर्नरचा सिद्धांत: प्राथमिक संयुजा आयनीकरणक्षम (Oxidation state) असते; दुय्यम संयुजा गैर-आयनीकरणक्षम (Coordination number) असते.",
-          "कोऑर्डिनेशन नंबर: मध्यवर्ती धातूशी जोडलेल्या डोनर अणूंची संख्या (उदा. [Co(en)₃]³⁺ चा CN = ६ कारण 'en' द्विदंती आहे).",
-          "IUPAC नियम: प्रथम कॅटायन, नंतर अ‍ॅनायन. लिगंड्स इंग्रजी वर्णक्रमाने. अ‍ॅनायनिक कॉम्प्लेक्स असल्यास धातूच्या शेवटी '-ate' (उदा. फेरेट, क्युप्रेट) लागते.",
-        ],
-        keyFormula: "Coordination Number = Number of Ligands × Denticity",
+        keyFormula: "Coordination Number = Number of Ligands × Denticity"
       },
       {
         title: "2. Valence Bond Theory (VBT) & Crystal Field Theory (CFT)",
-        titleMr: "२. संयुजा बंध (VBT) आणि क्रिस्टल फील्ड सिद्धांत (CFT)",
         points: [
           "Spectrochemical Series (Ligand field strength): I⁻ < Br⁻ < S²⁻ < Cl⁻ < F⁻ < OH⁻ < C₂O₄²⁻ < H₂O < NCS⁻ < EDTA⁴⁻ < NH₃ < en < CN⁻ < CO.",
           "Strong Field Ligands (e.g., CN⁻, CO, en, NH₃): Cause pairing of d-electrons against Hund's rule => form Low Spin / Inner Orbital Complexes (d²sp³).",
@@ -505,21 +361,13 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Tetrahedral CFT Splitting: Inverted splitting without 'g' subscript: lower e (-0.6 Δ_t) and higher t₂ (+0.4 Δ_t). Relation: Δ_t = (4/9) Δ_o.",
           "Synergic Bonding in Metal Carbonyls [M(CO)ₙ]: Metal-carbon bond strengthens due to σ-bond donation (CO -> M) AND π-backbonding donation (filled d-orbital of M -> empty π* orbital of CO).",
         ],
-        pointsMr: [
-          "स्पेक्ट्रोकेमिकल सिरीज: I⁻ < Cl⁻ < F⁻ < H₂O < NH₃ < en < CN⁻ < CO (CO सर्वात प्रबळ लिगंड).",
-          "प्रबळ लिगंड (Strong Field): इलेक्ट्रॉन्सची जोडी बनवतात (Low Spin, d²sp³).",
-          "कमकुवत लिगंड (Weak Field): जोडी बनवत नाहीत (High Spin, sp³d²).",
-          "ऑक्टाहेड्रल स्प्लिटिंग: खाली t₂g (-०.४ Δ_o) आणि वर eg (+०.६ Δ_o).",
-          "टेट्राहेड्रल स्प्लिटिंग: Δ_t = (४/९) Δ_o (नेहमी हाय-स्पिन कॉम्प्लेक्स).",
-          "सिनर्जिक बॉण्डिंग: मेटल कार्बोनिल्समध्ये बॅक-बॉण्डिंगमुळे C-O बंध कमकुवत व M-C बंध मजबूत होतो.",
-        ],
         keyFormula: "Δ_t = (4/9) Δ_o | CFSE_oct = [ -0.4 n(t₂g) + 0.6 n(eg) ] Δ_o + nP",
-        keyMnemonic: "Ligand strength: Halogens (weakest) < Oxygen donors < Nitrogen donors < Carbon donors (CN, CO strongest).",
+        keyMnemonic: "Ligand strength: Halogens (weakest) < Oxygen donors < Nitrogen donors < Carbon donors (CN, CO strongest)."
       },
     ],
     quickRevisionPoints: [
-      { en: "Geometrical Isomerism: [Ma₄b₂] and [Ma₃b₃] show cis-trans and fac-mer (facial-meridional) isomerism respectively.", mr: "भौमितिक समघटकता: [Ma₄b₂] सिस-ट्रान्स दाखवतो; [Ma₃b₃] फॅक-मेर (fac-mer) समघटकता दाखवतो." },
-      { en: "Optical Isomerism: Cis-[Co(en)₂Cl₂]⁺ is chiral and optically active (resolvable into d and l isomers); Trans-[Co(en)₂Cl₂]⁺ has a plane of symmetry and is optically inactive.", mr: "ऑप्टिकल समघटकता: Cis-[Co(en)₂Cl₂]⁺ हा प्रकाशक्रियाशील असतो; Trans प्रकारात सममिती प्रतल असल्याने तो अक्रियाशील असतो." },
+      { en: "Geometrical Isomerism: [Ma₄b₂] and [Ma₃b₃] show cis-trans and fac-mer (facial-meridional) isomerism respectively." },
+      { en: "Optical Isomerism: Cis-[Co(en)₂Cl₂]⁺ is chiral and optically active (resolvable into d and l isomers); Trans-[Co(en)₂Cl₂]⁺ has a plane of symmetry and is optically inactive." },
     ],
     keyFormulasTable: [
       { name: "CFT Tetrahedral vs Octahedral", formula: "Δ_t = (4/9) Δ_o", description: "Relation between tetrahedral and octahedral crystal field splitting" },
@@ -529,29 +377,23 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing Denticity with Coordination Number.",
-        mistakeMr: "डेंटिसिटी आणि कोऑर्डिनेशन नंबर एकच समजणे.",
-        correction: "Denticity is the number of donor atoms PER ligand (e.g. EDTA has denticity 6). Coordination number is total bonds to the metal.",
-        correctionMr: "डेंटिसिटी म्हणजे एका लिगंडमधील डोनर अणूंची संख्या (EDTA = ६), तर कोऑर्डिनेशन नंबर म्हणजे धातूशी एकूण जोडलेले बंध.",
+        correction: "Denticity is the number of donor atoms PER ligand (e.g. EDTA has denticity 6). Coordination number is total bonds to the metal."
       },
-    ],
+    ]
   },
 
   // 6. Aldehydes, Ketones & Carboxylic Acids
   {
     id: "note_chem_aldehydes_ketones_carboxylic",
     chapter: "Aldehydes, Ketones & Carboxylic Acids",
-    chapterMr: "अल्डिहाइड्स, कीटोन्स आणि कार्बोक्झिलिक ॲसिड्स (Organic Chemistry)",
     subject: "Chemistry",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Aldol, Cannizzaro, Nucleophilic Addition, Tollens/Fehling & HVZ Reaction Notes",
-    titleMr: "अल्डॉल संघनन, कॅनिझारो, न्यूक्लियोफिलिक ॲडिशन, टॉलेन्स टेस्ट व HVZ अभिक्रिया",
     summary: "Carbonyl chemistry, Nucleophilic addition reactivity order, Aldol & Cross-Aldol condensation, Cannizzaro reaction, Clemmensen & Wolff-Kishner reductions, Iodoform test, Tollens/Fehling tests, and Carboxylic acid acidity order.",
-    summaryMr: "कार्बोनिल संयुगांची अभिक्रियाशीलता, अल्डॉल संघनन (α-H सह), कॅनिझारो अभिक्रिया (α-H नसताना), क्लेमेन्सन व वुल्फ-किश्नर अपचयन, आयोडोफॉर्म टेस्ट, आणि कार्बोक्झिलिक ॲसिड आम्लधर्मीयता क्रम.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Carbonyl Reactivity & Important Named Reactions",
-        titleMr: "१. कार्बोनिल अभिक्रियाशीलता व महत्त्वाच्या नेम रिॲक्शन्स",
         points: [
           "Reactivity towards Nucleophilic Addition: HCHO > RCHO > ArCHO > R-CO-R > Ar-CO-Ar (Steric crowding and +I effect decrease reactivity).",
           "Aldol Condensation: Aldehydes/Ketones having at least one α-hydrogen in presence of dilute base (NaOH/Ba(OH)₂) -> β-hydroxy aldehyde/ketone -> heat -> α,β-unsaturated carbonyl.",
@@ -562,19 +404,11 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Rosenmund Reduction: Acyl chloride (RCOCl) + H₂ / Pd-BaSO₄ (poisoned with quinoline/S) -> Aldehyde (RCHO).",
           "Stephen Reaction: Nitrile (R-C≡N) + SnCl₂/HCl -> Imine hydrochloride -> H₃O⁺ -> RCHO.",
         ],
-        pointsMr: [
-          "न्यूक्लियोफिलिक ॲडिशन अभिक्रियाशीलता: फॉर्मल्डिहाइड (HCHO) > ॲसिटाल्डिहाइड > ॲसिटोन (+I इफेक्ट आणि अडथळ्यामुळे कीटोन कमी सक्रिय).",
-          "अल्डॉल संघनन (Aldol): α-हायड्रोजन असणाऱ्या कार्बोनिलमध्ये तनु NaOH टाकल्यास घडते -> α,β-असंतृप्त अल्डिहाइड/कीटोन मिळतो.",
-          "कॅनिझारो अभिक्रिया: α-हायड्रोजन नसणाऱ्या (HCHO, PhCHO) अल्डिहाइडमध्ये ५०% NaOH टाकल्यास एक रेणू ऑक्सिडीकृत (मिठाचा क्षार) व दुसरा अपचयित (अल्कोहोल) बनतो.",
-          "क्लेमेन्सन अपचयन: Zn-Hg + conc. HCl वापरून >C=O चे -CH₂- मध्ये रूपांतर होते.",
-          "वुल्फ-किश्नर अपचयन: हायड्राझिन (NH₂-NH₂) + KOH वापरून >C=O चे -CH₂- मध्ये रूपांतर होते.",
-        ],
         keyFormula: "HCHO + 50% NaOH -> HCOONa + CH₃OH (Cannizzaro) | >C=O + Zn-Hg/HCl -> -CH₂-",
-        keyMnemonic: "Aldol needs ALPHA-H; Cannizzaro CANNOT have alpha-H.",
+        keyMnemonic: "Aldol needs ALPHA-H; Cannizzaro CANNOT have alpha-H."
       },
       {
         title: "2. Tests of Distinction & Carboxylic Acid Acidity",
-        titleMr: "२. रासायनिक चाचण्या आणि कार्बोक्झिलिक ॲसिड आम्लधर्मीयता",
         points: [
           "Tollens' Test (Silver Mirror Test): Aldehydes (aliphatic & aromatic) reduce ammoniacal AgNO₃ to Ag mirror. Ketones do NOT give Tollens test (except α-hydroxy ketones).",
           "Fehling's Test: Aliphatic aldehydes reduce alkaline CuSO₄ (Fehling A + B) to red precipitate of Cu₂O. Aromatic aldehydes (PhCHO) do NOT give Fehling test.",
@@ -583,19 +417,12 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Acidity Order: CF₃COOH > CCl₃COOH > CHCl₂COOH > CH₂ClCOOH > HCOOH > PhCOOH > CH₃COOH.",
           "Hell-Volhard-Zelinsky (HVZ) Reaction: Carboxylic acid with α-H + X₂ (Cl₂/Br₂) in presence of Red Phosphorus -> α-halo carboxylic acid.",
         ],
-        pointsMr: [
-          "टॉलेन्स टेस्ट (सिल्व्हर मिरर): सर्व अल्डिहाइड्स सिल्व्हर मिरर देतात; कीटोन्स देत नाहीत.",
-          "फेलिंग टेस्ट: केवळ एलिफॅटिक अल्डिहाइड्स तांबडा अवक्षेप (Cu₂O) देतात (बेंझाल्डिहाइड फेलिंग देत नाही).",
-          "आयोडोफॉर्म टेस्ट: ज्यांच्यात CH₃-CO- किंवा CH₃-CH(OH)- गट असतो ते I₂/NaOH सोबत पिवळा CHI₃ अवक्षेप देतात.",
-          "आम्लधर्मीयता क्रम: CF₃COOH > CCl₃COOH > CHCl₂COOH > CH₂ClCOOH > HCOOH > CH₃COOH.",
-          "HVZ अभिक्रिया: कार्बोक्झिलिक ॲसिड + X₂ / Red P -> α-हॅलो कार्बोक्झिलिक ॲसिड.",
-        ],
-        keyFormula: "R-COCH₃ + 3I₂ + 4NaOH -> R-COONa + CHI₃↓ (yellow) + 3NaI + 3H₂O",
+        keyFormula: "R-COCH₃ + 3I₂ + 4NaOH -> R-COONa + CHI₃↓ (yellow) + 3NaI + 3H₂O"
       },
     ],
     quickRevisionPoints: [
-      { en: "Formic acid (HCOOH) is the only carboxylic acid that gives Tollens and Fehling tests because it contains an aldehyde -CHO group.", mr: "फॉर्मिक ॲसिड (HCOOH) मध्ये -CHO गट असल्याने ते टॉलेन्स व फेलिंग चाचणी देणारे एकमेव कार्बोक्झिलिक ॲसिड आहे." },
-      { en: "Benzoic acid is stronger than acetic acid, but Formic acid (HCOOH) is stronger than Benzoic acid (PhCOOH).", mr: "फॉर्मिक ॲसिड हे बेंझॉईक ॲसिडपेक्षाही अधिक तीव्र आम्ल आहे (HCOOH > PhCOOH > CH₃COOH)." },
+      { en: "Formic acid (HCOOH) is the only carboxylic acid that gives Tollens and Fehling tests because it contains an aldehyde -CHO group." },
+      { en: "Benzoic acid is stronger than acetic acid, but Formic acid (HCOOH) is stronger than Benzoic acid (PhCOOH)." },
     ],
     keyFormulasTable: [
       { name: "Iodoform Reagent", formula: "I₂ + NaOH (or NaOI)", description: "Detects methyl carbonyls and 2-hydroxy compounds producing yellow CHI₃" },
@@ -606,29 +433,23 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Thinking Benzaldehyde gives a positive Fehling's test.",
-        mistakeMr: "बेंझाल्डिहाइड फेलिंग टेस्ट देतो असे समजणे.",
-        correction: "Benzaldehyde reduces Tollens' reagent but FAILS to reduce Fehling's solution.",
-        correctionMr: "बेंझाल्डिहाइड टॉलेन्स टेस्ट देतो पण फेलिंग द्रावण अपचयित करू शकत नाही.",
+        correction: "Benzaldehyde reduces Tollens' reagent but FAILS to reduce Fehling's solution."
       },
-    ],
+    ]
   },
 
   // 7. Chemical & Ionic Equilibrium
   {
     id: "note_chem_equilibrium_ionic",
     chapter: "Chemical & Ionic Equilibrium",
-    chapterMr: "रासायनिक आणि आयनिक संतुलन (Equilibrium)",
     subject: "Chemistry",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Le Chatelier, pH Calculations, Buffer Solutions & Solubility Product (Ksp) Notes",
-    titleMr: "ले चॅटेलियर सिद्धांत, pH गणना, बफर द्रावणे आणि विद्राव्यता गुणाकार (Ksp)",
     summary: "Law of Chemical Equilibrium, Kp vs Kc relations, Le Chatelier's Principle effects (T, P, Conc, Inert gas), Ostwald's Dilution Law, pH/pOH, Hydrolysis of Salts, Buffer Action & Henderson-Hasselbalch, and Ksp Precipitation criteria.",
-    summaryMr: "Kp व Kc संबंध (Δn_g), ले चॅटेलियरचा नियम, ऑस्टवाल्डचा नियम, मिठांचे जलअपघटन, बफर द्रावणे (हँडरसन समीकरण), आणि Ksp विद्राव्यता गुणाकार चाचणी.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Chemical Equilibrium & Le Chatelier's Principle",
-        titleMr: "१. रासायनिक संतुलन आणि ले चॅटेलियरचा नियम",
         points: [
           "Relation between K_p and K_c: K_p = K_c (R T)^(Δn_g), where Δn_g = (moles of gaseous products) - (moles of gaseous reactants).",
           "If Δn_g = 0 => K_p = K_c (e.g., H₂ + I₂ ⇌ 2HI, dimensionless).",
@@ -640,19 +461,10 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Inert gas addition at Constant Volume: NO EFFECT on equilibrium.",
           "Inert gas addition at Constant Pressure: Shifts towards GREATER number of gaseous moles (Δn_g > 0).",
         ],
-        pointsMr: [
-          "Kp आणि Kc सूत्र: K_p = K_c (R T)^(Δn_g).",
-          "जर Δn_g = 0 असेल तर K_p = K_c असते (उदा. H₂ + I₂ ⇌ 2HI).",
-          "संतुलन स्थिरांक K फक्त तापमानावर (Temperature) अवलंबून असतो.",
-          "ले चॅटेलियरचा नियम: उष्णतादायी (Exothermic) प्रक्रियेत तापमान वाढवल्यास अभिक्रिया मागे सरकते.",
-          "दाब वाढवल्यास अभिक्रिया कमी वायूचे मोल्स असणाऱ्या दिशेने सरकते.",
-          "स्थिर आकारमानावर निष्क्रीय वायू मिसळल्यास संतुलनावर कोणताही परिणाम होत नाही.",
-        ],
-        keyFormula: "K_p = K_c (R T)^(Δn_g) | ΔG° = - 2.303 R T log K_eq",
+        keyFormula: "K_p = K_c (R T)^(Δn_g) | ΔG° = - 2.303 R T log K_eq"
       },
       {
         title: "2. Ionic Equilibrium, Buffers & Solubility Product (Ksp)",
-        titleMr: "२. आयनिक संतुलन, बफर द्रावणे आणि विद्राव्यता गुणाकार (Ksp)",
         points: [
           "Ostwald Dilution Law: For weak electrolyte with dissociation degree α: K_a = C α² / (1 - α) ≈ C α² => α = √(K_a / C). [H⁺] = C α = √(K_a · C).",
           "pH and pOH: pH = -log₁₀[H⁺], pOH = -log₁₀[OH⁻]. At 25°C: pH + pOH = 14 (K_w = 1.0 × 10⁻¹⁴).",
@@ -665,19 +477,12 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Solubility Product (K_sp): For salt A_x B_y ⇌ x A^(y+) + y B^(x-), K_sp = x^x · y^y · S^(x+y).",
           "Precipitation Criteria: If Ionic Product (Q_sp) > K_sp => Precipitation occurs; If Q_sp < K_sp => Unsaturated solution (No ppt).",
         ],
-        pointsMr: [
-          "ऑस्टवाल्डचा नियम: α = √(K_a / C), [H⁺] = √(K_a · C).",
-          "ॲसिडिक बफर (हँडरसन समीकरण): pH = pK_a + log([Salt] / [Acid]).",
-          "बेसिक बफर: pOH = pK_b + log([Salt] / [Base]).",
-          "मिठांचे जलअपघटन: दुर्बल ॲसिड + प्रबळ बेस चे मीठ (CH₃COONa) pH > ७ (अल्कधर्मी).",
-          "विद्राव्यता गुणाकार: Q_sp > K_sp असल्यास अवक्षेप (Precipitation) तयार होतो.",
-        ],
-        keyFormula: "pH = pK_a + log([Salt]/[Acid]) | K_sp = x^x · y^y · S^(x+y)",
+        keyFormula: "pH = pK_a + log([Salt]/[Acid]) | K_sp = x^x · y^y · S^(x+y)"
       },
     ],
     quickRevisionPoints: [
-      { en: "Common Ion Effect decreases the degree of ionization of a weak electrolyte (e.g., adding CH₃COONa suppresses ionization of CH₃COOH).", mr: "समान आयन परिणामामुळे (Common ion effect) दुर्बल आम्लाचे आयनीकरण घटते." },
-      { en: "Solubility of AgCl (AB type) K_sp = S² => S = √(K_sp); for Ag₂CrO₄ (A₂B type) K_sp = 4 S³ => S = ∛(K_sp / 4).", mr: "AgCl साठी K_sp = S² तर Ag₂CrO₄ साठी K_sp = ४S³ असते." },
+      { en: "Common Ion Effect decreases the degree of ionization of a weak electrolyte (e.g., adding CH₃COONa suppresses ionization of CH₃COOH)." },
+      { en: "Solubility of AgCl (AB type) K_sp = S² => S = √(K_sp); for Ag₂CrO₄ (A₂B type) K_sp = 4 S³ => S = ∛(K_sp / 4)." },
     ],
     keyFormulasTable: [
       { name: "Henderson Acidic Buffer", formula: "pH = pK_a + log([Salt] / [Acid])", description: "Calculates pH of acidic buffer mixture" },
@@ -688,29 +493,23 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Forgetting to include only GASEOUS species when calculating Δn_g in K_p = K_c(RT)^Δn_g.",
-        mistakeMr: "Δn_g काढताना घन किंवा द्रव पदार्थांचे मोल्स मोजणे.",
-        correction: "Δn_g strictly includes GASEOUS molecules: Δn_g = n_gas(products) - n_gas(reactants). Pure solids and liquids have activity = 1.",
-        correctionMr: "Δn_g मध्ये केवळ वायू (gas) स्वरूपातील मोल्सच मोजले जातात; घन व द्रव पदार्थांचे मोल्स सोडून दिले जातात.",
+        correction: "Δn_g strictly includes GASEOUS molecules: Δn_g = n_gas(products) - n_gas(reactants). Pure solids and liquids have activity = 1."
       },
-    ],
+    ]
   },
 
   // 8. p-Block Elements (Groups 15 to 18)
   {
     id: "note_chem_p_block_elements",
     chapter: "p-Block Elements (Groups 15 to 18)",
-    chapterMr: "p-गटातील मूलद्रव्ये (Groups 15 to 18)",
     subject: "Chemistry",
     exams: ["NEET", "JEE_MAIN", "MHT_CET"],
     title: "Nitrogen, Phosphorus, Oxygen, Halogens & Noble Gas Compounds Notes",
-    titleMr: "नायट्रोजन, फॉस्फरस, हॅलोजन्स व नोबल गॅसेस (XeF₂, XeF₄) संयुगांच्या रचना",
     summary: "Inert pair effect, Anomalous properties of 2nd period, Ammonia Haber process, Nitric acid Ostwald process, Oxoacids of P and S, Interhalogens, and Xenon fluorides geometry & hydrolysis.",
-    summaryMr: "जड अणूंचा अक्रिय जोडी प्रभाव (Inert pair effect), ॲमोनियाचे हेबर प्रोसेस, नायट्रिक ॲसिडची ऑस्टवाल्ड पद्धत, फॉस्फरस व सल्फरची ऑक्सोॲसिड्स आणि झेनॉनच्या संयुगांची रचना.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Group 15 (Nitrogen Family) & Group 16 (Oxygen Family)",
-        titleMr: "१. गट १५ (नायट्रोजन कुटुंब) आणि गट १६ (ऑक्सिजन कुटुंब)",
         points: [
           "Inert Pair Effect: Reluctance of valence s-electrons to participate in bonding down the group => lower oxidation state (+3 for Bi, +4 for Pb, +1 for Tl) is MORE stable than higher state (+5, +6, +3).",
           "Haber Process for NH₃: N₂ + 3H₂ ⇌ 2NH₃ (ΔH = -92.4 kJ/mol). Optimum: 200 atm, 700 K, Fe catalyst with Mo promoter.",
@@ -719,18 +518,10 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Contact Process for H₂SO₄: 2SO₂ + O₂ (V₂O₅ catalyst, 450°C, 2 bar) -> 2SO₃ -> absorbed in H₂SO₄ -> H₂S₂O₇ (Oleum) + H₂O -> 2H₂SO₄.",
           "Anomalous behavior of N and O: Small size, high electronegativity, absence of d-orbitals (max covalency of N = 4, cannot form NCl₅).",
         ],
-        pointsMr: [
-          "अक्रिय जोडी प्रभाव (Inert pair effect): गटात खाली जाताना कमी ऑक्सिडेशन स्थिती अधिक स्थिर असते (उदा. Bi³⁺ > Bi⁵⁺, Pb²⁺ > Pb⁴⁺).",
-          "ॲमोनिया हेबर प्रोसेस: N₂ + 3H₂ ⇌ 2NH₃ (Fe उत्प्रेरक, २०० atm).",
-          "फॉस्फरसची ऑक्सोॲसिड्स: H₃PO₂ (१ P-OH, एक-आम्लधर्मीय, तीव्र अपचायक), H₃PO₃ (२ P-OH, द्वि-आम्लधर्मीय), H₃PO₄ (३ P-OH, त्रि-आम्लधर्मीय).",
-          "सल्फ्यूरिक ॲसिड कॉन्टॅक्ट प्रोसेस: SO₂ चे SO₃ मध्ये रूपांतर करण्यासाठी V₂O₅ उत्प्रेरक वापरतात.",
-          "नायट्रोजन जास्तीत जास्त ४ बंध बनवू शकतो कारण त्याच्यात d-कक्षक (d-orbitals) नसतात.",
-        ],
-        keyFormula: "H₃PO₂ = Monobasic (1 P-OH, 2 P-H) | H₃PO₃ = Dibasic (2 P-OH, 1 P-H) | H₃PO₄ = Tribasic (3 P-OH)",
+        keyFormula: "H₃PO₂ = Monobasic (1 P-OH, 2 P-H) | H₃PO₃ = Dibasic (2 P-OH, 1 P-H) | H₃PO₄ = Tribasic (3 P-OH)"
       },
       {
         title: "2. Group 17 (Halogens) & Group 18 (Noble Gases)",
-        titleMr: "२. गट १७ (हॅलोजन्स) आणि गट १८ (नोबल गॅसेस)",
         points: [
           "Electron Gain Enthalpy Order: Cl > F > Br > I (F has smaller size and strong inter-electronic repulsions in compact 2p subshell).",
           "Bond Dissociation Enthalpy: Cl₂ > Br₂ > F₂ > I₂ (F-F bond is weaker due to high lone pair repulsions).",
@@ -745,23 +536,13 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "XeO₃: sp³ hybridization, Pyramidal.",
           "Hydrolysis of XeF₆: Complete hydrolysis gives explosive solid XeO₃: XeF₆ + 3H₂O -> XeO₃ + 6HF.",
         ],
-        pointsMr: [
-          "इलेक्ट्रॉन प्राप्ती एन्थाल्पी क्रम: Cl > F > Br > I (क्लोरीनची सर्वात जास्त).",
-          "बॉन्ड ऊर्जा क्रम: Cl₂ > Br₂ > F₂ > I₂.",
-          "ऑक्सिडायझिंग क्षमता: F₂ > Cl₂ > Br₂ > I₂.",
-          "झेनॉन संयुगांचे आकार:",
-          "XeF₂: sp³d (रेषीय Linear, ३ लोन पेअर्स).",
-          "XeF₄: sp³d² (समतल चौकोनी Square Planar, २ लोन पेअर्स).",
-          "XeF₆: sp³d³ (Distorted Octahedral, १ लोन पेअर).",
-          "XeO₃: sp³ (पिरॅमिडल Pyramidal).",
-        ],
         keyFormula: "XeF₂ = Linear (sp³d) | XeF₄ = Square Planar (sp³d²) | XeF₆ + 3H₂O -> XeO₃ + 6HF",
-        keyMnemonic: "XeF₂: 2 bonds + 3 LP = 5 (sp³d, Linear) | XeF₄: 4 bonds + 2 LP = 6 (sp³d², Sq Planar)",
+        keyMnemonic: "XeF₂: 2 bonds + 3 LP = 5 (sp³d, Linear) | XeF₄: 4 bonds + 2 LP = 6 (sp³d², Sq Planar)"
       },
     ],
     quickRevisionPoints: [
-      { en: "Helium is used in diving apparatus mixed with oxygen (80% He + 20% O₂) because of its extremely low solubility in blood at high pressure.", mr: "हेलियम रक्तात अतिशय कमी विरघळत असल्याने पाणबुड्यांच्या ऑक्सिजन सिलिंडरमध्ये वापरला जातो." },
-      { en: "Fluorine does NOT exhibit any positive oxidation state because it is the most electronegative element and lacks d-orbitals.", mr: "फ्लुओरिन सर्वात जास्त विद्युतऋण असल्याने तो कधीही धन (+ve) ऑक्सिडेशन स्थिती दाखवत नाही." },
+      { en: "Helium is used in diving apparatus mixed with oxygen (80% He + 20% O₂) because of its extremely low solubility in blood at high pressure." },
+      { en: "Fluorine does NOT exhibit any positive oxidation state because it is the most electronegative element and lacks d-orbitals." },
     ],
     keyFormulasTable: [
       { name: "XeF₂ Geometry", formula: "Linear (sp³d)", description: "2 Xe-F single bonds with 3 equatorial lone pairs" },
@@ -772,46 +553,33 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming H₃PO₃ and H₃PO₂ have basicity equal to the number of Hydrogen atoms (i.e. 3).",
-        mistakeMr: "H₃PO₃ आणि H₃PO₂ मधील हायड्रोजनची संख्या ३ असल्याने त्यांची बेसिकता ३ मानणे.",
-        correction: "Basicity is ONLY equal to the number of ionizable P-OH groups! H₃PO₄ is tribasic (3 P-OH), H₃PO₃ is dibasic (2 P-OH), and H₃PO₂ is monobasic (1 P-OH).",
-        correctionMr: "बेसिकता ही केवळ P-OH गटांच्या संख्येवर ठरते! H₃PO₄ = ३, H₃PO₃ = २, आणि H₃PO₂ = १ असते.",
+        correction: "Basicity is ONLY equal to the number of ionizable P-OH groups! H₃PO₄ is tribasic (3 P-OH), H₃PO₃ is dibasic (2 P-OH), and H₃PO₂ is monobasic (1 P-OH)."
       },
-    ],
+    ]
   },
   // 6. Haloalkanes & Haloarenes, Alcohols, Phenols & Ethers
   {
     id: "note_chem_organic_mechanisms",
     chapter: "Organic Chemistry (Haloalkanes, Alcohols & Amines)",
-    chapterMr: "सेंद्रिय रसायनशास्त्र (SN1/SN2, अल्कोहोल, फिनॉल आणि अमाइन्स)",
     subject: "Chemistry",
     exams: ["NEET", "MHT_CET", "JEE_MAIN"],
     title: "SN1 vs SN2 Mechanisms, Lucas Test, Reimer-Tiemann, Hoffmann Bromamide & Diazonium Reactions",
-    titleMr: "SN1 विरुद्ध SN2 प्रक्रिया, ल्युकास चाचणी, रीमर-टायमन, हॉफमन ब्रोमामाईड व डायाझोनियम",
     summary: "Crucial Organic Chemistry reactions, stereochemistry, Lucas test for alcohol differentiation, acidity of phenols, and Diazonium salt conversions.",
-    summaryMr: "महत्त्वाच्या सेंद्रिय अभिक्रिया, SN1/SN2 स्टिरिओकेमिस्ट्री, ल्युकास टेस्ट, फिनॉलची आम्लता आणि डायाझोनियम सॉल्ट रूपांतरणे.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. SN1 vs SN2 Substitution Mechanism Comparison",
-        titleMr: "१. SN1 विरुद्ध SN2 तुलना (Super Important)",
         points: [
           "SN1 Mechanism: Two-step mechanism via Carbocation intermediate. Rate = k[R-X] (Unimolecular). Reactivity order: 3° > 2° > 1° > CH₃X. Polar protic solvent (H₂O, EtOH) favors SN1. Stereochemistry: Racemization (Retention + Inversion).",
           "SN2 Mechanism: Single-step concerted mechanism via Pentacoordinated Transition State. Rate = k[R-X][Nu⁻] (Bimolecular). Reactivity order: CH₃X > 1° > 2° > 3°. Polar aprotic solvent (Acetone, DMSO, DMF) favors SN2. Stereochemistry: 100% Walden Inversion.",
           "Allylic & Benzylic Halides: Undergo fast SN1 AND fast SN2 due to resonance stabilization of both carbocation and transition state.",
           "Aryl and Vinyl halides are extremely inert towards nucleophilic substitution due to partial double bond character (resonance) and sp² hybridized carbon.",
         ],
-        pointsMr: [
-          "SN1 पद्धत: दोन टप्प्यांत होणारी अभिक्रिया. कार्बोकॅटायन तयार होतो. वेग = k[R-X]. क्रम: ३° > २° > १°. रेसिमायझेशन (Racemization) होते.",
-          "SN2 पद्धत: एकाच टप्प्यात बॅक-अटॅक द्वारे होते. वेग = k[R-X][Nu⁻]. क्रम: मिथाईल > १° > २° > ३°. १००% वाल्डेन इन्व्हर्जन (Walden Inversion) होते.",
-          "अलिलिक आणि बेंझिलिक हॅलाइड्स रेझोनन्समुळे SN1 आणि SN2 दोन्ही वेगाने देतात.",
-          "अराइल (Aryl) हॅलाइड्स रेझोनन्स आणि sp² कार्बनमुळे सामान्यतः न्यूक्लियोफिलिक सब्स्टिट्युशन दाखवत नाहीत.",
-        ],
         keyFormula: "SN1: 3° > 2° > 1° (Carbocation, Racemic) | SN2: 1° > 2° > 3° (Transition State, Inversion)",
-        keyMnemonic: "SN1 = 1 substrate in rate law (3° best) | SN2 = 2 molecules collide (1° unhindered best)",
+        keyMnemonic: "SN1 = 1 substrate in rate law (3° best) | SN2 = 2 molecules collide (1° unhindered best)"
       },
       {
         title: "2. Name Reactions: Reimer-Tiemann, Kolbe, Williamson & Hoffmann",
-        titleMr: "२. प्रसिद्ध अभिक्रिया: रीमर-टायमन, कोल्बे, विल्यमसन व हॉफमन ब्रोमामाईड",
         points: [
           "Reimer-Tiemann Reaction: Phenol + CHCl₃ + aq. NaOH => Salicylaldehyde (Electrophile is Dichlorocarbene :CCl₂).",
           "Kolbe's Reaction: Phenol + NaOH + CO₂ (4-7 atm, 400 K) => Salicylic acid (precursor for Aspirin).",
@@ -821,22 +589,13 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
           "Carbylamine Test (Isocyanide test): 1° Amine (Aliphatic or Aromatic) + CHCl₃ + 3 KOH => Extremely foul-smelling Isocyanide (R-NC). 2° and 3° amines DO NOT give this test.",
           "Gabriel Phthalimide Synthesis: Used for preparation of pure 1° Aliphatic amines ONLY. Aromatic 1° amines (Aniline) cannot be prepared by this method because aryl halides do not undergo nucleophilic attack on phthalimide anion.",
         ],
-        pointsMr: [
-          "रीमर-टायमन: फिनॉल + CHCl₃ + NaOH => सॅलिसिलअल्डिहाइड (इलेक्ट्रोफाइल: :CCl₂).",
-          "कोल्बे अभिक्रिया: फिनॉल + CO₂ + NaOH => सॅलिसिलिक ॲसिड.",
-          "ल्युकास चाचणी (Lucas Test): ३° अल्कोहोल लगेच गढूळपणा देतो, २° ५ मिनिटांत देतो, १° खोलीच्या तापमानाला गढूळपणा देत नाही.",
-          "विल्यमसन इथर: R-X नेहमी १° असावा. ३° हॅलाइड वापरल्यास अल्कीन तयार होते.",
-          "हॉफमन ब्रोमामाईड: १° अमाइन्स तयार करण्यासाठी; यात उत्पादनात १ कार्बन कमी होतो.",
-          "कार्बिलामाइन चाचणी: फक्त १° अमाइन्ससाठी (दुर्गंधीयुक्त आयसोसायनाइड R-NC तयार होतो).",
-          "गॅब्रिएल थॅलिमाइड: फक्त १° अलिफॅटिक अमाइन्स तयार करण्यासाठी (अॅनिलिन तयार करता येत नाही).",
-        ],
-        keyFormula: "R-CONH₂ + Br₂ + 4KOH -> R-NH₂ (1 less carbon) | Lucas Reagent = Anhydrous ZnCl₂ + Conc. HCl",
+        keyFormula: "R-CONH₂ + Br₂ + 4KOH -> R-NH₂ (1 less carbon) | Lucas Reagent = Anhydrous ZnCl₂ + Conc. HCl"
       },
     ],
     quickRevisionPoints: [
-      { en: "Phenol is more acidic than Alcohols because the phenoxide ion is resonance stabilized, whereas alkoxide ion has no resonance.", mr: "फिनॉक्साईड आयन रेझोनन्समुळे स्थिर असल्याने फिनॉल हा सामान्य अल्कोहोलपेक्षा जास्त आम्लधर्मी असतो." },
-      { en: "Picric acid is 2,4,6-trinitrophenol and is a strong acid even without a carboxylic group due to 3 strong -M and -I NO₂ groups.", mr: "पिक्रिक ॲसिड (2,4,6-ट्रायनायट्रोफिनॉल) मध्ये तीन -NO₂ गट असल्याने ते अत्यंत तीव्र आम्लधर्मी असते." },
-      { en: "Sandmeyer reaction replaces diazonium group with Cl, Br, or CN using Cu₂Cl₂/HCl, Cu₂Br₂/HBr, or CuCN/KCN.", mr: "सॅन्डमेयर अभिक्रियेत Cu₂Cl₂ किंवा Cu₂Br₂ वापरून डायाझोनियम ग्रुपचे क्लोरो/ब्रोमोबेंझिनमध्ये रूपांतर केले जाते." },
+      { en: "Phenol is more acidic than Alcohols because the phenoxide ion is resonance stabilized, whereas alkoxide ion has no resonance." },
+      { en: "Picric acid is 2,4,6-trinitrophenol and is a strong acid even without a carboxylic group due to 3 strong -M and -I NO₂ groups." },
+      { en: "Sandmeyer reaction replaces diazonium group with Cl, Br, or CN using Cu₂Cl₂/HCl, Cu₂Br₂/HBr, or CuCN/KCN." },
     ],
     keyFormulasTable: [
       { name: "Lucas Test", formula: "Anhyd. ZnCl₂ + Conc. HCl", description: "Differentiates 1°, 2°, 3° alcohols based on turbidity time" },
@@ -847,10 +606,8 @@ export const CHEMISTRY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Attempting Gabriel Phthalimide synthesis to synthesize Aniline (Aromatic 1° amine).",
-        mistakeMr: "गॅब्रिएल थॅलिमाइड पद्धतीचा वापर करून ॲनिलिन बनवण्याचा प्रयत्न करणे.",
-        correction: "Gabriel Phthalimide can ONLY synthesize aliphatic 1° amines because aryl halides do not undergo SN2 substitution with potassium phthalimide.",
-        correctionMr: "गॅब्रिएल थॅलिमाइडने फक्त ॲलिफॅटिक १° अमाइन्स तयार होतात, ॲनिलिनसारखे ॲरोमॅटिक अमाइन्स बनवता येत नाहीत.",
+        correction: "Gabriel Phthalimide can ONLY synthesize aliphatic 1° amines because aryl halides do not undergo SN2 substitution with potassium phthalimide."
       },
-    ],
+    ]
   },
 ];

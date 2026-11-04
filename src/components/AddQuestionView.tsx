@@ -56,15 +56,8 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
   const [pyqYear, setPyqYear] = useState<string>("");
 
   const [questionText, setQuestionText] = useState<string>("");
-  const [questionTextMr, setQuestionTextMr] = useState<string>("");
 
   const [options, setOptions] = useState<[string, string, string, string]>([
-    "",
-    "",
-    "",
-    "",
-  ]);
-  const [optionsMr, setOptionsMr] = useState<[string, string, string, string]>([
     "",
     "",
     "",
@@ -73,7 +66,6 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
   const [correctOption, setCorrectOption] = useState<number>(0);
 
   const [explanation, setExplanation] = useState<string>("");
-  const [explanationMr, setExplanationMr] = useState<string>("");
   const [formula, setFormula] = useState<string>("");
 
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
@@ -114,27 +106,19 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
     });
   };
 
-  const handleOptionMrChange = (index: number, val: string) => {
-    setOptionsMr((prev) => {
-      const copy = [...prev] as [string, string, string, string];
-      copy[index] = val;
-      return copy;
-    });
-  };
-
   // Smart Parse Single / Multi
   const handleRunSmartParse = () => {
     setSmartParseSuccess(null);
     setFormError(null);
 
     if (!smartPasteText.trim()) {
-      setFormError("कृपया मजकूर (MCQ Text) पेस्ट करा.");
+      setFormError("Please paste the MCQ text.");
       return;
     }
 
     const parsed = parseRawQuestionText(smartPasteText, currentExam);
     if (!parsed) {
-      setFormError("मजकूर वाचताना त्रुटी आली. कृपया प्रश्न आणि पर्याय (A, B, C, D) स्पष्ट आहेत का ते तपासा.");
+      setFormError("Error reading text. Please check if the question and options (A, B, C, D) are clear.");
       return;
     }
 
@@ -142,12 +126,9 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
     setSubject(parsed.detectedSubject);
     setChapter(parsed.detectedChapter);
     setQuestionText(parsed.questionText);
-    setQuestionTextMr(parsed.questionTextMr || parsed.questionText);
     setOptions(parsed.options);
-    setOptionsMr(parsed.optionsMr || parsed.options);
     setCorrectOption(parsed.correctOption);
     setExplanation(parsed.explanation);
-    setExplanationMr(parsed.explanationMr || "");
     setFormula(parsed.formula || "");
     setPyqYear(parsed.pyqYear || "");
 
@@ -155,7 +136,7 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
     setSelectedExams(applicable);
 
     setSmartParseSuccess(
-      `यशस्वी! विषय '${parsed.detectedSubject}' आणि चॅप्टर '${parsed.detectedChapter}' आपोआप ओळखले गेले. लागू परीक्षा: ${applicable.join(", ")}`
+      `Success! Subject '${parsed.detectedSubject}' and Chapter '${parsed.detectedChapter}' identified automatically. Target Exams: ${applicable.join(", ")}`
     );
   };
 
@@ -166,12 +147,12 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
     setFormSuccess(null);
 
     if (!questionText.trim()) {
-      setFormError("कृपया मुख्य प्रश्न वाक्य प्रविष्ट करा.");
+      setFormError("Please enter the primary question statement.");
       return;
     }
 
     if (options.some((opt) => !opt.trim())) {
-      setFormError("कृपया सर्व ४ पर्याय (A, B, C, D) प्रविष्ट करा.");
+      setFormError("Please enter all 4 options (A, B, C, D).");
       return;
     }
 
@@ -187,19 +168,11 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
       topic: topic.trim() || undefined,
       difficulty,
       questionText: questionText.trim(),
-      questionTextMr: questionTextMr.trim() || questionText.trim(),
       options: [options[0].trim(), options[1].trim(), options[2].trim(), options[3].trim()],
-      optionsMr: [
-        optionsMr[0].trim() || options[0].trim(),
-        optionsMr[1].trim() || options[1].trim(),
-        optionsMr[2].trim() || options[2].trim(),
-        optionsMr[3].trim() || options[3].trim(),
-      ],
       correctOption,
       explanation:
         explanation.trim() ||
-        "योग्य उत्तर पर्याय " + String.fromCharCode(65 + correctOption) + " आहे.",
-      explanationMr: explanationMr.trim() || undefined,
+        "The correct answer is option " + String.fromCharCode(65 + correctOption) + ".",
       formula: formula.trim() || undefined,
       pyqYear: pyqYear.trim() || undefined,
       isCustom: true,
@@ -215,18 +188,15 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
 
     const examNames = selectedExams.join(", ");
     setFormSuccess(
-      `हा प्रश्न ${examNames} या सर्व (${selectedExams.length}) परीक्षांच्या सराव, टेस्ट व PYQ बँकेत आपोआप सिंक झाला!`
+      `Question successfully synced to Practice, Test, and PYQ banks for: ${examNames}!`
     );
 
     // Reset inputs
     setSmartPasteText("");
     setParsedDraft(null);
     setQuestionText("");
-    setQuestionTextMr("");
     setOptions(["", "", "", ""]);
-    setOptionsMr(["", "", "", ""]);
     setExplanation("");
-    setExplanationMr("");
     setFormula("");
     setPyqYear("");
   };
@@ -246,7 +216,7 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
     try {
       const parsed = JSON.parse(jsonInput);
       if (!Array.isArray(parsed)) {
-        setBulkStatus("त्रुटी: JSON हे प्रश्नांची Array (List) असणे आवश्यक आहे.");
+        setBulkStatus("Error: JSON must be an Array of questions.");
         return;
       }
 
@@ -267,12 +237,9 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
               topic: item.topic,
               difficulty: item.difficulty || "Medium",
               questionText: item.questionText,
-              questionTextMr: item.questionTextMr || item.questionText,
               options: item.options,
-              optionsMr: item.optionsMr || item.options,
               correctOption: typeof item.correctOption === "number" ? item.correctOption : 0,
               explanation: item.explanation || "No explanation provided.",
-              explanationMr: item.explanationMr,
               formula: item.formula,
               pyqYear: item.pyqYear,
               isCustom: true,
@@ -283,17 +250,17 @@ export const AddQuestionView: React.FC<AddQuestionViewProps> = ({
       });
 
       if (validList.length === 0) {
-        setBulkStatus("त्रुटी: एकही वैध प्रश्न सापडला नाही. कृपया फॉरमॅट तपासा.");
+        setBulkStatus("Error: No valid questions found. Please check the format.");
         return;
       }
 
       onBulkImport(validList);
       setBulkStatus(
-        `यशस्वी! एकूण ${validList.length} प्रश्न सर्व संबंधित परीक्षांमध्ये (NEET/JEE/CET) आपोआप विभागून जोडले गेले.`
+        `Success! Total ${validList.length} questions automatically distributed and added across relevant exams (NEET/JEE/CET).`
       );
       setJsonInput("");
     } catch (e: any) {
-      setBulkStatus("अवैध JSON डेटा: " + e.message);
+      setBulkStatus("Invalid JSON data: " + e.message);
     }
   };
 
@@ -319,22 +286,22 @@ Exp: Centripetal acceleration is directed towards the center and has magnitude v
               <button
                 onClick={onBackToPractice}
                 className="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer border border-slate-300 mr-1"
-                title="मागे जा"
+                title="Go Back"
               >
                 <ArrowRight className="w-3.5 h-3.5 rotate-180 text-emerald-600" />
-                <span>← मागे जा</span>
+                <span>← Back</span>
               </button>
             )}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-extrabold">
               <Zap className="w-3.5 h-3.5 text-emerald-700" />
-              <span>कॉमन विषय ऑटो-सिंक सिस्टीम (Multi-Exam Auto Sync Active)</span>
+              <span>Multi-Exam Auto Sync Active</span>
             </div>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-            नवीन प्रश्न डेटा जोडा (Smart Question Entry)
+            Add New Question Data (Smart Question Entry)
           </h2>
           <p className="text-xs sm:text-sm text-slate-500">
-            भौतिकशास्त्र (Physics), रसायनशास्त्र (Chemistry), गणित (Maths) किंवा जीवशास्त्र (Biology) मध्ये प्रश्न टाकल्यास तो आपोआप सर्व परीक्षांमध्ये (NEET + JEE + CET) सिंक होतो.
+            Adding questions in Physics, Chemistry, Maths, or Biology automatically syncs them across all exams (NEET + JEE + CET).
           </p>
         </div>
 
@@ -349,7 +316,7 @@ Exp: Centripetal acceleration is directed towards the center and has magnitude v
             }`}
           >
             <Zap className="w-3.5 h-3.5" />
-            <span>१-क्लिक ऑटो पेस्ट (Smart Paste)</span>
+            <span>Smart Paste</span>
           </button>
           <button
             onClick={() => setActiveTab("single")}
@@ -359,7 +326,7 @@ Exp: Centripetal acceleration is directed towards the center and has magnitude v
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
-            मॅन्युअल फॉर्म (Single Form)
+            Single Form
           </button>
           <button
             onClick={() => setActiveTab("bulk")}
@@ -369,7 +336,7 @@ Exp: Centripetal acceleration is directed towards the center and has magnitude v
                 : "text-slate-600 hover:text-slate-900"
             }`}
           >
-            बल्क JSON / बॅकअप
+            Bulk JSON / Backup
           </button>
         </div>
       </div>
@@ -380,14 +347,14 @@ Exp: Centripetal acceleration is directed towards the center and has magnitude v
           <Share2 className="w-4 h-4 text-blue-600 shrink-0" />
           <div>
             <span className="font-bold text-slate-900 block">
-              हा प्रश्न कुठे कुठे सेव्ह करायचा आहे? (Target Exams):
+              Target Exams for Sync:
             </span>
             <span className="text-[11px] text-slate-600">
               {subject === "Physics" || subject === "Chemistry"
-                ? "Physics आणि Chemistry हे NEET, JEE आणि MHT-CET या तिन्ही परीक्षांसाठी कॉमन आहेत."
+                ? "Physics and Chemistry are common for NEET, JEE, and MHT-CET."
                 : subject === "Mathematics"
-                ? "Mathematics हे JEE Main आणि MHT-CET दोन्हीसाठी कॉमन आहे."
-                : "Biology हे NEET आणि MHT-CET (PCB) दोन्हीसाठी कॉमन आहे."}
+                ? "Mathematics is common for JEE Main and MHT-CET."
+                : "Biology is common for NEET and MHT-CET (PCB)."}
             </span>
           </div>
         </div>
@@ -434,7 +401,7 @@ Exp: Centripetal acceleration is directed towards the center and has magnitude v
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="block text-xs font-bold text-slate-800">
-                WhatsApp, पुस्तकातील किंवा Word मधील प्रश्न येथे पेस्ट करा:
+                Paste question from WhatsApp, Book, or Word here:
               </label>
               <button
                 type="button"
@@ -442,20 +409,21 @@ Exp: Centripetal acceleration is directed towards the center and has magnitude v
                 className="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>नमुना प्रश्न पेस्ट करून बघा</span>
+                <span>Try Sample Question</span>
               </button>
             </div>
             <textarea
               rows={6}
               value={smartPasteText}
               onChange={(e) => setSmartPasteText(e.target.value)}
-              placeholder="उदा.
+              placeholder="Example:
 Q. The magnetic field at the centre of a circular coil of radius r carrying current I is:
 (A) mu_0 * I / (2 * r)
 (B) mu_0 * I / (4 * pi * r)
 (C) 2 * mu_0 * I / r
 (D) zero
 Ans: A
+Formula: a_c = v^2 / r
 Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)."
               className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs font-mono text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden leading-relaxed"
             />
@@ -468,7 +436,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
               className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md flex items-center gap-2 transition-colors"
             >
               <Zap className="w-4 h-4 fill-white" />
-              <span>स्मार्ट ऑटो-पार्स करा (Auto-Parse Question)</span>
+              <span>Auto-Parse Question</span>
             </button>
           </div>
 
@@ -484,7 +452,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
               <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                 <span className="text-xs font-extrabold text-emerald-800 flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>पार्स झालेला प्रश्न पूर्वावलोकन (Preview)</span>
+                  <span>Parsed Question Preview</span>
                 </span>
                 <span className="text-xs bg-slate-200 text-slate-800 px-2.5 py-0.5 rounded-full font-bold">
                   {subject} • {chapter}
@@ -511,7 +479,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
                     <span>{opt}</span>
                     {correctOption === i && (
                       <span className="ml-auto text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded-md">
-                        योग्य उत्तर
+                        Correct Ans
                       </span>
                     )}
                   </div>
@@ -520,7 +488,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
 
               {explanation && (
                 <div className="text-[11px] bg-white p-3 rounded-lg border border-slate-200 text-slate-700">
-                  <strong>स्पष्टीकरण:</strong> {explanation}
+                  <strong>Explanation:</strong> {explanation}
                 </div>
               )}
 
@@ -533,7 +501,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>
-                    सर्व ({selectedExams.length}) परीक्षांमध्ये सेव्ह करा (Save to All Selected Exams)
+                    Save to All ({selectedExams.length}) Selected Exams
                   </span>
                 </button>
 
@@ -542,7 +510,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
                   onClick={() => setActiveTab("single")}
                   className="px-4 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition-colors"
                 >
-                  फॉर्ममध्ये फेरबदल करा (Edit in Form)
+                  Edit in Form
                 </button>
               </div>
             </div>
@@ -560,22 +528,22 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
             {/* Subject */}
             <div>
-              <label className="block font-bold text-slate-700 mb-1">विषय (Subject):</label>
+              <label className="block font-bold text-slate-700 mb-1">Subject:</label>
               <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value as any)}
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-medium"
               >
-                <option value="Physics">Physics (भौतिकशास्त्र - Common)</option>
-                <option value="Chemistry">Chemistry (रसायनशास्त्र - Common)</option>
-                <option value="Mathematics">Mathematics (गणित)</option>
-                <option value="Biology">Biology (जीवशास्त्र)</option>
+                <option value="Physics">Physics (Common)</option>
+                <option value="Chemistry">Chemistry (Common)</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Biology">Biology</option>
               </select>
             </div>
 
             {/* Chapter */}
             <div>
-              <label className="block font-bold text-slate-700 mb-1">अध्याय (Chapter):</label>
+              <label className="block font-bold text-slate-700 mb-1">Chapter:</label>
               <select
                 value={chapter}
                 onChange={(e) => setChapter(e.target.value)}
@@ -591,15 +559,15 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
 
             {/* Difficulty */}
             <div>
-              <label className="block font-bold text-slate-700 mb-1">काठिण्य पातळी:</label>
+              <label className="block font-bold text-slate-700 mb-1">Difficulty:</label>
               <select
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value as any)}
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-medium"
               >
-                <option value="Easy">सोपे (Easy)</option>
-                <option value="Medium">मध्यम (Medium)</option>
-                <option value="Hard">कठीण (Hard)</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
               </select>
             </div>
           </div>
@@ -608,26 +576,26 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
               <label className="block font-bold text-slate-700 mb-1">
-                किंवा स्वतःचे चॅप्टर नाव (Custom Chapter):
+                Custom Chapter Name (Optional):
               </label>
               <input
                 type="text"
                 value={customChapter}
                 onChange={(e) => setCustomChapter(e.target.value)}
-                placeholder="उदा. Magnetism and Matter"
+                placeholder="Example: Magnetism and Matter"
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800"
               />
             </div>
 
             <div>
               <label className="block font-bold text-slate-700 mb-1">
-                PYQ वर्ष टॅग (उदा. NEET 2024 / MHT-CET 2023):
+                PYQ Year Tag (e.g. NEET 2024 / MHT-CET 2023):
               </label>
               <input
                 type="text"
                 value={pyqYear}
                 onChange={(e) => setPyqYear(e.target.value)}
-                placeholder="उदा. NEET 2023 / CET 2024"
+                placeholder="Example: NEET 2023 / CET 2024"
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800"
               />
             </div>
@@ -637,28 +605,15 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
           <div className="space-y-3">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1">
-                प्रश्न वाक्य (English / Main Question): *
+                Question Statement (English): *
               </label>
               <textarea
                 required
-                rows={2}
+                rows={4}
                 value={questionText}
                 onChange={(e) => setQuestionText(e.target.value)}
                 placeholder="Type the question here..."
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs sm:text-sm text-slate-900 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
-                मराठी भाषांतर (Marathi Translation - Optional):
-              </label>
-              <textarea
-                rows={2}
-                value={questionTextMr}
-                onChange={(e) => setQuestionTextMr(e.target.value)}
-                placeholder="येथे मराठीत प्रश्न टाइप करा..."
-                className="w-full bg-amber-50/40 border border-amber-200 rounded-xl p-3 text-xs sm:text-sm text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-hidden"
               />
             </div>
           </div>
@@ -666,7 +621,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
           {/* 4 Options Grid */}
           <div className="space-y-3 pt-2">
             <label className="block text-xs font-bold text-slate-800">
-              ४ पर्याय आणि योग्य उत्तर निवडा (4 Options & Correct Answer): *
+              4 Options & Correct Answer: *
             </label>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -688,7 +643,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
                         <span className="font-bold w-6 h-6 rounded-md bg-slate-900 text-white flex items-center justify-center text-xs">
                           {optLetter}
                         </span>
-                        <span className="font-bold text-slate-700">पर्याय {optLetter}</span>
+                        <span className="font-bold text-slate-700">Option {optLetter}</span>
                       </div>
 
                       <label className="flex items-center gap-1.5 cursor-pointer text-[11px] font-bold text-emerald-800">
@@ -699,7 +654,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
                           onChange={() => setCorrectOption(optI)}
                           className="text-emerald-600 focus:ring-emerald-500"
                         />
-                        <span>योग्य उत्तर आहे</span>
+                        <span>Correct Answer</span>
                       </label>
                     </div>
 
@@ -708,15 +663,8 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
                       required
                       value={options[optI]}
                       onChange={(e) => handleOptionChange(optI, e.target.value)}
-                      placeholder={`Option ${optLetter} in English`}
+                      placeholder={`Option ${optLetter} text`}
                       className="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800"
-                    />
-                    <input
-                      type="text"
-                      value={optionsMr[optI]}
-                      onChange={(e) => handleOptionMrChange(optI, e.target.value)}
-                      placeholder={`पर्याय ${optLetter} मराठीत (पर्यायी)`}
-                      className="w-full bg-white border border-amber-200 rounded-lg px-3 py-1.5 text-xs text-slate-800"
                     />
                   </div>
                 );
@@ -728,42 +676,29 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-xs">
             <div>
               <label className="block font-bold text-slate-700 mb-1">
-                महत्त्वाचे सूत्र (Formula - Optional):
+                Formula (Optional):
               </label>
               <input
                 type="text"
                 value={formula}
                 onChange={(e) => setFormula(e.target.value)}
-                placeholder="उदा. F = (G * m1 * m2) / r^2"
+                placeholder="Example: F = (G * m1 * m2) / r^2"
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 font-mono"
               />
             </div>
 
             <div>
               <label className="block font-bold text-slate-700 mb-1">
-                सविस्तर इंग्रजी स्पष्टीकरण (Explanation):
+                Explanation (Step-by-Step):
               </label>
               <textarea
-                rows={2}
+                rows={4}
                 value={explanation}
                 onChange={(e) => setExplanation(e.target.value)}
-                placeholder="Step-by-step mathematical or conceptual explanation..."
+                placeholder="Mathematical or conceptual explanation..."
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800"
               />
             </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              मराठी स्पष्टीकरण (Marathi Step-by-Step Explanation):
-            </label>
-            <textarea
-              rows={2}
-              value={explanationMr}
-              onChange={(e) => setExplanationMr(e.target.value)}
-              placeholder="मराठीत उत्तर स्पष्ट करा..."
-              className="w-full bg-amber-50/40 border border-amber-200 rounded-xl p-3 text-xs text-slate-900"
-            />
           </div>
 
           {/* Actions */}
@@ -774,7 +709,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
             >
               <PlusCircle className="w-4 h-4" />
               <span>
-                सर्व ({selectedExams.length}) परीक्षांमध्ये सेव्ह करा (Save Question)
+                Save to All ({selectedExams.length}) Selected Exams
               </span>
             </button>
 
@@ -783,7 +718,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
               onClick={onBackToPractice}
               className="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
             >
-              सराव मोडवर परत जा
+              Return to Practice
             </button>
           </div>
         </form>
@@ -795,10 +730,10 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
-                बल्क प्रश्न इम्पोर्ट किंवा बॅकअप एक्स्पोर्ट
+                Bulk Question Import / Backup Export
               </h3>
               <p className="text-xs text-slate-500">
-                JSON फाईलद्वारे एकाच वेळी शेकडो प्रश्न ॲपमध्ये अपलोड करा किंवा सेव्ह केलेला सर्व डेटा डाऊनलोड करा.
+                Upload hundreds of questions at once via JSON file or download all saved data.
               </p>
             </div>
 
@@ -807,13 +742,13 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
               className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs flex items-center gap-2 transition-colors"
             >
               <Download className="w-4 h-4" />
-              <span>सर्व प्रश्न डाऊनलोड करा (Export JSON)</span>
+              <span>Export All Questions (JSON)</span>
             </button>
           </div>
 
           <div className="space-y-3">
             <label className="block text-xs font-bold text-slate-700">
-              येथे JSON पेस्ट करा (Paste Question Array JSON):
+              Paste Question Array JSON here:
             </label>
             <textarea
               rows={8}
@@ -825,12 +760,9 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
     "chapter": "Electrostatics",
     "difficulty": "Medium",
     "questionText": "What is the electric field inside a charged spherical conductor?",
-    "questionTextMr": "विद्युतभारित गोलाकार वाहकाच्या आत विद्युत क्षेत्र किती असते?",
     "options": ["Zero", "Maximum", "Infinite", "Depends on radius"],
-    "optionsMr": ["शून्य", "कमाल", "अनंत", "त्रिज्येवर अवलंबून"],
     "correctOption": 0,
-    "explanation": "Electric field inside a conductor in electrostatic equilibrium is always zero.",
-    "explanationMr": "संतुलनावस्थेत वाहकाच्या आतील विद्युत क्षेत्र नेहमी शून्य असते."
+    "explanation": "Electric field inside a conductor in electrostatic equilibrium is always zero."
   }
 ]`}
               className="w-full bg-slate-50 border border-slate-200 rounded-xl p-4 font-mono text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
@@ -840,7 +772,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
           {bulkStatus && (
             <div
               className={`p-4 rounded-xl text-xs font-bold ${
-                bulkStatus.startsWith("यशस्वी")
+                bulkStatus.startsWith("Success")
                   ? "bg-emerald-50 border border-emerald-200 text-emerald-800"
                   : "bg-rose-50 border border-rose-200 text-rose-800"
               }`}
@@ -855,7 +787,7 @@ Exp: Standard formula for circular coil magnetic field is B = mu_0 * I / (2 * r)
             className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md flex items-center gap-2 transition-colors disabled:opacity-50"
           >
             <Upload className="w-4 h-4" />
-            <span>इम्पोर्ट करा व ऑटो-सिंक करा (Import & Auto-Sync)</span>
+            <span>Import & Auto-Sync</span>
           </button>
         </div>
       )}

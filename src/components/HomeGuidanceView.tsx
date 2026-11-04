@@ -66,8 +66,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
     ? {
         id: "daily_neet",
         subject: "Biology",
-        textMr: "DNA च्या द्विकुंडल संरचनेत (Double Helix) दोन धागे कोणत्या बंधाने जोडलेले असतात?",
-        textEn: "In the DNA double helix structure, the two strands are held together by:",
+        text: "In the DNA double helix structure, the two strands are held together by:",
         options: ["Peptide bonds", "Hydrogen bonds", "Phosphodiester bonds", "Electrovalent bonds"],
         correct: 1,
         formula: "A = T (2 Hydrogen bonds) and G ≡ C (3 Hydrogen bonds)",
@@ -77,8 +76,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
     ? {
         id: "daily_jee",
         subject: "Mathematics",
-        textMr: "जर |a × b| = a · b असेल, तर सदिश a आणि b मधील कोन θ किती असेल?",
-        textEn: "If |a × b| = a · b, then the angle θ between vectors a and b is:",
+        text: "If |a × b| = a · b, then the angle θ between vectors a and b is:",
         options: ["0°", "45° (π/4)", "90° (π/2)", "180° (π)"],
         correct: 1,
         formula: "|a||b| sin θ = |a||b| cos θ => tan θ = 1 => θ = 45°",
@@ -87,8 +85,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
     : {
         id: "daily_cet",
         subject: "Physics",
-        textMr: "उभ्या वर्तुळाकार गतीत (Vertical Circular Motion) सर्वोच्च बिंदूवर आवश्यक किमान वेग किती असावा?",
-        textEn: "In vertical circular motion, the minimum critical velocity at the highest point is:",
+        text: "In vertical circular motion, the minimum critical velocity at the highest point is:",
         options: ["√(r g)", "√(3 r g)", "√(5 r g)", "2 √(r g)"],
         correct: 0,
         formula: "v_H = √(r g), v_M = √(3 r g), v_L = √(5 r g)",
@@ -447,7 +444,7 @@ export const HomeGuidanceView: React.FC<HomeGuidanceViewProps> = ({
 
         {/* Question Text in English */}
         <p className="text-xs sm:text-[13px] font-bold text-slate-100 leading-snug">
-          {dailyQuestion.textEn || dailyQuestion.textMr}
+          {dailyQuestion.text}
         </p>
 
         {/* 4 Interactive Options */}

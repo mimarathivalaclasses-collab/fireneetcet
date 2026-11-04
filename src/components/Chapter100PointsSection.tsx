@@ -16,19 +16,15 @@ import { ChapterPointItem, LanguageMode } from "../types";
 interface Chapter100PointsSectionProps {
   noteId: string;
   chapterTitle: string;
-  chapterTitleMr: string;
   subject: string;
   points: ChapterPointItem[];
-  language: LanguageMode;
 }
 
 export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = ({
   noteId,
   chapterTitle,
-  chapterTitleMr,
   subject,
   points,
-  language,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRange, setSelectedRange] = useState<"all" | "1-50" | "51-100" | "101-150" | "151-200">("all");
@@ -87,10 +83,6 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
     });
   };
 
-  const isMr = language === "mr";
-  const isEn = language === "en" || !language;
-  const isBilingual = language === "bilingual";
-
   // Filtered points
   const filteredPoints = useMemo(() => {
     return points.filter((p) => {
@@ -107,10 +99,9 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchEn = p.point.toLowerCase().includes(q);
-        const matchMr = p.pointMr?.toLowerCase().includes(q) || false;
         const matchFormula = p.formula?.toLowerCase().includes(q) || false;
         const matchId = p.id.toString() === q || `#${p.id}` === q;
-        if (!matchEn && !matchMr && !matchFormula && !matchId) return false;
+        if (!matchEn && !matchFormula && !matchId) return false;
       }
 
       return true;
@@ -374,11 +365,7 @@ export const Chapter100PointsSection: React.FC<Chapter100PointsSectionProps> = (
                 </div>
 
                 {/* Point Marathi Text (Only in bilingual or mr mode) */}
-                {(isBilingual || isMr) && pt.pointMr && pt.pointMr !== pt.point && (
-                  <div className="text-[11.5px] leading-relaxed text-slate-600 dark:text-slate-400 font-normal">
-                    {pt.pointMr}
-                  </div>
-                )}
+
 
                 {/* Formula Highlight */}
                 {pt.formula && (

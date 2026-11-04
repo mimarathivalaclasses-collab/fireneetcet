@@ -6,8 +6,8 @@ interface RoleBasedAccessWrapperProps {
   currentUser: StudentUser | null;
   allowedRoles: UserRole[];
   children: React.ReactNode;
-  titleMr?: string;
-  descriptionMr?: string;
+  title?: string;
+  description?: string;
   onOpenAuth: (targetRole?: UserRole) => void;
   onBackToHome: () => void;
 }
@@ -16,8 +16,8 @@ export const RoleBasedAccessWrapper: React.FC<RoleBasedAccessWrapperProps> = ({
   currentUser,
   allowedRoles,
   children,
-  titleMr,
-  descriptionMr,
+  title,
+  description,
   onOpenAuth,
   onBackToHome,
 }) => {
@@ -30,13 +30,13 @@ export const RoleBasedAccessWrapper: React.FC<RoleBasedAccessWrapperProps> = ({
 
   // Unauthorized Access State (Mobile-First Card Layout)
   const roleNameMap: Record<UserRole, string> = {
-    admin: "मुख्य ॲडमिन डायरेक्टर (Super Admin)",
-    class_admin: "कोचिंग क्लासेस ॲडमिन (Class Admin)",
-    agent: "अधिकृत एजंट पार्टनर (Partner)",
-    student: "नोंदणीकृत विद्यार्थी (Student)",
+    admin: "Super Admin",
+    class_admin: "Class Admin",
+    agent: "Partner",
+    student: "Student",
   };
 
-  const allowedRolesText = allowedRoles.map((r) => roleNameMap[r]).join(" किंवा ");
+  const allowedRolesText = allowedRoles.map((r) => roleNameMap[r]).join(" or ");
 
   return (
     <div className="w-full min-h-[70vh] flex items-center justify-center p-4">
@@ -47,27 +47,27 @@ export const RoleBasedAccessWrapper: React.FC<RoleBasedAccessWrapperProps> = ({
 
         <div className="space-y-2">
           <span className="inline-block px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-400 text-[11px] font-black uppercase tracking-wider">
-            🔒 सुरक्षित ॲक्सेस निर्बंध (Restricted Area)
+            🔒 Restricted Area
           </span>
           <h2 className="text-xl sm:text-2xl font-black text-white">
-            {titleMr || "या पानासाठी विशेष परवानगी आवश्यक आहे"}
+            {title || "Special Permission Required"}
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md mx-auto">
-            {descriptionMr ||
-              `हे पोर्टल केवळ ${allowedRolesText} साठी राखीव आहे. तुमचे वर्तमान खाते या भूमिकेत नाही.`}
+            {description ||
+              `This portal is reserved for ${allowedRolesText} only. Your current account does not have this role.`}
           </p>
         </div>
 
         {/* Current User Status Indicator */}
         <div className="p-3.5 bg-slate-900/80 rounded-2xl border border-slate-700/80 text-left flex items-center justify-between text-xs">
           <div>
-            <div className="text-[11px] text-slate-400 font-medium">सध्याचे लॉगिन:</div>
+            <div className="text-[11px] text-slate-400 font-medium">Current Login:</div>
             <div className="font-black text-white">
-              {currentUser ? currentUser.name : "लॉगिन केलेले नाही (Guest)"}
+              {currentUser ? currentUser.name : "Not Logged In (Guest)"}
             </div>
           </div>
           <div className="px-2.5 py-1 rounded-xl bg-slate-800 border border-slate-600 text-slate-300 font-bold text-[11px]">
-            भूमिका: {roleNameMap[currentRole]}
+            Role: {roleNameMap[currentRole]}
           </div>
         </div>
 
@@ -78,7 +78,7 @@ export const RoleBasedAccessWrapper: React.FC<RoleBasedAccessWrapperProps> = ({
             className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 text-xs font-black uppercase tracking-wider shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <LogIn className="w-4 h-4" />
-            <span>योग्य खात्याने लॉगिन करा</span>
+            <span>Login with Required Account</span>
           </button>
 
           <button
@@ -86,7 +86,7 @@ export const RoleBasedAccessWrapper: React.FC<RoleBasedAccessWrapperProps> = ({
             className="w-full min-h-[46px] py-3 px-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>मुख्य डॅशबोर्डवर जा</span>
+            <span>Go to Main Dashboard</span>
           </button>
         </div>
       </div>

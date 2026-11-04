@@ -8,34 +8,34 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     id: "fc_bio_01",
     exam: ["NEET", "MHT_CET"],
     subject: "Biology",
-    chapter: "Cell Biology & Division (पेशी व पेशी विभाजन)",
+    chapter: "Cell Biology & Division",
     topic: "Stages of Meiosis Prophase I",
     front: "What is the correct sequence of 5 substages in Prophase I of Meiosis?",
     frontMr: "अर्धसूत्री विभाजनाच्या (Meiosis) पूर्वावस्था-१ (Prophase I) मधील ५ उप-टप्प्यांचा योग्य क्रम काय आहे?",
     back: "1. Leptotene\n2. Zygotene (Synapsis / Synaptonemal complex)\n3. Pachytene (Crossing over via Recombinase enzyme)\n4. Diplotene (Chiasmata visible / Dissolution of synaptonemal complex)\n5. Diakinesis (Terminalisation of chiasmata)",
-    backMr: "१. लेप्टोटीन (Leptotene)\n२. झायगोटीन (Zygotene - सायनॅप्सिस)\n३. पॅकीटीन (Pachytene - क्रॉसिंग ओव्हर / जनुकीय देवाणघेवाण)\n४. डिप्लोटीन (Diplotene - कायझ्मॅटा दिसणे)\n५. डायकिनेसिस (Diakinesis - कायझ्मॅटाचे टोकाकडे सरकणे)",
+    backMr: "१. लेप्टोटीन (Leptotene)\n२. झायगोटीन\n३. पॅकीटीन\n४. डिप्लोटीन\n५. डायकिनेसिस",
     mnemonic: "💡 ट्रिक: Lata Zara Paani De Do (L-Z-P-D-D)",
     keyFact: "Crossing over occurs specifically in Pachytene stage using enzyme Recombinase.",
-    badge: "NEET Repeat Star",
+    badge: "NEET Repeat Star"
   },
   {
     id: "fc_bio_02",
     exam: ["NEET", "MHT_CET"],
     subject: "Biology",
-    chapter: "Human Physiology (मानवी शरीरक्रियाशास्त्र)",
+    chapter: "Human Physiology",
     topic: "Gastrointestinal Hormones",
     front: "What are the key functions of Gastrin, Secretin, and CCK (Cholecystokinin)?",
     frontMr: "गॅस्ट्रिन (Gastrin), सिक्रिटिन (Secretin) आणि CCK या हार्मोन्सचे प्रमुख कार्य काय आहे?",
     back: "• Gastrin: Stimulates gastric glands to secrete HCl & Pepsinogen.\n• Secretin: Stimulates exocrine pancreas to secrete water & bicarbonate ions (neutralizes acid).\n• CCK (Cholecystokinin): Stimulates gall bladder to release bile and pancreas to release pancreatic enzymes.",
-    backMr: "• Gastrin: जठर ग्रंथींना HCl आणि पेप्सिनोजेन सोडण्यास उत्तेजित करतो.\n• Secretin: स्वादुपिंडाला बायकार्बोनेट आयन्स व पाणी सोडण्यास सांगतो (अॅसिड न्यूट्रल करतो).\n• CCK: पित्ताशयातून पित्तरस (Bile) आणि स्वादुपिंडातून पाचक विकरे सोडण्यास उत्तेजित करतो.",
+    backMr: "• Gastrin: जठर ग्रंथींना HCl आणि पेप्सिनोजेन सोडण्यास उत्तेजित करतो.\n• Secretin: स्वादुपिंडाला बायकार्बोनेट आयन्स व पाणी सोडण्यास सांगतो.\n• CCK: पित्ताशयातून पित्तरस (Bile) आणि स्वादुपिंडातून पाचक विकरे सोडण्यास उत्तेजित करतो.",
     keyFact: "Secretin was the FIRST hormone discovered in history (by Bayliss and Starling, 1902).",
-    badge: "High Yield",
+    badge: "High Yield"
   },
   {
     id: "fc_bio_03",
     exam: ["NEET", "MHT_CET"],
     subject: "Biology",
-    chapter: "Genetics & Evolution (जनुकशास्त्र व उत्क्रांती)",
+    chapter: "Genetics & Evolution",
     topic: "Stop Codons (Nonsense Codons)",
     front: "What are the 3 Stop Codons in standard genetic code?",
     frontMr: "जनुकीय संकेतामधील (Genetic code) ३ समाप्ती कोडॉन्स (Stop Codons) कोणते आहेत?",
@@ -43,20 +43,20 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     backMr: "१. UAA (Ochre)\n२. UAG (Amber)\n३. UGA (Opal)\n\nहे कोणत्याही अमिनो आम्लाचे संकेत देत नाहीत व प्रथिनांची निर्मिती थांबवतात.",
     mnemonic: "💡 ट्रिक: U Are Away (UAA), U Are Gone (UAG), U Go Away (UGA)",
     keyFact: "Initiation codon is AUG (codes for Methionine).",
-    badge: "NEET Must Know",
+    badge: "NEET Must Know"
   },
   {
     id: "fc_bio_04",
     exam: ["NEET", "MHT_CET"],
     subject: "Biology",
-    chapter: "Plant Physiology (वनस्पती शरीरक्रियाशास्त्र)",
+    chapter: "Plant Physiology",
     topic: "Kranz Anatomy & C4 Pathway",
     front: "What are the characteristics of Kranz anatomy in C4 plants (e.g. Maize, Sugarcane)?",
-    frontMr: "C4 वनस्पतींमधील (उदा. मका, ऊस) क्रांन्झ शरीररचना (Kranz Anatomy) ची वैशिष्ट्ये काय आहेत?",
+    frontMr: "C4 वनस्पतींमधील क्रांन्झ शरीररचना (Kranz Anatomy) ची वैशिष्ट्ये काय आहेत?",
     back: "• Large bundle sheath cells arranged in a wreath/ring around vascular bundles.\n• Bundle sheath cells have: Many large chloroplasts, thick walls impervious to gases, NO intercellular spaces, and lack grana (agranal).\n• Primary CO2 acceptor in mesophyll is PEP (3C), fixed by PEP carboxylase.",
     backMr: "• संवहनी पुलाभोवती गोलाकार माळेसारख्या मोठ्या बंडल शीथ पेशी (Bundle Sheath Cells).\n• बंडल शीथ पेशींमध्ये: मोठे हरितलवक, वायू-अभिन्न जाड भिंती आणि अंतर्पेशीय पोकळी नसते.\n• CO2 चा प्राथमिक स्वीकारकर्ता PEP (3C) असतो आणि PEPcase द्वारे स्थिरीकरण होते.",
     keyFact: "C4 plants avoid photorespiration and show higher photosynthetic efficiency at high temperatures.",
-    badge: "NCERT Gold",
+    badge: "NCERT Gold"
   },
 
   // ==========================================
@@ -71,10 +71,10 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     front: "Difference between Aldol Condensation, Cannizzaro Reaction & Wurtz Reaction?",
     frontMr: "अल्डॉल संघनन, कॅनिझारो प्रक्रिया आणि वुर्ट्झ अभिक्रिया यांमधील फरक काय आहे?",
     back: "• Aldol: Aldehydes/Ketones with α-hydrogen + dilute base (NaOH) → β-hydroxy aldehyde.\n• Cannizzaro: Aldehydes with NO α-hydrogen (HCHO, PhCHO) + 50% conc. NaOH → Alcohol + Carboxylate salt (Disproportionation).\n• Wurtz: Alkyl halide + Na in dry ether → Symmetrical higher alkane (R-R).",
-    backMr: "• Aldol: α-हायड्रोजन असलेले अल्डीहाइड्स + विरल NaOH → β-हायड्रॉक्सी अल्डीहाइड.\n• Cannizzaro: α-हायड्रोजन नसलेले अल्डीहाइड्स + ५०% तीव्र NaOH → अल्कोहोल + आम्ल क्षार (Disproportionation).\n• Wurtz: अल्किल हॅलाइड + सोडियम (ड्राय इथर) → सममितीय उच्च अल्केन (R-R).",
+    backMr: "• Aldol: α-हायड्रोजन असलेले अल्डीहाइड्स + विरल NaOH → β-हायड्रॉक्सी अल्डीहाइड.\n• Cannizzaro: α-हायड्रोजन नसलेले अल्डीहाइड्स + ५०% तीव्र NaOH → अल्कोहोल + आम्ल क्षार (Disproportionation).\n• Wurtz: अल्किल हॅलाइड + सोडियम → सममितीय उच्च अल्केन (R-R).",
     mnemonic: "💡 ट्रिक: Aldol has Alpha-H; Cannizzaro CANNOT have Alpha-H.",
     keyFact: "Methane CANNOT be prepared by Wurtz reaction.",
-    badge: "100% Guaranteed Topic",
+    badge: "100% Guaranteed Topic"
   },
   {
     id: "fc_chem_02",
@@ -87,7 +87,7 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     back: "I⁻ < Br⁻ < S²⁻ < SCN⁻ < Cl⁻ < F⁻ < OH⁻ < C2O4²⁻ < H2O < NCS⁻ < EDTA⁴⁻ < NH3 < en < NO2⁻ < CN⁻ < CO\n\n• Weak field ligands (up to H2O): Cause low Δo → High spin complexes (no pairing).\n• Strong field ligands (NH3, CN⁻, CO): Cause large Δo → Low spin complexes (pairing occurs).",
     backMr: "I⁻ < Br⁻ < Cl⁻ < F⁻ < OH⁻ < H2O < NH3 < en < CN⁻ < CO\n\n• CO आणि CN⁻ हे सर्वात शक्तिशाली लिगँड्स आहेत (Strong Field) ज्यामुळे इलेक्ट्रॉन्सची जोडी (Pairing) होते.\n• हॅलोजन्स हे कमकुवत लिगँड्स आहेत (Weak Field).",
     keyFact: "CO is the strongest field ligand due to synergistic π-backbonding.",
-    badge: "JEE & NEET Core",
+    badge: "JEE & NEET Core"
   },
   {
     id: "fc_chem_03",
@@ -100,7 +100,7 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     back: "• k = (2.303 / t) × log10([A]0 / [A]t)\n• t1/2 = 0.693 / k\n• Key Property: Half-life (t1/2) is completely INDEPENDENT of initial concentration [A]0.\n• Unit of k = s⁻¹ or min⁻¹.",
     backMr: "• k = (2.303 / t) × log10([A]0 / [A]t)\n• t1/2 = 0.693 / k\n• महत्त्वाचे: प्रथम श्रेणी अभिक्रियेचे अर्धायुष्य काळ सुरुवातीच्या संहतीवर (Initial Concentration) मुळीच अवलंबून नसते.\n• k चे एकक: s⁻¹ असते.",
     keyFact: "Radioactive decay is always a first-order kinetics process.",
-    badge: "Formula Star",
+    badge: "Formula Star"
   },
 
   // ==========================================
@@ -117,7 +117,7 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     back: "• Ring / Thin Hoop: I = M R²\n• Circular Disc / Solid Cylinder: I = (1/2) M R² = 0.5 M R²\n• Hollow Sphere (Shell): I = (2/3) M R² ≈ 0.67 M R²\n• Solid Sphere: I = (2/5) M R² = 0.4 M R²\n\nOrder of rolling acceleration down incline: Solid Sphere > Disc > Hollow Sphere > Ring.",
     backMr: "• कडी (Ring): I = M R²\n• भरीव चकती (Disc): I = 1/2 M R²\n• पोकळ गोल (Hollow Sphere): I = 2/3 M R²\n• भरीव गोल (Solid Sphere): I = 2/5 M R²\n\nउतरणीवरून घरंगळताना वेग: भरीव गोल > चकती > पोकळ गोल > कडी.",
     keyFact: "Solid sphere has lowest MI ratio (k²/R² = 0.4) and reaches bottom of incline fastest.",
-    badge: "Physics Must Know",
+    badge: "Physics Must Know"
   },
   {
     id: "fc_phy_02",
@@ -128,9 +128,9 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     front: "De Broglie Wavelength of electron accelerated through potential V (in Volts)?",
     frontMr: "V व्होल्ट्स विभवांतराने गतिमान केलेल्या इलेक्ट्रॉनची डी-ब्रॉग्ली तरंगलांबी (De Broglie wavelength) काय असते?",
     back: "• λ = h / p = h / √(2 m q V)\n• For Electron: λ = (12.27 / √V) Å = (1.227 / √V) nm\n• Photoelectric Equation: E = hν = φ (Work Function) + KE_max = hν0 + e V0 (Stopping Potential).",
-    backMr: "• λ = h / √(2 m q V)\n• इलेक्ट्रॉनसाठी शॉर्टकट सूत्र: λ = 12.27 / √V Å (अँगस्ट्रॉम)\n• प्रकाशविद्युत समीकरण: hν = φ (कार्य फलन) + e V0 (स्टॉपिंग पोटेन्शियल).",
+    backMr: "• λ = h / √(2 m q V)\n• इलेक्ट्रॉनसाठी शॉर्टकट सूत्र: λ = 12.27 / √V Å\n• प्रकाशविद्युत समीकरण: hν = φ + e V0.",
     keyFact: "Stopping potential depends ONLY on incident frequency (ν) and work function (φ), NOT on light intensity.",
-    badge: "Formula Shortcut",
+    badge: "Formula Shortcut"
   },
   {
     id: "fc_phy_03",
@@ -141,9 +141,9 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     front: "Relation between Current (I), Drift Velocity (vd), and Temperature coefficient of resistance (α)?",
     frontMr: "विद्युतप्रवाह (I) आणि ड्रिफ्ट वेग (vd) यांमधील संबंध आणि तापमानानुसार रोध बदलण्याचे सूत्र काय?",
     back: "• I = n e A vd  =>  Current density j = I/A = n e vd\n• Drift velocity vd = (e E τ) / m\n• Resistance vs Temp: Rt = R0 [1 + α (T - T0)]\n• For Metals: α is positive (R increases with Temp).\n• For Semiconductors: α is negative (R decreases with Temp).",
-    backMr: "• I = n e A vd  (Current formula)\n• ड्रिफ्ट वेग vd = (e E τ) / m\n• रोधावरील तापमानाचा परिणाम: Rt = R0 (1 + α ΔT)\n• धातूसाठी α धन असतो (तापमानासोबत रोध वाढतो).\n• अर्धवाहकांसाठी (Semiconductors) α ऋण असतो (तापमानासोबत रोध कमी होतो).",
+    backMr: "• I = n e A vd  (Current formula)\n• ड्रिफ्ट वेग vd = (e E τ) / m\n• रोधावरील तापमानाचा परिणाम: Rt = R0 (1 + α ΔT)\n• धातूसाठी α धन असतो.\n• अर्धवाहकांसाठी (Semiconductors) α ऋण असतो.",
     keyFact: "In semiconductors like Silicon/Germanium, conductivity INCREASES with temperature.",
-    badge: "Core Physics",
+    badge: "Core Physics"
   },
 
   // ==========================================
@@ -160,7 +160,7 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     back: "• King's Property: ∫[a to b] f(x) dx = ∫[a to b] f(a + b - x) dx\n• Special case: ∫[0 to a] f(x) dx = ∫[0 to a] f(a - x) dx\n• Standard integral: ∫ e^x [f(x) + f'(x)] dx = e^x f(x) + C\n• Derivative of inverse trig: d/dx [tan⁻¹(x)] = 1 / (1 + x²).",
     backMr: "• किंग्स प्रॉपर्टी: ∫[a ते b] f(x) dx = ∫[a ते b] f(a + b - x) dx\n• महत्वाचे संकलन: ∫ e^x [f(x) + f'(x)] dx = e^x f(x) + C\n• tan⁻¹(x) चा अवकलज: 1 / (1 + x²).",
     keyFact: "Whenever you see symmetric trigonometric integrands with limits [0, π/2], applying King's rule gives 2I = (b-a) => I = π/4.",
-    badge: "JEE Super Shortcut",
+    badge: "JEE Super Shortcut"
   },
   {
     id: "fc_math_02",
@@ -173,6 +173,6 @@ export const FLASHCARDS_DATA: FlashcardItem[] = [
     back: "• d = | (a2 - a1) · (b1 × b2) | / | b1 × b2 |\n• If d = 0, the two lines are coplanar (intersecting or parallel).\n• For parallel lines (b1 = b2 = b): d = | (a2 - a1) × b | / | b |.",
     backMr: "• किमान अंतर d = | (a2 - a1) · (b1 × b2) | / | b1 × b2 |\n• जर d = 0 आले, तर त्या रेषा एकाच प्रतलात (Coplanar) असतात.\n• समांतर रेषांसाठी: d = | (a2 - a1) × b | / | b |.",
     keyFact: "Numerator is the scalar triple product [ (a2 - a1)  b1  b2 ].",
-    badge: "CET & JEE Classic",
+    badge: "CET & JEE Classic"
   },
 ];

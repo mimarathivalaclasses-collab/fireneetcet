@@ -83,11 +83,11 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
     return matchesSearch;
   });
 
-  const whatsappShareText = `🎯 मित्रांनो, MHT-CET, NEET आणि JEE सराव करण्यासाठी हे सर्वात भारी ॲप आहे! \n🔥 ५०००+ MCQs, १० ग्रँड मॉक टेस्ट्स व नोट्स फक्त ₹२९ मध्ये उपलब्ध आहेत!\n🎁 माझ्या लिंकवरून आत्ताच सुरू करा:\n👉 ${studentRefUrl}\n(किंवा नोंदणी करताना रेफरल कोड वापरा: ${studentRefCode})`;
+  const whatsappShareText = `🎯 Friends, this is the best app for MHT-CET, NEET, and JEE practice! \n🔥 5000+ MCQs, 10 Grand Mock Tests, and Notes are available for only ₹29!\n🎁 Get started using my link now:\n👉 ${studentRefUrl}\n(Or use referral code: ${studentRefCode} during registration)`;
 
   const handleSendCheer = (record: StudentReferralRecord) => {
     setCheerSentId(record.id);
-    const cheerMsg = `नमस्कार ${record.referredStudentName || "मित्रा"}! 🎯 MHT-CET / NEET / JEE चे ग्रँड मॉक टेस्ट्स आणि सराव प्रश्न सोडवले का? आजच नवीन टेस्ट देऊन तुझा रँक तपास! 🚀 \nॲप लिंक: ${studentRefUrl}`;
+    const cheerMsg = `Hello ${record.referredStudentName || "friend"}! 🎯 Have you solved the MHT-CET / NEET / JEE Grand Mock Tests and practice questions? Check your rank today by taking a new test! 🚀 \nApp link: ${studentRefUrl}`;
     const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(cheerMsg)}`;
     window.open(url, "_blank");
     setTimeout(() => setCheerSentId(null), 3000);
@@ -119,18 +119,18 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-black border border-amber-400/40">
                 <Trophy className="w-4 h-4 text-amber-400 fill-amber-400" />
-                <span>१० रेफरल्स = १००% फी रिफंड उद्दिष्ट (100% Refund Milestone)</span>
+                <span>10 Referrals = 100% Fee Refund Milestone</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
                 {isMilestoneAchieved
-                  ? "🎉 अभिनंदन! तुम्ही १००% फी रिफंड उद्दिष्ट साध्य केले आहे!"
-                  : `अजून फक्त ${remainingForMilestone} मित्र बाकी — तुमची भरलेली ₹२९ फी पूर्ण परत मिळवा!`}
+                  ? "🎉 Congratulations! You have achieved the 100% Fee Refund goal!"
+                  : `Only ${remainingForMilestone} more friends to go — get your ₹29 fee fully refunded!`}
               </h2>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 text-center shrink-0">
               <div className="text-[10px] uppercase tracking-wider text-amber-300 font-bold">
-                प्रगती (Progress)
+                Progress
               </div>
               <div className="text-2xl sm:text-3xl font-black text-white font-mono-numbers">
                 {totalReferredCount} <span className="text-base text-amber-300">/ {targetMilestone}</span>
@@ -142,10 +142,10 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
           <div className="space-y-3">
             <div className="flex justify-between items-center text-xs font-black">
               <span className="text-amber-200">
-                {progressPercent}% पूर्ण झाले ({totalReferredCount}/{targetMilestone} मित्र)
+                {progressPercent}% Complete ({totalReferredCount}/{targetMilestone} Friends)
               </span>
               <span className="text-emerald-300 font-mono-numbers">
-                एकूण कमाई: ₹{formatInr(totalEarnings)}
+                Total Earnings: ₹{formatInr(totalEarnings)}
               </span>
             </div>
 
@@ -169,8 +169,8 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     : "bg-white/5 border-white/10 text-slate-400"
                 }`}
               >
-                <div className="font-black text-white">३ मित्र</div>
-                <div className="text-[10px]">₹१७.४० जमा</div>
+                <div className="font-black text-white">3 Friends</div>
+                <div className="text-[10px]">₹17.40 Earned</div>
               </div>
 
               <div
@@ -180,8 +180,8 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     : "bg-white/5 border-white/10 text-slate-400"
                 }`}
               >
-                <div className="font-black text-white">५ मित्र</div>
-                <div className="text-[10px]">₹२९.०० (१००% फी)</div>
+                <div className="font-black text-white">5 Friends</div>
+                <div className="text-[10px]">₹29.00 (100% Fee)</div>
               </div>
 
               <div
@@ -191,8 +191,8 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     : "bg-white/5 border-white/10 text-slate-400"
                 }`}
               >
-                <div className="font-black text-white">८ मित्र</div>
-                <div className="text-[10px]">₹४६.४० जमा</div>
+                <div className="font-black text-white">8 Friends</div>
+                <div className="text-[10px]">₹46.40 Earned</div>
               </div>
 
               <div
@@ -202,8 +202,8 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     : "bg-white/5 border-white/10 text-slate-400"
                 }`}
               >
-                <div className="font-black text-amber-300">१० मित्र 🏆</div>
-                <div className="text-[10px] text-amber-200 font-extrabold">१००% रिफंड अनलॉक</div>
+                <div className="font-black text-amber-300">10 Friends 🏆</div>
+                <div className="text-[10px] text-amber-200 font-extrabold">100% Refund Unlocked</div>
               </div>
             </div>
           </div>
@@ -213,7 +213,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
             <div className="text-xs text-slate-300 flex items-center gap-1.5">
               <Sparkles className="w-4 h-4 text-amber-400" />
               <span>
-                प्रत्येक मित्राच्या जोडणीवर त्वरित <strong>₹५.८० (२०%)</strong> तुमच्या वॉलेटमध्ये जमा होतात.
+                Earn <strong>₹5.80 (20%)</strong> instantly for every friend who joins.
               </span>
             </div>
 
@@ -225,7 +225,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                 className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95 cursor-pointer"
               >
                 <Share2 className="w-4 h-4" />
-                <span>मित्र जोडा</span>
+                <span>Add Friend</span>
               </a>
 
               {onNavigateToWithdraw && (
@@ -234,7 +234,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                   onClick={onNavigateToWithdraw}
                   className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs flex items-center gap-1.5 border border-white/20 transition-all cursor-pointer"
                 >
-                  <span>पैसे काढा (Withdraw) →</span>
+                  <span>Withdraw →</span>
                 </button>
               )}
             </div>
@@ -242,21 +242,21 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
         </div>
       </div>
 
-      {/* 2. 10-SLOT VISUAL AVATAR GRID ("माझे १० रिफंड स्लॉट्स") */}
+      {/* 2. 10-SLOT VISUAL AVATAR GRID */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
           <div>
             <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
               <Award className="w-5 h-5 text-amber-500" />
-              <span>माझे १० रिफंड स्लॉट्स (10 Milestone Slots)</span>
+              <span>My 10 Refund Slots</span>
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              प्रत्येक स्लॉट भरल्यास ₹५.८० थेट खात्यावर जमा. १० स्लॉट पूर्ण होताच संपूर्ण फी परत!
+              Earn ₹5.80 for each slot filled. Get your full fee back once all 10 slots are filled!
             </p>
           </div>
 
           <div className="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 font-black text-xs border border-emerald-300 dark:border-emerald-700 font-mono-numbers">
-            भरलेले स्लॉट: {totalReferredCount} / 10
+            Slots Filled: {totalReferredCount} / 10
           </div>
         </div>
 
@@ -283,7 +283,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     </span>
                     <span className="text-[10px] font-extrabold text-emerald-700 dark:text-emerald-400 flex items-center gap-0.5">
                       <CheckCircle2 className="w-3 h-3" />
-                      +₹५.८०
+                      +₹5.80
                     </span>
                   </div>
 
@@ -293,7 +293,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     </div>
                     <div className="min-w-0">
                       <div className="text-xs font-black text-slate-900 dark:text-white truncate">
-                        {rec.referredStudentName || "विद्यार्थी"}
+                        {rec.referredStudentName || "Student"}
                       </div>
                       <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                         {maskPhoneNumber(rec.referredStudentMobile)}
@@ -303,7 +303,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
 
                   <div className="flex items-center justify-between text-[10px] pt-1 border-t border-emerald-200 dark:border-emerald-800 text-slate-600 dark:text-slate-300">
                     <span className="font-bold">{rec.referredStudentExam || "MHT_CET"}</span>
-                    <span className="text-emerald-700 dark:text-emerald-400 font-bold">यशस्वी ✓</span>
+                    <span className="text-emerald-700 dark:text-emerald-400 font-bold">Success ✓</span>
                   </div>
                 </div>
               );
@@ -316,8 +316,8 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                 className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border-2 border-dashed border-slate-300 dark:border-slate-700 space-y-2 flex flex-col justify-between text-center transition-all hover:border-emerald-400 dark:hover:border-emerald-500 group"
               >
                 <div className="flex items-center justify-between text-[10px] font-mono-numbers font-bold text-slate-400 dark:text-slate-500">
-                  <span>स्लॉट #{slot.slotNumber}</span>
-                  <span className="text-amber-600 dark:text-amber-400 font-bold">₹५.८० बाकी</span>
+                  <span>Slot #{slot.slotNumber}</span>
+                  <span className="text-amber-600 dark:text-amber-400 font-bold">₹5.80 Pending</span>
                 </div>
 
                 <div className="py-1">
@@ -325,7 +325,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     +
                   </div>
                   <div className="text-[11px] font-bold text-slate-600 dark:text-slate-400 mt-1">
-                    मित्र जोडा
+                    Add Friend
                   </div>
                 </div>
 
@@ -335,7 +335,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                   rel="noreferrer"
                   className="py-1 px-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-600 text-slate-700 dark:text-slate-300 text-[10px] font-black transition-colors block cursor-pointer"
                 >
-                  आमंत्रित करा
+                  Invite
                 </a>
               </div>
             );
@@ -347,53 +347,53 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
           <div className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>एकूण जोडलेले</span>
+            <span>Total Added</span>
             <Users className="w-4 h-4 text-indigo-500" />
           </div>
           <div className="text-2xl font-black text-slate-900 dark:text-white font-mono-numbers">
             {totalReferredCount}
           </div>
           <p className="text-[10px] text-slate-500 dark:text-slate-400">
-            तुमच्या कोडने आलेले विद्यार्थी
+            Students joined using your code
           </p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
           <div className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center justify-between">
-            <span>यशस्वी नोंदणी</span>
+            <span>Verified Joining</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-500" />
           </div>
           <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400 font-mono-numbers">
             {verifiedCount}
           </div>
           <p className="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">
-            पडताळलेले व कमिशन जमा
+            Verified & commission earned
           </p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
           <div className="text-[11px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center justify-between">
-            <span>जमा कमिशन</span>
+            <span>Total Commission</span>
             <TrendingUp className="w-4 h-4 text-amber-500" />
           </div>
           <div className="text-2xl font-black text-amber-700 dark:text-amber-400 font-mono-numbers">
             ₹{formatInr(totalEarnings)}
           </div>
           <p className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
-            प्रति मित्र ₹५.८० थेट वॉलेटमध्ये
+            ₹5.80 per friend in wallet
           </p>
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-xs space-y-1">
           <div className="text-[11px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-wider flex items-center justify-between">
-            <span>रिफंडसाठी बाकी</span>
+            <span>Remaining for Refund</span>
             <Trophy className="w-4 h-4 text-indigo-500" />
           </div>
           <div className="text-2xl font-black text-indigo-700 dark:text-indigo-400 font-mono-numbers">
-            {remainingForMilestone} <span className="text-xs font-normal text-slate-500">मित्र</span>
+            {remainingForMilestone} <span className="text-xs font-normal text-slate-500">Friends</span>
           </div>
           <p className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium">
-            {isMilestoneAchieved ? "लक्ष्य पूर्ण झाले!" : "१००% फी परताव्यासाठी"}
+            {isMilestoneAchieved ? "Milestone achieved!" : "For 100% fee refund"}
           </p>
         </div>
       </div>
@@ -404,10 +404,10 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
           <div>
             <h3 className="text-base font-black text-slate-900 dark:text-white flex items-center gap-2">
               <Users className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <span>जोडलेल्या मित्रांची सविस्तर यादी (Referred Friends Activity)</span>
+              <span>Referred Friends Activity</span>
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              प्रत्येक मित्राची सराव स्थिती, परीक्षा आणि मिळालेले कमिशन तपासा.
+              Track the progress, exam, and commission for each referred friend.
             </p>
           </div>
 
@@ -417,7 +417,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
               <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder="नाव, परीक्षा शोधा..."
+                placeholder="Search name, exam..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-500 font-medium"
@@ -434,7 +434,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
-                सर्व ({referredList.length})
+                All ({referredList.length})
               </button>
               <button
                 type="button"
@@ -445,7 +445,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
-                सक्रिय व पेड ({verifiedCount})
+                Active & Paid ({verifiedCount})
               </button>
             </div>
           </div>
@@ -459,11 +459,11 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
             </div>
             <h4 className="font-bold text-slate-800 dark:text-slate-200 text-sm">
               {referredList.length === 0
-                ? "अजून कोणीही विद्यार्थी जोडलेला नाही."
-                : "शोधाशी जुळणारा कोणताही मित्र सापडला नाही."}
+                ? "No friends added yet."
+                : "No friends found matching your search."}
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-              तुमचा रेफरल कोड किंवा लिंक मित्रांसोबत WhatsApp वर शेअर करा आणि प्रति विद्यार्थी ₹५.८० कमवा!
+              Share your referral code or link with friends on WhatsApp and earn ₹5.80 for each!
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
               <a
@@ -473,7 +473,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                 className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs inline-flex items-center gap-2 cursor-pointer shadow-sm"
               >
                 <Share2 className="w-4 h-4" />
-                <span>WhatsApp वर शेअर करा</span>
+                <span>Share on WhatsApp</span>
               </a>
               <button
                 type="button"
@@ -481,7 +481,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                 className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs inline-flex items-center gap-2 cursor-pointer border border-slate-200 dark:border-slate-700"
               >
                 {copiedLink ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4" />}
-                <span>{copiedLink ? "लिंक कॉपी झाली!" : "लिंक कॉपी"}</span>
+                <span>{copiedLink ? "Link Copied!" : "Copy Link"}</span>
               </button>
             </div>
           </div>
@@ -490,12 +490,12 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
             <table className="w-full text-xs text-left">
               <thead>
                 <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold bg-slate-50/70 dark:bg-slate-800/50">
-                  <th className="py-3 px-3.5 rounded-l-xl">विद्यार्थी नाव व संपर्क</th>
-                  <th className="py-3 px-3">लक्ष्य परीक्षा</th>
-                  <th className="py-3 px-3">नोंदणी तारीख</th>
-                  <th className="py-3 px-3">रेफरल स्थिती</th>
-                  <th className="py-3 px-3 text-right">जमा कमिशन</th>
-                  <th className="py-3 px-3.5 text-center rounded-r-xl">सराव प्रेरणा</th>
+                  <th className="py-3 px-3.5 rounded-l-xl">Student Name & Contact</th>
+                  <th className="py-3 px-3">Target Exam</th>
+                  <th className="py-3 px-3">Registration Date</th>
+                  <th className="py-3 px-3">Referral Status</th>
+                  <th className="py-3 px-3 text-right">Earned</th>
+                  <th className="py-3 px-3.5 text-center rounded-r-xl">Motivation</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-semibold text-slate-700 dark:text-slate-300">
@@ -520,7 +520,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                           </div>
                           <div>
                             <div className="font-bold text-slate-900 dark:text-white">
-                              {rec.referredStudentName || "विद्यार्थी"}
+                              {rec.referredStudentName || "Student"}
                             </div>
                             <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                               {maskPhoneNumber(rec.referredStudentMobile)}
@@ -538,7 +538,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
 
                       {/* Date */}
                       <td className="py-3 px-3 text-slate-500 dark:text-slate-400 font-mono-numbers">
-                        {new Date(rec.timestamp).toLocaleDateString("mr-IN", {
+                        {new Date(rec.timestamp).toLocaleDateString("en-IN", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",
@@ -549,7 +549,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                       <td className="py-3 px-3">
                         <span className="px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 font-black text-[10px] border border-emerald-300 dark:border-emerald-700 flex items-center gap-1 w-fit">
                           <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                          <span>सक्रिय व प्रमाणित (Verified)</span>
+                          <span>Active & Verified</span>
                         </span>
                       </td>
 
@@ -564,10 +564,10 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
                           type="button"
                           onClick={() => handleSendCheer(rec)}
                           className="px-2.5 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 font-bold text-[10px] border border-emerald-200 dark:border-emerald-800/80 inline-flex items-center gap-1 transition-all active:scale-95 cursor-pointer"
-                          title="मित्राला अभ्यासाची टेस्ट आठवण पाठवा"
+                          title="Send a study reminder to your friend"
                         >
                           <MessageCircle className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                          <span>{cheerSentId === rec.id ? "पाठवले!" : "आठवण पाठवा"}</span>
+                          <span>{cheerSentId === rec.id ? "Sent!" : "Send Reminder"}</span>
                         </button>
                       </td>
                     </tr>
@@ -584,10 +584,10 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
         <div className="space-y-1 max-w-md">
           <div className="font-black text-sm text-white flex items-center gap-2">
             <Gift className="w-4 h-4 text-amber-400" />
-            <span>रेफरल लिंक आणि कोड शेअर करा</span>
+            <span>Share Referral Link & Code</span>
           </div>
           <p className="text-xs text-slate-400">
-            कोड: <span className="font-mono text-amber-300 font-bold">{studentRefCode}</span> · थेट लिंक वापरून मित्रांना मोफत नोंदणी करायला सांगा.
+            Code: <span className="font-mono text-amber-300 font-bold">{studentRefCode}</span> · Invite friends to register for free using your direct link.
           </p>
         </div>
 
@@ -598,7 +598,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
             className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 border border-white/15 transition-all cursor-pointer"
           >
             {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedCode ? "कोड कॉपी झाला!" : "कोड कॉपी"}</span>
+            <span>{copiedCode ? "Code Copied!" : "Copy Code"}</span>
           </button>
 
           <button
@@ -607,7 +607,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
             className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 border border-white/15 transition-all cursor-pointer"
           >
             {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copiedLink ? "लिंक कॉपी झाली!" : "लिंक कॉपी"}</span>
+            <span>{copiedLink ? "Link Copied!" : "Copy Link"}</span>
           </button>
 
           <button
@@ -615,7 +615,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
             onClick={onOpenQr}
             className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-amber-300 font-bold text-xs flex items-center gap-1.5 border border-white/15 transition-all cursor-pointer"
           >
-            <span>QR कोड</span>
+            <span>QR Code</span>
           </button>
 
           <a
@@ -625,7 +625,7 @@ export const MyReferralsDashboard: React.FC<MyReferralsDashboardProps> = ({
             className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95 cursor-pointer"
           >
             <Share2 className="w-4 h-4" />
-            <span>WhatsApp शेअर</span>
+            <span>WhatsApp Share</span>
           </a>
         </div>
       </div>

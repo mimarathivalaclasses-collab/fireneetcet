@@ -533,7 +533,7 @@ export default function App() {
   };
 
   const handleClearMistakes = () => {
-    if (window.confirm("तुम्हाला सर्व नोंदवलेल्या चुकांची यादी साफ करायची आहे का?")) {
+    if (window.confirm("Are you sure you want to clear all recorded mistakes?")) {
       setMistakes([]);
     }
   };
@@ -655,7 +655,7 @@ export default function App() {
     result.questions.forEach((q) => {
       const userAns = result.userAnswers[q.id];
       if (userAns !== undefined && userAns !== q.correctOption) {
-        handleRecordMistake(q, userAns, `मॉक टेस्ट: ${result.exam}`);
+        handleRecordMistake(q, userAns, `Mock Test: ${result.exam}`);
       }
     });
 
@@ -685,7 +685,7 @@ export default function App() {
       const studentSubmission: StudentTestSubmission = {
         id: submissionId,
         studentId: currentUser?.id || "guest",
-        studentName: currentUser?.name || "विद्यार्थी (Guest)",
+        studentName: currentUser?.name || "Student (Guest)",
         studentMobile: currentUser?.mobile || "9999999999",
         exam: result.exam,
         testTitle: result.title || `Mock Test (${result.exam})`,
@@ -754,7 +754,7 @@ export default function App() {
   };
 
   const handleClearHistory = () => {
-    if (window.confirm("तुम्हाला सर्व टेस्ट इतिहास आणि आकडेवारी रिसेट करायची आहे का?")) {
+    if (window.confirm("Are you sure you want to reset all test history and statistics?")) {
       setTestHistory([]);
       setPracticeStats({
         totalAttempted: 0,
@@ -811,7 +811,7 @@ export default function App() {
   }, []);
 
   const handleLogout = () => {
-    if (window.confirm("तुम्हाला खात्यातून लॉग आऊट करायचे आहे का?")) {
+    if (window.confirm("Are you sure you want to log out from your account?")) {
       clearUserSession();
       try {
         localStorage.removeItem(VAULT_KEYS.CURRENT_STUDENT);
@@ -827,7 +827,7 @@ export default function App() {
   const handleStartDemoTest = (exam: ExamType, demoIndex: number = 1) => {
     const demoStudent: StudentUser = {
       id: `demo_user_${Date.now()}`,
-      name: `मोफत डेमो विद्यार्थी (${demoIndex === 1 ? "Physics-Chem" : demoIndex === 2 ? "Maths" : "Biology"})`,
+      name: `Free Demo Student (${demoIndex === 1 ? "Physics-Chem" : demoIndex === 2 ? "Maths" : "Biology"})`,
       mobile: "9999999999",
       email: "demo@abhyasmitra.com",
       role: "student",
@@ -852,7 +852,7 @@ export default function App() {
       const pAndC = filtered.filter((q) => q.subject === "Physics" || q.subject === "Chemistry");
       const testQs = deduplicateQuestionsList(pAndC.length >= 25 ? pAndC.slice(0, 25) : filtered.slice(0, 25));
       setActiveTestConfig({
-        title: "मोफत डेमो टेस्ट १: MHT-CET Physics & Chemistry",
+        title: "Free Demo Test 1: MHT-CET Physics & Chemistry",
         exam: exam,
         subject: "All",
         chapterFilter: "All",
@@ -864,7 +864,7 @@ export default function App() {
       const maths = filtered.filter((q) => q.subject === "Mathematics");
       const testQs = deduplicateQuestionsList(maths.length >= 25 ? maths.slice(0, 25) : filtered.slice(0, 25));
       setActiveTestConfig({
-        title: "मोफत डेमो टेस्ट २: MHT-CET Mathematics Sprint",
+        title: "Free Demo Test 2: MHT-CET Mathematics Sprint",
         exam: exam,
         subject: "Mathematics",
         chapterFilter: "All",
@@ -876,7 +876,7 @@ export default function App() {
       const bio = filtered.filter((q) => q.subject === "Biology");
       const testQs = deduplicateQuestionsList(bio.length >= 30 ? bio.slice(0, 30) : filtered.slice(0, 30));
       setActiveTestConfig({
-        title: "मोफत डेमो टेस्ट ३: NEET / CET Biology & Science Master",
+        title: "Free Demo Test 3: NEET / CET Biology & Science Master",
         exam: exam,
         subject: "Biology",
         chapterFilter: "All",
@@ -1012,7 +1012,7 @@ export default function App() {
 
           {/* Master Layout: Left Vertical Sidebar + Right Main Content */}
           <div className="flex-1 flex w-full max-w-full min-h-[calc(100vh-65px)]">
-            {/* Left Vertical Sidebar (उभी मेनू पट्टी) */}
+            {/* Left Vertical Sidebar */}
             <VerticalSidebar
               activeTab={activeTab}
               onNavigate={handleNavigateTab}
@@ -1089,10 +1089,10 @@ export default function App() {
                       </div>
                       <div>
                         <div className="text-xs sm:text-sm font-black text-orange-950 dark:text-orange-200">
-                          {activeReferralBanner.type === "agent" ? "अधिकृत एजंट भागीदार आमंत्रण:" : "मित्राकडून विशेष आमंत्रण:"} कोड <span className="font-mono bg-orange-200/60 dark:bg-orange-900/60 px-2 py-0.5 rounded text-orange-900 dark:text-orange-100 font-bold">{activeReferralBanner.code}</span>
+                          {activeReferralBanner.type === "agent" ? "Official Agent Partner Invitation:" : "Special Friend Invitation:"} Code <span className="font-mono bg-orange-200/60 dark:bg-orange-900/60 px-2 py-0.5 rounded text-orange-900 dark:text-orange-100 font-bold">{activeReferralBanner.code}</span>
                         </div>
                         <div className="text-[11px] text-slate-600 dark:text-slate-300">
-                          MHT-CET, NEET & JEE Main २५,०००+ प्रश्न, १० Grand Tests आणि मोफत डेमो चाचण्या उपलब्ध आहेत!
+                          MHT-CET, NEET & JEE Main 25,000+ Questions, 10 Grand Tests and Free Demo Tests available!
                         </div>
                       </div>
                     </div>
@@ -1103,14 +1103,14 @@ export default function App() {
                           onClick={() => handleNavigateTab("auth_portal")}
                           className="px-3.5 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-black text-xs shadow-sm cursor-pointer transition-all active:scale-95"
                         >
-                          लॉगिन / नोंदणी करा →
+                          Login / Register Now →
                         </button>
                       )}
                       <button
                         type="button"
                         onClick={() => setActiveReferralBanner(null)}
                         className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs px-2 py-1 cursor-pointer font-bold"
-                        title="बंद करा"
+                        title="Close"
                       >
                         ✕
                       </button>
@@ -1223,7 +1223,7 @@ export default function App() {
                       handleUpdatePracticeStats(subject, isCorrect);
                     }}
                     onRecordMistake={(question, selectedOption) => {
-                      handleRecordMistake(question, selectedOption, "सराव मोड (Practice Mode)");
+                      handleRecordMistake(question, selectedOption, "Practice Mode");
                     }}
                     onOpenAiGenerator={() => handleNavigateTab("ai_generator")}
                     onBack={handleBackNavigation}
@@ -1376,8 +1376,8 @@ export default function App() {
                   <RoleBasedAccessWrapper
                     currentUser={currentUser}
                     allowedRoles={["agent", "admin"]}
-                    titleMr="अधिकृत एजंट कमिशन पोर्टल"
-                    descriptionMr="हे पोर्टल केवळ नोंदणीकृत एजंट पार्टनर आणि ॲडमिनसाठी राखीव आहे. कृपया आपल्या एजंट खात्याने लॉगिन करा."
+                    title="Official Agent Commission Portal"
+                    description="This portal is reserved for registered Agent Partners and Admins only. Please login with your agent account."
                     onOpenAuth={() => handleNavigateTab("auth_portal")}
                     onBackToHome={handleNavigateHome}
                   >
@@ -1438,7 +1438,7 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                 <p className="font-semibold text-slate-700">
-                  NEET · JEE Main · MHT-CET सराव ॲप
+                  NEET · JEE Main · MHT-CET Practice App
                 </p>
                 <span className="text-slate-300">•</span>
                 <span className="text-slate-500 font-mono-numbers">NTA & State CET Syllabus</span>
@@ -1448,7 +1448,7 @@ export default function App() {
                   Physics · Chem · Maths · Bio
                 </span>
                 <span className="px-2 py-0.5 rounded bg-slate-100 font-medium border border-slate-200">
-                  मराठी व इंग्रजी माध्यम
+                  English Medium
                 </span>
               </div>
             </div>

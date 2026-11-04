@@ -31,7 +31,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 1,
     studentId: "top-1",
     studentName: "Aditya S. Kulkarni",
-    city: "पुणे (Pune)",
+    city: "Pune",
     exam: "MHT_CET",
     totalSolved: 1420,
     totalCorrect: 1385,
@@ -45,7 +45,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 2,
     studentId: "top-2",
     studentName: "Shruti M. Deshmukh",
-    city: "लातूर (Latur)",
+    city: "Latur",
     exam: "NEET",
     totalSolved: 1390,
     totalCorrect: 1342,
@@ -59,7 +59,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 3,
     studentId: "top-3",
     studentName: "Omkar V. Patil",
-    city: "कोल्हापूर (Kolhapur)",
+    city: "Kolhapur",
     exam: "JEE_MAIN",
     totalSolved: 1310,
     totalCorrect: 1250,
@@ -73,7 +73,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 4,
     studentId: "top-4",
     studentName: "Vaishnavi G. Jadhav",
-    city: "छत्रपती संभाजीनगर (Aurangabad)",
+    city: "Chhatrapati Sambhajinagar (Aurangabad)",
     exam: "MHT_CET",
     totalSolved: 1260,
     totalCorrect: 1198,
@@ -86,7 +86,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 5,
     studentId: "top-5",
     studentName: "Prathamesh R. Shinde",
-    city: "नांदेड (Nanded)",
+    city: "Nanded",
     exam: "NEET",
     totalSolved: 1220,
     totalCorrect: 1152,
@@ -99,7 +99,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 6,
     studentId: "top-6",
     studentName: "Ananya K. Joshi",
-    city: "नागपूर (Nagpur)",
+    city: "Nagpur",
     exam: "JEE_MAIN",
     totalSolved: 1180,
     totalCorrect: 1110,
@@ -112,7 +112,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 7,
     studentId: "top-7",
     studentName: "Tejas B. Gaikwad",
-    city: "नाशिक (Nashik)",
+    city: "Nashik",
     exam: "MHT_CET",
     totalSolved: 1140,
     totalCorrect: 1068,
@@ -125,7 +125,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 8,
     studentId: "top-8",
     studentName: "Pooja N. Chavan",
-    city: "सोलापूर (Solapur)",
+    city: "Solapur",
     exam: "NEET",
     totalSolved: 1100,
     totalCorrect: 1025,
@@ -138,7 +138,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 9,
     studentId: "top-9",
     studentName: "Sanket D. More",
-    city: "सातारा (Satara)",
+    city: "Satara",
     exam: "MHT_CET",
     totalSolved: 1060,
     totalCorrect: 985,
@@ -151,7 +151,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     rank: 10,
     studentId: "top-10",
     studentName: "Rutuja A. Pawar",
-    city: "अमरावती (Amravati)",
+    city: "Amravati",
     exam: "NEET",
     totalSolved: 1030,
     totalCorrect: 954,
@@ -162,7 +162,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
   },
   ...Array.from({ length: 40 }).map((_, i) => {
     const idx = i + 11;
-    const cities = ["ठाणे (Thane)", "नवी मुंबई", "सांगली", "जळगाव", "अहमदनगर", "बीड", "उस्मानाबाद", "परभणी", "धुळे", "रत्नागिरी"];
+    const cities = ["Thane", "Navi Mumbai", "Sangli", "Jalgaon", "Ahmednagar", "Beed", "Osmanabad", "Parbhani", "Dhule", "Ratnagiri"];
     const exams: ExamType[] = ["MHT_CET", "NEET", "JEE_MAIN"];
     const exam = exams[idx % 3];
     const total = 1000 - idx * 16;
@@ -173,7 +173,7 @@ const MOCK_TOPPERS_DATA: LeaderboardTopper[] = [
     return {
       rank: idx,
       studentId: `top-${idx}`,
-      studentName: `विद्यार्थी ${idx} (Maharashtra Aspirant)`,
+      studentName: `Student ${idx} (Maharashtra Aspirant)`,
       city: cities[idx % cities.length],
       exam,
       totalSolved: total,
@@ -250,8 +250,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
                 onClick={onBack}
                 className="px-3.5 py-1.5 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer ring-1 ring-white/20 mb-1"
               >
-                <ArrowLeft className="w-3.5 h-3.5 text-amber-300" />
-                <span>← मुख्य पानावर जा</span>
+                <span>← Back to Home</span>
               </button>
             )}
 
@@ -261,10 +260,10 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-              महाराष्ट्र टॉपर्स लीडरबोर्ड (Toppers Leaderboard)
+              Maharashtra Toppers Leaderboard
             </h1>
             <p className="text-indigo-200 text-xs sm:text-sm leading-relaxed">
-              सर्वाधिक अचूक उत्तरे आणि मॉक टेस्ट गुणांवर आधारित महाराष्ट्रातील सर्वोत्कृष्ट ५० विद्यार्थ्यांची रिअल-टाइम रँकिंग.
+              Real-time ranking of the top 50 students in Maharashtra based on most correct answers and mock test scores.
             </p>
           </div>
 
@@ -272,20 +271,20 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
           <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 text-white space-y-1.5 min-w-[200px]">
             <div className="text-[11px] uppercase font-bold text-amber-300 flex items-center gap-1">
               <Star className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-              <span>तुमची सध्याची स्थिती:</span>
+              <span>Your Current Status:</span>
             </div>
             <div className="text-sm font-black text-white">
-              {currentUser ? currentUser.name : "अतिथी विद्यार्थी"}
+              {currentUser ? currentUser.name : "Guest Student"}
             </div>
             <div className="text-xs text-slate-300 font-mono">
-              टार्गेट: <strong className="text-amber-300">{currentUser ? currentUser.examTarget : currentExam}</strong>
+              Target: <strong className="text-amber-300">{currentUser ? currentUser.examTarget : currentExam}</strong>
             </div>
             {onNavigateToPractice && (
               <button
                 onClick={onNavigateToPractice}
                 className="w-full mt-1 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs transition-colors cursor-pointer"
               >
-                सराव करून रँक वाढवा ⚡
+                Practice to improve Rank ⚡
               </button>
             )}
           </div>
@@ -324,19 +323,19 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
 
             <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-slate-200/80 text-center">
               <div>
-                <span className="text-[10px] text-slate-400 font-bold block">अचूक उत्तरे</span>
+                <span className="text-[10px] text-slate-400 font-bold block">Correct Answers</span>
                 <span className="text-sm font-black text-emerald-600 font-mono-numbers">
                   {topper.totalCorrect}
                 </span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-400 font-bold block">अचूकता</span>
+                <span className="text-[10px] text-slate-400 font-bold block">Accuracy</span>
                 <span className="text-sm font-black text-slate-900 font-mono-numbers">
                   {topper.accuracy}%
                 </span>
               </div>
               <div>
-                <span className="text-[10px] text-slate-400 font-bold block">सलग अभ्यास</span>
+                <span className="text-[10px] text-slate-400 font-bold block">Study Streak</span>
                 <span className="text-sm font-black text-orange-600 font-mono-numbers flex items-center justify-center gap-0.5">
                   <Flame className="w-3 h-3 fill-orange-500 text-orange-500" />
                   {topper.streakDays}d
@@ -362,7 +361,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
               }`}
             >
               {tab === "ALL"
-                ? "सर्व परीक्षा (All Exams)"
+                ? "All Exams"
                 : tab === "MHT_CET"
                 ? "MHT-CET"
                 : tab === "NEET"
@@ -377,7 +376,7 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="विद्यार्थी किंवा शहर शोधा..."
+            placeholder="Search student or city..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold outline-none focus:border-purple-600 bg-slate-50"
@@ -391,11 +390,11 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
           <div className="flex items-center gap-2">
             <Trophy className="w-5 h-5 text-purple-700" />
             <h3 className="text-sm sm:text-base font-black text-slate-900">
-              संपूर्ण टॉप ५० यादी ({filteredToppers.length} विद्यार्थी)
+              Full Top 50 List ({filteredToppers.length} students)
             </h3>
           </div>
           <span className="text-xs text-slate-500 font-bold">
-            निकष: अचूक उत्तरे + मॉक टेस्ट स्कोअर
+            Criteria: Correct Answers + Mock Test Score
           </span>
         </div>
 
@@ -432,21 +431,21 @@ export const LeaderboardView: React.FC<LeaderboardViewProps> = ({
 
               <div className="flex items-center gap-4 sm:gap-6 text-right shrink-0">
                 <div>
-                  <span className="text-[10px] text-slate-400 font-bold block">अचूक उत्तरे</span>
+                  <span className="text-[10px] text-slate-400 font-bold block">Correct Answers</span>
                   <span className="text-xs sm:text-sm font-black text-emerald-600 font-mono-numbers">
                     {topper.totalCorrect} / {topper.totalSolved}
                   </span>
                 </div>
 
                 <div>
-                  <span className="text-[10px] text-slate-400 font-bold block">अचूकता</span>
+                  <span className="text-[10px] text-slate-400 font-bold block">Accuracy</span>
                   <span className="text-xs sm:text-sm font-black text-slate-900 font-mono-numbers">
                     {topper.accuracy}%
                   </span>
                 </div>
 
                 <div className="hidden sm:block">
-                  <span className="text-[10px] text-slate-400 font-bold block">सलग सराव</span>
+                  <span className="text-[10px] text-slate-400 font-bold block">Study Streak</span>
                   <span className="text-xs sm:text-sm font-black text-orange-600 font-mono-numbers flex items-center justify-end gap-1">
                     <Flame className="w-3.5 h-3.5 fill-orange-500 text-orange-500" />
                     {topper.streakDays}d

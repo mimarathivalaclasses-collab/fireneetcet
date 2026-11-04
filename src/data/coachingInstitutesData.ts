@@ -5,7 +5,7 @@ import {
   InstituteSubmission,
   ExamType,
   SubjectType,
-  Question,
+  Question
 } from "../types";
 import { INITIAL_QUESTIONS } from "./initialQuestions";
 import { PYQ_QUESTIONS } from "./pyqQuestionsData";
@@ -14,11 +14,11 @@ export const ALL_DEFAULT_INSTITUTES: InstituteProfile[] = [
   {
     id: "inst_plpc_ambad",
     name: "Mi Marathiwala Classes, Ambad (Jalna)",
-    nameMr: "मी मराठीवाला क्लासेस, अंबड (जि. जालना)",
+    nameMr: "मी मराठीवाला क्लासेस, अंबड",
     instituteCode: "MARATHIWALA-AMBAD",
     directorName: "प्रा. डी. के. सर (Director - Mi Marathiwala Classes)",
     contactNumber: "+91 93072 20454",
-    city: "अंबड (जि. जालना, महाराष्ट्र)",
+    city: "अंबड",
     adminPasscode: "marathi123",
     maxStudentsLimit: 2000,
     batches: [
@@ -29,16 +29,16 @@ export const ALL_DEFAULT_INSTITUTES: InstituteProfile[] = [
     ],
     bannerNotice: "Mi Marathiwala Classes CBT Portal: Weekly Grand Mock Test is LIVE every Sunday 10:00 AM.",
     bannerNoticeMr: "📢 मी मराठीवाला क्लासेस ऑनलाईन टेस्ट पॅनल: सर्व बॅचेससाठी दर रविवारी सकाळी १०:०० वाजता महा-मॉक टेस्ट सुरू आहे!",
-    createdAt: 1704067200000,
+    createdAt: 1704067200000
   },
   {
     id: "inst_mimarathi",
     name: "Mi Marathi Vala Classes & Tech Prep",
-    nameMr: "मी मराठी वाला क्लासेस (NEET / JEE / MHT-CET अकॅडमी)",
+    nameMr: "मी मराठी वाला क्लासेस",
     instituteCode: "MIMARATHI",
     directorName: "संचालक: प्रा. अमोल पाटील सर",
     contactNumber: "+91 93072 20454",
-    city: "महाराष्ट्र (पुणे, लातूर, छत्रपती संभाजीनगर)",
+    city: "महाराष्ट्र",
     adminPasscode: "9307220454",
     maxStudentsLimit: 2000,
     batches: [
@@ -50,7 +50,7 @@ export const ALL_DEFAULT_INSTITUTES: InstituteProfile[] = [
     ],
     bannerNotice: "Online CBT Mock Tests & Live Rank Analysis for all batches.",
     bannerNoticeMr: "📢 सर्व बॅचेससाठी साप्ताहिक ऑनलाईन टेस्ट दर रविवारी सुरू आहे. टॉप रँक मिळवा!",
-    createdAt: 1704067200000,
+    createdAt: 1704067200000
   },
   {
     id: "inst_shree_academy",
@@ -70,7 +70,7 @@ export const ALL_DEFAULT_INSTITUTES: InstituteProfile[] = [
     ],
     bannerNotice: "Weekly Grand Mock Test is LIVE every Sunday.",
     bannerNoticeMr: "📢 साप्ताहिक युनिट टेस्ट ॲपवर वेळेत द्या. निकाल सोमवारी जाहीर होईल.",
-    createdAt: 1704067200000,
+    createdAt: 1704067200000
   },
   {
     id: "inst_royal_academy",
@@ -85,7 +85,7 @@ export const ALL_DEFAULT_INSTITUTES: InstituteProfile[] = [
     batches: ["NEET Elite PCB", "MHT-CET PCM Crash", "11th Science Foundation"],
     bannerNotice: "All batch students must attempt practice tests before 8:00 PM.",
     bannerNoticeMr: "📢 सायंकाळी ८:०० वाजेपूर्वी सर्व विद्यार्थ्यांनी टेस्ट पूर्ण करावी.",
-    createdAt: 1704067200000,
+    createdAt: 1704067200000
   },
   {
     id: "inst_vidyadeep",
@@ -100,7 +100,7 @@ export const ALL_DEFAULT_INSTITUTES: InstituteProfile[] = [
     batches: ["12th Board + MHT-CET", "NEET Medical Achievers"],
     bannerNotice: "New test series uploaded for chapter-wise preparation.",
     bannerNoticeMr: "📢 प्रकरणनिहाय नवीन टेस्ट सिरीज ॲपवर जोडण्यात आली आहे.",
-    createdAt: 1704067200000,
+    createdAt: 1704067200000
   },
 ];
 
@@ -147,7 +147,7 @@ export function generateSampleStudents(
       addedAt: Date.now() - i * 86400000 * 2,
       isActive: true,
       testsAttemptedCount: (i % 5) + 1,
-      avgScorePercentage: Math.min(98, Math.max(52, 60 + ((i * 7) % 38))),
+      avgScorePercentage: Math.min(98, Math.max(52, 60 + ((i * 7) % 38)))
     });
   }
 
@@ -161,7 +161,6 @@ export const INITIAL_INSTITUTE_WEEKLY_TESTS: InstituteWeeklyTest[] = [
     instituteId: DEFAULT_INSTITUTE.id,
     testCode: "WT-01-PHY-CHEM",
     title: "Weekly Unit Test 01: Physics (Rotational Dynamics) + Chemistry (Solutions)",
-    titleMr: "साप्ताहिक घटक चाचणी ०१: भौतिकशास्त्र (परिभ्रमण गती) + रसायनशास्त्र (द्रावणे)",
     exam: "MHT_CET",
     subject: "All",
     chapters: ["Rotational Dynamics", "Solutions & Colligative Properties", "Solid State"],
@@ -175,19 +174,18 @@ export const INITIAL_INSTITUTE_WEEKLY_TESTS: InstituteWeeklyTest[] = [
     markingScheme: {
       correct: 1,
       incorrect: 0,
-      mathsCorrect: 2,
+      mathsCorrect: 2
     },
     questions: INITIAL_QUESTIONS.slice(0, 25),
     status: "active",
     createdAt: Date.now() - 172800000,
-    createdBy: "प्रा. अमोल पाटील सर",
+    createdBy: "प्रा. अमोल पाटील सर"
   },
   {
     id: "inst_test_02",
     instituteId: DEFAULT_INSTITUTE.id,
     testCode: "WT-02-MATHS-MATRICES",
     title: "Class Rank Booster: Mathematics (Matrices & Trigonometry)",
-    titleMr: "क्लास रँक बूस्टर: गणित (मॅट्रायसेस व त्रिकोणमिती)",
     exam: "MHT_CET",
     subject: "Mathematics",
     chapters: ["Matrices", "Trigonometric Functions", "Vectors"],
@@ -201,19 +199,18 @@ export const INITIAL_INSTITUTE_WEEKLY_TESTS: InstituteWeeklyTest[] = [
     markingScheme: {
       correct: 2,
       incorrect: 0,
-      mathsCorrect: 2,
+      mathsCorrect: 2
     },
     questions: INITIAL_QUESTIONS.filter((q) => q.subject === "Mathematics").slice(0, 25),
     status: "active",
     createdAt: Date.now() - 86400000,
-    createdBy: "प्रा. अमोल पाटील सर",
+    createdBy: "प्रा. अमोल पाटील सर"
   },
   {
     id: "inst_test_03",
     instituteId: DEFAULT_INSTITUTE.id,
     testCode: "WT-03-NEET-BIO",
     title: "NEET Super 30: Biology (Genetics & Biotechnology Complete)",
-    titleMr: "NEET सुपर ३०: जीवशास्त्र (अनुवांशिकता व जैवतंत्रज्ञान संपूर्ण सराव)",
     exam: "NEET",
     subject: "Biology",
     chapters: ["Principles of Inheritance & Variation", "Molecular Basis of Inheritance", "Biotechnology Principles"],
@@ -226,12 +223,12 @@ export const INITIAL_INSTITUTE_WEEKLY_TESTS: InstituteWeeklyTest[] = [
     totalMarks: 100,
     markingScheme: {
       correct: 4,
-      incorrect: -1,
+      incorrect: -1
     },
     questions: PYQ_QUESTIONS.filter((q) => q.subject === "Biology").slice(0, 25),
     status: "active",
     createdAt: Date.now() - 43200000,
-    createdBy: "डॉ. सावंत मॅडम (NEET Faculty)",
+    createdBy: "डॉ. सावंत मॅडम (NEET Faculty)"
   },
 ];
 
@@ -254,7 +251,7 @@ export const INITIAL_INSTITUTE_SUBMISSIONS: InstituteSubmission[] = [
     unattemptedCount: 0,
     timeTakenSeconds: 1840,
     submittedAt: Date.now() - 3600000 * 5,
-    userAnswers: {},
+    userAnswers: {}
   },
   {
     id: "sub_02",
@@ -273,7 +270,7 @@ export const INITIAL_INSTITUTE_SUBMISSIONS: InstituteSubmission[] = [
     unattemptedCount: 0,
     timeTakenSeconds: 2100,
     submittedAt: Date.now() - 3600000 * 4,
-    userAnswers: {},
+    userAnswers: {}
   },
   {
     id: "sub_03",
@@ -292,7 +289,7 @@ export const INITIAL_INSTITUTE_SUBMISSIONS: InstituteSubmission[] = [
     unattemptedCount: 1,
     timeTakenSeconds: 1950,
     submittedAt: Date.now() - 3600000 * 3,
-    userAnswers: {},
+    userAnswers: {}
   },
 ];
 
@@ -528,7 +525,7 @@ export function parseMockTestFromWordOrExcel(
   if (isTabOrCsv) {
     lines.forEach((line, lineIdx) => {
       // Skip header if line 0 looks like header
-      if (lineIdx === 0 && (line.toLowerCase().includes("question") || line.toLowerCase().includes("option") || line.includes("प्रश्न"))) {
+      if (lineIdx === 0 && (line.toLowerCase().includes("question") || line.toLowerCase().includes("option") || line.includes)) {
         return;
       }
 
@@ -544,9 +541,9 @@ export function parseMockTestFromWordOrExcel(
         const ansRaw = (cleanParts[5] || "A").trim().toUpperCase();
 
         let correctIdx = 0;
-        if (ansRaw === "B" || ansRaw === "2" || ansRaw === "ब") correctIdx = 1;
-        else if (ansRaw === "C" || ansRaw === "3" || ansRaw === "क") correctIdx = 2;
-        else if (ansRaw === "D" || ansRaw === "4" || ansRaw === "ड") correctIdx = 3;
+        if (ansRaw === "B" || ansRaw === "2") correctIdx = 1;
+        else if (ansRaw === "C" || ansRaw === "3") correctIdx = 2;
+        else if (ansRaw === "D" || ansRaw === "4") correctIdx = 3;
 
         const expl = cleanParts[6] || "सविस्तर स्पष्टीकरण: योग्य पर्याय " + ["A", "B", "C", "D"][correctIdx] + " आहे.";
         const chapter = cleanParts[7] || defaultChapter;
@@ -559,14 +556,11 @@ export function parseMockTestFromWordOrExcel(
             chapter,
             difficulty: "Medium",
             questionText: qText,
-            questionTextMr: qText,
             options: [optA, optB, optC, optD],
-            optionsMr: [optA, optB, optC, optD],
             correctOption: correctIdx,
             explanation: expl,
-            explanationMr: expl,
             isCustom: true,
-            createdAt: Date.now(),
+            createdAt: Date.now()
           });
         }
       }
@@ -577,9 +571,7 @@ export function parseMockTestFromWordOrExcel(
     }
   }
 
-  // Word / Text document block parser
-  // Splits by "Q1.", "Q 1.", "1.", "प्र. १", "Question 1", etc.
-  const blocks = rawText.split(/\n\s*(?:Q\s*\.?\s*\d+|Question\s*\d+|प्र\s*\.?\s*\d+|\d+\.)[\s\:\-\)]/gi);
+  const blocks = rawText.split(/(?=\n\s*(?:Q\.?\s*\d+|\d+\.|\-{3,}))/gi);
 
   blocks.forEach((blk, idx) => {
     const trimmed = blk.trim();
@@ -596,12 +588,12 @@ export function parseMockTestFromWordOrExcel(
 
     for (const l of blkLines) {
       // Check for Option A / 1 / (A) / (1)
-      const optAMatch = l.match(/^(?:A|1|\(A\)|\(1\)|अ\)|\(अ\))[\.\:\-\)]\s*(.*)$/i);
-      const optBMatch = l.match(/^(?:B|2|\(B\)|\(2\)|ब\)|\(ब\))[\.\:\-\)]\s*(.*)$/i);
-      const optCMatch = l.match(/^(?:C|3|\(C\)|\(3\)|क\)|\(क\))[\.\:\-\)]\s*(.*)$/i);
-      const optDMatch = l.match(/^(?:D|4|\(D\)|\(4\)|ड\)|\(ड\))[\.\:\-\)]\s*(.*)$/i);
-      const ansMatch = l.match(/^(?:Ans|Answer|Correct|उत्तर|AnsKey)[\.\:\-\s]+([A-D1-4अ-ड])/i);
-      const expMatch = l.match(/^(?:Explanation|Solution|स्पष्टीकरण|Hint)[\.\:\-\s]+(.*)$/i);
+      const optAMatch = l.match(/^(?:A|1|\(A\)|\(1\)|अ)\s*[\.\:\-\)]\s*(.*)$/i);
+      const optBMatch = l.match(/^(?:B|2|\(B\)|\(2\)|ब)\s*[\.\:\-\)]\s*(.*)$/i);
+      const optCMatch = l.match(/^(?:C|3|\(C\)|\(3\)|क)\s*[\.\:\-\)]\s*(.*)$/i);
+      const optDMatch = l.match(/^(?:D|4|\(D\)|\(4\)|ड)\s*[\.\:\-\)]\s*(.*)$/i);
+      const ansMatch = l.match(/^(?:Ans|Answer|Correct|Ans\.)\s*[\.\:\-\s]+\s*([A-Da-d1-4])/i);
+      const expMatch = l.match(/^(?:Exp|Explanation|Solution|Sol)\s*[\.\:\-\s]+\s*(.*)$/i);
 
       if (optAMatch) {
         options[0] = optAMatch[1].trim();
@@ -617,9 +609,9 @@ export function parseMockTestFromWordOrExcel(
         foundOption = true;
       } else if (ansMatch) {
         const a = ansMatch[1].toUpperCase();
-        if (a === "B" || a === "2" || a === "ब") correctIdx = 1;
-        else if (a === "C" || a === "3" || a === "क") correctIdx = 2;
-        else if (a === "D" || a === "4" || a === "ड") correctIdx = 3;
+        if (a === "B" || a === "2") correctIdx = 1;
+        else if (a === "C" || a === "3") correctIdx = 2;
+        else if (a === "D" || a === "4") correctIdx = 3;
         else correctIdx = 0;
       } else if (expMatch) {
         explanation = expMatch[1].trim();
@@ -641,20 +633,17 @@ export function parseMockTestFromWordOrExcel(
         chapter: defaultChapter,
         difficulty: "Medium",
         questionText: qText,
-        questionTextMr: qText,
         options: [options[0], options[1], options[2], options[3]],
-        optionsMr: [options[0], options[1], options[2], options[3]],
         correctOption: correctIdx,
         explanation,
-        explanationMr: explanation,
         isCustom: true,
-        createdAt: Date.now(),
+        createdAt: Date.now()
       });
     }
   });
 
   if (questions.length === 0) {
-    warnings.push("कोणताही प्रश्न ओळखता आला नाही. कृपया प्रश्न व ४ पर्यायांचे स्वरूप तपासा.");
+    warnings.push;
   }
 
   return { questions, warnings };

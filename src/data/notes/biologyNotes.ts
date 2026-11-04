@@ -5,18 +5,14 @@ export const BIOLOGY_NOTES: TopicNote[] = [
   {
     id: "note_bio_circulation_physiology",
     chapter: "Human Physiology (Circulation, Digestion, Neural Control)",
-    chapterMr: "मानवी शरीरक्रियाशास्त्र (Human Physiology)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Cardiovascular System, ECG, Digestion, Neural Synapse & Nephron Notes",
-    titleMr: "हृदय, रक्तगट, ईसीजी (ECG), पचनसंस्था, मज्जासंस्था व नेफ्रॉन नोट्स",
     summary: "Cardiac Cycle, Pacemaker SA Node, ECG Waves, Digestion Enzymes, Synaptic Transmission, Action Potential, and Counter-Current Mechanism in Nephron.",
-    summaryMr: "हृदयाचे ठोके, पेसमेकर (SA Node), ECG तरंगांचा अर्थ, पचनसंस्थेतील विकरे (Enzymes), न्युरॉनमधील अ‍ॅक्शन पोटेंशियल आणि नेफ्रॉनमधील कॉऊंटर-करंट सिस्टीम.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Cardiovascular System & ECG Waves",
-        titleMr: "१. हृदय चक्र, नोडल ऊती व ईसीजी (ECG)",
         points: [
           "Sinoatrial (SA) Node: Located in right atrium upper corner, acts as natural pacemaker, generates 70-75 impulses/min.",
           "Cardiac Output: Stroke Volume × Heart Rate = 70 mL × 72 bpm ≈ 5040 mL/min (~5 Litres/min).",
@@ -24,19 +20,11 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Heart Sounds: Lubb (1st sound, closure of AV tricuspid & bicuspid valves), Dubb (2nd sound, closure of semilunar valves).",
           "ECG Waves: P wave (Atrial depolarisation), QRS complex (Ventricular depolarisation), T wave (Ventricular repolarisation).",
         ],
-        pointsMr: [
-          "SA नोड (पेसमेकर): उजव्या अलिंदात असतो, दर मिनिटाला ७०-७५ विद्युत आवेग निर्माण करतो.",
-          "कार्डियाक आउटपुट: स्ट्रोक व्हॉल्यूम × ठोके = ७० mL × ७२ = ~५ लिटर प्रति मिनिट.",
-          "एका हृदय चक्राचा कालावधी: ०.८ सेकंद.",
-          "हृदयाचे आवाज: लब (Lubb - AV व्हॉल्व्ह बंद होताना), डब (Dubb - सेमीलुनार व्हॉल्व्ह बंद होताना).",
-          "ECG तरंग: P तरंग (अलिंदाचे विध्रुवीकरण), QRS कॉम्प्लेक्स (निलयाचे विध्रुवीकरण), T तरंग (निलयाचे पुनर्ध्रुवीकरण).",
-        ],
         keyFormula: "Cardiac Output = Stroke Volume (70 mL) × Heart Rate (72 bpm) ≈ 5 L/min",
-        keyMnemonic: "ECG: P = Atrium Squeeze, QRS = Ventricle Squeeze, T = Ventricle Relax.",
+        keyMnemonic: "ECG: P = Atrium Squeeze, QRS = Ventricle Squeeze, T = Ventricle Relax."
       },
       {
         title: "2. Excretion & Neural Transmission",
-        titleMr: "२. उत्सर्जन संस्था आणि मज्जासंस्थेचे वहन",
         points: [
           "Glomerular Filtration Rate (GFR): ~125 mL/min = 180 Litres/day. 99% of filtrate is reabsorbed by renal tubules (Daily urine output ≈ 1.5 L).",
           "Juxtaglomerular Apparatus (JGA): Fall in GFR activates JG cells to release Renin => converts Angiotensinogen to Angiotensin I => Angiotensin II (vasoconstrictor, stimulates Aldosterone from adrenal cortex).",
@@ -44,18 +32,12 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Resting Membrane Potential of Neuron: -70 mV (maintained by 3 Na⁺ out / 2 K⁺ in ATPase pump).",
           "Action Potential: Depolarization occurs due to rapid INFLUX of Na⁺ ions (+30 mV); Repolarization occurs due to EFFLUX of K⁺ ions.",
         ],
-        pointsMr: [
-          "GFR: १२५ mL/min = १८० लिटर/दिवस (९९% पुनर्शोषण होते, प्रत्यक्ष लघवी १.५ लिटर).",
-          "रेनिन-अँजिओटेन्सिन प्रणाली (RAAS): रक्तदाब कमी झाल्यास JG पेशी रेनिन स्त्रवतात.",
-          "विश्रामी क्षमता (Resting Potential): -७० mV (३ Na⁺ बाहेर / २ K⁺ आत पंप).",
-          "डीपोलरायझेशन (Action Potential): Na⁺ आयन्स आत आल्यामुळे (+३० mV) निर्माण होते.",
-        ],
-        keyFormula: "GFR = 125 mL/min (180 L/day) | Resting Potential = -70 mV",
+        keyFormula: "GFR = 125 mL/min (180 L/day) | Resting Potential = -70 mV"
       },
     ],
     quickRevisionPoints: [
-      { en: "Universal Donor blood group is O Negative (O-); Universal Recipient is AB Positive (AB+).", mr: "सर्वयोग्य दाता: O निगेटिव्ह (O-); सर्वयोग्य ग्राहक: AB पॉझिटिव्ह (AB+)." },
-      { en: "Parietal / Oxyntic cells of stomach secrete HCl and Castle's Intrinsic Factor (essential for Vitamin B12 absorption).", mr: "पोटातील ऑक्सिन्टिक पेशी HCl आणि इंट्रिन्सिक फॅक्टर (व्हिटॅमिन B12 च्या शोषणासाठी आवश्यक) स्रवतात." },
+      { en: "Universal Donor blood group is O Negative (O-); Universal Recipient is AB Positive (AB+)." },
+      { en: "Parietal / Oxyntic cells of stomach secrete HCl and Castle's Intrinsic Factor (essential for Vitamin B12 absorption)." },
     ],
     keyFormulasTable: [
       { name: "Cardiac Output", formula: "CO = Stroke Volume × Heart Rate", description: "Volume of blood pumped by each ventricle per minute" },
@@ -65,29 +47,23 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing Depolarization and Repolarization ion fluxes in neuron.",
-        mistakeMr: "न्युरॉनच्या डीपोलरायझेशन आणि रिपोलरायझेशन मधील आयन्सची सरमिसळ करणे.",
-        correction: "Depolarization is caused by rapid INFLOW of Na⁺; Repolarization is caused by OUTFLOW of K⁺.",
-        correctionMr: "डीपोलरायझेशन Na⁺ आयन्स आत आल्याने होते; रिपोलरायझेशन K⁺ आयन्स बाहेर गेल्याने होते.",
+        correction: "Depolarization is caused by rapid INFLOW of Na⁺; Repolarization is caused by OUTFLOW of K⁺."
       },
-    ],
+    ]
   },
 
   // 2. Genetics & Principles of Inheritance
   {
     id: "note_bio_genetics_principles",
     chapter: "Genetics & Principles of Inheritance",
-    chapterMr: "जनुकशास्त्र आणि आनुवंशिकतेची तत्त्वे (Genetics & Evolution)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Mendelian Genetics, DNA Replication, Transcription & Genetic Code Notes",
-    titleMr: "मेंडेलचे नियम, डीएनए प्रतिकृती, ट्रान्सक्रिप्शन व जनुकीय संकेत नोट्स",
     summary: "Mendel's Laws, Dihybrid Cross, Incomplete Dominance, Codominance, Hershey-Chase Experiment, DNA Replication, Transcription, and Genetic Code.",
-    summaryMr: "मेंडेलचे नियम, द्विसंकर संतती, अपूर्ण प्रभाविता, डीएनए प्रतिकृती (Replication), ट्रान्सक्रिप्शन, ट्रान्सलेशन आणि जनुकीय संकेत (Genetic Code).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Mendelian Genetics & Cross Ratios",
-        titleMr: "१. मेंडेलचे अनुवंशिकता नियम व गुणोत्तरे",
         points: [
           "Monohybrid Cross Phenotypic Ratio: 3 : 1, Genotypic Ratio: 1 : 2 : 1.",
           "Dihybrid Cross Phenotypic Ratio: 9 : 3 : 3 : 1, Genotypic Ratio: 1:2:2:4:1:2:1:2:1.",
@@ -96,19 +72,11 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Codominance: ABO Blood grouping (IA and IB alleles are codominant over i). Controlled by gene I with 3 alleles yielding 6 genotypes and 4 phenotypes.",
           "Sex Determination in Birds: ZZ (Male homogametic) and ZW (Female heterogametic).",
         ],
-        pointsMr: [
-          "एकसंकर (Monohybrid) दृश्य स्वरूप: ३ : १, जनुकीय स्वरूप: १ : २ : १.",
-          "द्विसंकर (Dihybrid) दृश्य स्वरूप: ९ : ३ : ३ : १.",
-          "कसोटी संकर (Test Cross): १ : १ (Monohybrid) आणि १ : १ : १ : १ (Dihybrid).",
-          "अपूर्ण प्रभाविता (Snapdragon): दृश्य व जनुकीय दोन्ही १ : २ : १ (लाल : गुलाबी : पांढरा).",
-          "सहप्रभाविता (Codominance): मानवी ABO रक्तगट (३ अ‍ॅलील्स, ६ जीनोटाइप्स, ४ फिनोटाइप्स).",
-        ],
         keyFormula: "Dihybrid Phenotypic: 9:3:3:1 | Incomplete Dominance: 1:2:1",
-        keyMnemonic: "Blood Group: IA = IB > i (IA and IB are codominant, i is recessive).",
+        keyMnemonic: "Blood Group: IA = IB > i (IA and IB are codominant, i is recessive)."
       },
       {
         title: "2. Molecular Basis: DNA, Replication & Central Dogma",
-        titleMr: "२. आण्विक आधार: डीएनए, प्रतिकृती व सेंट्रल डोग्मा",
         points: [
           "Chargaff's Rule: In double stranded DNA, [A] = [T] and [G] = [C], so (A + G) / (T + C) = 1.",
           "DNA Packaging: Nucleosome contains histone octamer (2 each of H2A, H2B, H3, H4) wrapped by ~200 bp of DNA. H1 histone seals entry/exit.",
@@ -117,20 +85,13 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "DNA Polymerase: Synthesizes new strand strictly in 5' -> 3' direction. Continuous on leading strand, discontinuous (Okazaki fragments) on lagging strand.",
           "Genetic Code: 64 codons total. 61 sense codons code for 20 amino acids. 3 Stop codons: UAA, UAG, UGA. Start codon: AUG (Methionine).",
         ],
-        pointsMr: [
-          "चारगाफचा नियम: द्विसर्पिल DNA मध्ये [A] = [T] आणि [G] = [C].",
-          "न्यूक्लियोझोम: हिस्टोन अष्टक आणि सुमारे २०० bp DNA, H1 हिस्टोन बाहेर जोडलेला असतो.",
-          "हर्षी-चेस प्रयोग: ³²P (DNA) वापरून DNA हाच अनुवंशिक घटक असल्याचे सिद्ध केले.",
-          "मेसेलसन-स्टाल प्रयोग: DNA चे अर्ध-संरक्षक (Semi-conservative) द्विगुणन सिद्ध केले.",
-          "जनुकीय संकेत: एकूण ६४ कोडॉन्स. ६१ अमिनो आम्लांसाठी, ३ स्टॉप कोडॉन्स (UAA, UAG, UGA), आणि AUG स्टार्ट कोडॉन.",
-        ],
         keyFormula: "[A] = [T], [G] = [C] => Purines (A+G) = Pyrimidines (T+C)",
-        keyMnemonic: "Stop codons: U Are Away (UAA), U Are Gone (UAG), U Go Away (UGA).",
+        keyMnemonic: "Stop codons: U Are Away (UAA), U Are Gone (UAG), U Go Away (UGA)."
       },
     ],
     quickRevisionPoints: [
-      { en: "Central Dogma: DNA -> (Transcription) -> mRNA -> (Translation) -> Protein. Proposed by Francis Crick.", mr: "सेंट्रल डोग्मा: DNA → (ट्रान्सक्रिप्शन) → mRNA → (ट्रान्सलेशन) → प्रथिने. फ्रान्सिस क्रिक यांनी मांडला." },
-      { en: "Lac Operon: Inducer is Allolactose/Lactose. Structural genes: z (β-galactosidase), y (permease), a (transacetylase).", mr: "लॅक ऑपेरॉन: प्रेरक लॅक्टोज आहे. जनुके: z (β-गॅलॅक्टोसिडेस), y (परमीएझ), a (ट्रान्सअ‍ॅसिटायलेझ)." },
+      { en: "Central Dogma: DNA -> (Transcription) -> mRNA -> (Translation) -> Protein. Proposed by Francis Crick." },
+      { en: "Lac Operon: Inducer is Allolactose/Lactose. Structural genes: z (β-galactosidase), y (permease), a (transacetylase)." },
     ],
     keyFormulasTable: [
       { name: "Chargaff Rule", formula: "A + G = T + C", description: "Equimolar purines and pyrimidines in dsDNA" },
@@ -140,46 +101,34 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Writing DNA synthesis direction as 3' to 5'.",
-        mistakeMr: "DNA पॉलिमरेझची दिशा 3' ते 5' अशी लिहिणे.",
-        correction: "DNA and RNA polymerization ALWAYS proceeds strictly in 5' to 3' direction.",
-        correctionMr: "नवीन धाग्याची निर्मिती नेहमी 5' ते 3' दिशेनेच होते.",
+        correction: "DNA and RNA polymerization ALWAYS proceeds strictly in 5' to 3' direction."
       },
-    ],
+    ]
   },
 
   // 3. Plant Physiology (Photosynthesis, Respiration)
   {
     id: "note_bio_plant_physiology",
     chapter: "Plant Physiology (Photosynthesis, Respiration)",
-    chapterMr: "वनस्पती शरीरक्रियाशास्त्र: प्रकाशसंश्लेषण आणि श्वसन (Plant Physiology)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Light & Dark Reactions, C3 & C4 Cycles, Glycolysis, Krebs Cycle & ETS Notes",
-    titleMr: "प्रकाशसंश्लेषण (C3 व C4 चक्रे), ग्लायकोलिसिस, क्रेब्स चक्र व ETS नोट्स",
     summary: "Z-scheme light reaction, Calvin C3 Cycle (RuBisCO), Hatch-Slack C4 pathway (Kranz anatomy), Glycolysis steps, TCA / Krebs Cycle, and Electron Transport System (ATP yield).",
-    summaryMr: "Z-स्कीम प्रकाश अभिक्रिया, केल्विन C3 चक्र, C4 पाथवे (क्रान्झ शारीररचना), ग्लायकोलिसिसचे १० टप्पे, क्रेब्स चक्र आणि इलेक्ट्रॉन ट्रान्सपोर्ट सिस्टीम (ATP हिशोब).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Photosynthesis: Light & Dark Reactions (C3 & C4 Pathways)",
-        titleMr: "१. प्रकाशसंश्लेषण: प्रकाश अभिक्रिया, C3 आणि C4 चक्रे",
         points: [
           "Photosystems: PS II (reaction center P680, photolysis of water on inner thylakoid membrane), PS I (reaction center P700).",
           "Non-cyclic Photophosphorylation: Generates both ATP and NADPH + H⁺ with O₂ release; Cyclic Photophosphorylation: Involves ONLY PS I, generates ONLY ATP (no NADPH, no O₂).",
           "Calvin Cycle (C3 pathway): First stable product is 3-PGA (3-carbon). Primary CO₂ acceptor is RuBP (5-carbon ketose sugar) catalyzed by RuBisCO (most abundant enzyme on Earth). To make 1 Glucose molecule: 6 CO₂ + 18 ATP + 12 NADPH required.",
           "C4 Pathway (Hatch-Slack): Occurs in maize, sugarcane, sorghum. Kranz anatomy in leaf (bundle sheath cells with agranal chloroplasts). Primary CO₂ acceptor is PEP (3-carbon) catalyzed by PEPcase in mesophyll cells. First stable product is OAA (4-carbon). Avoids Photorespiration!",
         ],
-        pointsMr: [
-          "PS II (P680) पाण्याच्या विघटनाने ऑक्सिजन (O₂) मुक्त करतो; PS I (P700) NADPH तयार करतो.",
-          "केल्विन चक्र (C3): प्राथमिक CO₂ स्वीकारणारा घटक RuBP (५-कार्बन), पहिला स्थिर घटक 3-PGA (३-कार्बन). १ ग्लुकोजसाठी १८ ATP + १२ NADPH लागतात.",
-          "C4 पाथवे (उदा. मका, ऊस): क्रान्झ शारीररचना (Kranz anatomy). प्राथमिक CO₂ स्वीकारणारा घटक PEP (PEPcase), पहिला स्थिर घटक OAA (४-कार्बन). फोटोरेस्पिरेशन टाळते!",
-        ],
         keyFormula: "1 Glucose in C3 = 6 CO₂ + 18 ATP + 12 NADPH | 1 Glucose in C4 = 30 ATP",
-        keyMnemonic: "C4 Kranz: PEPcase in Mesophyll (fixes CO2 to OAA) -> RuBisCO in Bundle Sheath.",
+        keyMnemonic: "C4 Kranz: PEPcase in Mesophyll (fixes CO2 to OAA) -> RuBisCO in Bundle Sheath."
       },
       {
         title: "2. Cellular Respiration: Glycolysis, Krebs Cycle & ETS",
-        titleMr: "२. पेशी श्वसन: ग्लायकोलिसिस, क्रेब्स चक्र आणि ETS",
         points: [
           "Glycolysis (EMP Pathway): Occurs in Cytoplasm of all living cells. 1 Glucose (6C) -> 2 Pyruvate (3C). Net gain: 2 ATP + 2 NADH (No oxygen required).",
           "Link Reaction: Pyruvate + CoA + NAD⁺ --(Pyruvate Dehydrogenase, Mg²⁺)--> Acetyl CoA (2C) + CO₂ + NADH.",
@@ -188,18 +137,12 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Theoretical ATP Yield per Glucose: 1 NADH = 2.5 (or 3) ATP; 1 FADH₂ = 1.5 (or 2) ATP => Total ~36 to 38 ATP per glucose oxidized aerobically.",
           "Respiratory Quotient (RQ): Volume of CO₂ evolved / Volume of O₂ consumed. Carbohydrates: RQ = 1.0; Fats (Tripalmitin): RQ = 0.7; Proteins: RQ ≈ 0.9; Organic acids (Malic acid): RQ > 1.",
         ],
-        pointsMr: [
-          "ग्लायकोलिसिस (EMP): सायटोप्लाझममध्ये घडते. १ ग्लुकोज → २ पायरुव्हेट. निव्वळ नफा = २ ATP + २ NADH.",
-          "क्रेब्स चक्र: मायटोकॉन्ड्रियाच्या मॅट्रिक्समध्ये घडते. १ ग्लुकोजसाठी: ६ NADH + २ FADH₂ + २ GTP मिळतात.",
-          "ETS (इलेक्ट्रॉन वहन): मायटोकॉन्ड्रियाच्या आतील पडद्यावर. कॉम्प्लेक्स IV सायटोक्रोम सी ऑक्सिडेस आहे.",
-          "श्वसन गुणांक (RQ = CO₂ / O₂): कार्बोहायड्रेट्स = १.०, मेद (Fats/Tripalmitin) = ०.७, प्रथिने = ०.९.",
-        ],
-        keyFormula: "RQ = Vol CO₂ evolved / Vol O₂ consumed | Tripalmitin RQ = 102 CO₂ / 145 O₂ = 0.7",
+        keyFormula: "RQ = Vol CO₂ evolved / Vol O₂ consumed | Tripalmitin RQ = 102 CO₂ / 145 O₂ = 0.7"
       },
     ],
     quickRevisionPoints: [
-      { en: "Succinate Dehydrogenase (Complex II) is the ONLY enzyme of Krebs cycle embedded in the inner mitochondrial membrane; all others are in matrix.", mr: "सक्सिनेट डिहायड्रोजनेज हे क्रेब्स चक्रातील एकमेव विकर मायटोकॉन्ड्रियाच्या आतील पडद्यामध्ये असते; बाकी सर्व मॅट्रिक्समध्ये असतात." },
-      { en: "RuBisCO has both Carboxylase and Oxygenase activity; high O2 and high temperature favor wasteful Photorespiration (C2 cycle) in C3 plants.", mr: "RuBisCO ऑक्सिजन जास्त असल्यास प्रकाशश्वसन (Photorespiration) करतो ज्यामुळे ATP वाया जातात." },
+      { en: "Succinate Dehydrogenase (Complex II) is the ONLY enzyme of Krebs cycle embedded in the inner mitochondrial membrane; all others are in matrix." },
+      { en: "RuBisCO has both Carboxylase and Oxygenase activity; high O2 and high temperature favor wasteful Photorespiration (C2 cycle) in C3 plants." },
     ],
     keyFormulasTable: [
       { name: "C3 Calvin ATP Cost", formula: "1 Glucose = 18 ATP + 12 NADPH", description: "Energy cost for standard hexose sugar synthesis in C3" },
@@ -209,46 +152,33 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming C4 plants lack the Calvin cycle.",
-        mistakeMr: "C4 वनस्पतींमध्ये केल्विन चक्र नसते असे मानणे.",
-        correction: "C4 plants DO perform the Calvin cycle! It takes place specifically in their bundle sheath cells where RuBisCO is concentrated.",
-        correctionMr: "C4 वनस्पतींमध्येही केल्विन चक्र घडते, परंतु ते त्यांच्या बंडल शीथ पेशींमध्ये पार पडते.",
+        correction: "C4 plants DO perform the Calvin cycle! It takes place specifically in their bundle sheath cells where RuBisCO is concentrated."
       },
-    ],
+    ]
   },
 
   // 4. Cell Structure and Cell Division
   {
     id: "note_bio_cell_biology",
     chapter: "Cell Structure and Cell Division",
-    chapterMr: "पेशी रचना आणि पेशी विभाजन (Cell Biology & Cell Cycle)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Prokaryotes vs Eukaryotes, Organelles, Mitosis & Meiosis Crossing Over Notes",
-    titleMr: "पेशी रचना, अंगके, समसूत्री व अर्धसूत्री विभाजन (Meiosis) नोट्स",
     summary: "Fluid Mosaic Model, Endomembrane System, Mitochondria & Chloroplast 70S ribosomes, Cell Cycle phases (G1, S, G2, M), Mitosis stages, and Meiosis Prophase I substages (Crossing over at Pachytene).",
-    summaryMr: "फ्लुईड मोझॅक मॉडेल, अंतर्पटल संस्था, मायटोकॉन्ड्रिया व क्लोरोप्लास्ट, पेशी चक्र (G1, S, G2, M), समसूत्री विभाजन आणि मियोसिस प्रोफेज I (पॅकिटीनमधील क्रॉसिंग ओव्हर).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Cell Structure & Endomembrane System",
-        titleMr: "१. पेशी रचना व अंतर्पटल संस्था",
         points: [
           "Fluid Mosaic Model (Singer & Nicolson, 1972): Phospholipid bilayer with quasi-fluid nature; protein 'icebergs in a sea of lipids'. Lipid:Protein ratio in human RBC membrane is ~40% lipids and 52% proteins.",
           "Endomembrane System: Includes Endoplasmic Reticulum (RER: protein synthesis, SER: lipid/steroid synthesis), Golgi Apparatus (packaging and glycosylation of glycoproteins & glycolipids), Lysosomes (acid hydrolases at pH ~5.0), and Vacuoles (tonoplast membrane). Note: Mitochondria, Chloroplasts, and Peroxisomes are NOT part of endomembrane system!",
           "Semi-Autonomous Organelles: Mitochondria and Chloroplasts possess their own circular dsDNA, 70S ribosomes, and RNA, dividing by fission.",
           "Ribosomes: 70S (Prokaryotes: 50S + 30S), 80S (Eukaryotes: 60S + 40S). 'S' is Svedberg sedimentation coefficient.",
         ],
-        pointsMr: [
-          "फ्लुईड मोझॅक मॉडेल (१९७२): फॉस्फोलिपिड द्विथर व प्रथिने. मानवी RBC मध्ये ५२% प्रथिने व ४०% मेद असतात.",
-          "अंतर्पटल संस्था: ER (RER प्रथिने, SER लिपिड्स), गॉल्गी काय (पॅकेजिंग व ग्लायकोसिलेशन), लायसोझोम्स (पाचक विकरे) व व्हॅक्युओल (टोनोप्लास्ट). मायटोकॉन्ड्रिया यात येत नाही!",
-          "अर्ध-स्वायत्त अंगके: मायटोकॉन्ड्रिया व हरितलवकांमध्ये स्वतःचे DNA आणि ७०S रायबोझोम्स असतात.",
-          "रायबोझोम्स: प्रोकॅरिओट्स = ७०S (५०S + ३०S), यूकॅरिओट्स = ८०S (६०S + ४०S).",
-        ],
-        keyFormula: "Prokaryotic Ribosome: 70S (50S + 30S) | Eukaryotic Ribosome: 80S (60S + 40S)",
+        keyFormula: "Prokaryotic Ribosome: 70S (50S + 30S) | Eukaryotic Ribosome: 80S (60S + 40S)"
       },
       {
         title: "2. Cell Cycle & Meiosis Stages (Prophase I)",
-        titleMr: "२. पेशी चक्र आणि अर्धसूत्री विभाजन (Meiosis Prophase I)",
         points: [
           "Cell Cycle Phases: G1 (growth and metabolically active), S phase (DNA REPLICATION doubles DNA content from 2C to 4C, but chromosome number remains 2n; Centriole duplicates in cytoplasm), G2 (protein synthesis for mitosis), M Phase (Nuclear & Cytoplasmic division).",
           "Quiescent Stage (G0): Inactive exit stage where cells remain metabolically active but do not proliferate (e.g., Heart cells, Neurons).",
@@ -260,20 +190,13 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "4. Diplotene: Dissolution of synaptonemal complex; X-shaped Chiasmata become visible.",
           "5. Diakinesis: Terminalization of chiasmata, nucleolus disappears, spindle forms.",
         ],
-        pointsMr: [
-          "S-फेज (S Phase): DNA चे द्विगुणन होते (२C चे ४C होते, परंतु गुणसूत्रांची संख्या २n च राहते). सेंट्रिओल सायटोप्लाझममध्ये द्विगुणित होतो.",
-          "मेटाफेज: सर्व गुणसूत्रे विषुववृत्तावर येतात; गुणसूत्रांचा आकार व रचना अभ्यासण्यासाठी सर्वोत्तम टप्पा.",
-          "अ‍ॅनाफेज: सेंट्रोमिअरचे विभाजन होऊन क्रोमॅटिड्स विरुद्ध टोकांना जातात.",
-          "मियोसिस प्रोफेज I चे ५ टप्पे:",
-          "१. लेप्टोटीन, २. झायगोटीन (Synapsis - टेट्रॅड निर्मिती), ३. पॅकिटीन (Crossing Over - Recombinase विकर), ४. डिप्लोटीन (Chiasmata दिसतात), ५. डायकिनेसिस (Chiasmata टोकाकडे सरकतात).",
-        ],
         keyFormula: "S-phase: DNA doubles (2C -> 4C), Chromosome count remains 2n",
-        keyMnemonic: "Prophase I stages: Lazy Zebras Paint Dear Deer -> Leptotene, Zygotene, Pachytene, Diplotene, Diakinesis.",
+        keyMnemonic: "Prophase I stages: Lazy Zebras Paint Dear Deer -> Leptotene, Zygotene, Pachytene, Diplotene, Diakinesis."
       },
     ],
     quickRevisionPoints: [
-      { en: "Centromere splits in Mitotic Anaphase and Meiotic Anaphase II; Centromere DOES NOT split in Anaphase I of Meiosis.", mr: "सेंट्रोमिअरचे विभाजन अ‍ॅनाफेज (मायटोसिस) आणि अ‍ॅनाफेज II (मियोसिस) मध्ये होते; अ‍ॅनाफेज I मध्ये सेंट्रोमिअर विभाजित होत नाही." },
-      { en: "Crossing over occurs during Pachytene stage of Prophase I, creating genetic variations.", mr: "क्रॉसिंग ओव्हर प्रोफेज I च्या पॅकिटीन (Pachytene) टप्प्यात घडून येते ज्यामुळे जनुकीय विविधता निर्माण होते." },
+      { en: "Centromere splits in Mitotic Anaphase and Meiotic Anaphase II; Centromere DOES NOT split in Anaphase I of Meiosis." },
+      { en: "Crossing over occurs during Pachytene stage of Prophase I, creating genetic variations." },
     ],
     keyFormulasTable: [
       { name: "S-Phase DNA Content", formula: "2C -> 4C (2n remains 2n)", description: "DNA replication without change in ploidy number" },
@@ -283,46 +206,33 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Thinking chromosome number doubles in S-phase.",
-        mistakeMr: "S-फेजमध्ये गुणसूत्रांची संख्या दुप्पट होते असे समजणे.",
-        correction: "Only DNA AMOUNT doubles (2C to 4C); the number of chromosomes remains EXACTLY 2n.",
-        correctionMr: "S-फेजमध्ये फक्त DNA चे प्रमाण दुप्पट होते; गुणसूत्रांची संख्या २n च राहते.",
+        correction: "Only DNA AMOUNT doubles (2C to 4C); the number of chromosomes remains EXACTLY 2n."
       },
-    ],
+    ]
   },
 
   // 5. Biotechnology: Principles & Processes
   {
     id: "note_bio_biotechnology",
     chapter: "Biotechnology: Principles & Processes",
-    chapterMr: "जैवतंत्रज्ञान: तत्त्वे आणि प्रक्रिया (Biotechnology)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Restriction Enzymes, pBR322 Vector, PCR & Gel Electrophoresis Notes",
-    titleMr: "रेस्ट्रिक्शन एन्झाइम्स, pBR322 व्हेक्टर, PCR तंत्र व जेल इलेक्ट्रोफोरेसीस",
     summary: "Restriction Endonucleases (Molecular Scissors), Palindromic sequences, Gel Electrophoresis (Ethidium Bromide), pBR322 selectable markers, Polymerase Chain Reaction (PCR 3 steps), and Bioreactors.",
-    summaryMr: "रेस्ट्रिक्शन एन्डोन्यूक्लीएझ, पॅलिन्ड्रोमिक सीक्वेन्स, जेल इलेक्ट्रोफोरेसीस (EtBr आणि UV किरणे), pBR322 व्हेक्टर, PCR चे ३ टप्पे (Denaturation, Annealing, Extension) आणि बायोरिअ‍ॅक्टर्स.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Tools of Recombinant DNA Technology",
-        titleMr: "१. पुनर्जोडणी DNA तंत्रज्ञानाची (rDNA) साधने",
         points: [
           "Restriction Endonucleases: First discovered was Hind II (cuts at specific 6 bp sequence). EcoRI cuts at palindromic sequence 5'-GAATTC-3' between G and A yielding sticky overhanging ends.",
           "Agarose Gel Electrophoresis: Separates DNA fragments on basis of size/charge (DNA is negatively charged due to phosphate backbone, moves towards positive Anode). Smaller fragments travel farther. Visualized using Ethidium Bromide (EtBr) staining under UV light appearing as BRIGHT ORANGE bands. Elution is extracting DNA from gel piece.",
           "Cloning Vector pBR322: Features include ori (origin of replication, controls copy number), rop (codes for proteins in replication), and Selectable Markers: amp^R (ampicillin resistance) and tet^R (tetracycline resistance).",
           "Insertional Inactivation: Inserting foreign gene at BamHI site of tet^R gene disrupts tetracycline resistance, allowing recombinant selection. Blue-White Screening: Inactivation of β-galactosidase (lacZ gene) yields white recombinant colonies (non-recombinants turn blue in X-gal medium).",
         ],
-        pointsMr: [
-          "रेस्ट्रिक्शन एन्झाइम्स (आण्विक कात्री): EcoRI 5'-GAATTC-3' या पॅलिन्ड्रोमवर कापते आणि चिकट टोके तयार करते.",
-          "जेल इलेक्ट्रोफोरेसीस: DNA ऋणप्रभारित असल्याने धन एनोडकडे धावतो. लहान तुकडे वेगाने पुढे जातात. इथिडियम ब्रोमाइड (EtBr) व UV प्रकाशात चमकदार नारंगी पट्टे दिसतात.",
-          "pBR322 व्हेक्टर: amp^R आणि tet^R हे दोन निवडक मार्कर असतात.",
-          "इन्सर्शनल इनअ‍ॅक्टिव्हेशन (Blue-White Screening): रिकॉम्बिनंट कॉलनी पांढऱ्या (White) दिसतात, नॉन-रिकॉम्बिनंट निळ्या (Blue) दिसतात.",
-        ],
-        keyFormula: "EcoRI Palindromic site: 5'-G A A T T C-3' | 3'-C T T A A G-5'",
+        keyFormula: "EcoRI Palindromic site: 5'-G A A T T C-3' | 3'-C T T A A G-5'"
       },
       {
         title: "2. Polymerase Chain Reaction (PCR) & Bioreactors",
-        titleMr: "२. पॉलिमरेझ चेन रिएक्शन (PCR) व बायोरिअ‍ॅक्टर्स",
         points: [
           "PCR (Invented by Kary Mullis, 1983): In vitro amplification of DNA sequence into billions of copies. 3 Steps in each cycle:",
           "1. Denaturation: High temperature (94-96°C) separates dsDNA into single strands.",
@@ -331,21 +241,13 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Bioreactors: Large vessels (100-1000 Litres) providing optimal temperature, pH, substrate, oxygen, and salts. Most common is Stirred-tank bioreactor (ensures even oxygen distribution).",
           "Downstream Processing: Separation, purification, quality testing, and formulation of biological product with preservatives before marketing.",
         ],
-        pointsMr: [
-          "PCR चे ३ टप्पे:",
-          "१. डिनेच्युरेशन (Denaturation - ९४°C): DNA चे दोन्ही धागे वेगळे होतात.",
-          "२. अनिलींग (Annealing - ५५°C): प्रायमर्स जोडले जातात.",
-          "३. एक्स्टेन्शन (Extension - ७२°C): टॅक पॉलिमरेझ (Thermus aquaticus) नवीन धागा तयार करतो.",
-          "बायोरिअ‍ॅक्टर्स: मोठ्या प्रमाणावर (१००-१००० लिटर) उत्पादन करण्यासाठी स्टर्ड-टँक रिअ‍ॅक्टर.",
-          "डाउनस्ट्रीम प्रोसेसिंग: उत्पादनाचे शुद्धीकरण आणि पॅकिंग.",
-        ],
         keyFormula: "PCR Yield = 2^n copies (where n = number of cycles)",
-        keyMnemonic: "PCR Steps: D A E -> Denaturation (94°C) -> Annealing (55°C) -> Extension (72°C).",
+        keyMnemonic: "PCR Steps: D A E -> Denaturation (94°C) -> Annealing (55°C) -> Extension (72°C)."
       },
     ],
     quickRevisionPoints: [
-      { en: "Taq Polymerase is used in PCR because it remains active at high temperatures (thermostable up to 95°C).", mr: "टॅक पॉलिमरेझ हा थर्मोफिलिक बॅक्टेरियापासून मिळवला जात असल्याने उच्च तापमानालाही (९५°C) स्थिर राहतो." },
-      { en: "Microinjection is used to inject rDNA directly into nucleus of ANIMAL cell; Biolistics / Gene Gun (coated with gold/tungsten) is used for PLANT cells.", mr: "प्राणी पेशीसाठी मायक्रोइंजेकशन आणि वनस्पती पेशीसाठी जीन गन (Biolistics - सोने/टंगस्टनचे कण) वापरतात." },
+      { en: "Taq Polymerase is used in PCR because it remains active at high temperatures (thermostable up to 95°C)." },
+      { en: "Microinjection is used to inject rDNA directly into nucleus of ANIMAL cell; Biolistics / Gene Gun (coated with gold/tungsten) is used for PLANT cells." },
     ],
     keyFormulasTable: [
       { name: "PCR Amplification", formula: "Copies = 2^n", description: "Exponential DNA amplification after n thermal cycles" },
@@ -355,46 +257,33 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing the temperature order of the 3 PCR steps.",
-        mistakeMr: "PCR च्या तीन टप्प्यांच्या तापमानाचा क्रम चुकवणे.",
-        correction: "Order is: Denaturation (Highest, ~94°C) -> Annealing (Lowest, ~55°C) -> Extension (Medium, ~72°C).",
-        correctionMr: "क्रम: डिनेच्युरेशन (कमाल ~९४°C) → अनिलींग (किमान ~५५°C) → एक्स्टेन्शन (मध्यम ~७२°C).",
+        correction: "Order is: Denaturation (Highest, ~94°C) -> Annealing (Lowest, ~55°C) -> Extension (Medium, ~72°C)."
       },
-    ],
+    ]
   },
 
   // 6. Reproduction in Organisms & Humans
   {
     id: "note_bio_reproduction",
     chapter: "Reproduction in Organisms & Humans",
-    chapterMr: "सजीवांमधील आणि मानवातील प्रजनन (Reproduction)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Male & Female Reproductive Systems, Menstrual Cycle & Embryogenesis Notes",
-    titleMr: "नर व मादी प्रजनन संस्था, मासिक पाळी चक्र (Menstrual Cycle) व गर्भधारणा",
     summary: "Spermatogenesis vs Oogenesis, Sertoli & Leydig cells, Menstrual cycle hormones (LH surge), Fertilization, Blastocyst implantation, and Assisted Reproductive Technologies (IVF, ICSI, ZIFT).",
-    summaryMr: "शुक्राणू व बीजांड निर्मिती, सर्तोली व लेडिग पेशी, मासिक पाळीतील संप्रेरके (LH Surge आणि ओव्ह्युलेशन), फलन, ब्लास्टोसिस्टचे रोपण आणि ART तंत्रज्ञान (IVF, ZIFT, GIFT).",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Gametogenesis & Reproductive Organs",
-        titleMr: "१. युग्मक निर्मिती व प्रजनन अवयव",
         points: [
           "Spermatogenesis: Occurs in Seminiferous Tubules. Leydig cells (interstitial cells) secrete Testosterone under LH influence. Sertoli cells provide nutrition to developing spermatozoa under FSH influence.",
           "1 Primary Spermatocyte (2n) yields 4 functional Spermatozoa (n). Sperm acrosome is derived from Golgi apparatus and contains hyaluronidase enzyme.",
           "Oogenesis: Initiated during embryonic development. Primary oocytes remain arrested in Diplotene stage of Prophase I until puberty. 1 Primary Oocyte yields ONLY 1 functional Ovum (n) and 2-3 tiny non-functional Polar Bodies.",
           "Oogenesis resumes upon fertilization: Secondary oocyte completes Meiosis II upon sperm entry, releasing 2nd polar body and ootid.",
         ],
-        pointsMr: [
-          "शुक्राणूजनन: लेडिग पेशी टेस्टोस्टेरॉन स्त्रवतात; सर्तोली पेशी शुक्राणूंना पोषण देतात.",
-          "१ प्रायमरी स्पर्मेटोसाइटपासून ४ कार्यक्षम शुक्राणू तयार होतात.",
-          "बीजांडजनन (Oogenesis): गर्भावस्थेतच सुरू होते व प्रोफेज I च्या डिप्लोटीनमध्ये थांबते. १ प्रायमरी ऊसाइटपासून फक्त १ कार्यक्षम बीजांड (Ovum) आणि पोलर बॉडीज बनतात.",
-          "दुसरे मियोटिक विभाजन शुक्राणूचा प्रवेश झाल्यावरच पूर्ण होते.",
-        ],
-        keyFormula: "1 Primary Spermatocyte = 4 Sperms | 1 Primary Oocyte = 1 Ovum + Polar Bodies",
+        keyFormula: "1 Primary Spermatocyte = 4 Sperms | 1 Primary Oocyte = 1 Ovum + Polar Bodies"
       },
       {
         title: "2. Menstrual Cycle, Fertilization & ART",
-        titleMr: "२. मासिक पाळी चक्र, फलन आणि ART तंत्रज्ञान",
         points: [
           "Menstrual Phases (28 days cycle):",
           "1. Menstrual Phase (Days 1-5): Breakdown of endometrial lining due to sharp fall in Progesterone and Estrogen.",
@@ -404,18 +293,13 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Fertilization: Occurs in the Ampullary region of Fallopian Tube (Oviduct). Cortical reaction prevents Polyspermy.",
           "Assisted Reproductive Technologies (ART): IVF-ET (In Vitro Fertilization & Embryo Transfer), ZIFT (Zygote Intra-Fallopian Transfer - up to 8 blastomeres), IUT (Intra-Uterine Transfer - >8 blastomeres), GIFT (Gamete Intra-Fallopian Transfer), ICSI (Intra-Cytoplasmic Sperm Injection).",
         ],
-        pointsMr: [
-          "मासिक पाळीचे टप्पे: १ ते ५ दिवस (रक्तस्त्राव - प्रोजेस्टेरॉन घट), ६ ते १३ दिवस (फॉलिक्युलर - इस्ट्रोजेन वाढ), १४ वा दिवस (LH Surge मुळे ओव्ह्युलेशन / अंडमोचन), १५ ते २८ दिवस (ल्युटियल - कॉर्पस ल्युटियमकडून प्रोजेस्टेरॉन निर्मिती).",
-          "फलन: फॅलोपियन नलिकेच्या अ‍ॅम्प्युला (Ampulla) भागात होते.",
-          "ART तंत्रे: ZIFT (८ ब्लास्टोमिअर्सपर्यंत फॅलोपियन नळीत ट्रान्सफर), IUT (८ पेक्षा जास्त पेशी गर्भाशयात), ICSI (शुक्राणू थेट बीजांडात टोचणे).",
-        ],
         keyFormula: "LH Surge (Day 14) -> Ovulation | ZIFT: <= 8 blastomeres | IUT: > 8 blastomeres",
-        keyMnemonic: "Cycle Phases: Menstruation -> Follicular (Estrogen) -> LH Surge (Ovulation) -> Luteal (Progesterone).",
+        keyMnemonic: "Cycle Phases: Menstruation -> Follicular (Estrogen) -> LH Surge (Ovulation) -> Luteal (Progesterone)."
       },
     ],
     quickRevisionPoints: [
-      { en: "Human Chorionic Gonadotropin (hCG), human Placental Lactogen (hPL), and Relaxin are produced in women ONLY during pregnancy.", mr: "hCG, hPL आणि रिलॅक्सिन हे संप्रेरके स्त्रीमध्ये केवळ गर्भावस्थेतच निर्माण होतात (गर्भावस्थेची टेस्ट hCG शोधते)." },
-      { en: "Colostrum (first milk secreted after parturition) is rich in IgA antibodies, providing passive immunity to the newborn infant.", mr: "कोलोस्ट्रम (आईचे पहिले दूध) मध्ये IgA प्रतिपिंडे मुबलक असतात, जे बाळाला रोगप्रतिकारशक्ती देतात." },
+      { en: "Human Chorionic Gonadotropin (hCG), human Placental Lactogen (hPL), and Relaxin are produced in women ONLY during pregnancy." },
+      { en: "Colostrum (first milk secreted after parturition) is rich in IgA antibodies, providing passive immunity to the newborn infant." },
     ],
     keyFormulasTable: [
       { name: "Ovulation Trigger", formula: "LH Surge (Day 14 of 28-day cycle)", description: "Peak luteinizing hormone inducing follicle rupture" },
@@ -425,29 +309,23 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Saying fertilization occurs in the uterus.",
-        mistakeMr: "फलन गर्भाशयात होते असे सांगणे.",
-        correction: "Fertilization strictly occurs in the Ampullary region of the Fallopian tube. Implantation (at blastocyst stage) occurs in the uterus.",
-        correctionMr: "फलन फॅलोपियन नळीच्या अ‍ॅम्प्युला भागात होते, तर रोपण (Implantation) गर्भाशयाच्या भिंतीवर होते.",
+        correction: "Fertilization strictly occurs in the Ampullary region of the Fallopian tube. Implantation (at blastocyst stage) occurs in the uterus."
       },
-    ],
+    ]
   },
 
   // 7. Ecology & Environmental Issues
   {
     id: "note_bio_ecology",
     chapter: "Ecology & Environmental Issues",
-    chapterMr: "पर्यावरणशास्त्र आणि परिसंस्था (Ecology)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Population Interactions, Ecological Pyramids, Biodiversity & Conservation Notes",
-    titleMr: "लोकसंख्या परस्परसंबंध, परिसंस्था पिरॅमिड्स, जैवविविधता व संवर्धन",
     summary: "Population growth models (Exponential vs Logistic), Interspecific interactions (Mutualism, Commensalism, Parasitism, Amensalism), 10% Energy Law, Inverted biomass pyramid, and In-situ vs Ex-situ conservation.",
-    summaryMr: "लोकसंख्या वाढ (लॉजिस्टिक समीकरण), सजीवांमधील परस्परसंबंध (सहजीवन, परजीवी, अ‍ॅमेन्सालिझम), १०% ऊर्जा नियम, जैवविविधता संवर्धन (In-situ व Ex-situ) आणि राष्ट्रीय उद्याने.",
     highYieldWeightage: "Medium",
     sections: [
       {
         title: "1. Population Ecology & Species Interactions",
-        titleMr: "१. लोकसंख्या पर्यावरणशास्त्र आणि प्रजाती परस्परसंबंध",
         points: [
           "Exponential Growth (Unlimited resources): dN/dt = r N => N_t = N₀ e^(r t) (J-shaped curve).",
           "Logistic Growth (Verhulst-Pearl, Limited resources): dN/dt = r N [ (K - N) / K ] (S-shaped / Sigmoid curve, where K is Carrying Capacity).",
@@ -459,20 +337,10 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "- Amensalism (- / 0): One inhibited/harmed, other unaffected (e.g., Penicillium fungus secreting penicillin inhibiting bacterial growth).",
           "- Competition (- / -): Both species harmed (Gause's Competitive Exclusion Principle: two closely related species competing for same limiting resource cannot co-exist indefinitely).",
         ],
-        pointsMr: [
-          "लॉजिस्टिक वाढ (S-वक्र): dN/dt = r N [ (K - N) / K ] (K = वहन क्षमता).",
-          "परस्परसंबंध प्रकार:",
-          "सहजीवन (Mutualism +/+): दोन्हीचा फायदा (उदा. लायकेन, मायकोरायझा, अंजीर व गांधीलमाशी).",
-          "कमेन्सॅलिझम (+/०): एकाचा फायदा, दुसऱ्याला फरक नाही (उदा. आंब्यावरील ऑर्किड, जनावरांसोबतचा बगळा).",
-          "परजीविता (Parasitism +/-): परजीवाचा फायदा, यजमानाचे नुकसान (उदा. अमरवेल / कस्क्युटा).",
-          "अ‍ॅमेन्सॅलिझम (-/०): एकाचे नुकसान, दुसऱ्याला फरक नाही (उदा. पेनिसिलियम बुरशी जिवाणूंची वाढ रोखते).",
-          "स्पर्धा (-/-): दोघांचेही नुकसान (गॉसचे स्पर्धात्मक अपवर्जन तत्त्व).",
-        ],
-        keyFormula: "Logistic: dN/dt = r N (1 - N/K) | Exponential: dN/dt = r N",
+        keyFormula: "Logistic: dN/dt = r N (1 - N/K) | Exponential: dN/dt = r N"
       },
       {
         title: "2. Ecosystem Energy Flow & Biodiversity Conservation",
-        titleMr: "२. परिसंस्था ऊर्जा प्रवाह व जैवविविधता संवर्धन",
         points: [
           "Lindeman's 10% Energy Law: Only ~10% of energy is transferred from one trophic level to the next; 90% is lost as heat and metabolic respiration.",
           "Ecological Pyramids: Pyramid of Energy is ALWAYS UPRIGHT (unidirectional energy flow). Pyramid of Biomass in SEA / AQUATIC ecosystem is INVERTED (Phytoplankton < Zooplankton < Small Fish < Big Fish). Pyramid of Numbers in tree ecosystem with parasites is INVERTED.",
@@ -480,20 +348,13 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "In-situ (On-site) Conservation: Conserving species in their natural habitat. Includes National Parks, Wildlife Sanctuaries, Biosphere Reserves, and Sacred Groves (Khasi & Jaintia hills in Meghalaya, Western Ghats).",
           "Ex-situ (Off-site) Conservation: Conserving threatened species outside natural habitat in protective care. Includes Botanical Gardens, Zoological Parks, Wildlife Safari Parks, Cryopreservation of gametes (-196°C liquid Nitrogen), Seed Banks, and Tissue Culture.",
         ],
-        pointsMr: [
-          "१०% ऊर्जा नियम (Lindeman): एका पोषण पातळीकडून पुढच्या पातळीकडे केवळ १०% ऊर्जा जाते. ऊर्जेचा पिरॅमिड नेहमी सरळ (Upright) असतो.",
-          "समुद्रातील बायोमासचा पिरॅमिड उलटा (Inverted) असतो (फायटोप्लँक्टन कमी, मोठ्या माशांचे वस्तुमान जास्त).",
-          "प्रजाती-क्षेत्र संबंध (von Humboldt): log S = log C + Z log A.",
-          "नैसर्गिक अधिवासात संवर्धन (In-situ): राष्ट्रीय उद्याने (National Parks), अभयारण्ये, बायोस्फिअर रिझर्व्ह आणि देवराया (Sacred Groves).",
-          "कृत्रिम/बाह्य संवर्धन (Ex-situ): प्राणीसंग्रहालय, बॉटनिकल गार्डन्स, क्रायोप्रिझर्व्हेशन (-१९६°C लिक्विड नायट्रोजन), सीड बँक.",
-        ],
         keyFormula: "Species-Area: log S = log C + Z log A | 10% Energy Transfer Law",
-        keyMnemonic: "In-situ = Inside nature (Parks, Sanctuaries). Ex-situ = Outside/Exit (Zoos, Cryo, Seed banks).",
+        keyMnemonic: "In-situ = Inside nature (Parks, Sanctuaries). Ex-situ = Outside/Exit (Zoos, Cryo, Seed banks)."
       },
     ],
     quickRevisionPoints: [
-      { en: "Pyramid of energy is ALWAYS upright and can NEVER be inverted, because energy is lost as heat at each step in accordance with Second Law of Thermodynamics.", mr: "ऊर्जेचा पिरॅमिड नेहमी सरळच असतो, तो कधीही उलटा असू शकत नाही." },
-      { en: "The 'Evil Quartet' driving biodiversity loss: 1. Habitat loss and fragmentation (most important!), 2. Over-exploitation, 3. Alien species invasions, 4. Co-extinctions.", mr: "जैवविविधता नाशाची ४ मुख्य कारणे (Evil Quartet): १. अधिवास नाश (सर्वात प्रमुख), २. अतिशोषण, ३. परकीय प्रजाती आक्रमण, ४. सह-नामशेषता." },
+      { en: "Pyramid of energy is ALWAYS upright and can NEVER be inverted, because energy is lost as heat at each step in accordance with Second Law of Thermodynamics." },
+      { en: "The 'Evil Quartet' driving biodiversity loss: 1. Habitat loss and fragmentation (most important!), 2. Over-exploitation, 3. Alien species invasions, 4. Co-extinctions." },
     ],
     keyFormulasTable: [
       { name: "Logistic Growth Rate", formula: "dN/dt = r N (1 - N/K)", description: "Verhulst-Pearl sigmoid population growth model" },
@@ -503,29 +364,23 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Classifying Botanical Gardens and Zoos under In-situ conservation.",
-        mistakeMr: "बॉटनिकल गार्डन्स आणि प्राणीसंग्रहालये इन-सिटू (In-situ) संवर्धनात टाकणे.",
-        correction: "Botanical gardens, Zoos, and Seed Banks are EX-SITU (off-site) conservation methods.",
-        correctionMr: "बॉटनिकल गार्डन्स आणि झू हे एक्स-सिटू (Ex-situ / बाह्य संवर्धन) पद्धती आहेत.",
+        correction: "Botanical gardens, Zoos, and Seed Banks are EX-SITU (off-site) conservation methods."
       },
-    ],
+    ]
   },
 
   // 8. Human Physiology: Circulation & Excretion
   {
     id: "note_bio_human_physiology_circ_excret",
     chapter: "Human Physiology: Circulation & Excretion",
-    chapterMr: "मानवी शरीरक्रियाशास्त्र: रक्ताभिसरण आणि उत्सर्जन (Physiology)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Cardiac Cycle, ECG Interpretation, Nephron Counter-Current & RAAS Notes",
-    titleMr: "हृदय चक्र (Cardiac Cycle), ECG आलेख, नेफ्रॉन काउंटर-करंट यंत्रणा व RAAS नियमन",
     summary: "Cardiac cycle phases, Heart sounds (LUB-DUB), Standard ECG waves (P, QRS, T), Blood groups (ABO and Rh incompatibility Erythroblastosis Foetalis), Nephron structure, Urine formation (Glomerular filtration, Reabsorption, Tubular secretion), Counter-Current Multiplier in Loop of Henle, and RAAS Renin-Angiotensin kidney regulation.",
-    summaryMr: "हृदयाचे ठोके व आवाज (LUB-DUB), ECG वक्र (P, QRS, T), रक्तगट व Rh विसंगती, नेफ्रॉनची रचना, मूत्र निर्मिती टप्पे, हेन्लेच्या लूपमधील काउंटर-करंट यंत्रणा आणि मूत्रपिंडाचे RAAS हार्मोन्स नियमन.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Body Fluids, Cardiac Cycle & ECG Waves",
-        titleMr: "१. रक्त, हृदय चक्र आणि ईसीजी (ECG) आलेख",
         points: [
           "Cardiac Output = Stroke Volume × Heart Rate = 70 mL × 72 beats/min ≈ 5040 mL/min (≈ 5 Litres/min).",
           "Heart Sounds: First sound 'LUB' (closure of tricuspid & bicuspid valves at onset of ventricular systole); Second sound 'DUB' (closure of semilunar valves at onset of ventricular diastole).",
@@ -536,22 +391,11 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Blood Groups: Universal Donor = O negative (no antigens A, B, Rh); Universal Recipient = AB positive (no antibodies, has Rh antigen).",
           "Erythroblastosis Foetalis: Occurs when Rh-negative mother carries Rh-positive fetus for 2nd time. Prevented by administering anti-Rh antibodies (Rhogam) to mother immediately after 1st delivery.",
         ],
-        pointsMr: [
-          "कार्डिअॅक आउटपुट = स्ट्रोक व्हॉल्यूम × हृदयाचे ठोके = ७० mL × ७२ = ५ लिटर/मिनिट.",
-          "हृदयाचे आवाज: LUB (बायस्पिड व ट्रायस्पिड झडपा बंद होताना), DUB (अर्धचंद्राकृती Semilunar झडपा बंद होताना).",
-          "ECG वक्र:",
-          "- P-wave: अलिंद आकुंचन (Atrial Depolarization).",
-          "- QRS-complex: निलय आकुंचन (Ventricular Depolarization).",
-          "- T-wave: निलय शिथिलीकरण (Ventricular Repolarization).",
-          "सर्वयोग्य दाता = O Negative; सर्वयोग्य ग्राही = AB Positive.",
-          "एरिथ्रोब्लास्टोसिस फिटलिस: Rh- ऋण माता आणि Rh+ धन गर्भातील विसंगती (प्रतिबंध: Rhogam इंजेक्शन).",
-        ],
         keyFormula: "Cardiac Output = Stroke Volume (70 mL) × Heart Rate (72 bpm) ≈ 5 L/min",
-        keyMnemonic: "ECG: P = Atria contract, QRS = Ventricles pump, T = Ventricles relax.",
+        keyMnemonic: "ECG: P = Atria contract, QRS = Ventricles pump, T = Ventricles relax."
       },
       {
         title: "2. Excretory System, Nephron & RAAS Regulation",
-        titleMr: "२. उत्सर्जन संस्था, नेफ्रॉन व RAAS संप्रेरक नियंत्रण",
         points: [
           "Glomerular Filtration Rate (GFR): ~125 mL/min = 180 Litres/day. Over 99% of filtrate is reabsorbed; only ~1.5 Litres urine is excreted daily.",
           "Nephron Functions:",
@@ -564,20 +408,12 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "- RAAS (Renin-Angiotensin-Aldosterone System): Fall in GFR -> JGA cells release RENIN -> converts Angiotensinogen to Angiotensin I -> ACE converts to Angiotensin II (potent vasoconstrictor, raises BP) -> stimulates Adrenal Cortex to release ALDOSTERONE -> increases Na⁺ & water reabsorption.",
           "- ANF (Atrial Natriuretic Factor from Heart Atria): Released when BP increases -> causes Vasodilation and excretion of Na⁺ -> lowers blood pressure (acts as a check on RAAS).",
         ],
-        pointsMr: [
-          "GFR (ग्लोमेरुलर गाळण दर): १२५ mL/मिनिट (दिवसाला १८० लिटर गाळण, त्यापैकी ९९% परत शोषले जाते, १.५ लिटर मूत्र तयार होते).",
-          "PCT: ७०-८०% पाणी व क्षार आणि १००% ग्लुकोज पुन्हा शोषून घेतो.",
-          "हेन्लेचा लूप: उतरता भाग पाण्याला पारगम्य (गाळण घट्ट बनते); चढता भाग क्षारांना पारगम्य, पाण्याला अपारगम्य (गाळण पातळ बनते).",
-          "ADH संप्रेरक: पाण्याचे शोषण वाढवतो; याच्या कमतरतेमुळे डायबिटीस इन्सिपिडस होतो.",
-          "RAAS यंत्रणा: रक्तदाब कमी झाल्यावर रेनिन -> अँजिओटेन्सिन II -> अल्डोस्टेरॉन (रक्तदाब व पाणी वाढवतो).",
-          "ANF: हृदयाच्या भिंतीतून स्त्रवतो, रक्तदाब कमी करतो (RAAS च्या उलट काम करतो).",
-        ],
-        keyFormula: "GFR = 125 mL/min (180 L/day) | Renin -> Angiotensin II -> Aldosterone -> Raises BP",
+        keyFormula: "GFR = 125 mL/min (180 L/day) | Renin -> Angiotensin II -> Aldosterone -> Raises BP"
       },
     ],
     quickRevisionPoints: [
-      { en: "Juxtaglomerular Apparatus (JGA) is formed by cellular modifications in the DCT and the afferent arteriole at their contact point.", mr: "JGA रचना नेफ्रॉनची DCT आणि अभिवाही रोहिणी यांच्या संपर्कातून तयार होते." },
-      { en: "In human heart, Sino-Atrial Node (SAN) is the natural Pacemaker, generating maximum action potentials (70-75 per minute).", mr: "हृदयाचा नैसर्गिक पेसमेकर SAN (Sino-Atrial Node) असून तो दर मिनिटाला ७०-७५ प्रेरणा निर्माण करतो." },
+      { en: "Juxtaglomerular Apparatus (JGA) is formed by cellular modifications in the DCT and the afferent arteriole at their contact point." },
+      { en: "In human heart, Sino-Atrial Node (SAN) is the natural Pacemaker, generating maximum action potentials (70-75 per minute)." },
     ],
     keyFormulasTable: [
       { name: "Cardiac Output", formula: "CO = SV × HR", description: "Volume of blood pumped by each ventricle per minute" },
@@ -587,29 +423,23 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing Diabetes Mellitus with Diabetes Insipidus.",
-        mistakeMr: "डायबिटीस मेलिटस आणि डायबिटीस इन्सिपिडस एकच मानणे.",
-        correction: "Diabetes Mellitus is caused by INSULIN deficiency (high blood sugar, glucose in urine). Diabetes Insipidus is caused by ADH (Vasopressin) deficiency (excessive dilute urination, NO sugar in urine).",
-        correctionMr: "डायबिटीस मेलिटस हा इन्सुलिन कमतरतेमुळे होतो (रक्तात साखर), तर डायबिटीस इन्सिपिडस हा ADH संप्रेरक कमतरतेमुळे होतो (वारंवार भरपूर लघवी, साखर नसते).",
+        correction: "Diabetes Mellitus is caused by INSULIN deficiency (high blood sugar, glucose in urine). Diabetes Insipidus is caused by ADH (Vasopressin) deficiency (excessive dilute urination, NO sugar in urine)."
       },
-    ],
+    ]
   },
 
   // 9. Human Health, Disease & Microbes in Human Welfare
   {
     id: "note_bio_human_health_disease_microbes",
     chapter: "Human Health, Disease & Microbes",
-    chapterMr: "मानवी आरोग्य, रोग आणि सूक्ष्मजीव (Health & Microbes)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "Immunity Types, AIDS/HIV, Cancer, Drugs & Microbes in Welfare Notes",
-    titleMr: "प्रतिकारशक्ती (Immunity), एड्स/HIV, कर्करोग आणि सूक्ष्मजीवांचे मानवी कल्याणातील उपयोग",
     summary: "Innate vs Acquired Immunity, Antibodies structure (IgG, IgA, IgM, IgE), HIV Life Cycle & ELISA test, Cancer characteristics & Oncogenes, Common pathogens (Typhoid, Malaria Plasmodium life cycle, Filariasis), and Microbes in Sewage Treatment, Biogas & Biofertilizers.",
-    summaryMr: "जन्मजात व संपादित प्रतिकारशक्ती, प्रतिपिंडांची रचना (H2L2), HIV जीवनचक्र व एलिसा चाचणी, कर्करोग कारणे, मलेरिया प्लाझमोडियम जीवनचक्र, आणि सांडपाणी प्रक्रिया (STP) व बायोगॅसमधील सूक्ष्मजीव.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. Immunity, Antibodies & Major Human Diseases",
-        titleMr: "१. प्रतिकारशक्ती, प्रतिपिंडे आणि मानवी रोग",
         points: [
           "Innate Immunity Barriers: Physical (Skin, Mucus), Physiological (HCl in stomach, Saliva, Tears with Lysozyme), Cellular (PMNL-neutrophils, Macrophages, NK cells), Cytokine (Interferons secreted by virus-infected cells protect non-infected cells).",
           "Antibody Structure: Molecule represented as H₂L₂ (2 heavy chains + 2 light chains joined by Disulfide bonds).",
@@ -622,19 +452,10 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "AIDS (HIV): Retrovirus with RNA genome and Reverse Transcriptase enzyme. Binds to CD4 receptor on Helper T-lymphocytes (T_H cells). Diagnosed by ELISA test, confirmed by Western Blot.",
           "Cancer: Loss of Contact Inhibition, metastasis (malignant tumors spread to distant sites). Caused by Carcinogens and activation of Cellular Oncogenes (c-onc / proto-oncogenes).",
         ],
-        pointsMr: [
-          "प्रतिकारशक्ती प्रकार: जन्मजात (त्वचा, लाळ, अश्रू, मॅक्रोफेजेस, इंटरफेरॉन्स) व संपादित (B व T पेशी).",
-          "प्रतिपिंडांची रचना (H₂L₂): IgG (गर्भाशयात बाळाकडे जाते), IgA (आईच्या दुधात/कोलोस्ट्रममध्ये), IgM (सर्वात मोठे), IgE (ॲलर्जीमध्ये सक्रिय).",
-          "मलेरिया (प्लाझमोडियम): मादी ॲनोफिलीस डास चावल्याने स्पोरोझोईट्स शरीरात येतात. हिमोजोईन (Haemozoin) विषामुळे थंडी वाजून ताप येतो.",
-          "टायफॉईड: साल्मोनेला टायफी, विडाल चाचणीने (Widal Test) निदान होते.",
-          "एड्स (HIV): T-हेल्पर (CD4) पेशींवर हल्ला करतो, एलिसा (ELISA) चाचणीने तपासतात.",
-          "कर्करोग: संपर्क प्रतिबंधक क्षमता (Contact Inhibition) नष्ट होते; मेटास्टॅसिसमुळे इतर अवयवांत पसरतो.",
-        ],
-        keyFormula: "Antibody = H₂L₂ | Malaria Toxin = Haemozoin | Typhoid Test = Widal | AIDS Test = ELISA",
+        keyFormula: "Antibody = H₂L₂ | Malaria Toxin = Haemozoin | Typhoid Test = Widal | AIDS Test = ELISA"
       },
       {
         title: "2. Microbes in Human Welfare & Biotechnology Applications",
-        titleMr: "२. मानवी कल्याणातील सूक्ष्मजीव आणि जैवतंत्रज्ञान",
         points: [
           "Household & Industrial Products:",
           "- Curd formation: Lactobacillus / LAB (improves nutritional quality by increasing Vitamin B12).",
@@ -650,24 +471,13 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "- Anaerobic Sludge Digestion: Methanogenic bacteria (Methanobacterium) produce BIOGAS (CH₄ 50-70% + CO₂ + H₂S).",
           "Biofertilizers: Rhizobium (symbiotic in legumes), Azotobacter/Azospirillum (free-living N₂ fixers), Anabaena/Nostoc (Cyanobacteria in paddy fields), Mycorrhiza / Glomus (fungus absorbs Phosphorus for plant).",
         ],
-        pointsMr: [
-          "घरगुती व औद्योगिक उत्पादने:",
-          "- दही: लॅक्टोबॅसिलस (LAB - व्हिटॅमिन B12 वाढवतो).",
-          "- यीस्ट (Saccharomyces cerevisiae): बेकरी व दारू निर्मिती.",
-          "- स्टॅटिन (Statins - कोलेस्टेरॉल कमी करणारे): मोनेस्कस पर्प्यूरियस (Monascus purpureus).",
-          "- सायक्लोस्पोरिन A (अवयव प्रत्यारोपण इम्युनोसप्रेसंट): ट्रायकोडर्मा पॉलिस्पोरम बुरशी.",
-          "- स्ट्रेप्टोकायनेझ (रक्ताच्या गुठळ्या विरघळवणारे Clot buster): स्ट्रेप्टोकोकस.",
-          "सांडपाणी प्रक्रिया (STP): एरोबिक फ्लॉक्समुळे BOD (बायोकेमिकल ऑक्सिजन मागणी) कमी होते.",
-          "बायोगॅस: मिथेनोजेनिक जिवाणू (Methanobacterium) द्वारे CH₄ (मिथेन) वायू निर्मिती.",
-          "जैवनिहाय खते (Biofertilizers): रायझोबियम, ॲझोटोबॅक्टर, मायकोरायझा (फॉस्फरस शोषून घेतो).",
-        ],
         keyFormula: "High BOD = High Water Pollution | Biogas = CH₄ (60%) + CO₂ + H₂S",
-        keyMnemonic: "Statins = Monascus | Cyclosporin = Trichoderma | Clot buster = Streptococcus.",
+        keyMnemonic: "Statins = Monascus | Cyclosporin = Trichoderma | Clot buster = Streptococcus."
       },
     ],
     quickRevisionPoints: [
-      { en: "Interferons are glycoproteins produced by virus-infected cells to protect healthy neighboring cells from viral infection (innate cytokine barrier).", mr: "इंटरफेरॉन्स हे विषाणू संसर्ग झालेल्या पेशींनी इतर निरोगी पेशींचे रक्षण करण्यासाठी स्त्रवलेले प्रथिन असतात." },
-      { en: "ELISA (Enzyme Linked Immunosorbent Assay) is based on the principle of antigen-antibody interaction for rapid pathogen detection.", mr: "एलिसा चाचणी ही ॲन्टिजेन-ॲन्टिबbody परस्परक्रियेच्या तत्त्वावर आधारित असते." },
+      { en: "Interferons are glycoproteins produced by virus-infected cells to protect healthy neighboring cells from viral infection (innate cytokine barrier)." },
+      { en: "ELISA (Enzyme Linked Immunosorbent Assay) is based on the principle of antigen-antibody interaction for rapid pathogen detection." },
     ],
     keyFormulasTable: [
       { name: "Blood Cholesterol Lowering", formula: "Statins from Monascus purpureus", description: "Competitively inhibits HMG-CoA reductase in cholesterol synthesis" },
@@ -677,28 +487,22 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Confusing the organisms that produce Cyclosporin A and Statins.",
-        mistakeMr: "सायक्लोस्पोरिन A आणि स्टॅटिन तयार करणाऱ्या सूक्ष्मजीवांमध्ये गल्लत करणे.",
-        correction: "Statins are produced by the yeast MONASCUS PURPUREUS. Cyclosporin A is produced by the fungus TRICHODERMA POLYSPORUM.",
-        correctionMr: "स्टॅटिन मोनेस्कस पर्प्यूरियस (Monascus) कडून तर सायक्लोस्पोरिन A ट्रायकोडर्मा पॉलिस्पोरम (Trichoderma) कडून मिळते.",
+        correction: "Statins are produced by the yeast MONASCUS PURPUREUS. Cyclosporin A is produced by the fungus TRICHODERMA POLYSPORUM."
       },
-    ],
+    ]
   },
   // 6. Molecular Basis of Inheritance (DNA, Replication, Transcription, Lac Operon)
   {
     id: "note_bio_molecular_inheritance",
     chapter: "Molecular Basis of Inheritance",
-    chapterMr: "वारशाचा रेण्वीय आधार (DNA, ट्रान्सक्रिप्शन व लॅक ऑपेरॉन)",
     subject: "Biology",
     exams: ["NEET", "MHT_CET"],
     title: "DNA Double Helix, Replication, Transcription, Genetic Code & Lac Operon Notes",
-    titleMr: "DNA द्विसर्पिलाकार रचना, प्रतिकृतीकरण, ट्रान्सक्रिप्शन, जनुकीय संकेत व लॅक ऑपेरॉन",
     summary: "High-yield NCERT biology points covering Chargaff's rules, Meselson-Stahl experiment, Genetic code characteristics, Translation steps, and Lac Operon regulation.",
-    summaryMr: "चारगाफचे नियम, मेसल्सन-स्टाल प्रयोग, ट्रान्सक्रिप्शन, जेनेटिक कोडची वैशिष्ट्ये आणि लॅक ऑपेरॉन वरील अत्यंत महत्त्वाचे मुद्दे.",
     highYieldWeightage: "High",
     sections: [
       {
         title: "1. DNA Structure & Experiments (Griffith, Hershey-Chase, Meselson-Stahl)",
-        titleMr: "१. DNA रचना व महत्त्वाचे ऐतिहासिक प्रयोग",
         points: [
           "Chargaff's Rule: In double-stranded DNA, Purines = Pyrimidines => [A] + [G] = [T] + [C]. Specifically [A] = [T] and [G] = [C]. The ratio (A+T)/(G+C) varies across species but is constant within a species.",
           "DNA Double Helix (Watson & Crick, 1953): Pitch of helix = 3.4 nm (34 Å), distance between adjacent base pairs = 0.34 nm (3.4 Å), 10 base pairs per turn.",
@@ -706,18 +510,10 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Hershey and Chase Experiment (1952): Used T2 bacteriophage with ³⁵S (labels protein coat) and ³²P (labels DNA). Unequivocally proved that DNA is the genetic material.",
           "Meselson and Stahl Experiment (1958): Used heavy nitrogen ¹⁵N and ¹⁴N with CsCl density gradient centrifugation in E. coli. Proved Semi-conservative mode of DNA replication.",
         ],
-        pointsMr: [
-          "चारगाफचा नियम: द्विसर्पिल DNA मध्ये [A] = [T] आणि [G] = [C] असते. [A+G] = [T+C].",
-          "DNA द्विसर्पिलाकार: १ आवर्तनाची लांबी = ३.४ nm (१० बेस पेअर्स). दोन बेस पेअर्समधील अंतर = ०.३४ nm.",
-          "ग्रिफिथचा प्रयोग (१९२८): स्ट्रेप्टोकोकस न्युमोनी (S-strain आणि R-strain) वापरून ट्रान्सफॉर्मिंग प्रिन्सिपल सिद्ध केला.",
-          "हर्षी आणि चेस (१९५२): ³⁵S (प्रोटीन) आणि ³²P (DNA) किरणोत्सारी घटक वापरून DNA हेच अनुवंशिक घटक असल्याचे निर्विवाद सिद्ध केले.",
-          "मेसल्सन आणि स्टाल (१९५८): E. coli मध्ये ¹⁵N आणि CsCl वापरून DNA चे सेमी-कंझर्व्हेटिव्ह प्रतिकृतीकरण सिद्ध केले.",
-        ],
-        keyFormula: "[A] = [T] | [G] = [C] | Purines (A+G) = Pyrimidines (T+C) | DNA Pitch = 3.4 nm (10 bp)",
+        keyFormula: "[A] = [T] | [G] = [C] | Purines (A+G) = Pyrimidines (T+C) | DNA Pitch = 3.4 nm (10 bp)"
       },
       {
         title: "2. Genetic Code, Translation & The Lac Operon",
-        titleMr: "२. जेनेटिक कोड, ट्रान्सलेशन आणि लॅक ऑपेरॉन (Lac Operon)",
         points: [
           "Genetic Code Properties: Triplet (61 sense codons + 3 stop codons: UAA, UAG, UGA), Unambiguous (1 codon codes for only 1 amino acid), Degenerate (some amino acids coded by more than 1 codon), Universal, Commaless.",
           "AUG has DUAL functions: Codes for Methionine AND acts as Initiator Codon.",
@@ -725,19 +521,12 @@ export const BIOLOGY_NOTES: TopicNote[] = [
           "Structural Genes: z-gene -> β-galactosidase (hydrolyzes lactose into glucose + galactose); y-gene -> Permease (increases cell permeability to β-galactosides); a-gene -> Transacetylase.",
           "In the absence of inducer: Repressor protein (produced constitutively by i-gene) binds to Operator (O) region, preventing RNA Polymerase from transcribing structural genes.",
         ],
-        pointsMr: [
-          "जेनेटिक कोड: ट्रिपलेट (६१ कोडॉन्स + ३ स्टॉप कोडॉन्स UAA, UAG, UGA), अनअॅम्ब्युग्युअस, डीजनरेट, युनिव्हर्सल.",
-          "AUG ची दुहेरी भूमिका: मिथियोनाइन (Methionine) तयार करतो + इनिशिएटर कोडॉन म्हणून काम करतो.",
-          "लॅक ऑपेरॉन: प्रेरक (Inducer) = लॅक्टोज / ॲलोलॅक्टोज.",
-          "रचनात्मक जनुके: z-gene -> β-गॅलॅक्टोसिडेज, y-gene -> पर्मिएज, a-gene -> ट्रान्सॲसिटायलेज.",
-          "लॅक्टोज नसल्यास: रिप्रेशर ऑपरेटरला बांधला जातो व ट्रान्सक्रिप्शन थांबवतो.",
-        ],
-        keyFormula: "z-gene = β-galactosidase | y-gene = Permease | a-gene = Transacetylase | Stop Codons = UAA, UAG, UGA",
+        keyFormula: "z-gene = β-galactosidase | y-gene = Permease | a-gene = Transacetylase | Stop Codons = UAA, UAG, UGA"
       },
     ],
     quickRevisionPoints: [
-      { en: "Leading strand synthesis is continuous in 5'->3' direction, while lagging strand synthesis is discontinuous forming Okazaki fragments joined by DNA Ligase.", mr: "लीडिंग स्ट्रँड ५'->३' दिशेत सलग बनते, तर लॅगिंग स्ट्रँडवर ओकाझाकी तुकडे तयार होतात जे DNA Ligase ने जोडले जातात." },
-      { en: "tRNA is the adapter molecule having an anticodon loop that reads mRNA codon and an amino acid acceptor 3' CCA end.", mr: "tRNA मध्ये ॲन्टिकोडॉन लूप असतो आणि ३' टोकावर CCA सिक्वेन्सवर अमिनो ॲसिड जोडले जाते." },
+      { en: "Leading strand synthesis is continuous in 5'->3' direction, while lagging strand synthesis is discontinuous forming Okazaki fragments joined by DNA Ligase." },
+      { en: "tRNA is the adapter molecule having an anticodon loop that reads mRNA codon and an amino acid acceptor 3' CCA end." },
     ],
     keyFormulasTable: [
       { name: "DNA Base Pair Rule", formula: "A+G = T+C (d.s. DNA)", description: "Chargaff equivalency rule for double-stranded DNA molecules" },
@@ -748,10 +537,8 @@ export const BIOLOGY_NOTES: TopicNote[] = [
     commonMistakesToAvoid: [
       {
         mistake: "Assuming RNA Polymerase can synthesize RNA in both 5' to 3' and 3' to 5' directions.",
-        mistakeMr: "RNA पॉलिमरेज दोन्ही दिशांमध्ये काम करू शकते असे मानणे.",
-        correction: "All nucleic acid polymerases (DNA Pol and RNA Pol) can ONLY catalyze chain elongation in the 5' to 3' direction!",
-        correctionMr: "सर्व न्युक्लिक ॲसिड पॉलिमरेजेस (DNA आणि RNA पॉलिमरेज) फक्त ५' ते ३' दिशेनेच नवीन धागा तयार करू शकतात!",
+        correction: "All nucleic acid polymerases (DNA Pol and RNA Pol) can ONLY catalyze chain elongation in the 5' to 3' direction!"
       },
-    ],
+    ]
   },
 ];

@@ -11,7 +11,7 @@ export const enrichNoteWith100Points = (note: TopicNote): TopicNote => {
 
   return {
     ...note,
-    points100: points200,
+    points100: points200
   };
 };
 

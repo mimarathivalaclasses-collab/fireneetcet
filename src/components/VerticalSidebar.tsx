@@ -49,7 +49,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
   const navItems = [
     {
       id: "home" as NavigationTab,
-      label: "मुख्य मेनू",
+      label: "Main Menu",
       sublabel: "Home Dashboard",
       icon: Compass,
       color: "text-indigo-500",
@@ -57,7 +57,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "grand_tests" as NavigationTab,
-      label: "१० ग्रँड टेस्ट्स",
+      label: "10 Grand Tests",
       sublabel: "Special 1 + NEET 180Q",
       icon: Trophy,
       color: "text-amber-500",
@@ -67,7 +67,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "mock_test" as NavigationTab,
-      label: "चॅप्टर सराव",
+      label: "Chapter Practice",
       sublabel: "Chapter-wise Tests",
       icon: Zap,
       color: "text-blue-500",
@@ -75,7 +75,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "notes" as NavigationTab,
-      label: "रिव्हिजन नोट्स",
+      label: "Revision Notes",
       sublabel: "High-Yield Notes & PDF",
       icon: BookOpen,
       color: "text-emerald-500",
@@ -83,7 +83,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "pyq" as NavigationTab,
-      label: "मागील वर्षे (PYQ)",
+      label: "Previous Years (PYQ)",
       sublabel: "2015-2025 Solved",
       icon: Calendar,
       color: "text-purple-500",
@@ -91,7 +91,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "omr" as NavigationTab,
-      label: "डिजिटल OMR",
+      label: "Digital OMR",
       sublabel: "Offline Sheet Practice",
       icon: CircleDot,
       color: "text-amber-600",
@@ -99,7 +99,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "mistakes" as NavigationTab,
-      label: "माझ्या चुका",
+      label: "My Mistakes",
       sublabel: "Mistakes Revision Bank",
       icon: AlertTriangle,
       color: "text-rose-500",
@@ -109,7 +109,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "analytics" as NavigationTab,
-      label: "प्रगती व निकाल",
+      label: "Progress & Results",
       sublabel: "Performance & Rank",
       icon: BarChart3,
       color: "text-cyan-500",
@@ -117,7 +117,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "bookmarks" as NavigationTab,
-      label: "महत्त्वाचे प्रश्न",
+      label: "Important Questions",
       sublabel: "Saved Bookmarks",
       icon: Bookmark,
       color: "text-amber-400",
@@ -130,17 +130,17 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
   const secondaryItems = [
     {
       id: "refer_earn" as NavigationTab,
-      label: "रेफर आणि कमवा",
-      sublabel: "१० रेफर = १००% फी परत",
+      label: "Refer & Earn",
+      sublabel: "10 Referrals = 100% Fee Refund",
       icon: Gift,
       color: "text-emerald-400",
-      badge: "₹२९ परत",
+      badge: "₹29 Refund",
       badgeColor: "bg-emerald-500 text-slate-950 font-black",
       activeBg: "bg-emerald-700 text-white shadow-sm",
     },
     {
       id: "classes_portal" as NavigationTab,
-      label: "कोचिंग क्लासेस पोर्टल",
+      label: "Coaching Classes Portal",
       sublabel: "Institutes & Batches",
       icon: Building2,
       color: "text-purple-400",
@@ -148,7 +148,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "feedback" as NavigationTab,
-      label: "मदत व शंका निरसन",
+      label: "Help & Support",
       sublabel: "Student Support 24/7",
       icon: HelpCircle,
       color: "text-slate-400",
@@ -156,7 +156,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
     },
     {
       id: "compliance_rules" as NavigationTab,
-      label: "कायदे व नियमावली",
+      label: "Rules & Compliance",
       sublabel: "AdSense, Firebase, UPI",
       icon: ShieldCheck,
       color: "text-rose-500",
@@ -174,7 +174,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Rocket className="w-4 h-4 text-indigo-600 dark:text-indigo-400 transform -rotate-45" />
-            <span className="text-xs font-black text-slate-800 dark:text-slate-200">लक्ष्य परीक्षा:</span>
+            <span className="text-xs font-black text-slate-800 dark:text-slate-200">Target Exam:</span>
           </div>
           <span className="px-2 py-0.5 rounded-md text-[11px] font-black bg-indigo-100 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-300 font-mono">
             {currentExam === "MHT_CET" ? "MHT-CET" : currentExam === "NEET" ? "NEET" : "JEE MAIN"}
@@ -217,10 +217,10 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
         )}
       </div>
 
-      {/* Main Navigation Items (उभी मेनू यादी) */}
+      {/* Main Navigation Items */}
       <div className="p-3 space-y-1">
         <div className="px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
-          मुख्य अभ्यास साधने
+          Core Study Tools
         </div>
 
         {navItems.map((item) => {
@@ -279,7 +279,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
       {/* Secondary Tools & Special Portals */}
       <div className="p-3 pt-1 space-y-1 border-t border-slate-100 dark:border-slate-800/80">
         <div className="px-3 py-1.5 text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
-          अधिक साधने & पोर्टल्स
+          More Tools & Portals
         </div>
 
         {secondaryItems.map((item) => {
@@ -342,7 +342,7 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
           >
             <div className="flex items-center gap-2">
               <KeyRound className="w-4 h-4 text-amber-400 group-hover:rotate-45 transition-transform" />
-              <span>मास्टर ॲडमिन पॅनल</span>
+              <span>Master Admin Panel</span>
             </div>
             {pendingApprovalsCount > 0 && (
               <span className="px-1.5 py-0.5 text-[10px] font-black bg-amber-400 text-slate-950 rounded-full animate-pulse">
@@ -358,21 +358,21 @@ export const VerticalSidebar: React.FC<VerticalSidebarProps> = ({
         <div className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-stone-900 dark:to-orange-950/40 p-3 rounded-2xl border border-orange-200 dark:border-orange-900/50 space-y-2">
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 rounded-md bg-gradient-to-tr from-orange-600 to-amber-600 text-white flex items-center justify-center font-black text-[9px] shadow-xs">
-              म
+              M
             </div>
             <span className="text-xs font-black text-slate-900 dark:text-white">
-              मराठीवाला PRO
+              Marathiwala PRO
             </span>
           </div>
           <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-tight">
-            १० ग्रँड टेस्ट्स, २५,०००+ प्रश्न व सर्व नोट्स फक्त ₹२९ मध्ये!
+            10 Grand Tests, 25,000+ MCQs & All Notes for only ₹29!
           </p>
           {onOpenPaymentModal && (
             <button
               onClick={onOpenPaymentModal}
               className="w-full py-1.5 px-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
             >
-              सदस्यत्व घ्या (₹२९)
+              Get Membership (₹29)
             </button>
           )}
         </div>

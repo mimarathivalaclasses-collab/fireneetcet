@@ -31,42 +31,36 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   const navItems: {
     id: NavigationTab;
     label: string;
-    labelEn: string;
     icon: React.ComponentType<{ className?: string }>;
     matches: (tab: NavigationTab) => boolean;
   }[] = [
     {
       id: "home",
-      label: "होम",
-      labelEn: "Home",
+      label: "Home",
       icon: Home,
       matches: (t) => t === "home",
     },
     {
       id: "practice",
-      label: "सराव",
-      labelEn: "Practice",
+      label: "Practice",
       icon: Zap,
       matches: (t) => t === "practice" || t === "all_questions" || t === "pyq",
     },
     {
       id: "grand_tests",
-      label: "मॉक टेस्ट",
-      labelEn: "Tests",
+      label: "Tests",
       icon: FileCheck2,
       matches: (t) => t === "grand_tests" || t === "mock_test",
     },
     {
       id: "notes",
-      label: "नोट्स",
-      labelEn: "Notes",
+      label: "Notes",
       icon: BookOpen,
       matches: (t) => t === "notes" || t === "formulas",
     },
     {
       id: "analytics",
-      label: "प्रगती",
-      labelEn: "Stats",
+      label: "Stats",
       icon: BarChart3,
       matches: (t) => t === "analytics" || t === "leaderboard",
     },
@@ -102,7 +96,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               </div>
 
               <span className="text-[10.5px] mt-0.5 font-bold tracking-tight">
-                {item.labelEn || item.label}
+                {item.label}
               </span>
 
               {isActive && (

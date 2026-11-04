@@ -108,7 +108,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
       setIsAudioPlaying(false);
     } else {
       const textToSpeak = q.explanationMr
-        ? `प्रश्न स्पष्टीकरण: ${q.explanationMr}`
+        ? `Question Explanation: ${q.explanationMr}`
         : `Explanation: ${q.explanation}`;
       const isMr = Boolean(q.explanationMr);
 
@@ -239,11 +239,11 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
       }, 1000);
     } else if (pomodoroSeconds === 0 && isPomodoroRunning) {
       if (pomodoroMode === "study") {
-        alert("🎉 २५ मिनिटांचे सराव सत्र पूर्ण झाले! ५ मिनिटांचा ब्रेक घ्या.");
+        alert("🎉 25-minute practice session complete! Take a 5-minute break.");
         setPomodoroMode("break");
         setPomodoroSeconds(5 * 60);
       } else {
-        alert("⚡ ब्रेक संपला! नवीन २५ मिनिटांचा अभ्यास सत्र सुरू करा.");
+        alert("⚡ Break over! Start a new 25-minute study session.");
         setPomodoroMode("study");
         setPomodoroSeconds(25 * 60);
       }
@@ -338,7 +338,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
           options: currentQuestion.options,
           correctOption: currentQuestion.correctOption,
           userSelectedOption: selectedAnswers[currentQuestion.id],
-          studentQuery: doubtQuery || "कृपया हे संकल्पना मराठीत सोप्या भाषेत समजावून सांगा आणि लक्षात ठेवण्यासाठी शॉर्टकट ट्रिक द्या.",
+          studentQuery: doubtQuery || "Please explain this concept in simple terms and provide a shortcut trick to remember it.",
           language: language,
         }),
       });
@@ -347,10 +347,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
       if (data.success && data.explanation) {
         setAiDoubtResponse(data.explanation);
       } else {
-        setAiDoubtResponse("माफ करा, शंका सोडवण्यात अडचण आली. कृपया पुन्हा प्रयत्न करा.");
+        setAiDoubtResponse("Sorry, there was an error solving the doubt. Please try again.");
       }
     } catch (err) {
-      setAiDoubtResponse("सर्व्हरशी संपर्क होऊ शकला नाही. कृपया इंटरनेट तपासा.");
+      setAiDoubtResponse("Could not connect to the server. Please check your internet.");
     } finally {
       setIsAiLoading(false);
     }
@@ -375,13 +375,13 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               <button
                 onClick={onBack}
                 className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black flex items-center gap-1.5 mr-2 transition-all cursor-pointer border border-slate-300"
-                title="मागे जा"
+                title="Back"
               >
                 <ArrowLeft className="w-3.5 h-3.5 text-indigo-600" />
-                <span>← मागे जा</span>
+                <span>← Back</span>
               </button>
             )}
-            <span className="text-xs font-bold text-slate-500 mr-1">विषय (Subject):</span>
+            <span className="text-xs font-bold text-slate-500 mr-1">Subject:</span>
             <button
               id="filter-subj-all"
               onClick={() => {
@@ -395,7 +395,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   : "bg-slate-100 text-slate-700 hover:bg-slate-200"
               }`}
             >
-              सर्व विषय (All)
+              All Subjects
             </button>
             {availableSubjects.map((sub) => (
               <button
@@ -412,13 +412,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
               >
-                {sub === "Physics"
-                  ? "भौतिकशास्त्र (Physics)"
-                  : sub === "Chemistry"
-                  ? "रसायनशास्त्र (Chemistry)"
-                  : sub === "Mathematics"
-                  ? "गणित (Maths)"
-                  : "जीवशास्त्र (Biology)"}
+                {sub}
               </button>
             ))}
           </div>
@@ -434,20 +428,20 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   ? "bg-gradient-to-r from-rose-600 to-orange-600 text-white ring-2 ring-rose-400"
                   : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
               }`}
-              title="२५ मिनिटे सराव पोमोडोरो टायमर"
+              title="25-minute practice Pomodoro timer"
             >
               <Timer className={`w-4 h-4 ${isPomodoroActive ? "text-amber-300 animate-spin" : "text-slate-500"}`} />
-              <span>⏱️ पोमोडोरो ({Math.floor(pomodoroSeconds / 60)}:{String(pomodoroSeconds % 60).padStart(2, "0")})</span>
+              <span>⏱️ Pomodoro ({Math.floor(pomodoroSeconds / 60)}:{String(pomodoroSeconds % 60).padStart(2, "0")})</span>
             </button>
 
             <button
               id="btn-auto-question-set"
               onClick={() => setShowAutoSetModal(true)}
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white text-xs font-black transition-all shadow-xs cursor-pointer ring-1 ring-emerald-400"
-              title="१२,५०,०००+ ऑटो प्रश्न संच तयार करा"
+              title="Create 1,250,000+ Auto Question Sets"
             >
               <Zap className="w-4 h-4 text-amber-300 fill-amber-300" />
-              <span>⚡ ऑटो प्रश्न संच (12.5L+ MCQs)</span>
+              <span>⚡ Auto Sets (12.5L+ MCQs)</span>
             </button>
 
             {/* Quick AI Generator Shortcut */}
@@ -457,7 +451,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 hover:bg-purple-100 text-xs font-bold transition-all shadow-xs"
             >
               <Sparkles className="w-4 h-4 text-purple-600 fill-purple-200" />
-              <span className="hidden sm:inline">AI सराव संच</span>
+              <span className="hidden sm:inline">AI Practice Sets</span>
             </button>
           </div>
         </div>
@@ -471,15 +465,15 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               </div>
               <div>
                 <div className="text-xs font-black text-white flex items-center gap-2">
-                  <span>{pomodoroMode === "study" ? "🎯 २५ मिनिटे एकाग्र सराव सत्र (Focus Block)" : "☕ ५ मिनिटे विश्रांती (Short Break)"}</span>
+                  <span>{pomodoroMode === "study" ? "🎯 25-minute Focused Practice Session" : "☕ 5-minute Short Break"}</span>
                   <span className="px-2 py-0.2 rounded-full text-[9px] font-black uppercase bg-purple-500/30 text-purple-200 border border-purple-400/30">
-                    {isPomodoroRunning ? "चालू आहे" : "थांबवले"}
+                    {isPomodoroRunning ? "Running" : "Paused"}
                   </span>
                 </div>
                 <div className="text-[11px] text-purple-200">
                   {pomodoroMode === "study"
-                    ? "सलग २५ मिनिटे पूर्ण लक्ष देऊन प्रश्न सोडवा आणि अचूकता वाढवा."
-                    : "डोळ्यांना विश्रांती द्या आणि पाणी प्या."}
+                    ? "Solve questions with full focus for 25 minutes to improve accuracy."
+                    : "Rest your eyes and drink some water."}
                 </div>
               </div>
             </div>
@@ -495,12 +489,12 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                 }`}
               >
                 {isPomodoroRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-                <span>{isPomodoroRunning ? "थांबवा" : "सुरू करा"}</span>
+                <span>{isPomodoroRunning ? "Pause" : "Start"}</span>
               </button>
               <button
                 onClick={resetPomodoro}
                 className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 font-bold text-xs transition-colors cursor-pointer"
-                title="रिसेट"
+                title="Reset"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
@@ -513,7 +507,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
           {/* Chapter Filter */}
           <div>
             <label className="block text-[11px] font-semibold text-slate-500 mb-1">
-              अध्याय (Chapter):
+              Chapter:
             </label>
             <select
               id="filter-chapter"
@@ -524,7 +518,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               }}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             >
-              <option value="All">सर्व अध्याय (All Chapters)</option>
+              <option value="All">All Chapters</option>
               {availableChapters.map((ch) => (
                 <option key={ch.name} value={ch.name}>
                   {ch.name}
@@ -536,7 +530,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
           {/* Difficulty Filter */}
           <div>
             <label className="block text-[11px] font-semibold text-slate-500 mb-1">
-              काठिण्य पातळी (Difficulty):
+              Difficulty:
             </label>
             <select
               id="filter-difficulty"
@@ -547,17 +541,17 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               }}
               className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             >
-              <option value="All">सर्व स्तर (All Levels)</option>
-              <option value="Easy">सोपे (Easy)</option>
-              <option value="Medium">मध्यम (Medium / Exam-level)</option>
-              <option value="Hard">कठीण (Hard / Advanced)</option>
+              <option value="All">All Levels</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium (Exam-level)</option>
+              <option value="Hard">Hard (Advanced)</option>
             </select>
           </div>
 
           {/* Search Box */}
           <div>
             <label className="block text-[11px] font-semibold text-slate-500 mb-1">
-              शोध (Search keywords):
+              Search:
             </label>
             <div className="relative">
               <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -569,7 +563,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   setSearchQuery(e.target.value);
                   setCurrentIndex(0);
                 }}
-                placeholder="धडा, विषय, कीवर्ड शोधा..."
+                placeholder="Search chapter, subject, keyword..."
                 className="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-slate-800 placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -589,10 +583,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   ? "bg-emerald-600 text-white border-emerald-700 shadow-xs"
                   : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
               }`}
-              title="केवळ न सोडवलेले प्रश्न दाखवा"
+              title="Show unattempted questions only"
             >
               <Zap className="w-3.5 h-3.5" />
-              <span>न सोडवलेले</span>
+              <span>Unattempted</span>
             </button>
 
             <button
@@ -603,10 +597,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                 setCurrentIndex(0);
               }}
               className="py-2 px-2.5 rounded-lg border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-[11px] flex items-center justify-center gap-1 transition-all cursor-pointer shadow-xs"
-              title="प्रश्नांचा क्रम शफल करा व नवीन प्रश्न मिळवा"
+              title="Shuffle question order"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>शफल</span>
+              <span>Shuffle</span>
             </button>
 
             <button
@@ -623,7 +617,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               }`}
             >
               <Bookmark className="w-3.5 h-3.5" />
-              <span>सेव्ह ({bookmarkedIds.size})</span>
+              <span>Saved ({bookmarkedIds.size})</span>
             </button>
           </div>
         </div>
@@ -636,10 +630,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
             <BookOpen className="w-8 h-8" />
           </div>
           <h3 className="text-base font-bold text-slate-900">
-            निवडलेल्या निकषांनुसार प्रश्न सापडले नाहीत
+            No questions found for the selected criteria
           </h3>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
-            तुम्ही AI प्रश्न जनरेटर वापरून या अध्यायासाठी किंवा विषयासाठी अमर्याद नवीन प्रश्न तयार करू शकता!
+            You can use the AI Question Generator to create unlimited new questions for this chapter or subject!
           </p>
           <div className="flex justify-center gap-3 pt-2">
             <button
@@ -652,14 +646,14 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               }}
               className="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-semibold text-xs hover:bg-slate-200"
             >
-              फिल्टर्स काढा (Clear Filters)
+              Clear Filters
             </button>
             <button
               onClick={onOpenAiGenerator}
               className="px-4 py-2 rounded-xl bg-purple-600 text-white font-semibold text-xs hover:bg-purple-700 shadow-xs flex items-center gap-1.5"
             >
               <Sparkles className="w-4 h-4" />
-              <span>नवीन प्रश्न तयार करा (AI Generator)</span>
+              <span>Create New Questions (AI Generator)</span>
             </button>
           </div>
         </div>
@@ -672,7 +666,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               <div className="bg-slate-50/90 border-b border-slate-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs font-bold text-slate-900 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                    प्रश्न {currentIndex + 1} / {filteredQuestions.length}
+                    Question {currentIndex + 1} / {filteredQuestions.length}
                   </span>
                   <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
                     {currentQuestion.subject}
@@ -686,11 +680,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                         : "bg-amber-50 text-amber-700 border-amber-200"
                     }`}
                   >
-                    {currentQuestion.difficulty === "Easy"
-                      ? "सोपे (Easy)"
-                      : currentQuestion.difficulty === "Hard"
-                      ? "कठीण (Hard)"
-                      : "मध्यम (Medium)"}
+                    {currentQuestion.difficulty}
                   </span>
                   {currentQuestion.pyqYear && (
                     <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 flex items-center gap-1">
@@ -719,7 +709,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                         ? "bg-amber-50 text-amber-700 border-amber-300"
                         : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
                     }`}
-                    title={isBookmarked ? "बुकमार्क काढले" : "बुकमार्क करा"}
+                    title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
                   >
                     {isBookmarked ? (
                       <BookmarkCheck className="w-4 h-4 text-amber-600 fill-amber-600" />
@@ -727,7 +717,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                       <Bookmark className="w-4 h-4 text-slate-400" />
                     )}
                     <span className="hidden sm:inline">
-                      {isBookmarked ? "बुकमार्क सेव्ह" : "सेव्ह करा"}
+                      {isBookmarked ? "Saved" : "Save"}
                     </span>
                   </button>
 
@@ -736,10 +726,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                       id="btn-reset-question"
                       onClick={handleResetCurrent}
                       className="p-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-medium flex items-center gap-1"
-                      title="पुन्हा प्रयत्न करा (Try Again)"
+                      title="Try Again"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
-                      <span className="hidden sm:inline">रीसेट</span>
+                      <span className="hidden sm:inline">Reset</span>
                     </button>
                   )}
                 </div>
@@ -749,7 +739,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               <div className="p-5 sm:p-7 space-y-4">
                 <div className="space-y-2">
                   <div className="text-xs font-medium text-slate-400">
-                    अध्याय: <span className="text-slate-700 font-semibold">{currentQuestion.chapter}</span>
+                    Chapter: <span className="text-slate-700 font-semibold">{currentQuestion.chapter}</span>
                     {currentQuestion.topic && (
                       <span className="ml-2 text-slate-500">• {currentQuestion.topic}</span>
                     )}
@@ -763,12 +753,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   )}
 
                   {/* Marathi Translation if bilingual or mr */}
-                  {(language === "mr" || language === "bilingual") && currentQuestion.questionTextMr && (
-                    <div className="text-base sm:text-lg font-medium text-slate-800 bg-amber-50/50 p-3.5 rounded-xl border border-amber-100/80 leading-relaxed">
-                      <span className="text-xs font-bold text-amber-800 block mb-1">मराठी भाषांतर:</span>
-                      {currentQuestion.questionTextMr}
-                    </div>
-                  )}
+
                 </div>
 
                 {/* Options List */}
@@ -815,11 +800,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                           </span>
                           <div className="space-y-1">
                             <div className="text-sm font-medium leading-snug">{optText}</div>
-                            {language !== "en" && optMrText && optMrText !== optText && (
-                              <div className="text-xs text-slate-600 italic">
-                                ({optMrText})
-                              </div>
-                            )}
+
                           </div>
                         </div>
 
@@ -855,10 +836,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                       )}
                       <div>
                         <div className="text-sm font-bold">
-                          {isCorrect ? "अभिनंदन! योग्य उत्तर (+4 / बरोबर)" : "चुकीचे उत्तर! (-1 / 0)"}
+                          {isCorrect ? "Congratulations! Correct Answer (+4)" : "Incorrect Answer! (-1 / 0)"}
                         </div>
                         <div className="text-xs opacity-80">
-                          योग्य उत्तर पर्याय {String.fromCharCode(65 + currentQuestion.correctOption)} आहे.
+                          Correct option is {String.fromCharCode(65 + currentQuestion.correctOption)}.
                         </div>
                       </div>
                     </div>
@@ -870,7 +851,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                       className="px-3 py-1.5 rounded-lg bg-white shadow-xs border border-purple-200 text-purple-700 hover:bg-purple-50 text-xs font-bold flex items-center gap-1.5 shrink-0 transition-colors"
                     >
                       <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                      <span>शंका विचारा (AI Doubt)</span>
+                      <span>Ask AI Doubt</span>
                     </button>
                   </div>
                 )}
@@ -881,7 +862,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
                       <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
                         <Lightbulb className="w-4 h-4 text-amber-500" />
-                        <span>सविस्तर स्पष्टीकरण व सूत्र (Detailed Solution)</span>
+                        <span>Detailed Solution & Formula</span>
                       </div>
                       
                       <div className="flex items-center gap-2">
@@ -898,19 +879,19 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                           {isAudioPlaying ? (
                             <>
                               <VolumeX className="w-3.5 h-3.5" />
-                              <span>ऑडिओ थांबवा</span>
+                              <span>Stop Audio</span>
                             </>
                           ) : (
                             <>
                               <Volume2 className="w-3.5 h-3.5 text-indigo-600" />
-                              <span>🔊 स्पष्टीकरण ऐका</span>
+                              <span>🔊 Listen to Explanation</span>
                             </>
                           )}
                         </button>
 
                         {marking && (
                           <span className="hidden sm:inline text-[11px] font-semibold text-slate-500">
-                            गुणदान: {marking.descriptionMr}
+                            Marking: {marking.descriptionEn || marking.description}
                           </span>
                         )}
                       </div>
@@ -919,7 +900,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                     {/* Formula Callout */}
                     {currentQuestion.formula && (
                       <div className="p-3 rounded-xl bg-blue-50/80 border border-blue-200 text-blue-900 font-mono text-xs">
-                        <span className="font-bold block text-blue-800 mb-0.5">महत्त्वाचे सूत्र (Formula):</span>
+                        <span className="font-bold block text-blue-800 mb-0.5">Important Formula:</span>
                         {currentQuestion.formula}
                       </div>
                     )}
@@ -933,12 +914,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                     )}
 
                     {/* Marathi Explanation */}
-                    {(language === "mr" || language === "bilingual") && currentQuestion.explanationMr && (
-                      <div className="text-xs sm:text-sm text-slate-800 bg-amber-50/40 p-3 rounded-xl border border-amber-100 leading-relaxed">
-                        <strong className="text-amber-900 block mb-1">मराठी स्पष्टीकरण (Step-by-step):</strong>
-                        {currentQuestion.explanationMr}
-                      </div>
-                    )}
+
                   </div>
                 )}
               </div>
@@ -952,7 +928,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   className="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-xs hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
-                  <span>मागील (Previous)</span>
+                  <span>Previous</span>
                 </button>
 
                 <div className="text-xs text-slate-500 font-medium">
@@ -965,7 +941,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   onClick={handleNext}
                   className="px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold text-xs hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 shadow-xs transition-colors"
                 >
-                  <span>पुढील (Next)</span>
+                  <span>Next</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
@@ -981,10 +957,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-purple-950">
-                        AI शंका निरसन सहाय्यक (AI Doubt Solver)
+                        AI Doubt Solver Assistant
                       </h4>
                       <p className="text-[11px] text-purple-700">
-                        या प्रश्नाबाबत कोणतीही शंका, शॉर्टकट ट्रिक किंवा मराठी स्पष्टीकरण विचारा
+                        Ask any doubt, shortcut trick, or detailed explanation about this question
                       </p>
                     </div>
                   </div>
@@ -992,7 +968,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                     onClick={() => setIsAiDoubtOpen(false)}
                     className="text-purple-400 hover:text-purple-700 text-xs font-bold"
                   >
-                    बंद करा ✕
+                    Close ✕
                   </button>
                 </div>
 
@@ -1042,10 +1018,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
             <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 shadow-xs">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                  प्रश्न पॅलेट (Question Jump)
+                  Question Palette
                 </h4>
                 <span className="text-[11px] font-semibold text-slate-500">
-                  {Object.keys(selectedAnswers).length}/{filteredQuestions.length} पूर्ण
+                  {Object.keys(selectedAnswers).length}/{filteredQuestions.length} Completed
                 </span>
               </div>
 
@@ -1090,19 +1066,19 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-[11px] text-slate-600">
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-sm bg-emerald-600 shrink-0"></span>
-                  <span>बरोबर (Correct)</span>
+                  <span>Correct</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-sm bg-rose-600 shrink-0"></span>
-                  <span>चूक (Incorrect)</span>
+                  <span>Incorrect</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-sm bg-slate-100 border border-slate-300 shrink-0"></span>
-                  <span>न सोडवलेले</span>
+                  <span>Unattempted</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-full bg-amber-400 shrink-0"></span>
-                  <span>बुकमार्क</span>
+                  <span>Bookmark</span>
                 </div>
               </div>
             </div>
@@ -1111,10 +1087,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
             <div className="bg-gradient-to-br from-blue-50 to-slate-50 rounded-2xl border border-blue-200/80 p-4 space-y-2 text-xs">
               <div className="font-bold text-blue-950 flex items-center gap-1.5">
                 <Lightbulb className="w-4 h-4 text-blue-600" />
-                <span>स्मार्ट सराव टीप</span>
+                <span>Smart Practice Tip</span>
               </div>
               <p className="text-slate-600 text-[11px] leading-relaxed">
-                NEET आणि JEE मध्ये वेळेचे व्यवस्थापन अतिशय महत्त्वाचे आहे. प्रत्येक प्रश्नासाठी १ ते १.५ मिनिटांपेक्षा जास्त वेळ घेऊ नका.
+                Time management is crucial in NEET and JEE. Do not spend more than 1 to 1.5 minutes on each question.
               </p>
             </div>
           </div>
@@ -1132,10 +1108,10 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                 </div>
                 <div>
                   <h3 className="text-base font-black tracking-tight">
-                    ऑटो प्रश्न संच जनरेटर (12.5L+ प्रश्न)
+                    Auto Question Set Generator (12.5L+ MCQs)
                   </h3>
                   <p className="text-xs text-emerald-200">
-                    {currentExam} च्या ताज्या पॅटर्ननुसार अमर्याद सराव संच
+                    Unlimited practice sets based on the latest {currentExam} pattern
                   </p>
                 </div>
               </div>
@@ -1151,7 +1127,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               {/* Subject Selection */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
-                  विषय निवडा (Select Subject):
+                  Select Subject:
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {availableSubjects.map((sub) => (
@@ -1166,12 +1142,12 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                       }`}
                     >
                       {sub === "Physics"
-                        ? "⚛️ भौतिकशास्त्र (Physics)"
+                        ? "⚛️ Physics"
                         : sub === "Chemistry"
-                        ? "🧪 रसायनशास्त्र (Chemistry)"
+                        ? "🧪 Chemistry"
                         : sub === "Mathematics"
-                        ? "📐 गणित (Maths)"
-                        : "🧬 जीवशास्त्र (Biology)"}
+                        ? "📐 Mathematics"
+                        : "🧬 Biology"}
                     </button>
                   ))}
                 </div>
@@ -1180,7 +1156,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               {/* Number of Questions */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
-                  प्रश्नांची संख्या (Number of Questions):
+                  Number of Questions:
                 </label>
                 <div className="grid grid-cols-4 gap-2 font-mono-numbers">
                   {[10, 25, 50, 100].map((cnt) => (
@@ -1194,7 +1170,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                           : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
                       }`}
                     >
-                      {cnt} प्रश्न
+                      {cnt} MCQs
                     </button>
                   ))}
                 </div>
@@ -1203,7 +1179,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               {/* Difficulty Level */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
-                  काठिण्य पातळी (Difficulty):
+                  Difficulty Level:
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {(["Easy", "Medium", "Hard"] as DifficultyLevel[]).map((lvl) => (
@@ -1217,7 +1193,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                           : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
                       }`}
                     >
-                      {lvl === "Easy" ? "सोपे (Easy)" : lvl === "Medium" ? "मध्यम (Medium)" : "कठीण (Hard)"}
+                      {lvl === "Easy" ? "Easy" : lvl === "Medium" ? "Medium" : "Hard"}
                     </button>
                   ))}
                 </div>
@@ -1227,7 +1203,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
               <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 flex items-start gap-2">
                 <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <p>
-                  हे प्रश्न अल्गोरिदमद्वारे तयार केलेले असून प्रत्येक प्रश्नाचे मराठी व इंग्रजीत सविस्तर स्पष्टीकरण आणि आवश्यक सूत्रे उपलब्ध आहेत.
+                  These questions are generated by an algorithm and include detailed English explanations and required formulas for every question.
                 </p>
               </div>
 
@@ -1238,7 +1214,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   onClick={() => setShowAutoSetModal(false)}
                   className="flex-1 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
                 >
-                  रद्द करा
+                  Cancel
                 </button>
                 <button
                   type="button"
@@ -1246,7 +1222,7 @@ export const PracticeMode: React.FC<PracticeModeProps> = ({
                   className="flex-2 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white text-xs font-black shadow-lg shadow-emerald-700/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Play className="w-4 h-4 fill-white" />
-                  <span>सराव सुरू करा ({autoCount} प्रश्न)</span>
+                  <span>Start Practice ({autoCount} Questions)</span>
                 </button>
               </div>
             </div>

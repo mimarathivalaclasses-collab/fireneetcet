@@ -69,7 +69,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
   const formatSeconds = (secs: number) => {
     const mins = Math.floor(secs / 60);
     const s = secs % 60;
-    return `${mins} मि. ${s} से.`;
+    return `${mins} min. ${s} sec.`;
   };
 
   const handleDownloadPdf = () => {
@@ -82,7 +82,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
 
   // 1-Click WhatsApp Parent Share
   const handleShareWithParents = () => {
-    let studentName = "विद्यार्थी";
+    let studentName = "Student";
     try {
       const userRaw = localStorage.getItem("mcq_current_user_v1");
       if (userRaw) {
@@ -93,26 +93,26 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
 
     const appraisalMsg =
       result.percentage >= 80
-        ? "🌟 अप्रतिम कामगिरी! पालकांनी विद्यार्थ्याचे कौतुक करावे."
+        ? "🌟 Excellent performance! Parents should appreciate the student's hard work."
         : result.percentage >= 60
-        ? "👍 चांगला प्रयत्न! नियमित सरावाने अजून चांगले गुण मिळतील."
-        : "💡 सराव वाढवण्याची गरज आहे. कमजोर विषयांवर विशेष लक्ष द्यावे.";
+        ? "👍 Good effort! Regular practice will bring even better marks."
+        : "💡 More practice is needed. Focus more on weak subjects.";
 
-    const message = `📊 *अभ्यास मित्र - टेस्ट निकाल अहवाल* 🎯
-👤 *विद्यार्थी:* ${studentName}
-📚 *परीक्षा:* ${result.exam} (${result.title})
-📅 *दिनांक:* ${new Date(result.completedAt || Date.now()).toLocaleDateString("mr-IN")}
+    const message = `📊 *Practice App - Test Result Report* 🎯
+👤 *Student:* ${studentName}
+📚 *Exam:* ${result.exam} (${result.title})
+📅 *Date:* ${new Date(result.completedAt || Date.now()).toLocaleDateString("en-IN")}
 ----------------------------------------
-🏆 *मिळालेले गुण:* ${result.score} / ${result.maxMarks} (${result.percentage}%)
-✅ *बरोबर उत्तरे:* ${result.correct} / ${result.totalQuestions}
-❌ *चुकीची उत्तरे:* ${result.wrong}
-⚪ *न सोडवलेले:* ${result.unattempted}
-🎯 *अचूकता (Accuracy):* ${result.accuracy}%
-⏱️ *घेतलेला वेळ:* ${formatSeconds(result.timeTakenSeconds)}
+🏆 *Marks Obtained:* ${result.score} / ${result.maxMarks} (${result.percentage}%)
+✅ *Correct Answers:* ${result.correct} / ${result.totalQuestions}
+❌ *Incorrect Answers:* ${result.wrong}
+⚪ *Unattempted:* ${result.unattempted}
+🎯 *Accuracy:* ${result.accuracy}%
+⏱️ *Time Taken:* ${formatSeconds(result.timeTakenSeconds)}
 ----------------------------------------
-💬 *संदेश:* ${appraisalMsg}
+💬 *Message:* ${appraisalMsg}
 
-🔗 *ऑनलाइन सराव सुरू ठेवा:* ${window.location.origin}`;
+🔗 *Continue Practice:* ${window.location.origin}`;
 
     const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
@@ -124,14 +124,12 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
       stopExplanation();
       setPlayingQId(null);
     } else {
-      const textToSpeak = q.explanationMr
-        ? `प्रश्न स्पष्टीकरण: ${q.explanationMr}`
-        : `Explanation: ${q.explanation}`;
+      const textToSpeak = `Explanation: ${q.explanation}`;
 
       const isMr = Boolean(q.explanationMr);
 
       speakExplanation(textToSpeak, {
-        lang: isMr ? "mr-IN" : "en-IN",
+        lang: "en-IN",
         onStart: () => setPlayingQId(q.id),
         onEnd: () => setPlayingQId(null),
         onError: () => setPlayingQId(null),
@@ -181,8 +179,8 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
             <FileText className="w-4 h-4" />
           </div>
           <div>
-            <div className="text-xs font-bold text-slate-900">मॉक टेस्ट निकाल व स्पष्टीकरण PDF</div>
-            <div className="text-[11px] text-slate-500">सर्व प्रश्न, योग्य उत्तरे आणि स्टेप-बाय-स्टेप स्पष्टीकरणे PDF मध्ये सेव्ह करा</div>
+            <div className="text-xs font-bold text-slate-900">Mock Test Result & Explanation PDF</div>
+            <div className="text-[11px] text-slate-500">Save all questions, correct answers and step-by-step explanations as PDF</div>
           </div>
         </div>
 
@@ -193,7 +191,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
             className="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-xs flex items-center gap-2 transition-all cursor-pointer"
           >
             <Download className="w-4 h-4" />
-            <span>PDF डाउनलोड करा (Download PDF)</span>
+            <span>Download PDF</span>
           </button>
 
           <button
@@ -202,7 +200,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
             className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs flex items-center gap-2 transition-all cursor-pointer"
           >
             <Printer className="w-4 h-4 text-amber-400" />
-            <span>प्रिंट करा (Print Report)</span>
+            <span>Print Report</span>
           </button>
         </div>
       </div>
@@ -212,15 +210,15 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
         <div className="border-b-2 border-orange-500 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-orange-600 tracking-tight">
-              🎓 मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)
+              🎓 Mi Marathiwala Classes, Ambad
             </h1>
             <p className="text-xs sm:text-sm font-bold text-slate-700">
-              अधिकृत मॉक टेस्ट निकाल व विद्यार्थी कामगिरी विश्लेषण (Official Scorecard & Analysis)
+              Official Mock Test Scorecard & Student Performance Analysis
             </p>
           </div>
           <div className="text-left sm:text-right text-xs font-semibold text-slate-500">
-            <div>परीक्षा: <strong className="text-slate-900">{result.exam}</strong></div>
-            <div>दिनांक: <strong className="text-slate-900">{new Date(result.completedAt || Date.now()).toLocaleDateString("mr-IN")}</strong></div>
+            <div>Exam: <strong className="text-slate-900">{result.exam}</strong></div>
+            <div>Date: <strong className="text-slate-900">{new Date(result.completedAt || Date.now()).toLocaleDateString("en-IN")}</strong></div>
           </div>
         </div>
 
@@ -365,38 +363,38 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
             <div className="flex items-center gap-2">
               <Gauge className="w-5 h-5 text-amber-400" />
               <h3 className="text-sm font-bold tracking-tight">
-                वेळ व वेग मॅनेजमेंट विश्लेषण (Speedometer & Pacing Analytics)
+                Speedometer & Pacing Analytics
               </h3>
             </div>
             <span className="text-xs text-slate-400 font-mono-numbers">
-              सरासरी वेग: <strong className="text-white">{timeAnalytics.avgSecondsPerQ} सेकंद / प्रश्न</strong>
+              Avg Speed: <strong className="text-white">{timeAnalytics.avgSecondsPerQ} sec / question</strong>
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
             <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
               <div>
-                <span className="text-slate-400 font-medium">आदर्श वेगातील प्रश्न (10s - 90s)</span>
+                <span className="text-slate-400 font-medium">Optimal Pace Questions (10s - 90s)</span>
                 <div className="text-base font-extrabold text-emerald-400 font-mono-numbers mt-0.5">
-                  {timeAnalytics.optimalCount} प्रश्न 🟢
+                  {timeAnalytics.optimalCount} Questions 🟢
                 </div>
               </div>
             </div>
 
             <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
               <div>
-                <span className="text-slate-400 font-medium">जास्त वेळ घेतलेले प्रश्न (&gt; 90s)</span>
+                <span className="text-slate-400 font-medium">Overtime Questions (&gt; 90s)</span>
                 <div className="text-base font-extrabold text-red-400 font-mono-numbers mt-0.5">
-                  {timeAnalytics.overtimeCount} प्रश्न 🔴
+                  {timeAnalytics.overtimeCount} Questions 🔴
                 </div>
               </div>
             </div>
 
             <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
               <div>
-                <span className="text-slate-400 font-medium">अति-जलद उत्तरे (&lt; 10s)</span>
+                <span className="text-slate-400 font-medium">Rapid Guess Answers (&lt; 10s)</span>
                 <div className="text-base font-extrabold text-amber-400 font-mono-numbers mt-0.5">
-                  {timeAnalytics.rapidGuessCount} प्रश्न ⚡
+                  {timeAnalytics.rapidGuessCount} Questions ⚡
                 </div>
               </div>
             </div>
@@ -412,7 +410,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
             className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md flex items-center gap-2 transition-all cursor-pointer animate-pulse"
           >
             <MessageCircle className="w-4 h-4 fill-white" />
-            <span>पालकांना निकाल WhatsApp करा (Share with Parents)</span>
+            <span>Share Result with Parents on WhatsApp</span>
           </button>
 
           <button
@@ -421,7 +419,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
             className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs flex items-center gap-2 transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
-            <span>पुन्हा टेस्ट द्या (Retake Test)</span>
+            <span>Retake Test</span>
           </button>
 
           {result.wrong > 0 && onGoToMistakes && (
@@ -429,9 +427,9 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
               onClick={onGoToMistakes}
               className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-xs flex items-center gap-2 transition-colors cursor-pointer"
             >
-              <AlertTriangle className="w-4 h-4 text-yellow-300" />
-              <span>चुकलेले {result.wrong} प्रश्न एरर नोटबुकमध्ये पाहा</span>
-            </button>
+            <AlertTriangle className="w-4 h-4 text-yellow-300" />
+            <span>Review {result.wrong} Incorrect Questions in Error Notebook</span>
+          </button>
           )}
 
           <button
@@ -440,7 +438,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
             className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs flex items-center gap-2 transition-colors cursor-pointer"
           >
             <BookOpen className="w-4 h-4" />
-            <span>सराव मोडवर जा (Back to Practice)</span>
+            <span>Back to Practice</span>
           </button>
 
           <button
@@ -449,7 +447,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
             className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs border border-slate-300 shadow-xs flex items-center gap-2 transition-colors cursor-pointer"
           >
             <Download className="w-4 h-4 text-red-600" />
-            <span>PDF डाउनलोड (Download PDF)</span>
+            <span>Download PDF</span>
           </button>
         </div>
 
@@ -458,10 +456,10 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                प्रश्नोत्तरे व सविस्तर स्पष्टीकरणे (Solutions Review)
+                Solutions Review
               </h3>
               <p className="text-xs text-slate-500">
-                प्रत्येक प्रश्नाचे योग्य उत्तर, सूत्र आणि स्टेप-बाय-स्टेप स्पष्टीकरण तपासा.
+                Review correct answers, formulas and step-by-step explanations for each question.
               </p>
             </div>
 
@@ -473,7 +471,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                   filterType === "all" ? "bg-white text-slate-900 shadow-xs" : "text-slate-600"
                 }`}
               >
-                सर्व ({result.questions.length})
+                All ({result.questions.length})
               </button>
               <button
                 onClick={() => setFilterType("wrong")}
@@ -481,7 +479,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                   filterType === "wrong" ? "bg-rose-600 text-white shadow-xs" : "text-rose-700"
                 }`}
               >
-                चुकीचे ({result.wrong})
+                Incorrect ({result.wrong})
               </button>
               <button
                 onClick={() => setFilterType("correct")}
@@ -489,7 +487,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                   filterType === "correct" ? "bg-emerald-600 text-white shadow-xs" : "text-emerald-700"
                 }`}
               >
-                बरोबर ({result.correct})
+                Correct ({result.correct})
               </button>
               <button
                 onClick={() => setFilterType("unattempted")}
@@ -497,7 +495,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                   filterType === "unattempted" ? "bg-slate-700 text-white shadow-xs" : "text-slate-600"
                 }`}
               >
-                न सोडवलेले ({result.unattempted})
+                Unattempted ({result.unattempted})
               </button>
             </div>
           </div>
@@ -525,7 +523,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-slate-900 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                        प्रश्न {idx + 1}
+                        Question {idx + 1}
                       </span>
                       <span className="font-semibold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
                         {q.subject}
@@ -547,7 +545,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                         >
                           <Clock className="w-3 h-3" />
                           <span>{result.timeSpentPerQuestion[q.id]}s</span>
-                          {result.timeSpentPerQuestion[q.id] > 90 && <span className="text-[10px]">⚠️ जास्त वेळ</span>}
+                          {result.timeSpentPerQuestion[q.id] > 90 && <span className="text-[10px]">⚠️ Overtime</span>}
                         </span>
                       )}
 
@@ -563,14 +561,14 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                         {isAnsCorrect ? (
                           <>
                             <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>बरोबर</span>
+                            <span>Correct</span>
                           </>
                         ) : isUnattempted ? (
-                          <span>न सोडवलेले</span>
+                          <span>Unattempted</span>
                         ) : (
                           <>
                             <XCircle className="w-3.5 h-3.5" />
-                            <span>चुकीचे</span>
+                            <span>Incorrect</span>
                           </>
                         )}
                       </span>
@@ -582,7 +580,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                             ? "bg-amber-100 text-amber-800 border-amber-300"
                             : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                         }`}
-                        title="बुकमार्क करा"
+                        title="Bookmark Question"
                       >
                         <Bookmark className="w-3.5 h-3.5" />
                       </button>
@@ -594,11 +592,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                     <div className="text-sm font-semibold text-slate-900 leading-relaxed">
                       {q.questionText}
                     </div>
-                    {q.questionTextMr && (
-                      <div className="text-xs text-slate-700 bg-amber-50/60 p-2.5 rounded-lg border border-amber-100">
-                        <strong>मराठी:</strong> {q.questionTextMr}
-                      </div>
-                    )}
+                    {/* Marathi Text Removed */}
                   </div>
 
                   {/* Options List with Results */}
@@ -647,7 +641,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/60 pb-2">
                       <div className="flex items-center gap-1.5 font-bold text-slate-800">
                         <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
-                        <span>सविस्तर स्पष्टीकरण (Step-by-step Solution):</span>
+                        <span>Step-by-step Solution:</span>
                       </div>
 
                       {/* Listen to Audio Explanation Button */}
@@ -663,12 +657,12 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
                         {playingQId === q.id ? (
                           <>
                             <VolumeX className="w-3.5 h-3.5" />
-                            <span>ऑडिओ थांबवा (Stop)</span>
+                            <span>Stop Audio</span>
                           </>
                         ) : (
                           <>
                             <Volume2 className="w-3.5 h-3.5 text-indigo-600" />
-                            <span>🔊 स्पष्टीकरण ऐका (Listen Explanation)</span>
+                            <span>🔊 Listen Explanation</span>
                           </>
                         )}
                       </button>
@@ -676,17 +670,13 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
 
                     {q.formula && (
                       <div className="p-2 rounded-lg bg-blue-50 border border-blue-200 text-blue-900 font-mono text-[11px]">
-                        <strong>सूत्र (Formula):</strong> {q.formula}
+                        <strong>Formula:</strong> {q.formula}
                       </div>
                     )}
 
                     <p className="text-slate-700 leading-relaxed">{q.explanation}</p>
 
-                    {q.explanationMr && (
-                      <p className="text-slate-800 bg-amber-50/40 p-2.5 rounded-lg border border-amber-100 leading-relaxed">
-                        <strong className="text-amber-900">मराठी स्पष्टीकरण:</strong> {q.explanationMr}
-                      </p>
-                    )}
+                    {/* Marathi Explanation Removed */}
                   </div>
                 </div>
               );
@@ -696,7 +686,7 @@ export const TestResultView: React.FC<TestResultViewProps> = ({
 
         {/* Printable Footer */}
         <div className="pt-4 border-t border-orange-500 text-center text-xs font-bold text-slate-600">
-          🎓 मी मराठीवाला क्लासेस, अंबड • MHT-CET • NEET • JEE Main सराव व टेस्ट ॲनालिटिक्स • Mi Marathiwala Classes
+          🎓 Mi Marathiwala Classes, Ambad • MHT-CET • NEET • JEE Main Practice & Test Analytics
         </div>
       </div>
     </div>

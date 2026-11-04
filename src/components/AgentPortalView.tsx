@@ -126,15 +126,15 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
   const handleRegisterAgent = (e: React.FormEvent) => {
     e.preventDefault();
     if (!regName.trim() || !regMobile.trim()) {
-      alert("कृपया नाव आणि मोबाईल नंबर प्रविष्ट करा.");
+      alert("Please enter name and mobile number.");
       return;
     }
     if (regMobile.trim().length < 10) {
-      alert("कृपया वैध १० अंकी मोबाईल नंबर टाका.");
+      alert("Please enter a valid 10-digit mobile number.");
       return;
     }
     if (!regPassword.trim() || regPassword.trim().length < 4) {
-      alert("कृपया किमान ४ अक्षरी पासवर्ड तयार करा.");
+      alert("Please create a password of at least 4 characters.");
       return;
     }
 
@@ -143,7 +143,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
       const agents: AgentUser[] = raw ? JSON.parse(raw) : [];
 
       if (agents.find((a) => a.mobile === regMobile.trim())) {
-        alert("हा मोबाईल नंबर आधीच एजंट म्हणून नोंदणीकृत आहे! कृपया लॉगिन करा.");
+        alert("This mobile number is already registered as an agent! Please login.");
         setAuthMode("login");
         setLoginMobile(regMobile.trim());
         return;
@@ -184,7 +184,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
   const handleLoginAgent = (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginMobile.trim()) {
-      alert("कृपया मोबाईल नंबर टाका.");
+      alert("Please enter mobile number.");
       return;
     }
 
@@ -196,14 +196,14 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
       );
 
       if (!agent) {
-        alert("या नंबरवर एजंट खाते सापडले नाही. कृपया नवीन एजंट नोंदणी करा.");
+        alert("Agent account not found for this number. Please register as a new agent.");
         setAuthMode("register");
         setRegMobile(loginMobile.trim());
         return;
       }
 
       if (agent.password && agent.password !== loginPassword.trim()) {
-        alert("चुकीचा पासवर्ड! कृपया योग्य पासवर्ड प्रविष्ट करा.");
+        alert("Incorrect password! Please enter the correct password.");
         return;
       }
 
@@ -255,22 +255,22 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
 
     if (!amount || isNaN(amount) || amount < minWithdrawal) {
       setPayoutErrorMessage(
-        `किमान विड्रॉल रक्कम ₹${minWithdrawal} आहे. कृपया किमान ₹${minWithdrawal} किंवा त्यापेक्षा जास्त रक्कम टाका.`
+        `Minimum withdrawal amount is ₹${minWithdrawal}. Please enter an amount of ₹${minWithdrawal} or more.`
       );
       return;
     }
 
     if (amount > currentAgent.walletBalance) {
       setPayoutErrorMessage(
-        `तुमच्या वॉलेटमध्ये फक्त ₹${formatInr(
+        `You only have ₹${formatInr(
           currentAgent.walletBalance
-        )} शिल्लक आहे. शिल्लक रकमेपेक्षा जास्त रक्कम काढता येत नाही.`
+        )} in your wallet. You cannot withdraw more than your balance.`
       );
       return;
     }
 
     if (!payoutUpi.trim()) {
-      setPayoutErrorMessage("कृपया वैध UPI ID प्रविष्ट करा.");
+      setPayoutErrorMessage("Please enter a valid UPI ID.");
       return;
     }
 
@@ -318,7 +318,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
     agentReferralUrl
   )}`;
 
-  const agentShareWhatsappText = `🔥 MHT-CET, NEET & JEE Main सराव ॲप (फक्त ₹२९ मध्ये)! \n✅ २५,०००+ प्रश्न, १० ग्रँड मॉक टेस्ट्स आणि मराठी/इंग्रजी स्पष्टीकरण!\n👉 लगेच सुरू करा माझ्या अधिकृत लिंकवरून:\n${agentReferralUrl}\n(किंवा नोंदणी करताना एजंट कोड वापरा: ${currentAgent?.agentCode})`;
+  const agentShareWhatsappText = `🔥 MHT-CET, NEET & JEE Main Practice App (Only ₹29)! \n✅ 25,000+ Questions, 10 Grand Mock Tests and English explanations!\n👉 Start Now from my official link:\n${agentReferralUrl}\n(Or use Agent Code during registration: ${currentAgent?.agentCode})`;
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto pb-16 px-3 sm:px-4">
@@ -331,12 +331,12 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               className="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black flex items-center gap-1.5 transition-all cursor-pointer border border-slate-300 shadow-xs"
             >
               <ArrowLeft className="w-4 h-4 text-slate-700" />
-              <span>← मागे जा</span>
+              <span>← Go Back</span>
             </button>
           )}
           <span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-950 font-black text-xs border border-indigo-300 flex items-center gap-1">
             <Sparkles className="w-3.5 h-3.5 text-indigo-700" />
-            <span>अधिकृत एजंट व पार्टनर प्रोग्राम (प्रति रेफर ₹१० कमिशन)</span>
+            <span>Official Agent & Partner Program (₹10 Commission per Refer)</span>
           </span>
         </div>
 
@@ -352,13 +352,13 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               onClick={handleLogout}
               className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs border border-rose-200 cursor-pointer"
             >
-              लॉग आऊट
+              Logout
             </button>
           </div>
         )}
       </div>
 
-      {/* 2. PROMINENT VERIFIED AGENT REFERRAL CARD (User Requirement: "refer कोडे वर कर म्हणजे त्यांना खरं वाटेल") */}
+      {/* 2. PROMINENT VERIFIED AGENT REFERRAL CARD */}
       {currentAgent && (
         <div className="bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-indigo-500/40 relative overflow-hidden">
           {/* Ambient Lighting */}
@@ -369,19 +369,19 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <div className="space-y-1">
                 <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[11px] font-black border border-indigo-400/30">
                   <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>अधिकृत एजंट पार्टनर (Official Certified Agent)</span>
+                  <span>Official Certified Agent Partner</span>
                 </div>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-white">
-                  विद्यार्थी जोडा · प्रति रेफर थेट ₹१० कमिशन!
+                  Add Students · Earn ₹10 Commission per Refer!
                 </h1>
               </div>
 
               <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/15 text-center">
                 <div className="text-[10px] uppercase tracking-wider text-indigo-300 font-bold">
-                  तुमचा कमिशन दर
+                  Your Commission Rate
                 </div>
                 <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono-numbers">
-                  ₹१० <span className="text-xs text-white font-normal">(प्रति विद्यार्थी)</span>
+                  ₹10 <span className="text-xs text-white font-normal">(Per Student)</span>
                 </div>
               </div>
             </div>
@@ -391,9 +391,9 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               {/* The Big Code Badge */}
               <div className="lg:col-span-2 bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-indigo-400/30 space-y-3">
                 <div className="flex items-center justify-between text-xs text-indigo-300 font-bold">
-                  <span>तुमचा अधिकृत एजंट रेफरल कोड (Agent Code):</span>
+                  <span>Your Official Agent Referral Code:</span>
                   <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-                    ✓ प्रमाणित कोड (Verified)
+                    ✓ Verified Code
                   </span>
                 </div>
 
@@ -410,12 +410,12 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                       {copiedCode ? (
                         <>
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>कॉपी झाले!</span>
+                          <span>Copied!</span>
                         </>
                       ) : (
                         <>
                           <Copy className="w-3.5 h-3.5" />
-                          <span>कोड कॉपी</span>
+                          <span>Copy Code</span>
                         </>
                       )}
                     </button>
@@ -425,17 +425,17 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                     type="button"
                     onClick={() => setShowQrModal(true)}
                     className="px-3.5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-1.5 transition-all border border-white/20 cursor-pointer"
-                    title="QR कोड पहा"
+                    title="View QR Code"
                   >
                     <QrCode className="w-4 h-4 text-amber-300" />
-                    <span className="hidden sm:inline">QR कोड</span>
+                    <span className="hidden sm:inline">QR Code</span>
                   </button>
                 </div>
 
                 {/* Direct Agent Share Link */}
                 <div className="space-y-1 pt-1">
                   <div className="text-[11px] text-slate-300 font-semibold">
-                    तुमची थेट एजंट जॉइनिंग लिंक (Direct Link):
+                    Your Direct Agent Joining Link:
                   </div>
                   <div className="flex items-center gap-2 bg-slate-950/60 p-2 rounded-xl border border-slate-700">
                     <span className="flex-1 font-mono text-xs text-slate-300 truncate pl-1">
@@ -447,7 +447,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                       className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-1 transition-all cursor-pointer shrink-0"
                     >
                       {copiedLink ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>{copiedLink ? "कॉपी!" : "लिंक कॉपी"}</span>
+                      <span>{copiedLink ? "Copied!" : "Copy Link"}</span>
                     </button>
                   </div>
                 </div>
@@ -459,9 +459,9 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                   <Share2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-black text-sm text-white">१-क्लिक WhatsApp शेअर</h3>
+                  <h3 className="font-black text-sm text-white">1-Click WhatsApp Share</h3>
                   <p className="text-[11px] text-indigo-200 mt-0.5">
-                    ग्रुप्स व मित्रांना पाठवून प्रति ॲडमिशन ₹१० कमिशन मिळवा
+                    Share with groups and friends to earn ₹10 commission per admission.
                   </p>
                 </div>
                 <a
@@ -473,7 +473,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                   className="w-full py-2.5 px-4 rounded-xl bg-white text-indigo-950 font-black text-xs shadow-md hover:bg-indigo-50 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                 >
                   <Share2 className="w-4 h-4 text-indigo-700" />
-                  <span>WhatsApp वर पाठवा</span>
+                  <span>Send on WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -489,10 +489,10 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <Sparkles className="w-7 h-7" />
             </div>
             <h2 className="text-xl font-black text-slate-900">
-              {authMode === "login" ? "एजंट पार्टनर लॉगिन" : "नवीन एजंट नोंदणी"}
+              {authMode === "login" ? "Agent Partner Login" : "New Agent Registration"}
             </h2>
             <p className="text-xs text-slate-500">
-              प्रत्येक विद्यार्थी सबस्क्रिप्शनवर (₹२९) थेट <strong>₹१० कमिशन</strong> मिळवा
+              Earn direct <strong>₹10 commission</strong> on every student subscription (₹29)
             </p>
           </div>
 
@@ -506,7 +506,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              लॉगिन करा (Login)
+              Login
             </button>
             <button
               type="button"
@@ -517,7 +517,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
-              नवीन नोंदणी (Sign Up)
+              Sign Up
             </button>
           </div>
 
@@ -525,12 +525,12 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
             <form onSubmit={handleLoginAgent} className="space-y-4">
               <div>
                 <label className="text-xs font-bold text-slate-700 block mb-1">
-                  मोबाईल नंबर किंवा एजंट कोड:
+                  Mobile Number or Agent Code:
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="उदा. 9823456789 किंवा AGT-1001"
+                  placeholder="e.g. 9823456789 or AGT-1001"
                   value={loginMobile}
                   onChange={(e) => setLoginMobile(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-bold text-xs outline-none"
@@ -538,7 +538,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">पासवर्ड:</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Password:</label>
                 <input
                   type="password"
                   required
@@ -553,17 +553,17 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 type="submit"
                 className="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer"
               >
-                डॅशबोर्ड उघडा (Login)
+                Open Dashboard (Login)
               </button>
             </form>
           ) : (
             <form onSubmit={handleRegisterAgent} className="space-y-3.5">
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">पूर्ण नाव:</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Full Name:</label>
                 <input
                   type="text"
                   required
-                  placeholder="उदा. राहुल देशमुख"
+                  placeholder="e.g. Rahul Deshmukh"
                   value={regName}
                   onChange={(e) => setRegName(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-bold text-xs outline-none"
@@ -573,23 +573,23 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="text-xs font-bold text-slate-700 block mb-1">
-                    मोबाईल नंबर:
+                    Mobile Number:
                   </label>
                   <input
                     type="tel"
                     required
-                    placeholder="१० अंकी नंबर"
+                    placeholder="10-digit number"
                     value={regMobile}
                     onChange={(e) => setRegMobile(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-mono font-bold text-xs outline-none"
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-slate-700 block mb-1">पासवर्ड:</label>
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Password:</label>
                   <input
                     type="password"
                     required
-                    placeholder="किमान ४ अक्षरे"
+                    placeholder="Min 4 chars"
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 text-xs outline-none"
@@ -600,11 +600,11 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="text-xs font-bold text-slate-700 block mb-1">
-                    जिल्हा / शहर:
+                    District / City:
                   </label>
                   <input
                     type="text"
-                    placeholder="उदा. पुणे, लातूर"
+                    placeholder="e.g. Pune, Latur"
                     value={regCity}
                     onChange={(e) => setRegCity(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 text-xs outline-none"
@@ -612,11 +612,11 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 </div>
                 <div>
                   <label className="text-xs font-bold text-slate-700 block mb-1">
-                    UPI ID (कमिशनसाठी):
+                    UPI ID (for commission):
                   </label>
                   <input
                     type="text"
-                    placeholder="उदा. 98234@upi"
+                    placeholder="e.g. 98234@upi"
                     value={regUpiId}
                     onChange={(e) => setRegUpiId(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-mono text-xs outline-none"
@@ -628,13 +628,13 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 type="submit"
                 className="w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-wider shadow-md transition-all cursor-pointer"
               >
-                मोफत एजंट खाते तयार करा (Create Account)
+                Create Free Agent Account
               </button>
             </form>
           )}
 
           <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-[11px] text-slate-600 text-center">
-            🔒 सुरक्षित व पारदर्शक · २४ तासांत थेट UPI वर पेमेंट
+            🔒 Secure & Transparent · Direct UPI payment within 24 hours
           </div>
         </div>
       )}
@@ -642,13 +642,13 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
       {/* 4. AGENT LOGGED IN: STATS + TABS */}
       {currentAgent && (
         <>
-          {/* STATS TILES (User Requirement: "त्यांनी किती refer केले हे दिसेल आणि प्रति refer agent ला 29 च्या 20 टक्के... Minimum 100 rs काढता येईल असं कर") */}
+          {/* STATS TILES */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* 1. Wallet Balance */}
             <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-slate-500 uppercase tracking-wider">
-                  उपलब्ध कमिशन शिल्लक
+                  Available Commission Balance
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
                   <Wallet className="w-4 h-4" />
@@ -658,13 +658,13 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 ₹{formatInr(walletBal)}
               </div>
               <div className="flex items-center justify-between text-[11px] text-slate-600 pt-1 border-t border-slate-100 font-medium">
-                <span>किमान विड्रॉल: <strong>₹{minWithdrawal}</strong></span>
+                <span>Min Withdrawal: <strong>₹{minWithdrawal}</strong></span>
                 <span
                   className={`font-black ${
                     canWithdraw ? "text-emerald-700" : "text-amber-700"
                   }`}
                 >
-                  {canWithdraw ? "✓ विड्रॉल पात्र" : `अजून ₹${formatInr(remainingForWithdraw)} हवे`}
+                  {canWithdraw ? "✓ Eligible for Withdrawal" : `₹${formatInr(remainingForWithdraw)} more needed`}
                 </span>
               </div>
             </div>
@@ -673,17 +673,17 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
             <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-slate-500 uppercase tracking-wider">
-                  एकूण रेफरल्स (Referred)
+                  Total Referrals
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-black">
                   <Users className="w-4 h-4" />
                 </div>
               </div>
               <div className="text-3xl font-black text-slate-900 font-mono-numbers">
-                {totalStudentsCount} <span className="text-sm font-normal text-slate-500">विद्यार्थी</span>
+                {totalStudentsCount} <span className="text-sm font-normal text-slate-500">Students</span>
               </div>
               <div className="text-[11px] text-slate-600 pt-1 border-t border-slate-100 font-medium">
-                प्रति विद्यार्थी <strong>₹१०</strong> कमिशन
+                <strong>₹10</strong> commission per student
               </div>
             </div>
 
@@ -691,7 +691,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
             <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-slate-500 uppercase tracking-wider">
-                  एकूण कमावलेले (Lifetime)
+                  Total Earned (Lifetime)
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-black">
                   <TrendingUp className="w-4 h-4" />
@@ -701,7 +701,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 ₹{formatInr(currentAgent.totalEarnings || totalStudentsCount * 10)}
               </div>
               <div className="text-[11px] text-slate-600 pt-1 border-t border-slate-100 font-medium">
-                प्रति विद्यार्थी ₹१० थेट नफा दर
+                Direct ₹10 profit rate per student
               </div>
             </div>
 
@@ -709,7 +709,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
             <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-slate-500 uppercase tracking-wider">
-                  खात्यात जमा झालेले
+                  Paid to Account
                 </span>
                 <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-black">
                   <CheckCircle2 className="w-4 h-4" />
@@ -719,7 +719,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 ₹{formatInr(currentAgent.totalPaidOut || 0)}
               </div>
               <div className="text-[11px] text-slate-600 pt-1 border-t border-slate-100 font-medium">
-                थेट UPI / बँक ट्रान्सफर
+                Direct UPI / Bank Transfer
               </div>
             </div>
           </div>
@@ -736,7 +736,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               }`}
             >
               <Sparkles className="w-4 h-4 text-indigo-600" />
-              <span>डॅशबोर्ड ओव्हरव्ह्यू</span>
+              <span>Dashboard Overview</span>
             </button>
 
             <button
@@ -749,7 +749,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               }`}
             >
               <Users className="w-4 h-4 text-indigo-600" />
-              <span>रेफर केलेले विद्यार्थी ({totalStudentsCount})</span>
+              <span>Referred Students ({totalStudentsCount})</span>
             </button>
 
             <button
@@ -762,7 +762,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               }`}
             >
               <Wallet className="w-4 h-4 text-emerald-700" />
-              <span>पैसे काढा (Withdraw UPI)</span>
+              <span>Withdraw UPI</span>
             </button>
 
             <button
@@ -775,7 +775,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               }`}
             >
               <Calculator className="w-4 h-4 text-amber-600" />
-              <span>कमाई कॅल्क्युलेटर</span>
+              <span>Earnings Calculator</span>
             </button>
 
             <button
@@ -788,7 +788,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               }`}
             >
               <Share2 className="w-4 h-4 text-purple-600" />
-              <span>प्रमोशन मेसेजेस</span>
+              <span>Promotion Messages</span>
             </button>
           </div>
 
@@ -799,37 +799,37 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
                 <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-indigo-600" />
-                  <span>एजंट कमिशन पद्धत व नियम</span>
+                  <span>Agent Commission Method & Rules</span>
                 </h3>
 
                 <div className="space-y-3 text-xs text-slate-700">
                   <div className="p-3.5 bg-indigo-50 rounded-2xl border border-indigo-200 space-y-1">
                     <div className="font-black text-indigo-950 flex items-center gap-1.5">
                       <Zap className="w-4 h-4 text-indigo-600" />
-                      <span>₹२९ च्या प्रत्येक सबस्क्रिप्शनवर थेट ₹१० कमिशन</span>
+                      <span>Direct ₹10 commission on each ₹29 subscription</span>
                     </div>
                     <p className="text-indigo-900 leading-relaxed">
-                      तुमच्या लिंकने किंवा कोडने कोणत्याही विद्यार्थ्याने ₹२९ भरून नोंदणी केल्यास ₹१० थेट तुमच्या एजंट वॉलेटमध्ये जमा होतात.
+                      If any student registers by paying ₹29 using your link or code, ₹10 will be directly credited to your agent wallet.
                     </p>
                   </div>
 
                   <div className="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200 space-y-1">
                     <div className="font-black text-emerald-950 flex items-center gap-1.5">
                       <Wallet className="w-4 h-4 text-emerald-600" />
-                      <span>किमान विड्रॉल मर्यादा: ₹१०० (Minimum ₹100 Withdrawal)</span>
+                      <span>Minimum Withdrawal Limit: ₹100</span>
                     </div>
                     <p className="text-emerald-900 leading-relaxed">
-                      वॉलेट शिल्लक किमान ₹१०० झाल्यावर (फक्त १० विद्यार्थी जोडल्यावर) तुम्ही थेट PhonePe, GPay, Paytm UPI किंवा बँक खात्यावर रक्कम काढू शकता.
+                      Once your wallet balance reaches at least ₹100 (after adding just 10 students), you can withdraw the amount directly to your PhonePe, GPay, Paytm UPI, or bank account.
                     </p>
                   </div>
 
                   <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
                     <div className="font-black text-slate-900 flex items-center gap-1.5">
                       <Clock className="w-4 h-4 text-slate-600" />
-                      <span>२४ तासांत पेआउट हमी</span>
+                      <span>24-Hour Payout Guarantee</span>
                     </div>
                     <p className="text-slate-600 leading-relaxed">
-                      विड्रॉल विनंती सबमिट केल्यावर २४ तासांच्या आत ॲडमिन कडून रक्कम ट्रान्सफर केली जाते व UTR नंबर डॅशबोर्डवर दिसतो.
+                      After submitting a withdrawal request, the amount is transferred by the admin within 24 hours, and the UTR number will be visible on your dashboard.
                     </p>
                   </div>
                 </div>
@@ -840,20 +840,20 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 <div className="flex items-center justify-between">
                   <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-emerald-600" />
-                    <span>कमिशन अंदाजपत्रक (Target Earnings)</span>
+                    <span>Target Earnings Budget</span>
                   </h3>
                   <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">
-                    ₹१० / विद्यार्थी
+                    ₹10 / Student
                   </span>
                 </div>
 
                 <div className="space-y-2.5">
                   {[
-                    { count: 10, label: "१० विद्यार्थी (किमान विड्रॉल)", earn: "₹१००.००", note: "✓ लगेच UPI विड्रॉल" },
-                    { count: 25, label: "२५ विद्यार्थी", earn: "₹२५०.००", note: "✓ खात्यात जमा" },
-                    { count: 50, label: "५० विद्यार्थी", earn: "₹५००.००", note: "✓ खात्यात जमा" },
-                    { count: 100, label: "१०० विद्यार्थी", earn: "₹१,०००.००", note: "🌟 टॉप परफॉर्मर" },
-                    { count: 500, label: "५०० विद्यार्थी", earn: "₹५,०००.००", note: "🏆 मुख्य एजंट" },
+                    { count: 10, label: "10 Students (Min Withdrawal)", earn: "₹100.00", note: "✓ Immediate UPI Withdrawal" },
+                    { count: 25, label: "25 Students", earn: "₹250.00", note: "✓ Paid to Account" },
+                    { count: 50, label: "50 Students", earn: "₹500.00", note: "✓ Paid to Account" },
+                    { count: 100, label: "100 Students", earn: "₹1,000.00", note: "🌟 Top Performer" },
+                    { count: 500, label: "500 Students", earn: "₹5,000.00", note: "🏆 Master Agent" },
                   ].map((tier, idx) => (
                     <div
                       key={idx}
@@ -875,22 +875,22 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
             </div>
           )}
 
-          {/* TAB 2: REFERRED STUDENTS LIST ("त्यांनी किती refer केले हे दिसेल") */}
+          {/* TAB 2: REFERRED STUDENTS LIST */}
           {dashboardTab === "students" && (
             <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                 <div>
                   <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
                     <Users className="w-5 h-5 text-indigo-600" />
-                    <span>रेफर केलेले विद्यार्थी (Referred Students List)</span>
+                    <span>Referred Students List</span>
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    खालील विद्यार्थ्यांनी तुमच्या एजंट कोडने नोंदणी केली असून प्रत्येकाचे ₹१० थेट जमा झाले आहेत.
+                    The following students have registered using your agent code, and ₹10 for each has been credited.
                   </p>
                 </div>
 
                 <div className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-900 font-black text-xs font-mono-numbers">
-                  एकूण: {referredList.length} विद्यार्थी
+                  Total: {referredList.length} Students
                 </div>
               </div>
 
@@ -900,38 +900,37 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                     <Users className="w-6 h-6" />
                   </div>
                   <h4 className="font-bold text-slate-800 text-sm">
-                    अजून कोणीही विद्यार्थी जोडलेला नाही.
+                    No students added yet.
                   </h4>
                   <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                    तुमचा एजंट कोड <strong>{currentAgent.agentCode}</strong> आणि थेट लिंक व्हॉट्सॲपवर शेअर करा आणि कमिशन मिळवणे सुरू करा.
+                    Share your agent code <strong>{currentAgent.agentCode}</strong> and direct link on WhatsApp to start earning commission.
                   </p>
                   <button
-                    type="button"
                     onClick={handleCopyLink}
-                    className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs inline-flex items-center gap-2 cursor-pointer shadow-sm"
+                    className="px-4 py-2 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center gap-2 mx-auto cursor-pointer"
                   >
                     <Copy className="w-4 h-4" />
-                    <span>लिंक कॉपी करून शेअर करा</span>
+                    <span>Copy Link & Share</span>
                   </button>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left">
+                  <table className="w-full text-left text-xs">
                     <thead>
-                      <tr className="border-b border-slate-200 text-slate-500 font-bold bg-slate-50/70">
-                        <th className="py-2.5 px-3 rounded-l-xl">विद्यार्थ्याचे नाव</th>
-                        <th className="py-2.5 px-3">मोबाईल</th>
-                        <th className="py-2.5 px-3">लक्ष्य परीक्षा</th>
-                        <th className="py-2.5 px-3">नोंदणी तारीख</th>
-                        <th className="py-2.5 px-3">स्थिती</th>
-                        <th className="py-2.5 px-3 text-right rounded-r-xl">कमिशन (प्रति रेफर ₹१०)</th>
+                      <tr className="bg-slate-50 text-slate-500 font-black uppercase tracking-wider border-b border-slate-200">
+                        <th className="py-2.5 px-3 rounded-l-xl">Student Name</th>
+                        <th className="py-2.5 px-3">Mobile</th>
+                        <th className="py-2.5 px-3">Target Exam</th>
+                        <th className="py-2.5 px-3">Registration Date</th>
+                        <th className="py-2.5 px-3">Status</th>
+                        <th className="py-2.5 px-3 text-right rounded-r-xl">Commission (₹10 per refer)</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                    <tbody className="divide-y divide-slate-100">
                       {referredList.map((rec, idx) => (
                         <tr key={rec.id || idx} className="hover:bg-slate-50/80 transition-colors">
                           <td className="py-3 px-3 font-bold text-slate-900">
-                            {rec.referredStudentName || "विद्यार्थी"}
+                            {rec.referredStudentName || "Student"}
                           </td>
                           <td className="py-3 px-3 font-mono text-slate-500">
                             {maskPhoneNumber(rec.referredStudentMobile)}
@@ -942,7 +941,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                             </span>
                           </td>
                           <td className="py-3 px-3 text-slate-500 font-mono-numbers">
-                            {new Date(rec.timestamp).toLocaleDateString("mr-IN", {
+                            {new Date(rec.timestamp).toLocaleDateString("en-IN", {
                               day: "numeric",
                               month: "short",
                             })}
@@ -950,7 +949,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                           <td className="py-3 px-3">
                             <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px] flex items-center gap-1 w-fit">
                               <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                              सक्रिय
+                              Active
                             </span>
                           </td>
                           <td className="py-3 px-3 text-right font-black text-emerald-700 font-mono-numbers">
@@ -973,10 +972,10 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 <div className="flex items-center justify-between">
                   <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
                     <Wallet className="w-5 h-5 text-emerald-600" />
-                    <span>UPI / बँक विड्रॉल विनंती</span>
+                    <span>UPI / Bank Withdrawal Request</span>
                   </h3>
                   <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
-                    किमान मर्यादा: ₹{minWithdrawal}
+                    Minimum Limit: ₹{minWithdrawal}
                   </span>
                 </div>
 
@@ -986,18 +985,18 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                       <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                       <div className="space-y-1">
                         <p className="font-bold">
-                          सध्या तुमचे वॉलेट शिल्लक ₹{formatInr(walletBal)} आहे.
+                          Current wallet balance is ₹{formatInr(walletBal)}.
                         </p>
                         <p className="text-amber-800 leading-relaxed">
-                          पैसे खात्यावर ट्रान्सफर करण्यासाठी <strong>किमान ₹{minWithdrawal}</strong> शिल्लक असणे आवश्यक आहे. (अजून <strong>₹{formatInr(remainingForWithdraw)}</strong> किंवा <strong>{referralsNeeded}</strong> विद्यार्थी आवश्यक).
+                          A <strong>minimum of ₹{minWithdrawal}</strong> balance is required to transfer money to your account. (Still <strong>₹{formatInr(remainingForWithdraw)}</strong> or <strong>{referralsNeeded}</strong> students needed).
                         </p>
                       </div>
                     </div>
 
                     <div className="space-y-1">
                       <div className="flex justify-between text-[11px] font-bold text-amber-900 font-mono-numbers">
-                        <span>सध्या: ₹{formatInr(walletBal)}</span>
-                        <span>लक्ष्य: ₹{minWithdrawal}</span>
+                        <span>Current: ₹{formatInr(walletBal)}</span>
+                        <span>Target: ₹{minWithdrawal}</span>
                       </div>
                       <div className="w-full h-2.5 rounded-full bg-amber-200 overflow-hidden">
                         <div
@@ -1028,7 +1027,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 <form onSubmit={handleRequestPayout} className="space-y-3.5">
                   <div>
                     <label className="text-xs font-black text-slate-700 block mb-1">
-                      काढायची रक्कम (रुपये):
+                      Amount to Withdraw (INR):
                     </label>
                     <div className="relative">
                       <span className="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-slate-400">
@@ -1039,21 +1038,21 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                         min={minWithdrawal}
                         max={walletBal}
                         required
-                        placeholder={`किमान ${minWithdrawal}`}
+                        placeholder={`Min ${minWithdrawal}`}
                         value={payoutAmount}
                         onChange={(e) => setPayoutAmount(e.target.value)}
                         className="w-full pl-8 pr-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-mono font-bold text-xs outline-none"
                       />
                     </div>
                     <div className="flex justify-between text-[10px] text-slate-500 mt-1">
-                      <span>उपलब्ध: ₹{formatInr(walletBal)}</span>
+                      <span>Available: ₹{formatInr(walletBal)}</span>
                       {walletBal >= minWithdrawal && (
                         <button
                           type="button"
                           onClick={() => setPayoutAmount(String(Math.floor(walletBal)))}
                           className="text-indigo-600 font-bold hover:underline cursor-pointer"
                         >
-                          सर्व रक्कम (₹{Math.floor(walletBal)}) भरा
+                          Enter full amount (₹{Math.floor(walletBal)})
                         </button>
                       )}
                     </div>
@@ -1061,12 +1060,12 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
 
                   <div>
                     <label className="text-xs font-black text-slate-700 block mb-1">
-                      तुमचा UPI ID (PhonePe / GPay / Paytm):
+                      Your UPI ID (PhonePe / GPay / Paytm):
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="उदा. 9823456789@upi किंवा user@okaxis"
+                      placeholder="e.g. 9823456789@upi or user@okaxis"
                       value={payoutUpi}
                       onChange={(e) => setPayoutUpi(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-indigo-600 font-mono font-bold text-xs outline-none"
@@ -1085,8 +1084,8 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                     <Send className="w-4 h-4" />
                     <span>
                       {isSubmittingPayout
-                        ? "विनंती पाठवत आहे..."
-                        : `₹${payoutAmount || minWithdrawal} विड्रॉल विनंती सबमिट करा`}
+                        ? "Sending Request..."
+                        : `Submit Withdrawal Request for ₹${payoutAmount || minWithdrawal}`}
                     </span>
                   </button>
                 </form>
@@ -1094,7 +1093,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-[11px] text-slate-500 flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>
-                    विड्रॉल विनंती केल्यानंतर २४ तासांत रक्कम थेट बँक खात्यात ट्रान्सफर केली जाते.
+                    Amount is transferred directly to the bank account within 24 hours of the withdrawal request.
                   </span>
                 </div>
               </div>
@@ -1103,12 +1102,12 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
                 <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
                   <Clock className="w-5 h-5 text-indigo-600" />
-                  <span>विड्रॉल विनंती इतिहास (Payout Requests)</span>
+                  <span>Withdrawal Request History (Payout Requests)</span>
                 </h3>
 
                 {myPayouts.length === 0 ? (
                   <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
-                    कोणतीही विड्रॉल विनंती केलेली नाही.
+                    No withdrawal requests made yet.
                   </div>
                 ) : (
                   <div className="space-y-2.5">
@@ -1125,7 +1124,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                             UPI: {p.upiId}
                           </div>
                           <div className="text-[10px] text-slate-400 mt-0.5">
-                            {new Date(p.requestedAt).toLocaleString("mr-IN", {
+                            {new Date(p.requestedAt).toLocaleString("en-IN", {
                               day: "numeric",
                               month: "short",
                               hour: "2-digit",
@@ -1145,10 +1144,10 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                             }`}
                           >
                             {p.status === "approved" || p.status === "transferred"
-                              ? "✓ खात्यात जमा (Paid)"
+                              ? "✓ Paid to Account"
                               : p.status === "pending"
-                              ? "⏳ प्रलंबित (Pending)"
-                              : "नाकारले (Rejected)"}
+                              ? "⏳ Pending"
+                              : "Rejected"}
                           </span>
                           {p.adminUtr && (
                             <div className="text-[10px] font-mono text-emerald-700 mt-1">
@@ -1170,18 +1169,18 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <div className="text-center space-y-1">
                 <h3 className="text-lg font-black text-slate-900 flex items-center justify-center gap-2">
                   <Calculator className="w-5 h-5 text-indigo-600" />
-                  <span>एजंट कमिशन कॅल्क्युलेटर</span>
+                  <span>Agent Commission Calculator</span>
                 </h3>
                 <p className="text-xs text-slate-500">
-                  तुम्ही किती विद्यार्थी रेफर करू शकता त्यानुसार तुमचा संभाव्य नफा तपासा
+                  Check your potential profit based on how many students you can refer
                 </p>
               </div>
 
               <div className="space-y-3 bg-slate-50 p-5 rounded-2xl border border-slate-200">
                 <div className="flex justify-between items-center text-xs font-bold text-slate-700">
-                  <span>रेफर करायचे विद्यार्थी:</span>
+                  <span>Students to Refer:</span>
                   <span className="text-lg font-black text-indigo-700 font-mono-numbers">
-                    {calcStudents} विद्यार्थी
+                    {calcStudents} Students
                   </span>
                 </div>
 
@@ -1196,26 +1195,26 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
                 />
 
                 <div className="flex justify-between text-[11px] text-slate-400 font-mono-numbers">
-                  <span>१ विद्यार्थी</span>
-                  <span>२५०</span>
-                  <span>५००</span>
-                  <span>१००० विद्यार्थी</span>
+                  <span>1 Student</span>
+                  <span>250</span>
+                  <span>500</span>
+                  <span>1000 Students</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-200">
-                  <div className="text-xs text-indigo-900 font-semibold">कमिशन दर</div>
-                  <div className="text-2xl font-black text-indigo-950 mt-1">₹१०</div>
-                  <div className="text-[10px] text-indigo-700 mt-0.5">₹१० / विद्यार्थी</div>
+                  <div className="text-xs text-indigo-900 font-semibold">Commission Rate</div>
+                  <div className="text-2xl font-black text-indigo-950 mt-1">₹10</div>
+                  <div className="text-[10px] text-indigo-700 mt-0.5">₹10 / student</div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200">
-                  <div className="text-xs text-emerald-900 font-semibold">एकूण संभाव्य कमाई</div>
+                  <div className="text-xs text-emerald-900 font-semibold">Total Potential Earnings</div>
                   <div className="text-2xl font-black text-emerald-950 mt-1 font-mono-numbers">
                     ₹{formatInr(calcStudents * 10)}
                   </div>
-                  <div className="text-[10px] text-emerald-700 mt-0.5">थेट तुमच्या बँक खात्यात</div>
+                  <div className="text-[10px] text-emerald-700 mt-0.5">Directly to your bank account</div>
                 </div>
               </div>
             </div>
@@ -1227,18 +1226,18 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-black text-slate-900">
-                    व्हॉट्सॲप प्रमोशन मेसेज (WhatsApp Copy Script)
+                    WhatsApp Promotion Message (WhatsApp Copy Script)
                   </h4>
                   <button
                     type="button"
                     onClick={() => {
                       navigator.clipboard.writeText(agentShareWhatsappText);
-                      alert("प्रमोशन मेसेज कॉपी झाला आहे!");
+                      alert("Promotion message copied!");
                     }}
                     className="px-3 py-1 rounded-xl bg-slate-900 text-white text-xs font-bold flex items-center gap-1 cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" />
-                    <span>मेसेज कॉपी करा</span>
+                    <span>Copy Message</span>
                   </button>
                 </div>
 
@@ -1256,10 +1255,10 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xs animate-in fade-in">
           <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 space-y-4 text-center">
             <h3 className="font-black text-slate-900 text-base">
-              तुमचा अधिकृत एजंट QR कोड
+              Your Official Agent QR Code
             </h3>
             <p className="text-xs text-slate-500">
-              विद्यार्थ्यांना हा QR कोड स्कॅन करायला सांगा आणि थेट तुमच्या एजंट कोडने सुरू करा.
+              Ask students to scan this QR code and start directly with your agent code.
             </p>
 
             <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 inline-block">
@@ -1272,7 +1271,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
             </div>
 
             <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-xs font-mono font-bold text-indigo-950">
-              कोड: {currentAgent?.agentCode}
+              Code: {currentAgent?.agentCode}
             </div>
 
             <button
@@ -1280,7 +1279,7 @@ export const AgentPortalView: React.FC<AgentPortalViewProps> = ({
               onClick={() => setShowQrModal(false)}
               className="w-full py-2.5 rounded-xl bg-slate-900 text-white font-bold text-xs cursor-pointer"
             >
-              बंद करा (Close)
+              Close
             </button>
           </div>
         </div>

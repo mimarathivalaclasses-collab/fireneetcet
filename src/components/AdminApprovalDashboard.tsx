@@ -246,9 +246,9 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
   const handleDownloadBackup = () => {
     try {
       const res = exportAllDataAsJsonBackup();
-      showToast(`💾 सर्व डेटा सुरक्षित JSON फाईल (${res.filename}) मध्ये डाऊनलोड झाला!`);
+      showToast(`💾 All data downloaded safely in JSON file (${res.filename})!`);
     } catch (err) {
-      showToast("बॅकअप फाईल तयार करताना अडचण आली.");
+      showToast("Error creating backup file.");
     }
   };
 
@@ -263,12 +263,12 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
         const res = await restoreAllDataFromJson(content);
         if (res.success) {
           await loadAllData();
-          showToast(`✅ डेटा पूर्ववत केला! (${res.restoredStudentsCount} विद्यार्थी सुरक्षित रिस्टोअर झाले)`);
+          showToast(`✅ Data restored! (${res.restoredStudentsCount} students safely restored)`);
         } else {
-          alert(`रिस्टोअर अयशस्वी: ${res.message}`);
+          alert(`Restore failed: ${res.message}`);
         }
       } catch (err: any) {
-        alert("बॅकअप फाईल वाचताना त्रुटी: " + err.message);
+        alert("Error reading backup file: " + err.message);
       }
     };
     reader.readAsText(file);
@@ -278,23 +278,23 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
   // 1-Click WhatsApp Approval Notification
   const sendWhatsAppApprovalNotification = (student: StudentUser) => {
     if (!student.mobile) {
-      showToast("विद्यार्थ्याचा मोबाईल नंबर उपलब्ध नाही.");
+      showToast("Student mobile number not available.");
       return;
     }
     const cleanNumber = student.mobile.replace(/\D/g, "");
     const formattedNumber = cleanNumber.length === 10 ? `91${cleanNumber}` : cleanNumber;
     const message = encodeURIComponent(
-      `🎓 *अभिनंदन ${student.name}!* \n\n` +
-      `आपले *MHT-CET / NEET / JEE सराव ॲप* चे खाते ॲडमिनद्वारे *मंजूर (Approved)* करण्यात आले आहे! 🎉\n\n` +
-      `📱 *लॉगिन मोबाईल:* ${student.mobile}\n` +
-      `🔑 *पासवर्ड:* ${student.password || "आपण नोंदणी करताना ठेवलेला पासवर्ड"}\n` +
-      `🎯 *टारगेट परीक्षा:* ${student.examTarget}\n` +
-      `⚡ *सर्व टेस्ट्स अनलॉक:* २५,०००+ प्रश्न, Grand Tests, PYQs आणि नोट्स पूर्णपणे सुरू झाले आहेत!\n\n` +
-      `आताच ॲप उघडा आणि कुठल्याही मोबाईलवरून लॉगिन करून सराव सुरू करा!\n` +
-      `शुभेच्छा! 🏆`
+      `🎓 *Congratulations ${student.name}!* \n\n` +
+      `Your *MHT-CET / NEET / JEE Practice App* account has been *Approved* by the admin! 🎉\n\n` +
+      `📱 *Login Mobile:* ${student.mobile}\n` +
+      `🔑 *Password:* ${student.password || "The password you set during registration"}\n` +
+      `🎯 *Target Exam:* ${student.examTarget}\n` +
+      `⚡ *All Tests Unlocked:* 25,000+ Questions, Grand Tests, PYQs, and Notes are now fully accessible!\n\n` +
+      `Open the app now and log in from any mobile to start practicing!\n` +
+      `Best of luck! 🏆`
     );
     window.open(`https://wa.me/${formattedNumber}?text=${message}`, "_blank");
-    showToast("WhatsApp मेसेज पाठवण्यासाठी विंडो उघडली!");
+    showToast("WhatsApp notification window opened!");
   };
 
   useEffect(() => {
@@ -309,7 +309,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
   const handleAdminLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (lockoutTimer > 0) {
-      setPasscodeError(`अनेक वेळा चुकीचा पिन टाकला. कृपया ${lockoutTimer} सेकंद थांबा.`);
+      setPasscodeError(`Too many incorrect PIN attempts. Please wait ${lockoutTimer} seconds.`);
       return;
     }
 
@@ -320,15 +320,15 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
       setPasscodeError("");
       setFailedAttempts(0);
       loadAllData();
-      showToast("🔐 मास्टर ॲडमिन कन्सोलमध्ये स्वागत आहे!");
+      showToast("🔐 Welcome to Master Admin Console!");
     } else {
       const nextFailed = failedAttempts + 1;
       setFailedAttempts(nextFailed);
       if (nextFailed >= 5) {
         setLockoutTimer(30);
-        setPasscodeError("सुरक्षेच्या कारणास्तव ५ चुकीच्या प्रयत्नांनंतर ३० सेकंद लॉक करण्यात आले आहे.");
+        setPasscodeError("Locked for 30 seconds for security after 5 failed attempts.");
       } else {
-        setPasscodeError(`अवैध ॲडमिन सिक्युरिटी पिन! (${5 - nextFailed} प्रयत्न शिल्लक)`);
+        setPasscodeError(`Invalid Admin Security PIN! (${5 - nextFailed} attempts remaining)`);
       }
     }
   };
@@ -337,7 +337,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     setIsAdminAuthenticated(false);
     sessionStorage.removeItem("mcq_admin_logged_in");
     setPasscode("");
-    showToast("ॲडमिन सेशन बंद झाले.");
+    showToast("Admin session ended.");
   };
 
   // ================= STUDENT ACTIONS (Approve / Reject / Edit / Delete) =================
@@ -381,7 +381,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     }
 
     if (onApproveStudent) onApproveStudent(studentId);
-    showToast("✅ विद्यार्थी यशस्वीरित्या मंजूर (Approved) करण्यात आला!");
+    showToast("✅ Student successfully Approved!");
   };
 
   const handleReject = (studentId: string) => {
@@ -405,18 +405,18 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     }
 
     if (onRejectStudent) onRejectStudent(studentId);
-    showToast("विद्यार्थी ब्लॉक / रिजेक्ट करण्यात आला.");
+    showToast("Student blocked / rejected.");
   };
 
   const handleDeleteStudent = async (studentId: string, name: string) => {
-    if (window.confirm(`तुम्हाला खात्री आहे का की '${name}' या विद्यार्थ्याला कायमचे डेटाबेसमधून हटवायचे आहे?`)) {
+    if (window.confirm(`Are you sure you want to permanently delete student '${name}' from the database?`)) {
       const targetStudent = students.find((s) => s.id === studentId);
       const identifier = targetStudent?.mobile || studentId;
       await deleteStudentPermanently(identifier);
 
       const updated = students.filter((s) => s.id !== studentId && s.mobile !== targetStudent?.mobile);
       setStudents(updated);
-      showToast(`'${name}' हा विद्यार्थी पूर्णपणे हटवला गेला.`);
+      showToast(`Student '${name}' has been deleted.`);
     }
   };
 
@@ -441,13 +441,13 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     }
 
     setEditingStudent(null);
-    showToast("विद्यार्थी माहिती व पासवर्ड यशस्वीरित्या अपडेट झाली!");
+    showToast("Student info and password updated successfully!");
   };
 
   const handleCreateStudent = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newStudentName.trim() || !newStudentMobile.trim()) {
-      alert("कृपया विद्यार्थ्याचे नाव आणि मोबाईल नंबर भरा.");
+      alert("Please fill student name and mobile number.");
       return;
     }
     const newStudent: StudentUser = {
@@ -479,7 +479,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     setNewStudentMobile("");
     setNewStudentPassword("123456");
     setNewStudentClassName("");
-    showToast("नवीन विद्यार्थी जोडला व मंजूर केला गेला!");
+    showToast("New student added and approved!");
   };
 
   // Feedback Resolution Actions
@@ -491,38 +491,38 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     setFeedbackReports(updated);
     localStorage.setItem("mcq_app_user_feedbacks_v1", JSON.stringify(updated));
     await updateFeedbackReportStatusInCloud(report.id, newStatus);
-    showToast(newStatus === "resolved" ? "✅ त्रुटी दुरुस्त म्हणून मार्क केली!" : "⏳ त्रुटी प्रलंबित ठेवली.");
+    showToast(newStatus === "resolved" ? "✅ Marked as fixed!" : "⏳ Marked as pending.");
   };
 
   const handleDeleteFeedback = async (reportId: string) => {
-    if (confirm("हा अभिप्राय / त्रुटी अहवाल नक्की हटवायचा आहे का?")) {
+    if (confirm("Are you sure you want to delete this feedback / report?")) {
       const updated = feedbackReports.filter((f) => f.id !== reportId);
       setFeedbackReports(updated);
       localStorage.setItem("mcq_app_user_feedbacks_v1", JSON.stringify(updated));
       await deleteFeedbackReportFromCloud(reportId);
-      showToast("अहवाल हटवला गेला.");
+      showToast("Report deleted.");
     }
   };
 
   const sendWhatsAppFeedbackReply = (report: UserFeedbackReport) => {
     if (!report.studentMobile) {
-      showToast("विद्यार्थ्याचा संपर्क क्रमांक उपलब्ध नाही.");
+      showToast("Student contact number not available.");
       return;
     }
     const cleanNumber = report.studentMobile.replace(/\D/g, "");
     const formattedNumber = cleanNumber.length === 10 ? `91${cleanNumber}` : cleanNumber;
     const message = encodeURIComponent(
-      `नमस्ते *${report.studentName || "विद्यार्थी मित्र"}*,\n\n` +
-      `तुम्ही ॲपमध्ये नोंदवलेल्या *"${report.subject} - ${report.issueCategory}"* संदर्भातील मुद्द्याची पडताळणी झाली असून योग्य दुरुस्ती केली आहे. ✅\n\n` +
-      `📝 *नोंदवलेला प्रश्न:* "${report.description}"\n\n` +
-      `🙏 अभिप्राय दिल्याबद्दल धन्यवाद! ॲपमध्ये सराव सुरू ठेवा.`
+      `Hello *${report.studentName || "Student"}*,\n\n` +
+      `Your reported issue regarding *"${report.subject} - ${report.issueCategory}"* has been verified and fixed. ✅\n\n` +
+      `📝 *Reported Issue:* "${report.description}"\n\n` +
+      `🙏 Thank you for your feedback! Keep practicing on the app.`
     );
     window.open(`https://wa.me/${formattedNumber}?text=${message}`, "_blank");
   };
 
   // Agent Payout Actions
   const handleApprovePayout = (payoutId: string, utrInput?: string) => {
-    const utr = utrInput || prompt("कृपया ट्रान्सफर केलेला बँक UTR नंबर प्रविष्ट करा:") || `UTR${Date.now()}`;
+    const utr = utrInput || prompt("Please enter the transferred bank UTR number:") || `UTR${Date.now()}`;
     const updated = agentPayouts.map((p) =>
       p.id === payoutId
         ? {
@@ -535,24 +535,24 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
     );
     setAgentPayouts(updated);
     localStorage.setItem("mcq_app_agent_payouts_v1", JSON.stringify(updated));
-    showToast("विड्रॉल पेआउट मंजूर व पेड म्हणून मार्क झाले!");
+    showToast("Withdrawal payout approved and marked as paid!");
   };
 
   const handleDeletePayout = (payoutId: string) => {
-    if (window.confirm("ही विड्रॉल विनंती हटवायची आहे का?")) {
+    if (window.confirm("Are you sure you want to delete this withdrawal request?")) {
       const updated = agentPayouts.filter((p) => p.id !== payoutId);
       setAgentPayouts(updated);
       localStorage.setItem("mcq_app_agent_payouts_v1", JSON.stringify(updated));
-      showToast("विड्रॉल विनंती हटवली गेली.");
+      showToast("Withdrawal request deleted.");
     }
   };
 
   const handleDeletePayment = (paymentId: string) => {
-    if (window.confirm("ही पेमेंट पावती हटवायची आहे का?")) {
+    if (window.confirm("Are you sure you want to delete this payment receipt?")) {
       const updated = payments.filter((p) => p.id !== paymentId);
       setPayments(updated);
       localStorage.setItem("mcq_app_payment_receipts_v1", JSON.stringify(updated));
-      showToast("पेमेंट पावती हटवली गेली.");
+      showToast("Payment receipt deleted.");
     }
   };
 
@@ -594,22 +594,22 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
       {!isAdminAuthenticated ? (
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full text-white shadow-2xl space-y-6">
-            <div className="text-center space-y-2">
+              <div className="text-center space-y-2">
               <div className="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center mx-auto shadow-lg font-black">
                 <KeyRound className="w-7 h-7" />
               </div>
               <h2 className="text-xl font-extrabold text-white tracking-tight">
-                सुरक्षित मास्टर ॲडमिन कन्सोल
+                Secure Master Admin Console
               </h2>
               <p className="text-xs text-slate-400">
-                विद्यार्थी मंजुरी (Approval), एडिट-डिलिट व पेमेंट व्यवस्थापन
+                Student Approval, Edit/Delete & Payment Management
               </p>
             </div>
 
             <form onSubmit={handleAdminLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                  ॲडमिन सिक्युरिटी पिन प्रविष्ट करा:
+                  Enter Admin Security PIN:
                 </label>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -617,7 +617,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                     type={showPasscode ? "text" : "password"}
                     required
                     disabled={lockoutTimer > 0}
-                    placeholder="सिक्युरिटी पिन टाका"
+                    placeholder="Enter PIN"
                     value={passcode}
                     onChange={(e) => setPasscode(e.target.value)}
                     className="w-full pl-10 pr-12 py-3 rounded-2xl bg-slate-950 border border-slate-700 text-white text-sm font-mono font-bold focus:border-amber-400 outline-none disabled:opacity-50"
@@ -638,7 +638,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 )}
                 {lockoutTimer > 0 && (
                   <p className="text-amber-400 text-xs mt-1 font-bold">
-                    ⏳ लॉक कालावधी: {lockoutTimer} सेकंद
+                    ⏳ Locked for: {lockoutTimer} seconds
                   </p>
                 )}
               </div>
@@ -649,14 +649,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   disabled={lockoutTimer > 0}
                   className="flex-1 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 disabled:bg-slate-700 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg transition-all cursor-pointer"
                 >
-                  डॅशबोर्ड उघडा
+                  Open Dashboard
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
                   className="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs cursor-pointer"
                 >
-                  रद्द करा
+                  Cancel
                 </button>
               </div>
             </form>
@@ -692,7 +692,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               >
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4 text-amber-400" />
-                  <span>प्रलंबित मंजुरी (Approvals)</span>
+                  <span>Pending Approvals</span>
                 </div>
                 {pendingStudents.length > 0 && (
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
@@ -711,7 +711,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               >
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-indigo-400" />
-                  <span>सर्व विद्यार्थी (Edit/Delete)</span>
+                  <span>All Students (Edit/Delete)</span>
                 </div>
                 <span className="text-[11px] opacity-80 font-mono">{students.length}</span>
               </button>
@@ -726,7 +726,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               >
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-blue-400" />
-                  <span>विद्यार्थी सराव व निकाल</span>
+                  <span>Student Progress & Results</span>
                 </div>
                 <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-blue-500/30 text-blue-300">
                   {testSubmissions.length}
@@ -743,7 +743,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               >
                 <div className="flex items-center gap-2">
                   <CreditCard className="w-4 h-4 text-emerald-400" />
-                  <span>पेमेंट पावत्या व UTR</span>
+                  <span>Payment Receipts & UTR</span>
                 </div>
                 <span className="text-[11px] opacity-80 font-mono">{payments.length}</span>
               </button>
@@ -758,7 +758,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               >
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4 text-rose-300" />
-                  <span>त्रुटी व तक्रार इनबॉक्स</span>
+                  <span>Feedback & Bug Inbox</span>
                 </div>
                 {feedbackReports.filter((f) => f.status === "pending").length > 0 ? (
                   <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white">
@@ -779,7 +779,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
               >
                 <div className="flex items-center gap-2">
                   <Wallet className="w-4 h-4 text-teal-400" />
-                  <span>एजंट पार्टनर व पेआउट</span>
+                  <span>Agent Network & Payouts</span>
                 </div>
                 <span className="text-[11px] opacity-80 font-mono">{agents.length}</span>
               </button>
@@ -792,20 +792,20 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
               >
                 <RefreshCw className="w-3.5 h-3.5 text-amber-400" />
-                <span>डेटा रिफ्रेश</span>
+                <span>Refresh Data</span>
               </button>
               <div className="flex gap-2">
                 <button
                   onClick={handleAdminLogout}
                   className="flex-1 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-bold cursor-pointer"
                 >
-                  लॉग आऊट
+                  Logout
                 </button>
                 <button
                   onClick={onClose}
                   className="flex-1 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold cursor-pointer"
                 >
-                  बंद करा
+                  Close
                 </button>
               </div>
             </div>
@@ -955,21 +955,21 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-white p-4 rounded-2xl border border-slate-200">
                     <div>
                       <h3 className="text-sm font-extrabold text-slate-900">
-                        प्रलंबित विद्यार्थी मंजुरी (Pending Student Approvals)
+                        Pending Student Approvals
                       </h3>
                       <p className="text-xs text-slate-500">
-                        विद्यार्थ्याने नोंदणी किंवा पेमेंट केल्यानंतर मंजुरी दिल्यावरच त्याचे खाते सुरू होईल.
+                        Students waiting for registration or device info approval.
                       </p>
                     </div>
                     {pendingStudents.length > 0 && (
                       <button
                         onClick={() => {
                           pendingStudents.forEach((s) => handleApprove(s.id));
-                          showToast("सर्व प्रलंबित विद्यार्थ्यांना एका क्लिकवर मंजूर केले!");
+                          showToast("All pending students approved!");
                         }}
                         className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer"
                       >
-                        ✓ सर्वांना एकदम मंजूर करा
+                        ✓ Approve All
                       </button>
                     )}
                   </div>
@@ -977,8 +977,8 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   {pendingStudents.length === 0 ? (
                     <div className="bg-white rounded-2xl p-8 text-center border border-slate-200 text-slate-500 text-xs">
                       <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
-                      <p className="font-bold text-slate-800 text-sm">सर्व विद्यार्थी मंजूर आहेत!</p>
-                      <p className="mt-1">कोणतीही प्रलंबित विनंती शिल्लक नाही.</p>
+                      <p className="font-bold text-slate-800 text-sm">All students are approved!</p>
+                      <p className="mt-1">No pending requests remaining.</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1000,7 +1000,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                               )}
                             </div>
                             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">
-                              ⏳ मंजुरी प्रलंबित
+                              ⏳ Approval Pending
                             </span>
                           </div>
 
@@ -1020,26 +1020,26 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                               className="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
                             >
                               <CheckCircle2 className="w-4 h-4" />
-                              <span>मंजूर करा (Approve)</span>
+                              <span>Approve (Send WhatsApp)</span>
                             </button>
                             <button
                               onClick={() => sendWhatsAppApprovalNotification(std)}
                               className="p-2 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-800 cursor-pointer"
-                              title="WhatsApp वर मंजुरी संदेश पाठवा"
+                              title="Send approval message on WhatsApp"
                             >
                               <MessageCircle className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => setEditingStudent(std)}
                               className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
-                              title="विद्यार्थी माहिती संपादन"
+                              title="Edit student info"
                             >
                               <Edit3 className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDeleteStudent(std.id, std.name)}
                               className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 cursor-pointer"
-                              title="हटवा"
+                              title="Delete"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -1060,7 +1060,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                       <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
-                        placeholder="नाव किंवा मोबाईल नंबरने शोधा..."
+                        placeholder="Search by name or mobile..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs outline-none focus:border-indigo-500"
@@ -1072,7 +1072,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                         onChange={(e) => setExamFilter(e.target.value)}
                         className="px-2.5 py-2 rounded-xl border border-slate-200 text-xs font-bold bg-white text-slate-700 outline-none"
                       >
-                        <option value="ALL">सर्व परीक्षा</option>
+                        <option value="ALL">All Exams</option>
                         <option value="MHT_CET">MHT-CET</option>
                         <option value="NEET">NEET</option>
                         <option value="JEE_MAIN">JEE Main</option>
@@ -1082,10 +1082,10 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                         onChange={(e) => setStatusFilter(e.target.value)}
                         className="px-2.5 py-2 rounded-xl border border-slate-200 text-xs font-bold bg-white text-slate-700 outline-none"
                       >
-                        <option value="ALL">सर्व स्टेटस</option>
-                        <option value="approved">मंजूर (Approved)</option>
-                        <option value="pending">प्रलंबित (Pending)</option>
-                        <option value="rejected">ब्लॉक (Rejected)</option>
+                        <option value="ALL">All Status</option>
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                        <option value="rejected">Blocked</option>
                       </select>
                     </div>
                   </div>
@@ -1112,7 +1112,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                                   : "bg-rose-100 text-rose-800"
                               }`}
                             >
-                              {std.approvalStatus === "approved" && std.isApproved ? "मंजूर" : "प्रलंबित"}
+                              {std.approvalStatus === "approved" && std.isApproved ? "Approved" : "Pending"}
                             </span>
                           </div>
 
@@ -1123,7 +1123,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
 
                           {(std.className || std.coachingClass) && (
                             <div className="bg-purple-50/70 p-2 rounded-xl text-[11px] text-purple-900 border border-purple-100 flex items-center gap-1.5 font-bold">
-                              <span>🏫 क्लास:</span>
+                              <span>🏫 Class:</span>
                               <span className="truncate">{std.className || std.coachingClass}</span>
                             </div>
                           )}
@@ -1132,10 +1132,10 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                           <div className="bg-indigo-50/70 p-2 rounded-xl text-[11px] flex items-center justify-between text-indigo-900 border border-indigo-100">
                             <span className="font-bold flex items-center gap-1">
                               <Activity className="w-3.5 h-3.5 text-indigo-600" />
-                              <span>{std.totalTestsTaken || 0} टेस्ट्स • {std.totalQuestionsSolved || 0} Qs</span>
+                              <span>{std.totalTestsTaken || 0} Tests • {std.totalQuestionsSolved || 0} Qs</span>
                             </span>
                             <span className="font-mono font-black text-emerald-700 bg-white px-1.5 py-0.5 rounded-md border border-indigo-100 text-[10px]">
-                              {std.overallAccuracy || 0}% अचूक
+                              {std.overallAccuracy || 0}% Accuracy
                             </span>
                           </div>
                         </div>
@@ -1151,7 +1151,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                               className="flex-1 py-1.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>मंजूर करा</span>
+                              <span>Approve</span>
                             </button>
                           ) : (
                             <button
@@ -1159,27 +1159,27 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                               className="flex-1 py-1.5 px-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer"
                             >
                               <UserX className="w-3.5 h-3.5" />
-                              <span>ब्लॉक करा</span>
+                              <span>Block</span>
                             </button>
                           )}
                           <button
                             onClick={() => sendWhatsAppApprovalNotification(std)}
                             className="p-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 cursor-pointer"
-                            title="WhatsApp वर संपर्क"
+                            title="Contact via WhatsApp"
                           >
                             <MessageCircle className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => setEditingStudent(std)}
                             className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
-                            title="संपादन करा"
+                            title="Edit"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => handleDeleteStudent(std.id, std.name)}
                             className="p-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 cursor-pointer"
-                            title="डेटाबेसमधून हटवा"
+                            title="Delete from database"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -1205,21 +1205,21 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   <div className="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-extrabold text-slate-900">
-                        पेमेंट पावत्या व UTR पडताळणी
+                        Payment Receipts & UTR Verification
                       </h3>
                       <p className="text-xs text-slate-500">
-                        विद्यार्थ्यांनी भरलेले ₹२९ शुल्क व त्यांचे UTR नंबर.
+                        ₹29 fees paid by students and their UTR numbers.
                       </p>
                     </div>
                     <span className="px-3 py-1 bg-emerald-100 text-emerald-900 rounded-xl text-xs font-black">
-                      एकूण पावत्या: {payments.length}
+                      Total Receipts: {payments.length}
                     </span>
                   </div>
 
                   {payments.length === 0 ? (
                     <div className="bg-white rounded-2xl p-8 text-center border border-slate-200 text-slate-500 text-xs">
                       <CreditCard className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                      <p className="font-bold text-slate-800">कोणत्याही पावत्या नोंदवलेल्या नाहीत.</p>
+                      <p className="font-bold text-slate-800">No receipts registered yet.</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1237,7 +1237,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                             <button
                               onClick={() => {
                                 navigator.clipboard.writeText(p.utr);
-                                showToast("UTR कॉपी केला!");
+                                showToast("UTR Copied!");
                               }}
                               className="text-indigo-600 hover:text-indigo-800"
                             >
@@ -1245,12 +1245,12 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                             </button>
                           </div>
                           <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500">
-                            <span>{new Date(p.date).toLocaleString("mr-IN")}</span>
+                            <span>{new Date(p.date).toLocaleString("en-IN")}</span>
                             <button
                               onClick={() => handleDeletePayment(p.id)}
                               className="text-rose-600 hover:text-rose-800 font-bold"
                             >
-                              हटवा
+                              Delete
                             </button>
                           </div>
                         </div>
@@ -1265,17 +1265,17 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 <div className="space-y-3">
                   <div className="bg-white p-4 rounded-2xl border border-slate-200">
                     <h3 className="text-sm font-extrabold text-slate-900">
-                      विद्यार्थी तक्रार व त्रुटी निवारण इनबॉक्स
+                      Student Feedback & Bug Fix Inbox
                     </h3>
                     <p className="text-xs text-slate-500">
-                      विद्यार्थ्यांनी नोंदवलेल्या त्रुटी तपासून WhatsApp वर निराकरण पाठवा.
+                      Check errors reported by students and send solutions on WhatsApp.
                     </p>
                   </div>
 
                   {feedbackReports.length === 0 ? (
                     <div className="bg-white rounded-2xl p-8 text-center border border-slate-200 text-slate-500 text-xs">
                       <MessageSquare className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                      <p className="font-bold text-slate-800">सध्या कोणतीही तक्रार आलेली नाही.</p>
+                      <p className="font-bold text-slate-800">No complaints received yet.</p>
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -1302,7 +1302,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                                   : "bg-rose-100 text-rose-800"
                               }`}
                             >
-                              {report.status === "resolved" ? "✅ दुरुस्त (Resolved)" : "⏳ प्रलंबित (Pending)"}
+                              {report.status === "resolved" ? "✅ Resolved" : "⏳ Pending"}
                             </span>
                           </div>
 
@@ -1320,14 +1320,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                               }`}
                             >
                               <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>{report.status === "resolved" ? "प्रलंबित ठेवा" : "दुरुस्त म्हणून मार्क करा"}</span>
+                              <span>{report.status === "resolved" ? "Keep Pending" : "Mark as Fixed"}</span>
                             </button>
                             <button
                               onClick={() => sendWhatsAppFeedbackReply(report)}
                               className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center gap-1 cursor-pointer"
                             >
                               <MessageCircle className="w-3.5 h-3.5" />
-                              <span>WhatsApp उत्तर</span>
+                              <span>WhatsApp Reply</span>
                             </button>
                             <button
                               onClick={() => handleDeleteFeedback(report.id)}
@@ -1349,25 +1349,25 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   <div className="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
                     <div>
                       <h3 className="text-sm font-extrabold text-slate-900">
-                        एजंट पार्टनर व कमिशन व्यवस्थापन
+                        Agent Partner & Commission Management
                       </h3>
                       <p className="text-xs text-slate-500">
-                        प्रत्येक रेफरलवर थेट ₹१० कमिशन व पेआउट विनंत्या.
+                        Direct ₹10 commission on each referral and payout requests.
                       </p>
                     </div>
                     <span className="px-3 py-1 bg-teal-100 text-teal-900 rounded-xl text-xs font-black">
-                      एकूण एजंट्स: {agents.length}
+                      Total Agents: {agents.length}
                     </span>
                   </div>
 
                   {agentPayouts.length > 0 && (
                     <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 space-y-2">
-                      <h4 className="text-xs font-black text-amber-900">विड्रॉल विनंत्या (Payout Requests):</h4>
+                      <h4 className="text-xs font-black text-amber-900">Withdrawal Requests (Payout Requests):</h4>
                       {agentPayouts.map((po) => (
                         <div key={po.id} className="bg-white p-3 rounded-xl border border-amber-200 flex items-center justify-between text-xs">
                           <div>
                             <span className="font-bold text-slate-900">{po.agentName}</span> ({po.agentPhone})
-                            <p className="text-slate-500 font-mono">UPI: {po.upiId} | रक्कम: <strong>₹{po.amount}</strong></p>
+                            <p className="text-slate-500 font-mono">UPI: {po.upiId} | Amount: <strong>₹{po.amount}</strong></p>
                           </div>
                           <div className="flex items-center gap-2">
                             {po.status === "pending" ? (
@@ -1375,7 +1375,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                                 onClick={() => handleApprovePayout(po.id)}
                                 className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold"
                               >
-                                मंजूर व पेड करा
+                                Approve & Mark Paid
                               </button>
                             ) : (
                               <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-bold">
@@ -1397,7 +1397,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   {agents.length === 0 ? (
                     <div className="bg-white rounded-2xl p-8 text-center border border-slate-200 text-slate-500 text-xs">
                       <Wallet className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                      <p className="font-bold text-slate-800">कोणतेही एजंट नोंदणीकृत नाहीत.</p>
+                      <p className="font-bold text-slate-800">No agents registered yet.</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1411,7 +1411,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                             </div>
                             <div className="text-right">
                               <span className="text-sm font-black text-emerald-700">₹{ag.walletBalance || 0}</span>
-                              <p className="text-[10px] text-slate-500">रेफरल्स: {ag.totalReferrals || 0}</p>
+                              <p className="text-[10px] text-slate-500">Referrals: {ag.totalReferrals || 0}</p>
                             </div>
                           </div>
                         </div>
@@ -1430,36 +1430,36 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
         <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-black text-slate-900">नवीन विद्यार्थी जोडा</h3>
+              <h3 className="text-sm font-black text-slate-900">Add New Student</h3>
               <button onClick={() => setIsAddingStudent(false)} className="text-slate-400 hover:text-slate-700">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleCreateStudent} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">विद्यार्थ्याचे नाव:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Student Name:</label>
                 <input
                   type="text"
                   required
-                  placeholder="उदा. राहुल शिंदे"
+                  placeholder="e.g. John Doe"
                   value={newStudentName}
                   onChange={(e) => setNewStudentName(e.target.value)}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:border-indigo-600"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">मोबाईल नंबर:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Mobile Number:</label>
                 <input
                   type="text"
                   required
-                  placeholder="उदा. 9881063427"
+                  placeholder="e.g. 9881063427"
                   value={newStudentMobile}
                   onChange={(e) => setNewStudentMobile(e.target.value)}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:border-indigo-600"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">पासवर्ड:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Password:</label>
                 <input
                   type="text"
                   required
@@ -1469,7 +1469,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">परीक्षा लक्ष्य:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Exam Target:</label>
                 <select
                   value={newStudentExam}
                   onChange={(e) => setNewStudentExam(e.target.value as ExamType)}
@@ -1481,10 +1481,10 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">कोचिंग क्लास / कॉलेजचे नाव (ऐच्छिक):</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Coaching Class / College Name (Optional):</label>
                 <input
                   type="text"
-                  placeholder="उदा. मी मराठीवाला क्लासेस"
+                  placeholder="e.g. ABC Classes"
                   value={newStudentClassName}
                   onChange={(e) => setNewStudentClassName(e.target.value)}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:border-indigo-600"
@@ -1495,14 +1495,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   type="submit"
                   className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black cursor-pointer shadow-md"
                 >
-                  जोडा व मंजूर करा
+                  Add & Approve
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsAddingStudent(false)}
                   className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold cursor-pointer"
                 >
-                  रद्द करा
+                  Cancel
                 </button>
               </div>
             </form>
@@ -1515,14 +1515,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
         <div className="fixed inset-0 z-60 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-black text-slate-900">विद्यार्थी माहिती संपादन करा</h3>
+              <h3 className="text-sm font-black text-slate-900">Edit Student Information</h3>
               <button onClick={() => setEditingStudent(null)} className="text-slate-400 hover:text-slate-700">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleSaveEditedStudent} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">नाव:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Name:</label>
                 <input
                   type="text"
                   required
@@ -1532,7 +1532,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">मोबाईल:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Mobile:</label>
                 <input
                   type="text"
                   required
@@ -1542,7 +1542,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">पासवर्ड:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Password:</label>
                 <input
                   type="text"
                   required
@@ -1552,7 +1552,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">परीक्षा:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Exam:</label>
                 <select
                   value={editingStudent.examTarget}
                   onChange={(e) => setEditingStudent({ ...editingStudent, examTarget: e.target.value as ExamType })}
@@ -1564,10 +1564,10 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">कोचिंग क्लास / कॉलेजचे नाव:</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Coaching Class / College Name:</label>
                 <input
                   type="text"
-                  placeholder="उदा. मी मराठीवाला क्लासेस"
+                  placeholder="e.g. Mi Marathiwala Classes"
                   value={editingStudent.className || editingStudent.coachingClass || ""}
                   onChange={(e) =>
                     setEditingStudent({
@@ -1580,7 +1580,7 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">मंजुरी स्थिती (Approval Status):</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Approval Status:</label>
                 <select
                   value={editingStudent.approvalStatus}
                   onChange={(e) => {
@@ -1593,9 +1593,9 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   }}
                   className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white outline-none"
                 >
-                  <option value="approved">मंजूर (Approved)</option>
-                  <option value="pending">प्रलंबित (Pending)</option>
-                  <option value="rejected">ब्लॉक (Rejected)</option>
+                  <option value="approved">Approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="rejected">Blocked / Rejected</option>
                 </select>
               </div>
               <div className="flex gap-2 pt-2">
@@ -1603,14 +1603,14 @@ export const AdminApprovalDashboard: React.FC<AdminApprovalDashboardProps> = ({
                   type="submit"
                   className="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black cursor-pointer shadow-md"
                 >
-                  बदल सेव्ह करा
+                  Save Changes
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditingStudent(null)}
                   className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold cursor-pointer"
                 >
-                  रद्द करा
+                  Cancel
                 </button>
               </div>
             </form>

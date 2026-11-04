@@ -32,7 +32,7 @@ export const VAULT_KEYS = {
   LAST_CLOUD_SYNC: "mcq_last_cloud_sync_timestamp",
 };
 
-export const VAULT_EVENT_NAME = "abhyasmitra_data_vault_updated";
+export const VAULT_EVENT_NAME = "mimarathiwala_data_vault_updated";
 
 /**
  * Normalizes a phone number to last 10 digits for duplicate-free indexing
@@ -168,7 +168,7 @@ export function getAllStudentsFromVaults(): StudentUser[] {
           lk.includes("approval")
         ) {
           try {
-            const rawVal = localStorage.getItem(k);
+            const rawVal = localStorage.getItem(lk);
             if (!rawVal) continue;
             const parsed = JSON.parse(rawVal);
             if (Array.isArray(parsed)) {
@@ -520,7 +520,7 @@ export function exportAllDataAsJsonBackup(): { filename: string; count: number }
   } catch (e) {}
 
   const backupPayload = {
-    appName: "मी मराठीवाला क्लासेस, अंबड (Mi Marathiwala Classes)",
+    appName: "Mi Marathiwala Classes, Ambad",
     version: "2.0_PERMANENT_VAULT",
     exportedAt: new Date().toISOString(),
     exportTimestamp: Date.now(),
@@ -569,7 +569,7 @@ export async function restoreAllDataFromJson(jsonString: string): Promise<{
       return {
         success: false,
         restoredStudentsCount: 0,
-        message: "बॅकअप फाईलमध्ये विद्यार्थ्यांचा डेटा सापडला नाही.",
+        message: "No student data found in the backup file.",
       };
     }
 
@@ -595,13 +595,13 @@ export async function restoreAllDataFromJson(jsonString: string): Promise<{
     return {
       success: true,
       restoredStudentsCount: studentsToRestore.length,
-      message: `यशस्वी! ${studentsToRestore.length} विद्यार्थ्यांच्या सर्व नोंदी सुरक्षित रिस्टोअर झाल्या आहेत.`,
+      message: `Success! All records for ${studentsToRestore.length} students have been securely restored.`,
     };
   } catch (err: any) {
     return {
       success: false,
       restoredStudentsCount: 0,
-      message: `रिस्टोअर करताना त्रुटी आली: ${err?.message || "Invalid JSON"}`,
+      message: `Error during restoration: ${err?.message || "Invalid JSON"}`,
     };
   }
 }

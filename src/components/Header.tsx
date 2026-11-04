@@ -254,54 +254,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="hidden sm:inline">Notes</span>
           </button>
 
-          {/* Language Switcher Dropdown */}
-          <div className="relative shrink-0" ref={langDropdownRef}>
-            <button
-              type="button"
-              onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-              className="p-1.5 sm:p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer shrink-0"
-              title="Change Language"
-              aria-label="Change Language"
-            >
-              <Languages className="w-4 h-4 text-slate-700 dark:text-slate-300" />
-            </button>
-
-            {isLangDropdownOpen && (
-              <div className="absolute right-0 mt-1.5 w-32 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1 z-50 animate-in fade-in zoom-in-95">
-                <button
-                  type="button"
-                  onClick={() => handleLangChange("en")}
-                  className={`w-full px-3 py-1.5 text-left text-xs font-bold flex items-center justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 ${
-                    currentLang === "en" ? "text-orange-600 dark:text-orange-400 font-black" : "text-slate-700 dark:text-slate-300"
-                  }`}
-                >
-                  <span>English</span>
-                  {currentLang === "en" && <Check className="w-3.5 h-3.5" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleLangChange("bilingual")}
-                  className={`w-full px-3 py-1.5 text-left text-xs font-bold flex items-center justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 ${
-                    currentLang === "bilingual" ? "text-orange-600 dark:text-orange-400 font-black" : "text-slate-700 dark:text-slate-300"
-                  }`}
-                >
-                  <span>Bilingual</span>
-                  {currentLang === "bilingual" && <Check className="w-3.5 h-3.5" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleLangChange("mr")}
-                  className={`w-full px-3 py-1.5 text-left text-xs font-bold flex items-center justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 ${
-                    currentLang === "mr" ? "text-orange-600 dark:text-orange-400 font-black" : "text-slate-700 dark:text-slate-300"
-                  }`}
-                >
-                  <span>Marathi</span>
-                  {currentLang === "mr" && <Check className="w-3.5 h-3.5" />}
-                </button>
-              </div>
-            )}
-          </div>
-
           {/* Theme Toggle (Dark / Light) */}
           {onToggleDarkMode && (
             <button
